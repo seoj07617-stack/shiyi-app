@@ -974,7 +974,7 @@ function addFood(){
     }
   });
   if(addedCount===0){showToast('未识别，试试：2个馒头、1杯牛奶250ml');return;}
-  saveData();renderMeals();input.value='';
+  saveData();renderMeals();renderAIInsights();input.value='';
   showToast(addedCount>1?`${addedCount}项共${totalKcal}kcal`:`${data.meals[data.meals.length-1].name} ${totalKcal}kcal`);
 }
 function renderMeals(){
@@ -1004,7 +1004,7 @@ function renderMeals(){
   document.getElementById('dailyProtein').textContent=Math.round(totalProtein);
   document.getElementById('dailyFat').textContent=Math.round(totalFat);
 }
-function delMeal(idx){if(!confirm('删除这条饮食记录？'))return;data.meals.splice(idx,1);saveData();renderMeals();showToast('已删除');}
+function delMeal(idx){if(!confirm('删除这条饮食记录？'))return;data.meals.splice(idx,1);saveData();renderMeals();renderAIInsights();showToast('已删除');}
 /* ===== WATER / 饮水追踪 ===== */
 function addWater(ml){
   if(!data.water)data.water={};
@@ -1389,25 +1389,32 @@ function renderProgress(){
 }
 
 /* ===== AI INSIGHT / AI洞察 ===== */
-let aiInsightsData=null;
-async function fetchAIInsights(){
-  try{
-    const resp=await fetch('https://seoj07617-stack.github.io/shiyi-app/ai-insights.json?t='+Date.now());
-    if(!resp.ok)return;
-    aiInsightsData=await resp.json();
-    renderAIInsights();
-  }catch(e){console.error('fetchAIInsights error',e);}
-}
 function renderAIInsights(){
-  if(!aiInsightsData)return;
   const card=document.getElementById('aiInsightCard');
   if(!card)return;
-  const d=aiInsightsData;
-  const todayInsight=d.daily_summary||'';
-  if(!todayInsight){card.style.display='none';return;}
+  const todayMeals=(data.meals||[]).filter(m=>m.date===TODAY_STR);
+  if(!todayMeals.length){card.style.display='none';return;}
+  let totalKcal=0,totalP=0,totalC=0,totalF=0,mealCount=0;
+  todayMeals.forEach(m=>{totalKcal+=m.kcal||0;totalP+=m.protein||0;totalC+=m.carb||0;totalF+=m.fat||0;mealCount++;});
+  const w=data.weights&&data.weights.length?data.weights[data.weights.length-1].val:68;
+  const bmr=10*w+6.25*175-5*24-5;
+  const tdee=bmr*1.55;
+  const proteinTarget=w*1.6;
+  const kcalPct=Math.round(totalKcal/tdee*100);
+  const proteinPct=Math.round(totalP/proteinTarget*100);
+  let summary='';
+  const tips=[];
+  if(totalKcal<1){card.style.display='none';return;}
+  if(totalKcal<tdee*0.8){summary='今日摄入偏少，距TDEE还差'+Math.round(tdee-totalKcal)+'kcal。减脂期可以适度缺口，但别低于基础代谢。';tips.push('建议补一餐富含蛋白质的食物，如鸡胸肉/鸡蛋');tips.push('热量缺口控制在TDEE的15-20%最安全');}
+  else if(totalKcal>tdee*1.1){summary='今日摄入略超TDEE约'+Math.round(totalKcal-tdee)+'kcal，偶尔超一天不影响减脂大局。';tips.push('明天正常吃回来就行，不用刻意少吃');tips.push('重点是蛋白质够不够，不是卡路里');}
+  else{summary='今日摄入在合理范围内，'+(kcalPct<95?'略低于':'接近')+'TDEE，减脂节奏不错。';}
+  if(totalP<proteinTarget*0.7){tips.push('蛋白质还差'+Math.round(proteinTarget-totalP)+'g，优先补鸡蛋/牛奶/鸡胸肉');}
+  else if(totalP>=proteinTarget){tips.push('蛋白质达标，肌肉合成原料充足');}
+  if(totalF>totalKcal*0.35/9){tips.push('脂肪占比偏高，注意控制油脂摄入');}
+  if(totalC>totalKcal*0.55/4){tips.push('碳水占比偏高，可以适当替换为蛋白质');}
+  if(mealCount>=3){tips.push('已记录'+mealCount+'餐，保持记录习惯');}
   card.style.display='block';
-  const catClr={diet:'green',workout:'cyan',investment:'purple',reading:'amber'}[d.focus]||'purple';
-  card.innerHTML='<div class="card-glow"></div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:28px;height:28px;border-radius:8px;background:var(--'+catClr+'-glow);display:flex;align-items:center;justify-content:center;color:var(--'+catClr+')"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--white)">拾壹洞察</div><div style="font-size:10px;color:var(--white-dim)">'+(d.date||'')+' · AI分析</div></div></div><div style="font-size:13px;color:var(--white-mid);line-height:1.7">'+todayInsight.replace(/\n/g,'<br>')+'</div>'+(d.tips&&d.tips.length?'<div style="margin-top:10px;padding-top:10px;border-top:0.5px solid var(--glass-border)">'+d.tips.map(t=>'<div style="display:flex;gap:6px;align-items:flex-start;margin-bottom:4px;font-size:12px"><span style="color:var(--'+catClr+');flex-shrink:0">·</span><span style="color:var(--white-mid);line-height:1.5">'+t+'</span></div>').join('')+'</div>':'');
+  card.innerHTML='<div class="card-glow"></div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:28px;height:28px;border-radius:8px;background:var(--green-glow);display:flex;align-items:center;justify-content:center;color:var(--green)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--white)">拾壹健康洞察</div><div style="font-size:10px;color:var(--white-dim)">基于今日数据实时分析</div></div></div><div style="display:flex;gap:8px;margin-bottom:10px"><div style="flex:1;padding:8px;border-radius:8px;background:rgba(255,255,255,0.03);border:0.5px solid rgba(255,255,255,0.06);text-align:center"><div style="font-size:14px;font-weight:600;color:var(--green)">'+totalKcal+'</div><div style="font-size:9px;color:var(--white-dim)">kcal / '+Math.round(tdee)+'</div></div><div style="flex:1;padding:8px;border-radius:8px;background:rgba(255,255,255,0.03);border:0.5px solid rgba(255,255,255,0.06);text-align:center"><div style="font-size:14px;font-weight:600;color:var(--cyan)">'+Math.round(totalP)+'g</div><div style="font-size:9px;color:var(--white-dim)">蛋白 / '+Math.round(proteinTarget)+'g</div></div></div><div style="font-size:13px;color:var(--white-mid);line-height:1.7">'+summary+'</div>'+(tips.length?'<div style="margin-top:10px;padding-top:10px;border-top:0.5px solid var(--glass-border)">'+tips.map(t=>'<div style="display:flex;gap:6px;align-items:flex-start;margin-bottom:4px;font-size:12px"><span style="color:var(--green);flex-shrink:0">·</span><span style="color:var(--white-mid);line-height:1.5">'+t+'</span></div>').join('')+'</div>':'');
 }
 
 /* ===== REVIEW ===== */
@@ -1570,7 +1577,7 @@ function renderAll(){
   try{renderNewsChips();renderNews();fetchRemoteNews();}catch(e){console.error(e)}
   try{fetchRemoteProgress();}catch(e){console.error(e)}
   try{renderMoodGrid();renderScoreRow();renderReviewHistory();loadTodayReview();}catch(e){console.error(e)}
-  try{fetchAIInsights();}catch(e){console.error(e)}
+  try{renderAIInsights();}catch(e){console.error(e)}
 }
 renderAll();
 /* FAB tooltip */
