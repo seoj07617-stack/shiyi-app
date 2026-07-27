@@ -330,7 +330,11 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
       <svg viewBox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2zM7 9h7M7 13h7M7 17h4"/></svg>
       <span>新闻</span>
     </div>
-    <div class="nav-section-label">交易</div>
+    <div class="nav-section-label">成长</div>
+    <div class="nav-item" data-tab="progress">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      <span>共同进步</span>
+    </div>
     <div class="nav-item" data-tab="review">
       <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/><path d="M9 12h6M9 16h4"/></svg>
       <span>每日复盘</span>
@@ -361,6 +365,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 
       <!-- HEALTH -->
       <div class="section active" id="sec-health">
+        <div class="card glass" id="aiInsightCard" style="display:none;margin-bottom:14px"></div>
         <div class="card glass">
           <div class="card-glow"></div>
           <div class="card-title"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>体重追踪</div>
@@ -472,9 +477,14 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 
       <!-- TODO -->
       <div class="section" id="sec-todo">
-        <div style="display:flex;justify-content:flex-end;margin-bottom:4px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <span style="font-size:11px;color:var(--white-dim)" id="remoteTodoStatus">同步中...</span>
+            <button class="btn-icon" onclick="fetchRemoteTodos()" style="padding:4px;width:24px;height:24px"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg></button>
+          </div>
           <button class="btn btn-primary btn-sm" onclick="showTodoModal()"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>新增</button>
         </div>
+        <div id="remoteTodoList"></div>
         <div class="chips" id="todoChips"></div>
         <div id="todoList"></div>
         <div style="margin-top:16px">
@@ -553,6 +563,15 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
         <div id="reviewHistory"></div>
       </div>
 
+      <!-- PROGRESS (共同进步) -->
+      <div class="section" id="sec-progress">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:11px;color:var(--white-dim)" id="progressStatus">加载中...</span>
+          <button class="btn-icon" onclick="fetchRemoteProgress()" style="padding:4px;width:24px;height:24px"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg></button>
+        </div>
+        <div id="progressTimeline"></div>
+      </div>
+
     </div>
   </main>
 </div>
@@ -574,6 +593,11 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 </div>
 
 <div class="toast" id="toast"></div>
+
+<div id="askShiyiFab" onclick="window.open('https://www.feishu.cn/messenger/?p2p_msg=ou_75d267bcf68338bd0d6469757f1f4ca1','_blank')" style="position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--purple-mid),var(--purple-deep));color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px var(--purple-glow-strong);z-index:90;transition:all .25s var(--ease);border:0.5px solid rgba(167,139,250,0.3)" onmouseenter="this.style.transform='scale(1.08)'" onmouseleave="this.style.transform='scale(1)'" ontouchstart="this.style.transform='scale(0.95)'" ontouchend="this.style.transform='scale(1)'">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="12" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/></svg>
+</div>
+<div id="fabTooltip" style="position:fixed;bottom:76px;right:24px;font-size:11px;color:var(--white-mid);background:rgba(18,18,22,0.9);padding:6px 12px;border-radius:8px;z-index:90;pointer-events:none;opacity:0;transition:opacity .3s;backdrop-filter:blur(10px);border:0.5px solid var(--glass-border)">问拾壹</div>
 <div class="install-banner" id="installBanner"><span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="var(--purple)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>添加到主屏幕</span><button class="btn btn-primary" onclick="installPWA()">安装</button><button class="btn-icon" onclick="dismissInstall()" style="margin-left:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
 
 <script>
@@ -679,6 +703,7 @@ const pageTitles={
   todo:{title:'待办',subtitle:'任务管理'},
   journal:{title:'阅读',subtitle:'进度 · 读书笔记'},
   news:{title:'新闻',subtitle:'关注 · 简报'},
+  progress:{title:'共同进步',subtitle:'里程碑 · 成长轨迹'},
   review:{title:'每日复盘',subtitle:'交易日志 · 反思'}
 };
 const navIcons={
@@ -686,7 +711,8 @@ const navIcons={
   diary:'<path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>',
   todo:'<path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>',
   journal:'<path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14zM4 19.5A2.5 2.5 0 006.5 22H20"/>',
-  news:'<path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2zM7 9h7M7 13h7M7 17h4"/>',
+  news:'<path d="M19 20H5a2 2 0 01-2-3V6a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2zM7 9h7M7 13h7M7 17h4"/>',
+  progress:'<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>',
   review:'<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/><path d="M9 12h6M9 16h4"/>'
 };
 document.querySelectorAll('.nav-item').forEach(item=>{
@@ -1206,6 +1232,110 @@ function addNews(){
 }
 function delNews(idx){if(!confirm('删除这条新闻？'))return;data.news.splice(idx,1);saveData();renderNews();showToast('已删除');}
 
+/* ===== REMOTE TODOS / 拾壹推送的待办 ===== */
+let remoteTodosData=null;
+async function fetchRemoteTodos(){
+  const statusEl=document.getElementById('remoteTodoStatus');
+  const listEl=document.getElementById('remoteTodoList');
+  statusEl.textContent='同步中...';statusEl.style.color='var(--white-dim)';
+  try{
+    const resp=await fetch('https://seoj07617-stack.github.io/shiyi-app/todos.json?t='+Date.now());
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    remoteTodosData=await resp.json();
+    renderRemoteTodos();
+  }catch(e){
+    console.error('fetchRemoteTodos error',e);
+    statusEl.textContent='同步失败';statusEl.style.color='var(--amber)';
+    listEl.innerHTML='';
+  }
+}
+function renderRemoteTodos(){
+  const statusEl=document.getElementById('remoteTodoStatus');
+  const listEl=document.getElementById('remoteTodoList');
+  if(!remoteTodosData||!remoteTodosData.items||!remoteTodosData.items.length){
+    statusEl.textContent='已同步';statusEl.style.color='var(--green)';
+    listEl.innerHTML='';return;
+  }
+  const items=remoteTodosData.items.filter(t=>!t.done);
+  const doneCount=remoteTodosData.items.filter(t=>t.done).length;
+  statusEl.textContent='拾壹推送 '+items.length+'项'+(doneCount?' · '+doneCount+'项已完成':'');
+  statusEl.style.color='var(--purple)';
+  const prioColor={high:'red',mid:'amber',low:'green'};
+  const prioLabel={high:'高',mid:'中',low:'低'};
+  const catColor={工作:'purple',投资:'green',生活:'amber',学习:'cyan'};
+  listEl.innerHTML=items.map(t=>{
+    const isOverdue=t.due&&t.due<TODAY_STR;
+    return '<div class="todo-item glass-sm" style="border-left:2px solid var(--purple)"><div class="todo-check" style="border-color:var(--purple);cursor:default"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><div style="flex:1"><div class="todo-text">'+t.text+'</div><div class="todo-meta"><span class="priority p-'+t.priority+'"></span><span class="tag tag-'+(prioColor[t.priority]||'dim')+'">'+(prioLabel[t.priority]||'')+'</span><span class="tag tag-'+(catColor[t.cat]||'dim')+'">'+(t.cat||'')+'</span>'+(t.due?'<span class="todo-due'+(isOverdue?' overdue':'')+'">'+(isOverdue?'逾期 ':'')+t.due.slice(5)+'</span>':'')+'</div></div></div>';
+  }).join('');
+}
+
+/* ===== PROGRESS / 共同进步 ===== */
+let progressData=null;
+const progressIconSvgs={
+  star:'<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>',
+  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  chart:'<path d="M18 20V10M12 20V4M6 20v-6"/>',
+  brain:'<circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/>',
+  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+  rocket:'<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c1-1 1-2.5 0-3.5s-2.5-1-3.5 0z"/><path d="M12 2l-5.5 9.5L12 14l2.5-2.5L12 2z"/><path d="M12 2l5.5 9.5L12 14"/>',
+  book:'<path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14z"/>',
+  flag:'<path d="M4 15s1-1 4-1 5 2 8 2V6s-3-2-6-2-4 1-4 1v14"/>'
+};
+const progressCatColor={里程碑:'purple',投资纪律:'green',认知升级:'cyan',思维训练:'amber',规划:'purple',工具:'green',阅读:'cyan'};
+async function fetchRemoteProgress(){
+  const statusEl=document.getElementById('progressStatus');
+  const timelineEl=document.getElementById('progressTimeline');
+  statusEl.textContent='加载中...';statusEl.style.color='var(--white-dim)';
+  try{
+    const resp=await fetch('https://seoj07617-stack.github.io/shiyi-app/progress.json?t='+Date.now());
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    progressData=await resp.json();
+    renderProgress();
+  }catch(e){
+    console.error('fetchRemoteProgress error',e);
+    statusEl.textContent='加载失败';statusEl.style.color='var(--amber)';
+    timelineEl.innerHTML='';
+  }
+}
+function renderProgress(){
+  const statusEl=document.getElementById('progressStatus');
+  const timelineEl=document.getElementById('progressTimeline');
+  if(!progressData||!progressData.milestones||!progressData.milestones.length){
+    statusEl.textContent='暂无记录';statusEl.style.color='var(--white-dim)';
+    timelineEl.innerHTML='<div style="text-align:center;color:var(--white-dim);padding:32px;font-size:13px">共同进步的路上，每一步都算数</div>';return;
+  }
+  const ms=progressData.milestones;
+  statusEl.textContent=ms.length+'个里程碑';statusEl.style.color='var(--purple)';
+  timelineEl.innerHTML=ms.map((m,i)=>{
+    const isLast=i===ms.length-1;
+    const iconSvg=progressIconSvgs[m.icon]||progressIconSvgs.star;
+    const catClr=progressCatColor[m.cat]||'purple';
+    return '<div style="display:flex;gap:14px;position:relative;margin-bottom:'+(isLast?'0':'4')+'px"><div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0"><div style="width:36px;height:36px;border-radius:10px;background:var(--'+catClr+'-glow);border:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;color:var(--'+catClr+')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+iconSvg+'</svg></div>'+(isLast?'':'<div style="width:1.5px;flex:1;min-height:20px;background:linear-gradient(180deg,var(--'+catClr+'-glow),rgba(255,255,255,0.03));margin-top:4px"></div>')+'</div><div style="flex:1;padding:2px 0 '+(isLast?'0':'12')+'px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span style="font-size:13px;font-weight:600;color:var(--white)">'+m.title+'</span><span class="tag tag-'+catClr+'">'+m.cat+'</span></div><div style="font-size:12px;color:var(--white-mid);line-height:1.6">'+m.desc+'</div><div style="font-size:10px;color:var(--white-faint);margin-top:4px;font-variant-numeric:tabular-nums">'+m.date+'</div></div></div>';
+  }).join('');
+}
+
+/* ===== AI INSIGHT / AI洞察 ===== */
+let aiInsightsData=null;
+async function fetchAIInsights(){
+  try{
+    const resp=await fetch('https://seoj07617-stack.github.io/shiyi-app/ai-insights.json?t='+Date.now());
+    if(!resp.ok)return;
+    aiInsightsData=await resp.json();
+    renderAIInsights();
+  }catch(e){console.error('fetchAIInsights error',e);}
+}
+function renderAIInsights(){
+  if(!aiInsightsData)return;
+  const card=document.getElementById('aiInsightCard');
+  if(!card)return;
+  const d=aiInsightsData;
+  const todayInsight=d.daily_summary||'';
+  if(!todayInsight){card.style.display='none';return;}
+  card.style.display='block';
+  const catClr={diet:'green',workout:'cyan',investment:'purple',reading:'amber'}[d.focus]||'purple';
+  card.innerHTML='<div class="card-glow"></div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:28px;height:28px;border-radius:8px;background:var(--'+catClr+'-glow);display:flex;align-items:center;justify-content:center;color:var(--'+catClr+')"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--white)">拾壹洞察</div><div style="font-size:10px;color:var(--white-dim)">'+(d.date||'')+' · AI分析</div></div></div><div style="font-size:13px;color:var(--white-mid);line-height:1.7">'+todayInsight.replace(/\n/g,'<br>')+'</div>'+(d.tips&&d.tips.length?'<div style="margin-top:10px;padding-top:10px;border-top:0.5px solid var(--glass-border)">'+d.tips.map(t=>'<div style="display:flex;gap:6px;align-items:flex-start;margin-bottom:4px;font-size:12px"><span style="color:var(--'+catClr+');flex-shrink:0">·</span><span style="color:var(--white-mid);line-height:1.5">'+t+'</span></div>').join('')+'</div>':'');
+}
+
 /* ===== REVIEW ===== */
 const moods=[
   {id:'calm',label:'平静',color:'#a78bfa',svg:'<circle cx="12" cy="12" r="9"/><path d="M8 14h8M9 9h.01M15 9h.01"/>'},
@@ -1361,12 +1491,17 @@ function renderAll(){
   try{renderCalendar();}catch(e){console.error(e)}
   try{renderWorkoutHistory();}catch(e){console.error(e)}
   try{renderDiaryStreak();renderDiaryHistory();loadTodayDiary();}catch(e){console.error(e)}
-  try{renderTodoChips();renderTodos();}catch(e){console.error(e)}
+  try{renderTodoChips();renderTodos();fetchRemoteTodos();}catch(e){console.error(e)}
   try{renderJournal();}catch(e){console.error(e)}
   try{renderNewsChips();renderNews();fetchRemoteNews();}catch(e){console.error(e)}
+  try{fetchRemoteProgress();}catch(e){console.error(e)}
   try{renderMoodGrid();renderScoreRow();renderReviewHistory();loadTodayReview();}catch(e){console.error(e)}
+  try{fetchAIInsights();}catch(e){console.error(e)}
 }
 renderAll();
+/* FAB tooltip */
+const fab=document.getElementById('askShiyiFab'),fabTip=document.getElementById('fabTooltip');
+if(fab&&fabTip){fab.addEventListener('mouseenter',()=>fabTip.style.opacity='1');fab.addEventListener('mouseleave',()=>fabTip.style.opacity='0');fab.addEventListener('touchstart',()=>{fabTip.style.opacity='1';setTimeout(()=>fabTip.style.opacity='0',1500);},{passive:true});}
 window.addEventListener('resize',()=>{requestAnimationFrame(()=>{renderWeight();});});
 
 /* ===== PWA INSTALL ===== */
