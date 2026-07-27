@@ -1126,7 +1126,7 @@ function updateCharCount(){document.getElementById('charCount').textContent=docu
 /* ===== NEWS ===== */
 const newsCats=['全部','金融','国际','国内','深圳教育','政策'];
 function renderNewsChips(){document.getElementById('newsChips').innerHTML=newsCats.map(c=>`<div class="chip${newsFilter===c?' active':''}" onclick="setNewsFilter('${c}')">${c}</div>`).join('');}
-function setNewsFilter(c){newsFilter=c;renderNewsChips();renderNews();}
+function setNewsFilter(c){newsFilter=c;renderNewsChips();renderRemoteNews();renderNews();}
 /* ===== REMOTE NEWS / 远程新闻自动加载 ===== */
 let remoteNewsData=null;
 function toggleManualNews(){
@@ -1146,40 +1146,45 @@ async function fetchRemoteNews(){
   try{
     const resp=await fetch('https://seoj07617-stack.github.io/shiyi-app/news.json?t='+Date.now());
     if(!resp.ok)throw new Error('HTTP '+resp.status);
-    const json=await resp.json();
-    remoteNewsData=json;
-    const dateStr=json.date||'';
-    const items=json.items||[];
-    if(!items.length){
-      statusEl.textContent='暂无新闻';
-      listEl.innerHTML='<div style="text-align:center;color:var(--white-dim);padding:12px;font-size:12px">今天还没有推送新闻</div>';
-      return;
-    }
-    statusEl.textContent=dateStr===TODAY_STR?'今日 '+dateStr.slice(5)+' · '+items.length+'条':dateStr.slice(5)+' · '+items.length+'条';
-    statusEl.style.color='var(--purple)';
-    const impactColor={bull:'green',bear:'red',neutral:'dim'};
-    const impactLabel={bull:'利多',bear:'利空',neutral:'中性'};
-    const catColor={金融:'green',国际:'purple',国内:'dim',深圳教育:'purple',政策:'red'};
-    // Filter by category if set
-    let filteredItems=items;
-    if(newsFilter!=='全部')filteredItems=items.filter(n=>n.cat===newsFilter);
-    listEl.innerHTML=filteredItems.map((n,i)=>{
-      const hasContent=!!n.content;
-      const contentId='rn-content-'+i;
-      const contentHtml=hasContent?'<div id="'+contentId+'" style="display:none;font-size:12px;color:var(--white-mid);line-height:1.7;margin-top:6px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.03);border:0.5px solid rgba(255,255,255,0.04)">'+n.content.replace(/\n/g,'<br>')+'</div>':'';
-      const expandIcon=hasContent?'<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="margin-left:auto;flex-shrink:0;opacity:0.4"><path d="M6 9l6 6 6-6"/></svg>':'';
-      const impactTag=n.impact?'<span class="tag tag-'+(impactColor[n.impact]||'dim')+'">'+(impactLabel[n.impact]||'')+'</span>':'';
-      const catTag=n.cat?'<span class="tag tag-'+(catColor[n.cat]||'dim')+'">'+n.cat+'</span>':'';
-      const clickHandler=hasContent?' onclick="toggleNewsContent(\''+contentId+'\')" style="cursor:pointer"':'';
-      return '<div style="padding:10px 12px;margin-bottom:6px;border-radius:10px;background:rgba(255,255,255,0.02);border:0.5px solid rgba(255,255,255,0.04)"><div'+clickHandler+' style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--white)"><span>'+n.headline+'</span>'+expandIcon+'</div>'+contentHtml+'<div style="display:flex;gap:5px;margin-top:6px;align-items:center">'+catTag+impactTag+(n.relevance==='high'?'<span style="font-size:10px;color:var(--amber);font-weight:600">高相关</span>':'')+'</div></div>';
-    }).join('');
-    if(!filteredItems.length && items.length) listEl.innerHTML='<div style="text-align:center;color:var(--white-dim);padding:12px;font-size:12px">该分类暂无新闻</div>';
+    remoteNewsData=await resp.json();
+    renderRemoteNews();
   }catch(e){
     console.error('fetchRemoteNews error',e);
     statusEl.textContent='加载失败，点击刷新重试';
     statusEl.style.color='var(--amber)';
     listEl.innerHTML='';
   }
+}
+function renderRemoteNews(){
+  const statusEl=document.getElementById('remoteNewsStatus');
+  const listEl=document.getElementById('remoteNewsList');
+  if(!remoteNewsData||!remoteNewsData.items||!remoteNewsData.items.length){
+    statusEl.textContent='暂无新闻';
+    listEl.innerHTML='<div style="text-align:center;color:var(--white-dim);padding:12px;font-size:12px">今天还没有推送新闻</div>';
+    return;
+  }
+  const dateStr=remoteNewsData.date||'';
+  const items=remoteNewsData.items;
+  const total=items.length;
+  const filteredCount=newsFilter==='全部'?total:items.filter(n=>n.cat===newsFilter).length;
+  statusEl.textContent=(dateStr===TODAY_STR?'今日 '+dateStr.slice(5):dateStr.slice(5))+' · '+(newsFilter==='全部'?total+'条':filteredCount+'/'+total+'条');
+  statusEl.style.color='var(--purple)';
+  const impactColor={bull:'green',bear:'red',neutral:'dim'};
+  const impactLabel={bull:'利多',bear:'利空',neutral:'中性'};
+  const catColor={金融:'green',国际:'purple',国内:'dim',深圳教育:'purple',政策:'red'};
+  let filteredItems=items;
+  if(newsFilter!=='全部')filteredItems=items.filter(n=>n.cat===newsFilter);
+  listEl.innerHTML=filteredItems.map((n,i)=>{
+    const hasContent=!!n.content;
+    const contentId='rn-content-'+i;
+    const contentHtml=hasContent?'<div id="'+contentId+'" style="display:none;font-size:12px;color:var(--white-mid);line-height:1.7;margin-top:6px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.03);border:0.5px solid rgba(255,255,255,0.04)">'+n.content.replace(/\n/g,'<br>')+'</div>':'';
+    const expandIcon=hasContent?'<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="margin-left:auto;flex-shrink:0;opacity:0.4"><path d="M6 9l6 6 6-6"/></svg>':'';
+    const impactTag=n.impact?'<span class="tag tag-'+(impactColor[n.impact]||'dim')+'">'+(impactLabel[n.impact]||'')+'</span>':'';
+    const catTag=n.cat?'<span class="tag tag-'+(catColor[n.cat]||'dim')+'">'+n.cat+'</span>':'';
+    const clickHandler=hasContent?' onclick="toggleNewsContent(\''+contentId+'\')" style="cursor:pointer"':'';
+    return '<div style="padding:10px 12px;margin-bottom:6px;border-radius:10px;background:rgba(255,255,255,0.02);border:0.5px solid rgba(255,255,255,0.04)"><div'+clickHandler+' style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--white)"><span>'+n.headline+'</span>'+expandIcon+'</div>'+contentHtml+'<div style="display:flex;gap:5px;margin-top:6px;align-items:center">'+catTag+impactTag+(n.relevance==='high'?'<span style="font-size:10px;color:var(--amber);font-weight:600">高相关</span>':'')+'</div></div>';
+  }).join('');
+  if(!filteredItems.length && items.length) listEl.innerHTML='<div style="text-align:center;color:var(--white-dim);padding:12px;font-size:12px">该分类暂无新闻</div>';
 }
 function renderNews(){
   const el=document.getElementById('newsList');
