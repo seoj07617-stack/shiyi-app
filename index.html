@@ -826,6 +826,16 @@ const quickFoodList=['馒头','米饭','红薯','鸡蛋','牛奶','鸡胸肉','�
 function parseFoodInput(raw){
   raw=raw.trim();
   if(!raw)return null;
+  // 处理中文数量词
+  const cnNums={'一':1,'二':2,'两':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10};
+  // 处理"一个半"="1.5个"、"半个"="0.5个"、"两"="2"
+  raw=raw.replace(/一个半/g,'1.5个').replace(/半个/g,'0.5个').replace(/半/g,'0.5');
+  // 处理"两+单位"如"两个"→"2个"、"两杯"→"2杯"
+  raw=raw.replace(/^两(个|碗|根|片|杯|勺|份|盘)/,'2$1');
+  // 处理中文数字开头
+  for(const[cn,num]of Object.entries(cnNums)){
+    raw=raw.replace(new RegExp('^'+cn+'(个|碗|根|片|杯|勺|份|盘)'),num+'$1');
+  }
   let qty=1,foodName=null,customGrams=null;
   const qtyMatch=raw.match(/^(\d+\.?\d*)\s*(个|碗|根|片|杯|勺|ml|g|kg|份|盘)/);
   if(qtyMatch){qty=parseFloat(qtyMatch[1]);const u=qtyMatch[2];raw=raw.slice(qtyMatch[0].length).trim();if(u==='g')customGrams=qty;if(u==='kg')customGrams=qty*1000;if(u==='ml')customGrams=qty;}
@@ -847,7 +857,7 @@ function parseFoodInput(raw){
     protein:Math.round(info.protein*ratio*10)/10,
     fat:Math.round(info.fat*ratio*10)/10,
     qty,
-    display:customGrams!=null?(info.unit==='ml'?`${foodName} ${customGrams}ml`:`${foodName} ${customGrams}g`):(qty>1?`${qty}${info.unit}${foodName}`:`${foodName}`)
+    display:customGrams!=null?(info.unit==='ml'?`${foodName} ${customGrams}ml`:`${foodName} ${customGrams}g`):`${qty}${info.unit}${foodName}`
   };
 }
 function renderMealTypeChips(){
@@ -864,17 +874,26 @@ function quickAddFood(name){
   if(!data.meals)data.meals=[];
   const info=foodDB[name];
   data.meals.push({date:TODAY_STR,type:selectedMealType,name,kcal:info.kcal,carb:info.carb,protein:info.protein,fat:info.fat,display:`1${info.unit}${name}`});
-  saveData();renderMeals();showToast(`${name} ${info.kcal}kcal 已添加到${selectedMealType}`);
+  saveData();renderMeals();showToast(`1${info.unit}${name} ${info.kcal}kcal`);
 }
 function addFood(){
   const input=document.getElementById('foodInput');
   const raw=input.value.trim();
   if(!raw){showToast('请输入食物');return;}
-  const result=parseFoodInput(raw);
-  if(!result||result.kcal===0&&result.name==='未知'){showToast('未识别，试试：2个馒头、1杯牛奶250ml');return;}
-  if(!data.meals)data.meals=[];
-  data.meals.push({date:TODAY_STR,type:selectedMealType,name:result.name,kcal:result.kcal,carb:result.carb,protein:result.protein,fat:result.fat,display:result.display||raw});
-  saveData();renderMeals();input.value='';showToast(`${result.name} ${result.kcal}kcal`);
+  // 支持多种分隔符：中英文逗号、顿号、空格
+  const items=raw.split(/[，、,\s]+/).filter(s=>s.length>0);
+  let addedCount=0,totalKcal=0;
+  items.forEach(item=>{
+    const result=parseFoodInput(item);
+    if(result&&!(result.kcal===0&&result.name==='未知')){
+      if(!data.meals)data.meals=[];
+      data.meals.push({date:TODAY_STR,type:selectedMealType,name:result.name,kcal:result.kcal,carb:result.carb,protein:result.protein,fat:result.fat,display:result.display||item});
+      addedCount++;totalKcal+=result.kcal;
+    }
+  });
+  if(addedCount===0){showToast('未识别，试试：2个馒头、1杯牛奶250ml');return;}
+  saveData();renderMeals();input.value='';
+  showToast(addedCount>1?`${addedCount}项共${totalKcal}kcal`:`${data.meals[data.meals.length-1].name} ${totalKcal}kcal`);
 }
 function renderMeals(){
   if(!data.meals)data.meals=[];
