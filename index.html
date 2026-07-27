@@ -518,21 +518,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
           <div class="card-title"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l5 5v9a2 2 0 01-2 2z"/><path d="M14 2v6h6"/></svg>今日新闻</div>
           <div id="remoteNewsStatus" style="font-size:11px;color:var(--white-dim);margin-bottom:8px">加载中...</div>
           <div id="remoteNewsList" style="margin-bottom:12px"></div>
-          <div style="display:flex;gap:6px;margin-bottom:8px">
-            <button class="btn btn-sm" style="flex:1;font-size:11px;padding:6px" onclick="fetchRemoteNews()"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="margin-right:4px"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>刷新</button>
-            <button class="btn btn-sm" style="flex:1;font-size:11px;padding:6px" onclick="toggleManualNews()"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="margin-right:4px"><path d="M12 5v14M5 12h14"/></svg>手动添加</button>
-          </div>
-          <div id="manualNewsForm" style="display:none">
-            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
-            <select id="newsCat" style="flex:1;min-width:80px"><option>金融</option><option>国际</option><option>国内</option><option>深圳教育</option><option>政策</option></select>
-            <select id="newsImpact" style="flex:1;min-width:70px"><option value="neutral">中性</option><option value="bull">利多</option><option value="bear">利空</option></select>
-            <select id="newsRelevance" style="flex:1;min-width:70px"><option value="normal">一般</option><option value="high">高相关</option></select>
-            </div>
-            <input id="newsHeadline" placeholder="新闻标题或摘要">
-            <textarea id="newsContent" placeholder="新闻内容摘要" rows="2" style="margin-top:8px"></textarea>
-            <input id="newsUrl" placeholder="来源链接（可选）" style="margin-top:8px">
-            <button class="btn btn-primary btn-sm" style="width:100%;margin-top:8px" onclick="addNews()">添加</button>
-          </div>
+          <button class="btn btn-sm" style="width:100%;font-size:11px;padding:6px;margin-top:8px" onclick="fetchRemoteNews()"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="margin-right:4px"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>刷新新闻</button>
         </div>
         <div id="newsList"></div>
               </div>
