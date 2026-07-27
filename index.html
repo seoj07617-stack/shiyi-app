@@ -164,6 +164,23 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 .set-row .set-name{width:auto;flex:2;text-align:left}
 .workout-history-item{padding:13px 15px;margin-bottom:8px;cursor:pointer;position:relative}
 .workout-history-date{font-size:12px;font-weight:600;color:var(--purple);margin-bottom:5px;font-variant-numeric:tabular-nums}
+.mobile-header{display:none;position:fixed;top:0;left:0;right:0;z-index:101;height:48px;background:rgba(13,8,32,0.92);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:0.5px solid var(--glass-border);align-items:center;padding:0 16px;gap:10px}
+.mobile-header-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#1a1035,#0d0820);border:0.5px solid rgba(167,139,250,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(124,58,237,0.2);transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
+.mobile-header-icon:active{transform:scale(0.9)}
+.mobile-header-title{font-size:15px;font-weight:600;background:linear-gradient(135deg,var(--purple),var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex-shrink:0}
+.mobile-header-date{font-size:11px;color:var(--white-dim);margin-left:auto;font-variant-numeric:tabular-nums}
+.category-drawer{display:none;position:fixed;inset:0;z-index:200;pointer-events:none}
+.category-drawer.open{display:block;pointer-events:auto}
+.drawer-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);opacity:0;transition:opacity .25s}
+.category-drawer.open .drawer-overlay{opacity:1}
+.drawer-panel{position:absolute;left:0;top:0;bottom:0;width:260px;background:rgba(18,10,40,0.97);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border-right:0.5px solid var(--glass-border);transform:translateX(-100%);transition:transform .3s cubic-bezier(.32,.72,0,1);padding:20px 0;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
+.category-drawer.open .drawer-panel{transform:translateX(0)}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:4px 20px 16px;border-bottom:0.5px solid var(--glass-border);margin-bottom:8px}
+.drawer-section{padding:0 12px}
+.drawer-section-label{font-size:10px;font-weight:600;color:var(--white-dim);text-transform:uppercase;letter-spacing:0.08em;padding:12px 10px 6px}
+.drawer-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:var(--white-mid);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.drawer-item:active{background:rgba(124,58,237,0.15);color:var(--purple-bright);transform:scale(0.97)}
+.drawer-item svg{color:var(--purple);flex-shrink:0}
 .workout-history-detail{font-size:12px;color:var(--white-mid);line-height:1.6}
 .workout-history-detail .part-tag{color:var(--white);font-weight:600;margin-right:6px}
 
@@ -268,13 +285,14 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 @media(max-width:767px){
   :root{--sidebar-w:0px}
   .app{flex-direction:column}
+  .mobile-header{display:flex}
   .sidebar{width:100%;height:auto;flex-direction:row;padding:8px 10px;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px));border-right:none;border-top:0.5px solid var(--glass-border);order:2;flex-shrink:0;overflow-x:auto;overflow-y:hidden;position:fixed;bottom:0;left:0;right:0;z-index:100}
   .sidebar::-webkit-scrollbar{display:none}
   .sidebar-logo,.nav-section-label,.sidebar-spacer,.sidebar-footer{display:none}
   .nav-item{flex-direction:column;gap:3px;padding:6px 10px;font-size:10px;margin-bottom:0;flex-shrink:0;min-width:54px}
   .nav-item.active::before{display:none}
   .nav-item .nav-badge{position:absolute;top:2px;right:4px;font-size:8px;padding:1px 5px}
-  .content{order:1;padding-bottom:72px}
+  .content{order:1;padding-bottom:72px;padding-top:48px}
   .content-header{padding:20px 18px 14px}
   .content-header .page-title{font-size:20px}
   .content-body{padding:0 18px 48px}
@@ -298,6 +316,44 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 </head>
 <body>
 <div class="app">
+  <div class="mobile-header" id="mobileHeader">
+    <div class="mobile-header-icon" onclick="toggleCategoryDrawer()">
+      <svg viewBox="0 0 40 40" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="mlg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c4b5fd"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><rect x="7" y="8" width="5.5" height="20" rx="1.8" fill="url(#mlg)" opacity="0.95"/><rect x="16" y="4" width="5.5" height="28" rx="1.8" fill="url(#mlg)"/><rect x="25" y="10" width="5.5" height="18" rx="1.8" fill="url(#mlg)" opacity="0.7"/></svg>
+    </div>
+    <span class="mobile-header-title">拾壹工作台</span>
+    <div class="mobile-header-date" id="mobileDate"></div>
+  </div>
+  <div class="category-drawer" id="categoryDrawer">
+    <div class="drawer-overlay" onclick="toggleCategoryDrawer()"></div>
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <svg viewBox="0 0 40 40" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="dlg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c4b5fd"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><rect x="7" y="8" width="5.5" height="20" rx="1.8" fill="url(#dlg)" opacity="0.95"/><rect x="16" y="4" width="5.5" height="28" rx="1.8" fill="url(#dlg)"/><rect x="25" y="10" width="5.5" height="18" rx="1.8" fill="url(#dlg)" opacity="0.7"/></svg>
+          <span style="font-size:16px;font-weight:600;color:var(--purple-bright)">拾壹</span>
+        </div>
+        <button class="btn-icon" onclick="toggleCategoryDrawer()" style="color:var(--white-dim)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="drawer-section">
+        <div class="drawer-section-label">生活</div>
+        <div class="drawer-item" onclick="switchTab('health');toggleCategoryDrawer()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>健康</div>
+        <div class="drawer-item" onclick="switchTab('diary');toggleCategoryDrawer()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>每日感想</div>
+      </div>
+      <div class="drawer-section">
+        <div class="drawer-section-label">效率</div>
+        <div class="drawer-item" onclick="switchTab('todo');toggleCategoryDrawer()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>待办</div>
+        <div class="drawer-item" onclick="switchTab('progress');toggleCategoryDrawer()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>共同进步</div>
+      </div>
+      <div class="drawer-section">
+        <div class="drawer-section-label">学习</div>
+        <div class="drawer-item" onclick="switchTab('journal');toggleCategoryDrawer()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14zM4 19.5A2.5 2.5 0 006.5 22H20"/></svg>阅读</div>
+        <div class="drawer-item" onclick="switchTab('news');toggleCategoryDrawer()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2zM7 9h7M7 13h7M7 17h4"/></svg>新闻</div>
+      </div>
+      <div class="drawer-section">
+        <div class="drawer-section-label">交易</div>
+        <div class="drawer-item" onclick="switchTab('review');toggleCategoryDrawer()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/><path d="M9 12h6M9 16h4"/></svg>每日复盘</div>
+      </div>
+    </div>
+  </div>
   <nav class="sidebar">
     <div class="sidebar-logo" onclick="this.querySelector('.logo-icon').classList.toggle('pressed')">
       <div class="logo-icon" style="width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#1a1035 0%,#0d0820 100%);border:0.5px solid rgba(167,139,250,0.25);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(124,58,237,0.3),inset 0 1px 0 rgba(255,255,255,0.06);flex-shrink:0;cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1)">
@@ -632,6 +688,7 @@ function migrateData(d){
   return d;
 }
 function saveData(){try{localStorage.setItem(STORE_KEY,JSON.stringify(data));}catch(e){showToast('保存失败：存储空间不足');}}
+function toggleCategoryDrawer(){document.getElementById('categoryDrawer').classList.toggle('open')}
 function defaultData(){
   const today=new Date().toISOString().slice(0,10);
   return{
@@ -696,7 +753,9 @@ function applyTemplate(idx){
 
 const today=new Date();
 const TODAY_STR=new Date().toISOString().slice(0,10);
-document.getElementById('todayDate').textContent=`${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}.${String(today.getDate()).padStart(2,'0')} ${['SUN','MON','TUE','WED','THU','FRI','SAT'][today.getDay()]}`;
+const dateStr=`${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}.${String(today.getDate()).padStart(2,'0')} ${['SUN','MON','TUE','WED','THU','FRI','SAT'][today.getDay()]}`;
+document.getElementById('todayDate').textContent=dateStr;
+const md=document.getElementById('mobileDate');if(md)md.textContent=today.getMonth()+1+'/'+today.getDate();
 
 /* Navigation */
 const pageTitles={
