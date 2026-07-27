@@ -513,33 +513,28 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
       <div class="section" id="sec-news">
         <div class="card glass">
           <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>添加关注</div>
-          <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+          <div class="card-title"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l5 5v9a2 2 0 01-2 2z"/><path d="M14 2v6h6"/></svg>今日新闻</div>
+          <div id="remoteNewsStatus" style="font-size:11px;color:var(--white-dim);margin-bottom:8px">加载中...</div>
+          <div id="remoteNewsList" style="margin-bottom:12px"></div>
+          <div style="display:flex;gap:6px;margin-bottom:8px">
+            <button class="btn btn-sm" style="flex:1;font-size:11px;padding:6px" onclick="fetchRemoteNews()"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="margin-right:4px"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>刷新</button>
+            <button class="btn btn-sm" style="flex:1;font-size:11px;padding:6px" onclick="toggleManualNews()"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="margin-right:4px"><path d="M12 5v14M5 12h14"/></svg>手动添加</button>
+          </div>
+          <div id="manualNewsForm" style="display:none">
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
             <select id="newsCat" style="flex:1;min-width:80px"><option>金融</option><option>国际</option><option>国内</option><option>深圳教育</option><option>政策</option></select>
             <select id="newsImpact" style="flex:1;min-width:70px"><option value="neutral">中性</option><option value="bull">利多</option><option value="bear">利空</option></select>
             <select id="newsRelevance" style="flex:1;min-width:70px"><option value="normal">一般</option><option value="high">高相关</option></select>
+            </div>
+            <input id="newsHeadline" placeholder="新闻标题或摘要">
+            <textarea id="newsContent" placeholder="新闻内容摘要" rows="2" style="margin-top:8px"></textarea>
+            <input id="newsUrl" placeholder="来源链接（可选）" style="margin-top:8px">
+            <button class="btn btn-primary btn-sm" style="width:100%;margin-top:8px" onclick="addNews()">添加</button>
           </div>
-          <input id="newsHeadline" placeholder="新闻标题或摘要">
-          <textarea id="newsContent" placeholder="新闻内容摘要（粘贴关键内容，方便直接阅读）" rows="3" style="margin-top:8px"></textarea>
-          <input id="newsUrl" placeholder="来源链接（可选）" style="margin-top:8px">
-          <button class="btn btn-primary btn-sm" style="width:100%;margin-top:8px" onclick="addNews()">添加</button>
         </div>
         <div class="chips" id="newsChips"></div>
         <div id="newsList"></div>
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24"><path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/></svg>简报入口</div>
-          <a style="display:flex;align-items:center;gap:10px;padding:13px 16px;margin:6px 0;border-radius:var(--radius-sm);background:var(--purple-glow);color:var(--purple);font-size:12px;text-decoration:none;border:0.5px solid rgba(167,139,250,0.14);font-weight:600;transition:all .25s" href="https://kcnyrvyhng0i.feishu.cn/drive/folder/S5GCfXibnlBmxMdAGvdcadDbnJh" target="_blank">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>每日综合新闻简报
-          </a>
-          <a style="display:flex;align-items:center;gap:10px;padding:13px 16px;margin:6px 0;border-radius:var(--radius-sm);background:var(--purple-glow);color:var(--purple);font-size:12px;text-decoration:none;border:0.5px solid rgba(167,139,250,0.14);font-weight:600;transition:all .25s" href="https://kcnyrvyhng0i.feishu.cn/drive/folder/W4gXfmQYJlmO8OdIziuc2u8xnnd" target="_blank">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3v18h18M7 14l3-3 3 3 5-5"/></svg>每日股票消息面简报
-          </a>
-          <a style="display:flex;align-items:center;gap:10px;padding:13px 16px;margin:6px 0;border-radius:var(--radius-sm);background:var(--purple-glow);color:var(--purple);font-size:12px;text-decoration:none;border:0.5px solid rgba(167,139,250,0.14);font-weight:600;transition:all .25s" href="https://kcnyrvyhng0i.feishu.cn/drive/folder/I5bsfPkKIlwd1odcPmucHbYDnwd" target="_blank">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>每日复盘
-          </a>
-        </div>
-      </div>
+              </div>
 
       <!-- REVIEW -->
       <div class="section" id="sec-review">
@@ -1131,6 +1126,47 @@ function updateCharCount(){document.getElementById('charCount').textContent=docu
 const newsCats=['全部','金融','国际','国内','深圳教育','政策'];
 function renderNewsChips(){document.getElementById('newsChips').innerHTML=newsCats.map(c=>`<div class="chip${newsFilter===c?' active':''}" onclick="setNewsFilter('${c}')">${c}</div>`).join('');}
 function setNewsFilter(c){newsFilter=c;renderNewsChips();renderNews();}
+/* ===== REMOTE NEWS / 远程新闻自动加载 ===== */
+let remoteNewsData=null;
+function toggleManualNews(){
+  const f=document.getElementById('manualNewsForm');
+  f.style.display=f.style.display==='none'?'block':'none';
+}
+async function fetchRemoteNews(){
+  const statusEl=document.getElementById('remoteNewsStatus');
+  const listEl=document.getElementById('remoteNewsList');
+  statusEl.textContent='加载中...';
+  statusEl.style.color='var(--white-dim)';
+  try{
+    const resp=await fetch('https://seoj07617-stack.github.io/shiyi-app/news.json?t='+Date.now());
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    const json=await resp.json();
+    remoteNewsData=json;
+    const dateStr=json.date||'';
+    const items=json.items||[];
+    if(!items.length){
+      statusEl.textContent='暂无新闻';
+      listEl.innerHTML='<div style="text-align:center;color:var(--white-dim);padding:12px;font-size:12px">今天还没有推送新闻</div>';
+      return;
+    }
+    statusEl.textContent=dateStr===TODAY_STR?'今日 '+dateStr.slice(5)+' · '+items.length+'条':dateStr.slice(5)+' · '+items.length+'条';
+    statusEl.style.color='var(--purple)';
+    const impactColor={bull:'green',bear:'red',neutral:'dim'};
+    const impactLabel={bull:'利多',bear:'利空',neutral:'中性'};
+    const catColor={金融:'green',国际:'purple',国内:'dim',深圳教育:'purple',政策:'red'};
+    listEl.innerHTML=items.map(n=>{
+      const contentHtml=n.content?'<div style="font-size:12px;color:var(--white-mid);line-height:1.65;margin-top:5px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.02)">'+n.content.replace(/\n/g,'<br>')+'</div>':'';
+      const impactTag=n.impact?'<span class="tag tag-'+(impactColor[n.impact]||'dim')+'">'+(impactLabel[n.impact]||'')+'</span>':'';
+      const catTag=n.cat?'<span class="tag tag-'+(catColor[n.cat]||'dim')+'">'+n.cat+'</span>':'';
+      return '<div style="padding:10px 12px;margin-bottom:6px;border-radius:10px;background:rgba(255,255,255,0.02);border:0.5px solid rgba(255,255,255,0.04)"><div style="font-size:13px;font-weight:600;color:var(--white)">'+n.headline+'</div>'+contentHtml+'<div style="display:flex;gap:5px;margin-top:6px;align-items:center">'+catTag+impactTag+(n.relevance==='high'?'<span style="font-size:10px;color:var(--amber);font-weight:600">高相关</span>':'')+'</div></div>';
+    }).join('');
+  }catch(e){
+    console.error('fetchRemoteNews error',e);
+    statusEl.textContent='加载失败，点击刷新重试';
+    statusEl.style.color='var(--amber)';
+    listEl.innerHTML='';
+  }
+}
 function renderNews(){
   const el=document.getElementById('newsList');
   const newsCatColor={金融:'green',国际:'purple',国内:'dim',深圳教育:'purple',政策:'red'};
@@ -1322,7 +1358,7 @@ function renderAll(){
   try{renderDiaryStreak();renderDiaryHistory();loadTodayDiary();}catch(e){console.error(e)}
   try{renderTodoChips();renderTodos();}catch(e){console.error(e)}
   try{renderJournal();}catch(e){console.error(e)}
-  try{renderNewsChips();renderNews();}catch(e){console.error(e)}
+  try{renderNewsChips();renderNews();fetchRemoteNews();}catch(e){console.error(e)}
   try{renderMoodGrid();renderScoreRow();renderReviewHistory();loadTodayReview();}catch(e){console.error(e)}
 }
 renderAll();
