@@ -286,13 +286,13 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
   :root{--sidebar-w:0px}
   .app{flex-direction:column}
   .mobile-header{display:flex}
-  .sidebar{width:100%;height:auto;flex-direction:row;padding:8px 10px;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px));border-right:none;border-top:0.5px solid var(--glass-border);order:2;flex-shrink:0;overflow-x:auto;overflow-y:hidden;position:fixed;bottom:0;left:0;right:0;z-index:100}
+  .sidebar{display:none}
   .sidebar::-webkit-scrollbar{display:none}
   .sidebar-logo,.nav-section-label,.sidebar-spacer,.sidebar-footer{display:none}
   .nav-item{flex-direction:column;gap:3px;padding:6px 10px;font-size:10px;margin-bottom:0;flex-shrink:0;min-width:54px}
   .nav-item.active::before{display:none}
   .nav-item .nav-badge{position:absolute;top:2px;right:4px;font-size:8px;padding:1px 5px}
-  .content{order:1;padding-bottom:72px;padding-top:48px}
+  .content{order:1;padding-bottom:20px;padding-top:48px}
   .content-header{padding:20px 18px 14px}
   .content-header .page-title{font-size:20px}
   .content-body{padding:0 18px 48px}
@@ -689,6 +689,19 @@ function migrateData(d){
 }
 function saveData(){try{localStorage.setItem(STORE_KEY,JSON.stringify(data));}catch(e){showToast('保存失败：存储空间不足');}}
 function toggleCategoryDrawer(){document.getElementById('categoryDrawer').classList.toggle('open')}
+function switchTab(tab){
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
+  const navItem=document.querySelector(`.nav-item[data-tab="${tab}"]`);
+  if(navItem)navItem.classList.add('active');
+  const sec=document.getElementById('sec-'+tab);
+  if(sec)sec.classList.add('active');
+  document.getElementById('pageTitleText').textContent=pageTitles[tab].title;
+  document.getElementById('pageSubtitle').textContent=pageTitles[tab].subtitle;
+  const hdrIcon=document.querySelector('.content-header .page-title svg');
+  if(hdrIcon)hdrIcon.innerHTML=navIcons[tab];
+  document.querySelector('.content').scrollTop=0;
+}
 function defaultData(){
   const today=new Date().toISOString().slice(0,10);
   return{
