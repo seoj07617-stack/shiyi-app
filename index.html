@@ -313,6 +313,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
   .content-body{padding:0 24px 48px}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"><\/script>
 </head>
 <body>
 <div class="app">
@@ -1592,6 +1593,109 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPro
 });
 function installPWA(){if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt.userChoice.then(r=>{if(r.outcome==='accepted')showToast('已安装到桌面');deferredPrompt=null;document.getElementById('installBanner').classList.remove('show');});}
 function dismissInstall(){document.getElementById('installBanner').classList.remove('show');localStorage.setItem('installDismissed','1');}
+
+// === Stock Dashboard ===
+async function loadStockData(){
+  try{
+    const r=await fetch('https://seoj07617-stack.github.io/shiyi-app/stock-data.json?v='+Date.now());
+    if(!r.ok)return null;
+    return await r.json();
+  }catch(e){return null}
+}
+
+function renderStockDashboard(data){
+  if(!data)return;
+  const el=document.getElementById('stockDashboard');
+  if(!el)return;
+  
+  let html='';
+  
+  // Market overview bars
+  html+='<div class="market-bar">';
+  for(const[name,info]of Object.entries(data.market)){
+    const clr=info.change>=0?'var(--green)':'var(--red)';
+    html+=`<div class="market-bar-item"><div class="name">${name}</div><div class="val" style="color:${clr}">${info.change>=0?'+':''}${info.change.toFixed(2)}%</div><div class="pct" style="color:var(--white-dim)">${info.price.toFixed(2)}</div></div>`;
+  }
+  html+='</div>';
+  
+  // Holdings metrics
+  data.holdings.forEach((h,i)=>{
+    const clr=h.change>=0?'var(--green)':'var(--red)';
+    const pnlClr=h.pnl>=0?'var(--green)':'var(--red)';
+    html+=`<div class="stock-chart-wrap">`;
+    html+=`<div class="stock-chart-title">${h.name} <span class="code">${h.code}</span></div>`;
+    html+=`<div class="stock-metrics">`;
+    html+=`<div class="stock-metric"><div class="label">现价</div><div class="value" style="color:${clr}">${h.price.toFixed(3)}</div><div class="change" style="color:${clr}">${h.change>=0?'+':''}${h.change.toFixed(2)}%</div></div>`;
+    html+=`<div class="stock-metric"><div class="label">盈亏</div><div class="value" style="color:${pnlClr}">${(h.pnl*100).toFixed(1)}%</div><div class="change" style="color:var(--white-dim)">成本${h.cost.toFixed(3)}</div></div>`;
+    html+=`<div class="stock-metric"><div class="label">市值</div><div class="value" style="color:var(--white)">¥${(h.marketValue/10000).toFixed(2)}万</div><div class="change" style="color:var(--white-dim)">${h.shares}份</div></div>`;
+    html+=`<div class="stock-metric"><div class="label">成交额</div><div class="value" style="color:var(--white)">${h.volume}</div><div class="change" style="color:var(--white-dim)">${h.notes}</div></div>`;
+    html+=`</div>`;
+    html+=`<canvas id="stockChart${i}" height="120"></canvas>`;
+    html+=`</div>`;
+  });
+  
+  // Key news
+  html+=`<div style="margin-top:4px">`;
+  data.keyNews.forEach(n=>{
+    const impactClr=n.impact==='bull'?'var(--green)':n.impact==='bear'?'var(--red)':'var(--amber)';
+    const prefix=n.impact==='bull'?'利多':n.impact==='bear'?'利空':'中性';
+    html+=`<div class="stock-news-item"><div class="stock-news-impact" style="background:${impactClr}"></div><div class="stock-news-text"><span style="color:${impactClr};font-weight:600">[${prefix}]</span> ${n.headline}</div></div>`;
+  });
+  html+=`</div>`;
+  
+  // Reminders
+  html+=`<div style="margin-top:8px">`;
+  data.reminders.forEach(r=>{
+    html+=`<div class="stock-reminder">${r}</div>`;
+  });
+  html+=`</div>`;
+  
+  el.innerHTML=html;
+  
+  // Render charts
+  data.holdings.forEach((h,i)=>{
+    const canvas=document.getElementById('stockChart'+i);
+    if(!canvas||!h.history||!h.history.length)return;
+    const ctx=canvas.getContext('2d');
+    const isNeg=h.change<0;
+    new Chart(ctx,{
+      type:'line',
+      data:{
+        labels:h.history.map(p=>p.date),
+        datasets:[{
+          data:h.history.map(p=>p.price),
+          borderColor:isNeg?'#f87171':'#34d399',
+          backgroundColor:isNeg?'rgba(248,113,113,0.08)':'rgba(52,211,153,0.08)',
+          borderWidth:1.5,
+          fill:true,
+          tension:0.3,
+          pointRadius:0,
+          pointHitRadius:8
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,padding:8,titleFont:{size:10},bodyFont:{size:11},callbacks:{label:function(ctx){return ctx.parsed.y.toFixed(3)}}}},
+        scales:{
+          x:{display:true,ticks:{maxTicksLimit:5,font:{size:9},color:'rgba(255,255,255,0.25)'},grid:{display:false}},
+          y:{display:true,ticks:{font:{size:9},color:'rgba(255,255,255,0.25)',callback:v=>v.toFixed(3)},grid:{color:'rgba(255,255,255,0.04)'}}
+        },
+        interaction:{mode:'nearest',axis:'x',intersect:false}
+      }
+    });
+  });
+}
+
+// Auto-load on tab switch
+const origSwitchTab=window.switchTab;
+window.switchTab=function(tab){
+  if(origSwitchTab)origSwitchTab(tab);
+  if(tab==='review'){
+    loadStockData().then(d=>{if(d)renderStockDashboard(d)});
+  }
+};
+
 </script>
 </body>
 </html>
