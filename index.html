@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7.65 - debug tab switch - 2026-07-28T14:30 -->
+<!-- v7.66 - inline style tab switch + force reflow - 2026-07-28T18:35 -->
 <html lang="zh-CN">
 <head>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -77,9 +77,8 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Displ
 .content-header .page-subtitle{font-size:12px;color:var(--white-dim);font-weight:400;margin-left:4px}
 .content-body{padding:0 32px 48px;max-width:680px}
 
-.section{display:none;animation:slideUp .35s var(--ease)}
+.section{display:none}
 .section.active{display:block}
-@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 .glass{background:var(--glass);backdrop-filter:blur(var(--blur)) saturate(180%);-webkit-backdrop-filter:blur(var(--blur)) saturate(180%);border:0.5px solid var(--glass-border);border-radius:var(--radius)}
 .glass-strong{background:var(--glass-strong);backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);border:0.5px solid rgba(255,255,255,0.08);border-radius:var(--radius)}
@@ -480,7 +479,7 @@ window.onerror=function(msg,url,line){
     <div class="content-body">
 
             <!-- HOME -->
-      <div class="section active" id="sec-home">
+      <div class="section active" id="sec-home" style="display:block">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
           <div style="font-size:18px;font-weight:700;color:var(--white)"><span id="homeGreeting"></span></div>
           <div style="font-size:12px;color:var(--white-dim);font-variant-numeric:tabular-nums" id="homeDate"></div>
@@ -536,7 +535,7 @@ window.onerror=function(msg,url,line){
       </div>
 
 <!-- HEALTH -->
-      <div class="section" id="sec-health">
+      <div class="section" id="sec-health" style="display:none">
         <div class="card glass" id="aiInsightCard" style="display:none;margin-bottom:14px"></div>
         <div class="card glass">
           <div class="card-glow"></div>
@@ -617,7 +616,7 @@ window.onerror=function(msg,url,line){
         </div>
 
       <!-- DIARY (每日感想) -->
-      <div class="section" id="sec-diary">
+      <div class="section" id="sec-diary" style="display:none">
         <div class="card glass-strong diary-card">
           <div class="card-glow"></div>
           <div class="card-title">
@@ -633,7 +632,7 @@ window.onerror=function(msg,url,line){
       </div>
 
       <!-- TODO -->
-      <div class="section" id="sec-todo">
+      <div class="section" id="sec-todo" style="display:none">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
           <div style="display:flex;align-items:center;gap:6px">
             <span style="font-size:11px;color:var(--white-dim)" id="remoteTodoStatus">同步中...</span>
@@ -654,7 +653,7 @@ window.onerror=function(msg,url,line){
       </div>
 
       <!-- JOURNAL (阅读) -->
-      <div class="section" id="sec-journal">
+      <div class="section" id="sec-journal" style="display:none">
         <div class="card glass">
           <div class="card-glow"></div>
           <div class="card-title"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14zM4 19.5A2.5 2.5 0 006.5 22H20"/></svg>阅读进度</div>
@@ -677,7 +676,7 @@ window.onerror=function(msg,url,line){
       </div>
 
       <!-- NEWS -->
-      <div class="section" id="sec-news">
+      <div class="section" id="sec-news" style="display:none">
         <div class="chips" id="newsChips" style="margin-bottom:4px">
         </div>
         <div class="card glass">
@@ -691,7 +690,7 @@ window.onerror=function(msg,url,line){
               </div>
 
       <!-- REVIEW -->
-      <div class="section" id="sec-workout">
+      <div class="section" id="sec-workout" style="display:none">
         <div class="card glass-strong" style="margin-bottom:8px">
           <div class="card-glow"></div>
           <div class="card-title"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/><circle cx="12" cy="12" r="4"/></svg>训练计划 <span class="count-badge" id="workoutPlanBadge"></span></div>
@@ -700,7 +699,7 @@ window.onerror=function(msg,url,line){
         <div id="workoutExercises"></div>
       </div>
 
-      <div class="section" id="sec-review">
+      <div class="section" id="sec-review" style="display:none">
         <div id="stockDashboard" class="card glass-strong" style="margin-bottom:8px">
           <div class="card-glow"></div>
           <div class="card-title"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 5-8"/></svg> 股票仪表盘 <span class="count-badge" id="stockDateBadge"></span></div>
@@ -736,7 +735,7 @@ window.onerror=function(msg,url,line){
       </div>
 
       <!-- PROGRESS (共同进步) -->
-      <div class="section" id="sec-progress">
+      <div class="section" id="sec-progress" style="display:none">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
           <span style="font-size:11px;color:var(--white-dim)" id="progressStatus">加载中...</span>
           <button class="btn-icon" onclick="fetchRemoteProgress()" style="padding:4px;width:24px;height:24px"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg></button>
@@ -808,20 +807,27 @@ function saveData(){try{localStorage.setItem(STORE_KEY,JSON.stringify(data));}ca
 function toggleCategoryDrawer(){document.getElementById('categoryDrawer').classList.toggle('open')}
 function switchTab(tab){
   try{
-  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
-  const navItem=document.querySelector(`.nav-item[data-tab="${tab}"]`);
+  var allSecs=document.querySelectorAll('.section');
+  var allNavs=document.querySelectorAll('.nav-item');
+  for(var i=0;i<allNavs.length;i++){allNavs[i].classList.remove('active');}
+  for(var i=0;i<allSecs.length;i++){
+    allSecs[i].classList.remove('active');
+    allSecs[i].style.display='none';
+  }
+  var navItem=document.querySelector('.nav-item[data-tab="'+tab+'"]');
   if(navItem)navItem.classList.add('active');
-  const sec=document.getElementById('sec-'+tab);
+  var sec=document.getElementById('sec-'+tab);
   if(!sec){showToast('ERR: sec-'+tab+' not found');return;}
   sec.classList.add('active');
-  var cs=window.getComputedStyle(sec);
-  showToast(tab+' | display:'+cs.display);
+  sec.style.display='block';
+  sec.style.opacity='0';
+  void sec.offsetHeight;
+  sec.style.opacity='1';
   var dbg=document.getElementById('tabDebug');
-  if(dbg)dbg.textContent='v7.65 | '+tab;
+  if(dbg)dbg.textContent='v7.66 | '+tab;
   if(pageTitles[tab]){document.getElementById('pageTitleText').textContent=pageTitles[tab].title;document.getElementById('pageSubtitle').textContent=pageTitles[tab].subtitle;}
-  if(navIcons[tab]){const hdrIcon=document.querySelector('.content-header .page-title svg');if(hdrIcon)hdrIcon.innerHTML=navIcons[tab];}
-  document.querySelector('.content').scrollTop=0;
+  if(navIcons[tab]){var hdrIcon=document.querySelector('.content-header .page-title svg');if(hdrIcon)hdrIcon.innerHTML=navIcons[tab];}
+  var ct=document.querySelector('.content');if(ct)ct.scrollTop=0;
   }catch(e){showToast('switchTab err:'+e.message);}
 }
 function defaultData(){
@@ -939,17 +945,9 @@ const navIcons={
 };
 document.querySelectorAll('.nav-item').forEach(item=>{
   item.addEventListener('click',()=>{
-    const tab=item.dataset.tab;
+    var tab=item.dataset.tab;
     if(!tab)return;
-    const sec=document.getElementById('sec-'+tab);
-    if(!sec)return;
-    document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
-    item.classList.add('active');
-    sec.classList.add('active');
-    if(pageTitles[tab]){document.getElementById('pageTitleText').textContent=pageTitles[tab].title;document.getElementById('pageSubtitle').textContent=pageTitles[tab].subtitle;}
-    if(navIcons[tab]){const hdrIcon=document.querySelector('.content-header .page-title svg');if(hdrIcon)hdrIcon.innerHTML=navIcons[tab];}
-    try{document.querySelector('.content').scrollTop=0;}catch(e){}
+    switchTab(tab);
     if(tab==='home')try{renderHome();renderHabits();renderCountdowns();}catch(e){}
     if(tab==='todo')try{renderTodos();}catch(e){}
   });
@@ -1946,6 +1944,18 @@ function renderAll(){
   try{fetchWorkoutData();}catch(e){console.error(e)}
 }
 renderAll();
+
+/* Self-diagnostic: verify tab switching works */
+(function(){
+  try{
+    var homeSec=document.getElementById('sec-home');
+    if(homeSec){
+      homeSec.classList.add('active');
+      homeSec.style.display='block';
+      void homeSec.offsetHeight;
+    }
+  }catch(e){}
+})();
 /* FAB tooltip */
 const fab=document.getElementById('askShiyiFab'),fabTip=document.getElementById('fabTooltip');
 if(fab&&fabTip){fab.addEventListener('mouseenter',()=>fabTip.style.opacity='1');fab.addEventListener('mouseleave',()=>fabTip.style.opacity='0');fab.addEventListener('touchstart',()=>{fabTip.style.opacity='1';setTimeout(()=>fabTip.style.opacity='0',1500);},{passive:true});}
