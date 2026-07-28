@@ -164,12 +164,12 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 .set-row .set-name{width:auto;flex:2;text-align:left}
 .workout-history-item{padding:13px 15px;margin-bottom:8px;cursor:pointer;position:relative}
 .workout-history-date{font-size:12px;font-weight:600;color:var(--purple);margin-bottom:5px;font-variant-numeric:tabular-nums}
-.mobile-header{display:none;position:fixed;top:0;left:0;right:0;z-index:101;height:48px;padding-top:env(safe-area-inset-top,0px);background:rgba(13,8,32,0.92);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:0.5px solid var(--glass-border);align-items:center;padding-left:16px;padding-right:16px;gap:10px}
+.mobile-header{display:none;position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:101;height:48px;background:rgba(13,8,32,0.92);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:0.5px solid var(--glass-border);align-items:center;padding:0 16px;gap:10px}
 .mobile-header-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#1a1035,#0d0820);border:0.5px solid rgba(167,139,250,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(124,58,237,0.2);transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
 .mobile-header-icon:active{transform:scale(0.9)}
 .mobile-header-title{font-size:15px;font-weight:600;background:linear-gradient(135deg,var(--purple),var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex-shrink:0}
 .mobile-header-date{font-size:11px;color:var(--white-dim);margin-left:auto;font-variant-numeric:tabular-nums}
-.category-drawer{display:none;position:fixed;inset:0;z-index:200;pointer-events:none}
+.category-drawer{display:none;position:fixed;inset:0;z-index:200;pointer-events:none;padding-bottom:env(safe-area-inset-bottom,0px)}
 .category-drawer.open{display:block;pointer-events:auto}
 .drawer-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);opacity:0;transition:opacity .25s}
 .category-drawer.open .drawer-overlay{opacity:1}
