@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7.67 - rollback to v7.57 structure + inline style fix -->
+<!-- v7.68 - drawer inline style fix + bigger hamburger -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -166,7 +166,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 .workout-history-item{padding:13px 15px;margin-bottom:8px;cursor:pointer;position:relative}
 .workout-history-date{font-size:12px;font-weight:600;color:var(--purple);margin-bottom:5px;font-variant-numeric:tabular-nums}
 .mobile-header{display:none;position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:101;height:48px;background:rgba(13,8,32,0.92);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:0.5px solid var(--glass-border);align-items:center;padding:0 16px;gap:10px}
-.mobile-header-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#1a1035,#0d0820);border:0.5px solid rgba(167,139,250,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(124,58,237,0.2);transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
+.mobile-header-icon{width:40px;height:40px;border-radius:10px;padding:4px;background:linear-gradient(135deg,#1a1035,#0d0820);border:0.5px solid rgba(167,139,250,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(124,58,237,0.2);transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
 .mobile-header-icon:active{transform:scale(0.9)}
 .mobile-header-title{font-size:15px;font-weight:600;background:linear-gradient(135deg,var(--purple),var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex-shrink:0}
 .mobile-header-date{font-size:11px;color:var(--white-dim);margin-left:auto;font-variant-numeric:tabular-nums}
@@ -353,7 +353,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
     <div class="mobile-header-icon" onclick="toggleCategoryDrawer()">
       <svg viewBox="0 0 40 40" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="mlg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c4b5fd"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><rect x="7" y="8" width="5.5" height="20" rx="1.8" fill="url(#mlg)" opacity="0.95"/><rect x="16" y="4" width="5.5" height="28" rx="1.8" fill="url(#mlg)"/><rect x="25" y="10" width="5.5" height="18" rx="1.8" fill="url(#mlg)" opacity="0.7"/></svg>
     </div>
-    <span class="mobile-header-title">拾壹工作台</span>
+    <span class="mobile-header-title" onclick="toggleCategoryDrawer()">拾壹工作台</span>
     <div class="mobile-header-date" id="mobileDate"></div>
   </div>
   <div class="category-drawer" id="categoryDrawer">
@@ -758,7 +758,28 @@ function migrateData(d){
   return d;
 }
 function saveData(){try{localStorage.setItem(STORE_KEY,JSON.stringify(data));}catch(e){showToast('保存失败：存储空间不足');}}
-function toggleCategoryDrawer(){document.getElementById('categoryDrawer').classList.toggle('open')}
+function toggleCategoryDrawer(){
+  var d=document.getElementById('categoryDrawer');
+  if(!d)return;
+  var isOpen=d.classList.contains('open');
+  if(isOpen){
+    d.classList.remove('open');
+    d.style.display='none';
+    d.style.pointerEvents='none';
+    var panel=d.querySelector('.drawer-panel');
+    if(panel)panel.style.transform='translateX(-100%)';
+    var overlay=d.querySelector('.drawer-overlay');
+    if(overlay)overlay.style.opacity='0';
+  }else{
+    d.classList.add('open');
+    d.style.display='block';
+    d.style.pointerEvents='auto';
+    var panel=d.querySelector('.drawer-panel');
+    if(panel){panel.style.transform='translateX(0)';}
+    var overlay=d.querySelector('.drawer-overlay');
+    if(overlay)overlay.style.opacity='1';
+  }
+}
 function switchTab(tab){
   try{
   var allSecs=document.querySelectorAll('.section');
