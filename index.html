@@ -1,10 +1,7 @@
 <!DOCTYPE html>
-<!-- v7.66 - inline style tab switch + force reflow - 2026-07-28T18:35 -->
+<!-- v7.67 - rollback to v7.57 structure + inline style fix -->
 <html lang="zh-CN">
 <head>
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>拾壹工作台</title>
@@ -79,6 +76,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Displ
 
 .section{display:none}
 .section.active{display:block}
+
 
 .glass{background:var(--glass);backdrop-filter:blur(var(--blur)) saturate(180%);-webkit-backdrop-filter:blur(var(--blur)) saturate(180%);border:0.5px solid var(--glass-border);border-radius:var(--radius)}
 .glass-strong{background:var(--glass-strong);backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);border:0.5px solid rgba(255,255,255,0.08);border-radius:var(--radius)}
@@ -298,7 +296,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
   .content{order:1;padding-bottom:20px;padding-top:calc(48px + env(safe-area-inset-top,0px))}
   .content-header{padding:20px 18px 14px}
   .content-header .page-title{font-size:20px}
-  .content-body{padding:0 18px 24px}
+  .content-body{padding:0 18px calc(48px + env(safe-area-inset-bottom,0px))}
   .metric-grid{grid-template-columns:repeat(2,1fr)}
 }
 @media(min-width:768px) and (max-width:1023px){
@@ -346,20 +344,10 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 .impact-bear{background:rgba(239,68,68,0.15);color:var(--red)}
 .impact-neutral{background:rgba(255,255,255,0.05);color:var(--white-dim)}
 .reminder-item{font-size:11px;color:var(--white-dim);padding:2px 0}
-
-
-
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 </head>
-<body><div id="globalError" style="display:none;position:fixed;top:0;left:0;right:0;z-index:99999;background:#f87171;color:#000;padding:8px 12px;font-size:12px;font-weight:600;word-break:break-all"></div>
-<script>
-window.onerror=function(msg,url,line){
-  var el=document.getElementById('globalError');
-  if(el){el.style.display='block';el.textContent='JS Error L'+line+': '+msg;}
-  return false;
-};
-</script>
+<body>
 <div class="app">
   <div class="mobile-header" id="mobileHeader">
     <div class="mobile-header-icon" onclick="toggleCategoryDrawer()">
@@ -377,9 +365,6 @@ window.onerror=function(msg,url,line){
           <span style="font-size:16px;font-weight:600;color:var(--purple-bright)">拾壹</span>
         </div>
         <button class="btn-icon" onclick="toggleCategoryDrawer()" style="color:var(--white-dim)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-      </div>
-      <div class="drawer-section">
-        <div class="drawer-item" onclick="switchTab('home');toggleCategoryDrawer()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>首页</div>
       </div>
       <div class="drawer-section">
         <div class="drawer-section-label">生活</div>
@@ -413,44 +398,40 @@ window.onerror=function(msg,url,line){
         <div class="date" id="todayDate"></div>
       </div>
     </div>
-    <div class="nav-item active" data-tab="home" onclick="switchTab('home')">
-      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>首页</span>
-    </div>
     <div class="nav-section-label">生活</div>
-    <div class="nav-item" data-tab="health" onclick="switchTab('health')">
+    <div class="nav-item active" data-tab="health">
       <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
       <span>健康</span>
     </div>
-    <div class="nav-item" data-tab="workout" onclick="switchTab('workout')">
+    <div class="nav-item" data-tab="workout">
       <svg viewBox="0 0 24 24"><path d="M6.5 6.5h11v11h-11z" fill="none"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/><circle cx="12" cy="12" r="4" fill="none"/></svg>
       <span>训练</span>
     </div>
-    <div class="nav-item" data-tab="diary" onclick="switchTab('diary')">
+    <div class="nav-item" data-tab="diary">
       <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
       <span>每日感想</span>
     </div>
     <div class="nav-section-label">效率</div>
-    <div class="nav-item" data-tab="todo" onclick="switchTab('todo')">
+    <div class="nav-item" data-tab="todo">
       <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
       <span>待办</span>
       <span class="nav-badge" id="navTodoBadge" style="display:none"></span>
     </div>
-    <div class="nav-item" data-tab="progress" onclick="switchTab('progress')">
+    <div class="nav-item" data-tab="progress">
       <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
       <span>共同进步</span>
     </div>
     <div class="nav-section-label">学习</div>
-    <div class="nav-item" data-tab="journal" onclick="switchTab('journal')">
+    <div class="nav-item" data-tab="journal">
       <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14zM4 19.5A2.5 2.5 0 006.5 22H20"/></svg>
       <span>阅读</span>
     </div>
-    <div class="nav-item" data-tab="news" onclick="switchTab('news')">
+    <div class="nav-item" data-tab="news">
       <svg viewBox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2zM7 9h7M7 13h7M7 17h4"/></svg>
       <span>新闻</span>
     </div>
     <div class="nav-section-label">交易</div>
-    <div class="nav-item" data-tab="review" onclick="switchTab('review')">
+    <div class="nav-item" data-tab="review">
       <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/><path d="M9 12h6M9 16h4"/></svg>
       <span>每日复盘</span>
     </div>
@@ -471,71 +452,15 @@ window.onerror=function(msg,url,line){
   <main class="content">
     <div class="content-header">
       <div class="page-title" id="pageTitle">
-        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        <span id="pageTitleText">首页</span>
-        <span class="page-subtitle" id="pageSubtitle">今日概览</span>
+        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        <span id="pageTitleText">健康</span>
+        <span class="page-subtitle" id="pageSubtitle">体重 · 训练 · 睡眠 · 饮水</span>
       </div>
     </div>
     <div class="content-body">
 
-            <!-- HOME -->
-      <div class="section active" id="sec-home" style="display:block">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-          <div style="font-size:18px;font-weight:700;color:var(--white)"><span id="homeGreeting"></span></div>
-          <div style="font-size:12px;color:var(--white-dim);font-variant-numeric:tabular-nums" id="homeDate"></div>
-        </div>
-        <!-- Today's tasks mini -->
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>今日待办</div>
-          <div id="homeTodos" style="display:flex;flex-direction:column;gap:6px"></div>
-          <div id="homeTodosEmpty" style="display:none;text-align:center;padding:12px 0;font-size:12px;color:var(--white-dim)">今天没有待办，歇着</div>
-        </div>
-
-        <!-- Today's training mini -->
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5h11v11h-11z" fill="none"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/><circle cx="12" cy="12" r="4" fill="none"/></svg>今日训练</div>
-          <div id="homeWorkout" style="display:flex;flex-direction:column;gap:6px"></div>
-        </div>
-
-        <!-- Habits -->
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>每日习惯</div>
-          <div id="habitList" style="display:flex;flex-direction:column;gap:8px"></div>
-        </div>
-
-        <!-- Pomodoro -->
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>专注计时</div>
-          <div style="text-align:center;padding:6px 0">
-            <div id="pomodoroDisplay" style="font-size:42px;font-weight:700;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,var(--purple),var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">25:00</div>
-            <div id="pomodoroLabel" style="font-size:11px;color:var(--white-dim);margin-top:2px">专注模式</div>
-            <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
-              <button class="btn btn-primary btn-sm" id="pomStartBtn" onclick="startPomodoro()">开始</button>
-              <button class="btn btn-ghost btn-sm" onclick="resetPomodoro()">重置</button>
-            </div>
-            <div style="display:flex;gap:6px;justify-content:center;margin-top:10px">
-              <button class="chip" onclick="setPomTime(25)" id="pom25" style="font-size:10px;padding:3px 8px;border:1px solid var(--purple)">25分</button>
-              <button class="chip" onclick="setPomTime(15)" id="pom15" style="font-size:10px;padding:3px 8px">15分</button>
-              <button class="chip" onclick="setPomTime(5)" id="pom5" style="font-size:10px;padding:3px 8px">5分</button>
-            </div>
-            <div style="font-size:11px;color:var(--white-dim);margin-top:8px">今日专注 <span id="pomCount" style="color:var(--purple);font-weight:700">0</span> 次</div>
-          </div>
-        </div>
-
-        <!-- Countdowns -->
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V7a2 2 0 012-2h10a2 2 0 012 2v14"/><path d="M3 21h18"/><path d="M9 21v-4h6v4"/></svg>倒计时</div>
-          <div id="countdownList" style="display:flex;flex-direction:column;gap:10px"></div>
-        </div>
-      </div>
-
-<!-- HEALTH -->
-      <div class="section" id="sec-health" style="display:none">
+      <!-- HEALTH -->
+      <div class="section active" id="sec-health" style="display:block">
         <div class="card glass" id="aiInsightCard" style="display:none;margin-bottom:14px"></div>
         <div class="card glass">
           <div class="card-glow"></div>
@@ -614,6 +539,38 @@ window.onerror=function(msg,url,line){
             <div class="cal-row" id="checkinCal"></div>
           </div>
         </div>
+
+        <div class="card glass">
+          <div class="card-glow"></div>
+          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>每日习惯</div>
+          <div id="habitList" style="display:flex;flex-direction:column;gap:8px"></div>
+        </div>
+
+        <div class="card glass">
+          <div class="card-glow"></div>
+          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>专注计时</div>
+          <div style="text-align:center;padding:6px 0">
+            <div id="pomodoroDisplay" style="font-size:42px;font-weight:700;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,var(--purple),var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">25:00</div>
+            <div id="pomodoroLabel" style="font-size:11px;color:var(--white-dim);margin-top:2px">专注模式</div>
+            <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+              <button class="btn btn-primary btn-sm" id="pomStartBtn" onclick="startPomodoro()">开始</button>
+              <button class="btn btn-ghost btn-sm" onclick="resetPomodoro()">重置</button>
+            </div>
+            <div style="display:flex;gap:6px;justify-content:center;margin-top:10px">
+              <button class="chip" onclick="setPomTime(25)" id="pom25" style="font-size:10px;padding:3px 8px;border:1px solid var(--purple)">25分</button>
+              <button class="chip" onclick="setPomTime(15)" id="pom15" style="font-size:10px;padding:3px 8px">15分</button>
+              <button class="chip" onclick="setPomTime(5)" id="pom5" style="font-size:10px;padding:3px 8px">5分</button>
+            </div>
+            <div style="font-size:11px;color:var(--white-dim);margin-top:8px">今日专注 <span id="pomCount" style="color:var(--purple);font-weight:700">0</span> 次</div>
+          </div>
+        </div>
+
+        <div class="card glass">
+          <div class="card-glow"></div>
+          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V7a2 2 0 012-2h10a2 2 0 012 2v14"/><path d="M3 21h18"/><path d="M9 21v-4h6v4"/></svg>倒计时</div>
+          <div id="countdownList" style="display:flex;flex-direction:column;gap:10px"></div>
+        </div>
+      </div>
 
       <!-- DIARY (每日感想) -->
       <div class="section" id="sec-diary" style="display:none">
@@ -771,10 +728,7 @@ window.onerror=function(msg,url,line){
 <div id="fabTooltip" style="position:fixed;bottom:76px;right:24px;font-size:11px;color:var(--white-mid);background:rgba(18,18,22,0.9);padding:6px 12px;border-radius:8px;z-index:90;pointer-events:none;opacity:0;transition:opacity .3s;backdrop-filter:blur(10px);border:0.5px solid var(--glass-border)">问拾壹</div>
 <div class="install-banner" id="installBanner"><span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="var(--purple)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>添加到主屏幕</span><button class="btn btn-primary" onclick="installPWA()">安装</button><button class="btn-icon" onclick="dismissInstall()" style="margin-left:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
 
-<script>console.log('拾壹工作台 v7.60 loaded at', new Date().toISOString());
-
-
-
+<script>
 const STORE_KEY='shiyi_desk_v2';
 const DATA_VERSION=8;
 let data=loadData();
@@ -810,10 +764,7 @@ function switchTab(tab){
   var allSecs=document.querySelectorAll('.section');
   var allNavs=document.querySelectorAll('.nav-item');
   for(var i=0;i<allNavs.length;i++){allNavs[i].classList.remove('active');}
-  for(var i=0;i<allSecs.length;i++){
-    allSecs[i].classList.remove('active');
-    allSecs[i].style.display='none';
-  }
+  for(var i=0;i<allSecs.length;i++){allSecs[i].classList.remove('active');allSecs[i].style.display='none';}
   var navItem=document.querySelector('.nav-item[data-tab="'+tab+'"]');
   if(navItem)navItem.classList.add('active');
   var sec=document.getElementById('sec-'+tab);
@@ -823,8 +774,6 @@ function switchTab(tab){
   sec.style.opacity='0';
   void sec.offsetHeight;
   sec.style.opacity='1';
-  var dbg=document.getElementById('tabDebug');
-  if(dbg)dbg.textContent='v7.66 | '+tab;
   if(pageTitles[tab]){document.getElementById('pageTitleText').textContent=pageTitles[tab].title;document.getElementById('pageSubtitle').textContent=pageTitles[tab].subtitle;}
   if(navIcons[tab]){var hdrIcon=document.querySelector('.content-header .page-title svg');if(hdrIcon)hdrIcon.innerHTML=navIcons[tab];}
   var ct=document.querySelector('.content');if(ct)ct.scrollTop=0;
@@ -922,8 +871,7 @@ const md=document.getElementById('mobileDate');if(md)md.textContent=today.getMon
 
 /* Navigation */
 const pageTitles={
-  home:{title:'首页',subtitle:'今日概览'},
-  health:{title:'健康',subtitle:'体重 · 饮食 · 打卡'},
+  health:{title:'健康',subtitle:'体重 · 饮食 · 习惯 · 专注 · 倒计时'},
   workout:{title:'训练',subtitle:'增肌 · 减脂 · PPL六天循环'},
   diary:{title:'每日感想',subtitle:'记录每一天'},
   todo:{title:'待办',subtitle:'任务管理'},
@@ -933,7 +881,6 @@ const pageTitles={
   review:{title:'每日复盘',subtitle:'交易日志 · 反思'}
 };
 const navIcons={
-  home:'<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/>',
   health:'<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>',
   workout:'<path d="M3 12h3M18 12h3M12 3v3M12 18v3"/><circle cx="12" cy="12" r="4"/>',
   diary:'<path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>',
@@ -948,10 +895,8 @@ document.querySelectorAll('.nav-item').forEach(item=>{
     var tab=item.dataset.tab;
     if(!tab)return;
     switchTab(tab);
-    if(tab==='home')try{renderHome();renderHabits();renderCountdowns();}catch(e){}
-    if(tab==='todo')try{renderTodos();}catch(e){}
   });
-});
+}););
 
 /* ===== HEALTH ===== */
 function addWeight(){
@@ -1104,88 +1049,7 @@ function renderCountdowns(){
   }).join('');
 }
 
-
-/* ===== HOME / 首页 ===== */
-function getGreeting(){
-  const h=new Date().getHours();
-  if(h<6)return '夜深了';
-  if(h<9)return '早上好';
-  if(h<12)return '上午好';
-  if(h<14)return '中午好';
-  if(h<18)return '下午好';
-  return '晚上好';
-}
-function renderHome(){
-  const now=new Date();
-  document.getElementById('homeGreeting').textContent=' · '+getGreeting()+'，君';
-  document.getElementById('homeDate').textContent=now.toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
-  
-  // Today's todos
-  const todayStr=TODAY_STR;
-  const todayTodos=(data.todos||[]).filter(t=>!t.done&&t.date===todayStr);
-  const overdueTodos=(data.todos||[]).filter(t=>!t.done&&t.date&&t.date<todayStr);
-  const allShow=[...overdueTodos,...todayTodos].slice(0,5);
-  const el=document.getElementById('homeTodos');
-  const emptyEl=document.getElementById('homeTodosEmpty');
-  if(allShow.length===0){
-    el.style.display='none';emptyEl.style.display='block';
-  } else {
-    el.style.display='flex';emptyEl.style.display='none';
-    el.innerHTML=allShow.map(t=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.03);cursor:pointer" onclick="switchTab('todo')">
-      <div style="width:6px;height:6px;border-radius:50%;background:${t.date<todayStr?'var(--red)':'var(--purple)'};flex-shrink:0"></div>
-      <div style="font-size:13px;color:var(--white-mid);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.text}</div>
-      ${t.date<todayStr?'<div style="font-size:10px;color:var(--red)">逾期</div>':''}
-    </div>`).join('');
-    if((overdueTodos.length+todayTodos.length)>5){
-      el.innerHTML+=`<div style="text-align:center;padding:6px;font-size:11px;color:var(--white-dim)">还有 ${overdueTodos.length+todayTodos.length-5} 项，<span style="color:var(--purple);cursor:pointer" onclick="switchTab('todo')">查看全部</span></div>`;
-    }
-  }
-  
-  // Today's workout summary
-  const workoutEl=document.getElementById('homeWorkout');
-  const dayOfWeek=now.getDay();
-  const dayNames=['日','一','二','三','四','五','六'];
-  const checkedIn=data.checkins&&data.checkins.includes(todayStr);
-  workoutEl.innerHTML=`
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.03)">
-      <div style="font-size:13px;color:var(--white-mid)">周${dayNames[dayOfWeek]}训练</div>
-      <div style="font-size:12px;font-weight:600;color:${checkedIn?'var(--green)':'var(--white-dim)'}">${checkedIn?'已完成':'未完成'}</div>
-    </div>
-    <div style="display:flex;gap:12px;margin-top:4px">
-      <div style="flex:1;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.03)">
-        <div style="font-size:10px;color:var(--white-dim)">连续打卡</div>
-        <div style="font-size:18px;font-weight:700;color:var(--green);margin-top:2px">${getStreak()}</div>
-      </div>
-      <div style="flex:1;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.03)">
-        <div style="font-size:10px;color:var(--white-dim)">本月打卡</div>
-        <div style="font-size:18px;font-weight:700;color:var(--purple);margin-top:2px">${getMonthCount()}</div>
-      </div>
-    </div>
-  `;
-}
-
-function getStreak(){
-  if(!data.checkins||data.checkins.length===0)return 0;
-  const sorted=[...data.checkins].sort().reverse();
-  let streak=0;
-  const today=new Date();
-  for(let i=0;i<365;i++){
-    const d=new Date(today);
-    d.setDate(d.getDate()-i);
-    const ds=d.toISOString().slice(0,10);
-    if(sorted.includes(ds))streak++;
-    else if(i>0)break;
-  }
-  return streak;
-}
-
-function getMonthCount(){
-  if(!data.checkins)return 0;
-  const ym=TODAY_STR.slice(0,7);
-  return data.checkins.filter(d=>d.startsWith(ym)).length;
-}
-
-/* ===== DIET / 饩食追踪 ===== */
+/* ===== DIET / 饮食追踪 ===== */
 const mealTypes=['早餐','午餐','晚餐','加餐'];
 let selectedMealType='早餐';
 const foodDB={
@@ -1929,7 +1793,6 @@ function renderAll(){
   try{renderCheckin();}catch(e){console.error(e)}
   try{renderHabits();}catch(e){console.error(e)}
   try{renderCountdowns();}catch(e){console.error(e)}
-  try{renderHome();}catch(e){console.error(e)}
   try{if(data.pomodoros&&data.pomodoros[TODAY_STR]){document.getElementById('pomCount').textContent=data.pomodoros[TODAY_STR];}}catch(e){}
   try{renderWeight();}catch(e){console.error(e)}
   try{renderMealTypeChips();renderQuickFoods();renderMeals();renderWater();}catch(e){console.error(e)}
@@ -1945,15 +1808,11 @@ function renderAll(){
 }
 renderAll();
 
-/* Self-diagnostic: verify tab switching works */
+/* Self-diagnostic: force first section visible */
 (function(){
   try{
-    var homeSec=document.getElementById('sec-home');
-    if(homeSec){
-      homeSec.classList.add('active');
-      homeSec.style.display='block';
-      void homeSec.offsetHeight;
-    }
+    var firstSec=document.querySelector('.section.active');
+    if(firstSec){firstSec.style.display='block';void firstSec.offsetHeight;}
   }catch(e){}
 })();
 /* FAB tooltip */
@@ -2066,17 +1925,11 @@ function renderStockDashboard(data){
 const origSwitchTab=window.switchTab;
 window.switchTab=function(tab){
   if(origSwitchTab)origSwitchTab(tab);
-  if(tab==='home')try{renderHome();renderHabits();renderCountdowns();}catch(e){}
   if(tab==='review'){
     loadStockData().then(d=>{if(d)renderStockDashboard(d)});
   }
 };
 
 </script>
-
-
-
-<!-- Debug indicator -->
-<div id="tabDebug" style="position:fixed;top:4px;right:4px;z-index:9998;background:rgba(124,58,237,0.9);color:#fff;font-size:10px;padding:3px 8px;border-radius:6px;font-weight:600;pointer-events:none">v7.65 | home</div>
 </body>
 </html>
