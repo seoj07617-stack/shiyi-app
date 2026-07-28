@@ -1,6 +1,10 @@
 <!DOCTYPE html>
+<!-- v7.60 - tab fix - 2026-07-28T13:33 -->
 <html lang="zh-CN">
 <head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>拾壹工作台</title>
@@ -758,7 +762,8 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 <div id="fabTooltip" style="position:fixed;bottom:76px;right:24px;font-size:11px;color:var(--white-mid);background:rgba(18,18,22,0.9);padding:6px 12px;border-radius:8px;z-index:90;pointer-events:none;opacity:0;transition:opacity .3s;backdrop-filter:blur(10px);border:0.5px solid var(--glass-border)">问拾壹</div>
 <div class="install-banner" id="installBanner"><span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="var(--purple)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>添加到主屏幕</span><button class="btn btn-primary" onclick="installPWA()">安装</button><button class="btn-icon" onclick="dismissInstall()" style="margin-left:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
 
-<script>
+<script>console.log('拾壹工作台 v7.60 loaded at', new Date().toISOString());
+
 const STORE_KEY='shiyi_desk_v2';
 const DATA_VERSION=8;
 let data=loadData();
@@ -916,13 +921,16 @@ const navIcons={
 document.querySelectorAll('.nav-item').forEach(item=>{
   item.addEventListener('click',()=>{
     const tab=item.dataset.tab;
+    if(!tab)return;
+    const sec=document.getElementById('sec-'+tab);
+    if(!sec)return;
     document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
     document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
     item.classList.add('active');
-    document.getElementById('sec-'+tab).classList.add('active');
+    sec.classList.add('active');
     if(pageTitles[tab]){document.getElementById('pageTitleText').textContent=pageTitles[tab].title;document.getElementById('pageSubtitle').textContent=pageTitles[tab].subtitle;}
-    if(navIcons[tab]){document.querySelector('.content-header .page-title svg').innerHTML=navIcons[tab];}
-    document.querySelector('.content').scrollTop=0;
+    if(navIcons[tab]){const hdrIcon=document.querySelector('.content-header .page-title svg');if(hdrIcon)hdrIcon.innerHTML=navIcons[tab];}
+    try{document.querySelector('.content').scrollTop=0;}catch(e){}
     if(tab==='home')try{renderHome();renderHabits();renderCountdowns();}catch(e){}
     if(tab==='todo')try{renderTodos();}catch(e){}
   });
