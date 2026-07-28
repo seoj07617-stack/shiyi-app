@@ -366,6 +366,9 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
         <button class="btn-icon" onclick="toggleCategoryDrawer()" style="color:var(--white-dim)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
       </div>
       <div class="drawer-section">
+        <div class="drawer-item" onclick="switchTab('home');toggleCategoryDrawer()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>首页</div>
+      </div>
+      <div class="drawer-section">
         <div class="drawer-section-label">生活</div>
         <div class="drawer-item" onclick="switchTab('health');toggleCategoryDrawer()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>健康</div>
         <div class="drawer-item" onclick="switchTab('workout');toggleCategoryDrawer()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/><circle cx="12" cy="12" r="4"/></svg>训练</div>
@@ -455,19 +458,17 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
   <main class="content">
     <div class="content-header">
       <div class="page-title" id="pageTitle">
-        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-        <span id="pageTitleText">健康</span>
-        <span class="page-subtitle" id="pageSubtitle">体重 · 训练 · 睡眠 · 饮水</span>
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span id="pageTitleText">首页</span>
+        <span class="page-subtitle" id="pageSubtitle">今日概览</span>
       </div>
     </div>
     <div class="content-body">
 
             <!-- HOME -->
       <div class="section active" id="sec-home">
-        <div class="content-header">
-          <div>
-            <div class="page-title"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>今日概览<span class="page-subtitle" id="homeGreeting"></span></div>
-          </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div style="font-size:18px;font-weight:700;color:var(--white)"><span id="homeGreeting"></span></div>
           <div style="font-size:12px;color:var(--white-dim);font-variant-numeric:tabular-nums" id="homeDate"></div>
         </div>
         <div class="content-body" style="max-width:680px">
@@ -799,10 +800,8 @@ function switchTab(tab){
   if(navItem)navItem.classList.add('active');
   const sec=document.getElementById('sec-'+tab);
   if(sec)sec.classList.add('active');
-  document.getElementById('pageTitleText').textContent=pageTitles[tab].title;
-  document.getElementById('pageSubtitle').textContent=pageTitles[tab].subtitle;
-  const hdrIcon=document.querySelector('.content-header .page-title svg');
-  if(hdrIcon)hdrIcon.innerHTML=navIcons[tab];
+  if(pageTitles[tab]){document.getElementById('pageTitleText').textContent=pageTitles[tab].title;document.getElementById('pageSubtitle').textContent=pageTitles[tab].subtitle;}
+  if(navIcons[tab]){const hdrIcon=document.querySelector('.content-header .page-title svg');if(hdrIcon)hdrIcon.innerHTML=navIcons[tab];}
   document.querySelector('.content').scrollTop=0;
 }
 function defaultData(){
@@ -897,6 +896,7 @@ const md=document.getElementById('mobileDate');if(md)md.textContent=today.getMon
 
 /* Navigation */
 const pageTitles={
+  home:{title:'首页',subtitle:'今日概览'},
   health:{title:'健康',subtitle:'体重 · 饮食 · 打卡'},
   workout:{title:'训练',subtitle:'增肌 · 减脂 · PPL六天循环'},
   diary:{title:'每日感想',subtitle:'记录每一天'},
@@ -907,6 +907,7 @@ const pageTitles={
   review:{title:'每日复盘',subtitle:'交易日志 · 反思'}
 };
 const navIcons={
+  home:'<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/>',
   health:'<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>',
   workout:'<path d="M3 12h3M18 12h3M12 3v3M12 18v3"/><circle cx="12" cy="12" r="4"/>',
   diary:'<path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>',
@@ -923,10 +924,11 @@ document.querySelectorAll('.nav-item').forEach(item=>{
     document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
     item.classList.add('active');
     document.getElementById('sec-'+tab).classList.add('active');
-    document.getElementById('pageTitleText').textContent=pageTitles[tab].title;
-    document.getElementById('pageSubtitle').textContent=pageTitles[tab].subtitle;
-    document.querySelector('.content-header .page-title svg').innerHTML=navIcons[tab];
+    if(pageTitles[tab]){document.getElementById('pageTitleText').textContent=pageTitles[tab].title;document.getElementById('pageSubtitle').textContent=pageTitles[tab].subtitle;}
+    if(navIcons[tab]){document.querySelector('.content-header .page-title svg').innerHTML=navIcons[tab];}
     document.querySelector('.content').scrollTop=0;
+    if(tab==='home')try{renderHome();renderHabits();renderCountdowns();}catch(e){}
+    if(tab==='todo')try{renderTodos();}catch(e){}
   });
 });
 
@@ -2031,6 +2033,7 @@ function renderStockDashboard(data){
 const origSwitchTab=window.switchTab;
 window.switchTab=function(tab){
   if(origSwitchTab)origSwitchTab(tab);
+  if(tab==='home')try{renderHome();renderHabits();renderCountdowns();}catch(e){}
   if(tab==='review'){
     loadStockData().then(d=>{if(d)renderStockDashboard(d)});
   }
