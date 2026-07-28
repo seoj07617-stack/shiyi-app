@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7.68 - drawer inline style fix + bigger hamburger -->
+<!-- v7.69 - mobile: all sections visible + scroll nav strip, no drawer/display toggle -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -165,7 +165,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 .set-row .set-name{width:auto;flex:2;text-align:left}
 .workout-history-item{padding:13px 15px;margin-bottom:8px;cursor:pointer;position:relative}
 .workout-history-date{font-size:12px;font-weight:600;color:var(--purple);margin-bottom:5px;font-variant-numeric:tabular-nums}
-.mobile-header{display:none;position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:101;height:48px;background:rgba(13,8,32,0.92);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:0.5px solid var(--glass-border);align-items:center;padding:0 16px;gap:10px}
+.mobile-header{display:none;position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:101;height:48px;background:rgba(13,8,32,0.92);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:0.5px solid var(--glass-border);align-items:center;padding:0 8px;gap:6px}
 .mobile-header-icon{width:40px;height:40px;border-radius:10px;padding:4px;background:linear-gradient(135deg,#1a1035,#0d0820);border:0.5px solid rgba(167,139,250,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(124,58,237,0.2);transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
 .mobile-header-icon:active{transform:scale(0.9)}
 .mobile-header-title{font-size:15px;font-weight:600;background:linear-gradient(135deg,var(--purple),var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex-shrink:0}
@@ -298,6 +298,13 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
   .content-header .page-title{font-size:20px}
   .content-body{padding:0 18px calc(48px + env(safe-area-inset-bottom,0px))}
   .metric-grid{grid-template-columns:repeat(2,1fr)}
+
+  /* Mobile: all sections always visible, stacked vertically */
+  .section{display:block!important;margin-bottom:12px;}
+  .category-drawer{display:none!important}
+  .content{padding-top:calc(48px + env(safe-area-inset-top,0px));}
+  .content-body{padding:0 12px 20px;}
+
 }
 @media(min-width:768px) and (max-width:1023px){
   :root{--sidebar-w:64px}
@@ -344,17 +351,52 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 .impact-bear{background:rgba(239,68,68,0.15);color:var(--red)}
 .impact-neutral{background:rgba(255,255,255,0.05);color:var(--white-dim)}
 .reminder-item{font-size:11px;color:var(--white-dim);padding:2px 0}
+
+  .mobile-nav-strip{
+    display:flex;
+    gap:4px;
+    overflow-x:auto;
+    flex:1;
+    padding:0 8px;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+  }
+  .mobile-nav-strip::-webkit-scrollbar{display:none}
+  .mobile-nav-btn{
+    white-space:nowrap;
+    padding:5px 10px;
+    border-radius:8px;
+    background:rgba(124,58,237,0.15);
+    color:var(--white-dim);
+    font-size:11px;
+    font-weight:500;
+    border:0.5px solid rgba(167,139,250,0.15);
+    cursor:pointer;
+    flex-shrink:0;
+    transition:background .2s,color .2s;
+  }
+  .mobile-nav-btn.active{
+    background:linear-gradient(135deg,var(--purple),var(--purple-bright));
+    color:#fff;
+    border-color:transparent;
+  }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <div class="app">
   <div class="mobile-header" id="mobileHeader">
-    <div class="mobile-header-icon" onclick="toggleCategoryDrawer()">
-      <svg viewBox="0 0 40 40" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="mlg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c4b5fd"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><rect x="7" y="8" width="5.5" height="20" rx="1.8" fill="url(#mlg)" opacity="0.95"/><rect x="16" y="4" width="5.5" height="28" rx="1.8" fill="url(#mlg)"/><rect x="25" y="10" width="5.5" height="18" rx="1.8" fill="url(#mlg)" opacity="0.7"/></svg>
+    <span class="mobile-header-title">拾壹工作台</span>
+    <div class="mobile-nav-strip">
+      <button class="mobile-nav-btn active" data-tab="health" onclick="scrollToSection('sec-health')">健康</button>
+      <button class="mobile-nav-btn" data-tab="workout" onclick="scrollToSection('sec-workout')">训练</button>
+      <button class="mobile-nav-btn" data-tab="diary" onclick="scrollToSection('sec-diary')">每日感想</button>
+      <button class="mobile-nav-btn" data-tab="todo" onclick="scrollToSection('sec-todo')">待办</button>
+      <button class="mobile-nav-btn" data-tab="progress" onclick="scrollToSection('sec-progress')">共同进步</button>
+      <button class="mobile-nav-btn" data-tab="journal" onclick="scrollToSection('sec-journal')">阅读</button>
+      <button class="mobile-nav-btn" data-tab="news" onclick="scrollToSection('sec-news')">新闻</button>
+      <button class="mobile-nav-btn" data-tab="review" onclick="scrollToSection('sec-review')">复盘</button>
     </div>
-    <span class="mobile-header-title" onclick="toggleCategoryDrawer()">拾壹工作台</span>
-    <div class="mobile-header-date" id="mobileDate"></div>
   </div>
   <div class="category-drawer" id="categoryDrawer">
     <div class="drawer-overlay" onclick="toggleCategoryDrawer()"></div>
@@ -759,46 +801,48 @@ function migrateData(d){
 }
 function saveData(){try{localStorage.setItem(STORE_KEY,JSON.stringify(data));}catch(e){showToast('保存失败：存储空间不足');}}
 function toggleCategoryDrawer(){
-  var d=document.getElementById('categoryDrawer');
-  if(!d)return;
-  var isOpen=d.classList.contains('open');
-  if(isOpen){
-    d.classList.remove('open');
-    d.style.display='none';
-    d.style.pointerEvents='none';
-    var panel=d.querySelector('.drawer-panel');
-    if(panel)panel.style.transform='translateX(-100%)';
-    var overlay=d.querySelector('.drawer-overlay');
-    if(overlay)overlay.style.opacity='0';
-  }else{
-    d.classList.add('open');
-    d.style.display='block';
-    d.style.pointerEvents='auto';
-    var panel=d.querySelector('.drawer-panel');
-    if(panel){panel.style.transform='translateX(0)';}
-    var overlay=d.querySelector('.drawer-overlay');
-    if(overlay)overlay.style.opacity='1';
-  }
+  // On mobile, this just scrolls to top (drawer not used)
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function scrollToSection(id){
+  var el=document.getElementById(id);
+  if(el){el.scrollIntoView({behavior:'smooth',block:'start'});}
+  // Update active nav
+  document.querySelectorAll('.mobile-nav-btn').forEach(function(b){
+    b.classList.remove('active');
+    if(b.getAttribute('data-tab')===id) b.classList.add('active');
+  });
 }
 function switchTab(tab){
-  try{
-  var allSecs=document.querySelectorAll('.section');
-  var allNavs=document.querySelectorAll('.nav-item');
-  for(var i=0;i<allNavs.length;i++){allNavs[i].classList.remove('active');}
-  for(var i=0;i<allSecs.length;i++){allSecs[i].classList.remove('active');allSecs[i].style.display='none';}
-  var navItem=document.querySelector('.nav-item[data-tab="'+tab+'"]');
-  if(navItem)navItem.classList.add('active');
-  var sec=document.getElementById('sec-'+tab);
-  if(!sec){showToast('ERR: sec-'+tab+' not found');return;}
-  sec.classList.add('active');
-  sec.style.display='block';
-  sec.style.opacity='0';
-  void sec.offsetHeight;
-  sec.style.opacity='1';
-  if(pageTitles[tab]){document.getElementById('pageTitleText').textContent=pageTitles[tab].title;document.getElementById('pageSubtitle').textContent=pageTitles[tab].subtitle;}
-  if(navIcons[tab]){var hdrIcon=document.querySelector('.content-header .page-title svg');if(hdrIcon)hdrIcon.innerHTML=navIcons[tab];}
-  var ct=document.querySelector('.content');if(ct)ct.scrollTop=0;
-  }catch(e){showToast('switchTab err:'+e.message);}
+  // Mobile: scroll to section (all visible)
+  // Desktop: show/hide sections
+  var isMobile = window.innerWidth < 768;
+  
+  if(isMobile){
+    var el=document.getElementById('sec-'+tab);
+    if(el){el.scrollIntoView({behavior:'smooth',block:'start'});}
+    document.querySelectorAll('.mobile-nav-btn').forEach(function(b){
+      b.classList.remove('active');
+      if(b.getAttribute('data-tab')===tab) b.classList.add('active');
+    });
+    return;
+  }
+  
+  // Desktop: display toggle (works fine on desktop browsers)
+  var sections=document.querySelectorAll('.section');
+  sections.forEach(function(sec){
+    var secId=sec.id.replace('sec-','');
+    if(secId===tab){
+      sec.style.display='block';
+    }else{
+      sec.style.display='none';
+    }
+  });
+  document.querySelectorAll('.nav-item').forEach(function(item){
+    var itemTab=item.getAttribute('data-tab');
+    if(itemTab===tab){item.classList.add('active');}
+    else{item.classList.remove('active');}
+  });
 }
 function defaultData(){
   const today=new Date().toISOString().slice(0,10);
