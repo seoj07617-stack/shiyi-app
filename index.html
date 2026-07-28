@@ -347,6 +347,10 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 .impact-bear{background:rgba(239,68,68,0.15);color:var(--red)}
 .impact-neutral{background:rgba(255,255,255,0.05);color:var(--white-dim)}
 .reminder-item{font-size:11px;color:var(--white-dim);padding:2px 0}
+
+.btab{color:rgba(255,255,255,0.4);transition:color .2s}
+.btab.active{color:#a78bfa}
+.btab:active{color:#c4b5fd}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 </head>
@@ -764,35 +768,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 
 <script>console.log('拾壹工作台 v7.60 loaded at', new Date().toISOString());
 
-// Debug: global error handler
-window.onerror=function(msg,src,line,col,err){
-  const d=document.getElementById('debugPanel');
-  if(d)d.textContent='ERROR: '+msg+' @L'+line;
-  return false;
-};
 
-// Debug: visible panel + patch switchTab with logging
-(function(){
-  const p=document.createElement('div');
-  p.id='debugPanel';
-  p.style.cssText='position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,0.95);color:#0f0;font-size:12px;padding:10px;z-index:99999;font-family:monospace;pointer-events:none';
-  document.body.appendChild(p);
-  const origST=window.switchTab;
-  window.switchTab=function(tab){
-    p.textContent='switchTab: '+tab;
-    try{
-      if(origST)origST(tab);
-      const sec=document.getElementById('sec-'+tab);
-      p.textContent='switchTab: '+tab+' -> sec:'+(sec?'found':'MISSING')+' active:'+(sec?sec.classList.contains('active'):'?');
-    }catch(e){
-      p.textContent='switchTab ERROR: '+e.message;
-    }
-  };
-  setTimeout(function(){
-    const secs=document.querySelectorAll('.section');
-    p.textContent='v7.62 | '+secs.length+' sections | tap a tab now';
-  },300);
-})();
 
 const STORE_KEY='shiyi_desk_v2';
 const DATA_VERSION=8;
@@ -831,6 +807,7 @@ function switchTab(tab){
   if(navItem)navItem.classList.add('active');
   const sec=document.getElementById('sec-'+tab);
   if(sec)sec.classList.add('active');
+  document.querySelectorAll('.btab').forEach(b=>{b.classList.toggle('active',b.dataset.tab===tab);});
   if(pageTitles[tab]){document.getElementById('pageTitleText').textContent=pageTitles[tab].title;document.getElementById('pageSubtitle').textContent=pageTitles[tab].subtitle;}
   if(navIcons[tab]){const hdrIcon=document.querySelector('.content-header .page-title svg');if(hdrIcon)hdrIcon.innerHTML=navIcons[tab];}
   document.querySelector('.content').scrollTop=0;
@@ -2074,5 +2051,33 @@ window.switchTab=function(tab){
 };
 
 </script>
+
+<!-- Mobile Bottom Tab Bar -->
+<div id="mobileTabBar" style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(10,8,20,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid rgba(124,58,237,0.2);padding:4px 0;padding-bottom:max(4px,env(safe-area-inset-bottom));display:flex;justify-content:space-around;align-items:center">
+  <div class="btab active" data-tab="home" onclick="switchTab('home')" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;min-width:44px;cursor:pointer">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span style="font-size:9px;color:inherit">首页</span>
+  </div>
+  <div class="btab" data-tab="health" onclick="switchTab('health')" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;min-width:44px;cursor:pointer">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+    <span style="font-size:9px;color:inherit">健康</span>
+  </div>
+  <div class="btab" data-tab="workout" onclick="switchTab('workout')" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;min-width:44px;cursor:pointer">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>
+    <span style="font-size:9px;color:inherit">训练</span>
+  </div>
+  <div class="btab" data-tab="todo" onclick="switchTab('todo')" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;min-width:44px;cursor:pointer">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    <span style="font-size:9px;color:inherit">待办</span>
+  </div>
+  <div class="btab" data-tab="news" onclick="switchTab('news')" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;min-width:44px;cursor:pointer">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+    <span style="font-size:9px;color:inherit">新闻</span>
+  </div>
+  <div class="btab" data-tab="review" onclick="switchTab('review')" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;min-width:44px;cursor:pointer">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/><path d="M9 12h6M9 16h4"/></svg>
+    <span style="font-size:9px;color:inherit">复盘</span>
+  </div>
+</div>
 </body>
 </html>
