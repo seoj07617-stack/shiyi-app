@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>触摸测试</title>
+</head>
+<body style="margin:0;padding:20px;font-family:sans-serif;background:#0d0820;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;">
+
+<h1 style="font-size:20px;margin:0;">飞书WebView触摸测试</h1>
+
+<button id="btn1" onclick="test1()" ontouchstart="test1()" style="width:200px;height:60px;font-size:18px;border:none;border-radius:12px;background:#7c3aed;color:#fff;cursor:pointer;">
+点我测试
+</button>
+
+<div id="result1" style="font-size:16px;color:#999;">等待点击...</div>
+
+<a href="javascript:void(0)" onclick="test2();return false;" ontouchstart="test2();return false;" style="width:200px;height:60px;display:flex;align-items:center;justify-content:center;font-size:18px;border-radius:12px;background:#22c55e;color:#fff;text-decoration:none;">
+用a标签测试
+</a>
+
+<div id="result2" style="font-size:16px;color:#999;">等待点击...</div>
+
+<div id="auto" style="font-size:14px;color:#c4b5fd;margin-top:20px;">页面加载中...</div>
+
+<script>
+// Auto test - if this runs, JS works
+document.getElementById('auto').textContent = 'JS已加载! 自动测试通过。';
+document.getElementById('auto').style.color = '#22c55e';
+
+function test1(){
+  document.getElementById('btn1').style.background = '#22c55e';
+  document.getElementById('btn1').textContent = '点击成功!';
+  document.getElementById('result1').textContent = 'onclick/ontouchstart 生效';
+  document.getElementById('result1').style.color = '#22c55e';
+}
+
+function test2(){
+  document.getElementById('result2').textContent = 'a标签点击生效!';
+  document.getElementById('result2').style.color = '#22c55e';
+}
+</script>
+
+</body>
+</html>
