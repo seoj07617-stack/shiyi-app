@@ -1,0 +1,88 @@
+{
+  "plan": "PPL六天循环",
+  "goal": "增肌为主+减脂",
+  "level": "中级(卧推60kg×2)",
+  "updated": "2026-07-28",
+  "schedule": [
+    {
+      "day": 1, "name": "推A", "muscles": "胸+肩+三头",
+      "exercises": [
+        {"name":"杠铃卧推","sets":4,"reps":"6","weight":"50-55kg","tip":"主力复合，第4组加到55kg","gif":"https://static.exercisedb.dev/media/EIeI8Vf.gif","steps":["平躺在长凳上，双脚平放在地上，背部紧贴长凳","正手握住杠铃，握距略宽于肩宽","将杠铃从架子上提起，直接放在胸部上方","慢慢降低到胸部，保持肘部内收","推起至双臂完全伸展"]},
+        {"name":"上斜哑铃卧推","sets":3,"reps":"10","weight":"中等","tip":"上胸填充，慢下快上","gif":"https://static.exercisedb.dev/media/TVdivgY.gif","steps":["坐在上斜凳上，每只手各拿一个哑铃","向后靠在长凳上，哑铃举至肩高","慢慢下放哑铃至上胸位置","推起至手臂伸直"]},
+        {"name":"绳索夹胸","sets":3,"reps":"12-15","weight":"轻","tip":"挤压感优先","gif":"https://static.exercisedb.dev/media/0CXGHya.gif","steps":["滑轮调至胸部高度，站在中央","手掌朝下抓住手柄，手臂向两侧伸展","双手并拢夹胸，挤压1秒","慢慢回到起始位"]},
+        {"name":"哑铃肩推","sets":4,"reps":"8","weight":"中等","tip":"核心收紧不借力","gif":"https://static.exercisedb.dev/media/84RyJf8.gif","steps":["站立或坐姿，哑铃举至肩高","掌心朝前，向上推至手臂伸直","在顶部停顿，慢慢下放"]},
+        {"name":"绳索侧平举","sets":3,"reps":"15","weight":"轻","tip":"肩膀增肌关键，慢控制","gif":"https://static.exercisedb.dev/media/goJ6ezq.gif","steps":["单手握住对侧绳索手柄","手臂向侧方举起至与地面平行","慢放回，不甩"]},
+        {"name":"绳索三头下压","sets":3,"reps":"12","weight":"中等","tip":"肘夹紧","gif":"https://static.exercisedb.dev/media/gAwDzB3.gif","steps":["V形杆接在高滑轮","正手握杆，肘靠身体两侧","下压至手臂伸直，挤压三头","慢放回"]},
+        {"name":"碎颅者(仰卧臂屈伸)","sets":3,"reps":"10","weight":"中等","tip":"上臂不动","gif":"https://static.exercisedb.dev/media/h8LFzo9.gif","steps":["平躺在长凳上，正手握杠铃","手臂伸直至胸部上方","保持上臂静止，弯曲肘部向额头降低","伸直手臂回到起始位"]}
+      ]
+    },
+    {
+      "day": 2, "name": "拉A", "muscles": "背+二头+后束",
+      "exercises": [
+        {"name":"杠铃俯身划船","sets":4,"reps":"6","weight":"中重","tip":"背部主力，肩胛骨先收再拉","gif":"https://static.exercisedb.dev/media/w2P4aQ5.gif","steps":["双脚肩宽，膝盖微弯","臀部前倾，背部挺直挺胸","正手握杠铃，收缩肩胛骨将杠铃拉向下胸","顶部挤压，慢放回"]},
+        {"name":"绳索下拉","sets":3,"reps":"10","weight":"中等","tip":"想象肘往下插","gif":"https://static.exercisedb.dev/media/KZ6gQr7.gif","steps":["绳索接高位，正手握","背部挺直微后倾","向下拉至胸前，挤压背阔肌","慢放回充分伸展"]},
+        {"name":"绳索坐姿划船","sets":3,"reps":"12","weight":"中等","tip":"背部厚度","gif":"https://static.exercisedb.dev/media/Xp3mKn8.gif","steps":["坐在划船机上，脚踏板踩稳","正手握手柄，背挺直","拉向身体，肩胛骨挤压","慢放回"]},
+        {"name":"哑铃后束飞鸟","sets":3,"reps":"15","weight":"轻","tip":"俯身45度不借力","gif":"https://static.exercisedb.dev/media/Rt5vWj9.gif","steps":["双脚肩宽，各握哑铃","臀部前倾保持背部挺直","手臂向两侧举起至平行地面","慢放回"]},
+        {"name":"杠铃弯举","sets":3,"reps":"8","weight":"中等","tip":"不晃身体","gif":"https://static.exercisedb.dev/media/Yq7nLm4.gif","steps":["站直，反手握杠铃","肘靠躯干，弯举至肩高","挤压二头肌，慢放回"]},
+        {"name":"绳索锤式弯举","sets":3,"reps":"12","weight":"轻","tip":"前臂+二头双打","gif":"https://static.exercisedb.dev/media/Zs8oNp5.gif","steps":["双手握绳索，掌心相对","上臂静止，弯举至肩高","慢放回"]}
+      ]
+    },
+    {
+      "day": 3, "name": "腿A", "muscles": "腿+核心",
+      "exercises": [
+        {"name":"杠铃深蹲","sets":4,"reps":"6","weight":"中重","tip":"腿部王者，蹲到平行","gif":"https://static.exercisedb.dev/media/Ab2cDe1.gif","steps":["杠铃放肩上，正手握","双脚肩宽或略宽","收紧核心下蹲至大腿平行","推起站直"]},
+        {"name":"罗马尼亚硬拉","sets":3,"reps":"10","weight":"中等","tip":"臀+腿后，背挺直臀部铰链","gif":"https://static.exercisedb.dev/media/Cd4eFg2.gif","steps":["双脚肩宽，正手握杠铃","臀部铰链前倾，膝盖微弯","杠铃沿腿面下放至腿后拉伸感","臀部发力站起"]},
+        {"name":"腿举","sets":3,"reps":"12","weight":"中等","tip":"不锁死膝盖","gif":"https://static.exercisedb.dev/media/Ef6gHi3.gif","steps":["坐在腿举机上，背靠垫","双脚放在踏板上肩宽","推起至腿近伸直不锁死","慢放回"]},
+        {"name":"哑铃弓步蹲","sets":3,"reps":"10/腿","weight":"轻","tip":"平衡+单腿力量","gif":"https://static.exercisedb.dev/media/Gh8iJk4.gif","steps":["双手各握哑铃站立","一脚前迈下蹲至膝近地","前脚跟推回起始位","换腿"]},
+        {"name":"腿屈伸","sets":3,"reps":"15","weight":"轻","tip":"顶部挤压1秒","gif":"https://static.exercisedb.dev/media/Ij0kLm5.gif","steps":["坐在腿屈伸机上","伸腿至完全伸展，挤压1秒","慢放回"]},
+        {"name":"悬垂举腿","sets":3,"reps":"12","weight":"自重","tip":"核心主力","gif":"https://static.exercisedb.dev/media/Kl2mNn6.gif","steps":["悬挂在引体向上杆上","核心发力抬腿至平行地面","慢放回"]},
+        {"name":"俄罗斯转体","sets":3,"reps":"15/侧","weight":"自重","tip":"侧腹","gif":"https://static.exercisedb.dev/media/Mn4oPp7.gif","steps":["坐地，膝盖弯曲后倾","双脚可抬离地面","双手合拢左右转体","每侧15次"]}
+      ]
+    },
+    {
+      "day": 4, "name": "推B", "muscles": "胸+肩+三头(变式)",
+      "exercises": [
+        {"name":"上斜杠铃卧推","sets":4,"reps":"8","weight":"中等","tip":"上胸主导","gif":"https://static.exercisedb.dev/media/TVdivgY.gif","steps":["上斜凳30度，正手握杠铃","下放至上胸位置","推起至伸直"]},
+        {"name":"哑铃飞鸟","sets":3,"reps":"12-15","weight":"轻","tip":"拉伸感优先","gif":"https://static.exercisedb.dev/media/0CXGHya.gif","steps":["平躺持哑铃，掌心相对","手臂以宽弧线向两侧放低","感受胸部拉伸","弧线收回"]},
+        {"name":"俯卧撑","sets":3,"reps":"力竭","weight":"自重","tip":"收尾榨干","gif":"https://static.exercisedb.dev/media/EIeI8Vf.gif","steps":["标准俯卧撑姿势","下放至胸触地","推起，做到力竭"]},
+        {"name":"哑铃肩推","sets":4,"reps":"10","weight":"中等","tip":"肩前束+中束","gif":"https://static.exercisedb.dev/media/84RyJf8.gif","steps":["站或坐，哑铃肩高","推过头顶","慢放回"]},
+        {"name":"哑铃侧平举","sets":3,"reps":"15","weight":"轻","tip":"控制慢放","gif":"https://static.exercisedb.dev/media/goJ6ezq.gif","steps":["站立持哑铃，掌心朝身","侧举至平行地面","慢放回"]},
+        {"name":"绳索三头下压","sets":3,"reps":"12","weight":"中等","tip":"","gif":"https://static.exercisedb.dev/media/gAwDzB3.gif","steps":["V形杆高滑轮，肘夹紧","下压伸直","慢放回"]},
+        {"name":"窄握卧推","sets":3,"reps":"10","weight":"中等","tip":"三头刺激","gif":"https://static.exercisedb.dev/media/h8LFzo9.gif","steps":["握距与肩同宽或略窄","下放至胸","推起，肘靠身体"]}
+      ]
+    },
+    {
+      "day": 5, "name": "拉B", "muscles": "背+二头+后束(变式)",
+      "exercises": [
+        {"name":"哑铃俯身划船","sets":4,"reps":"10","weight":"中等","tip":"单臂更集中","gif":"https://static.exercisedb.dev/media/w2P4aQ5.gif","steps":["俯身持哑铃","拉向髋部","挤压背部","慢放回"]},
+        {"name":"绳索下拉(绳索)","sets":3,"reps":"12","weight":"中等","tip":"外旋结尾拉","gif":"https://static.exercisedb.dev/media/KZ6gQr7.gif","steps":["绳索附件高位","下拉至胸前","底部外旋挤压","慢放回"]},
+        {"name":"绳索坐姿划船","sets":3,"reps":"12","weight":"中等","tip":"","gif":"https://static.exercisedb.dev/media/Xp3mKn8.gif","steps":["坐姿划船","拉向身体","慢放回"]},
+        {"name":"哑铃后束飞鸟","sets":3,"reps":"15","weight":"轻","tip":"","gif":"https://static.exercisedb.dev/media/Rt5vWj9.gif","steps":["俯身45度","侧举至平行","慢放回"]},
+        {"name":"绳索弯举","sets":3,"reps":"12","weight":"轻","tip":"","gif":"https://static.exercisedb.dev/media/Zs8oNp5.gif","steps":["低滑轮，掌心朝上","弯举至肩高","慢放回"]},
+        {"name":"杠铃弯举","sets":3,"reps":"8","weight":"中等","tip":"","gif":"https://static.exercisedb.dev/media/Yq7nLm4.gif","steps":["反手握杠铃","弯举","慢放回"]}
+      ]
+    },
+    {
+      "day": 6, "name": "腿B+有氧", "muscles": "腿+核心+有氧",
+      "exercises": [
+        {"name":"杠铃深蹲","sets":4,"reps":"8","weight":"中重","tip":"容量日","gif":"https://static.exercisedb.dev/media/Ab2cDe1.gif","steps":["标准深蹲","蹲至平行","推起"]},
+        {"name":"罗马尼亚硬拉","sets":3,"reps":"12","weight":"中等","tip":"","gif":"https://static.exercisedb.dev/media/Cd4eFg2.gif","steps":["臀部铰链","下放至拉伸","站起"]},
+        {"name":"绳索腿弯举","sets":3,"reps":"15","weight":"轻","tip":"腿后孤立","gif":"https://static.exercisedb.dev/media/Ef6gHi3.gif","steps":["俯卧在腿弯举机上","弯举至完全收缩","慢放回"]},
+        {"name":"腿举","sets":3,"reps":"12","weight":"中等","tip":"","gif":"https://static.exercisedb.dev/media/Ef6gHi3.gif","steps":["腿举","不锁死","慢放回"]},
+        {"name":"提踵","sets":4,"reps":"15","weight":"中等","tip":"小腿","gif":"https://static.exercisedb.dev/media/Ab2cDe1.gif","steps":["站在提踵机上","踮起至最高","慢放回"]},
+        {"name":"3/4卷腹","sets":3,"reps":"15","weight":"自重","tip":"","gif":"https://static.exercisedb.dev/media/Kl2mNn6.gif","steps":["平躺膝弯","卷起至45度","慢放回"]},
+        {"name":"侧平板支撑","sets":3,"reps":"30秒/侧","weight":"自重","tip":"","gif":"https://static.exercisedb.dev/media/Mn4oPp7.gif","steps":["侧躺，前臂撑地","抬臀至直线","保持30秒"]},
+        {"name":"坡度走(有氧)","sets":1,"reps":"15min","weight":"心率130-140","tip":"减脂收尾","gif":"","steps":["跑步机坡度8-10","速度5-6km/h","保持心率130-140"]}
+      ]
+    },
+    {
+      "day": 7, "name": "主动恢复", "muscles": "全身拉伸+轻有氧",
+      "exercises": [
+        {"name":"坡度走","sets":1,"reps":"20-30min","weight":"轻松","tip":"促进恢复","gif":"","steps":["低强度有氧","不喘不累"]},
+        {"name":"全身拉伸","sets":1,"reps":"15min","weight":"自重","tip":"每个肌群30秒","gif":"","steps":["胸/背/腿/肩依次拉伸","每个部位30秒以上"]}
+      ]
+    }
+  ],
+  "cardioRule": "每次力量后加10分钟有氧(坡度走/椭圆机，心率130-140)",
+  "progressRule": "复合动作每周+2.5kg或同重量多做1个，隔离动作做满上限次数就加重"
+}
