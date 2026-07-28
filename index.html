@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7.64 - remove bottom bar - 2026-07-28T13:33 -->
+<!-- v7.65 - debug tab switch - 2026-07-28T14:30 -->
 <html lang="zh-CN">
 <head>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -353,7 +353,14 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 </head>
-<body>
+<body><div id="globalError" style="display:none;position:fixed;top:0;left:0;right:0;z-index:99999;background:#f87171;color:#000;padding:8px 12px;font-size:12px;font-weight:600;word-break:break-all"></div>
+<script>
+window.onerror=function(msg,url,line){
+  var el=document.getElementById('globalError');
+  if(el){el.style.display='block';el.textContent='JS Error L'+line+': '+msg;}
+  return false;
+};
+</script>
 <div class="app">
   <div class="mobile-header" id="mobileHeader">
     <div class="mobile-header-icon" onclick="toggleCategoryDrawer()">
@@ -800,15 +807,22 @@ function migrateData(d){
 function saveData(){try{localStorage.setItem(STORE_KEY,JSON.stringify(data));}catch(e){showToast('保存失败：存储空间不足');}}
 function toggleCategoryDrawer(){document.getElementById('categoryDrawer').classList.toggle('open')}
 function switchTab(tab){
+  try{
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
   const navItem=document.querySelector(`.nav-item[data-tab="${tab}"]`);
   if(navItem)navItem.classList.add('active');
   const sec=document.getElementById('sec-'+tab);
-  if(sec)sec.classList.add('active');
+  if(!sec){showToast('ERR: sec-'+tab+' not found');return;}
+  sec.classList.add('active');
+  var cs=window.getComputedStyle(sec);
+  showToast(tab+' | display:'+cs.display);
+  var dbg=document.getElementById('tabDebug');
+  if(dbg)dbg.textContent='v7.65 | '+tab;
   if(pageTitles[tab]){document.getElementById('pageTitleText').textContent=pageTitles[tab].title;document.getElementById('pageSubtitle').textContent=pageTitles[tab].subtitle;}
   if(navIcons[tab]){const hdrIcon=document.querySelector('.content-header .page-title svg');if(hdrIcon)hdrIcon.innerHTML=navIcons[tab];}
   document.querySelector('.content').scrollTop=0;
+  }catch(e){showToast('switchTab err:'+e.message);}
 }
 function defaultData(){
   const today=new Date().toISOString().slice(0,10);
@@ -2051,5 +2065,8 @@ window.switchTab=function(tab){
 </script>
 
 
+
+<!-- Debug indicator -->
+<div id="tabDebug" style="position:fixed;top:4px;right:4px;z-index:9998;background:rgba(124,58,237,0.9);color:#fff;font-size:10px;padding:3px 8px;border-radius:6px;font-weight:600;pointer-events:none">v7.65 | home</div>
 </body>
 </html>
