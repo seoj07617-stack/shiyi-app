@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7.71 - mobile: all sections visible + scroll nav strip, no drawer/display toggle -->
+<!-- v7.72 - mobile: all sections visible + scroll nav strip, no drawer/display toggle -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -29,12 +29,9 @@
   --ease:cubic-bezier(.4,0,.2,1);--ease-spring:cubic-bezier(.34,1.56,.64,1);
   --sidebar-w:220px;
 }
-html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue','PingFang SC',sans-serif;background:var(--bg);color:var(--white);overflow:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue','PingFang SC',sans-serif;background:var(--bg);color:var(--white);overflow:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
-.app{display:flex;height:100vh;height:100dvh;position:relative}
-.app::before{content:'';position:fixed;top:-30%;left:-15%;width:70%;height:70%;background:radial-gradient(ellipse,var(--purple-glow) 0%,transparent 65%);pointer-events:none;z-index:0}
-.app::after{content:'';position:fixed;bottom:-25%;right:-20%;width:65%;height:65%;background:radial-gradient(ellipse,var(--indigo-glow) 0%,transparent 65%);pointer-events:none;z-index:0}
-
+.app{display:flex;height:100vh;height:100dvh;position:relative;pointer-events:auto}
 /* SIDEBAR */
 .sidebar{width:var(--sidebar-w);flex-shrink:0;display:flex;flex-direction:column;background:var(--sidebar-bg);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border-right:0.5px solid var(--glass-border);padding:24px 14px 16px;position:relative;z-index:10;overflow-y:auto}
 .sidebar::-webkit-scrollbar{width:0}
@@ -64,7 +61,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Displ
 .save-indicator{font-size:10px;color:var(--white-faint);font-variant-numeric:tabular-nums}
 
 /* CONTENT */
-.content{flex:1;overflow-y:auto;position:relative;z-index:1;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
+.content{flex:1;overflow-y:auto;pointer-events:auto;position:relative;z-index:1;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
 .content::-webkit-scrollbar{width:4px}
 .content::-webkit-scrollbar-track{background:transparent}
 .content::-webkit-scrollbar-thumb{background:var(--purple-deep);border-radius:2px;opacity:0.4}
@@ -165,7 +162,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 .set-row .set-name{width:auto;flex:2;text-align:left}
 .workout-history-item{padding:13px 15px;margin-bottom:8px;cursor:pointer;position:relative}
 .workout-history-date{font-size:12px;font-weight:600;color:var(--purple);margin-bottom:5px;font-variant-numeric:tabular-nums}
-.mobile-header{display:none;position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:101;height:48px;background:rgba(13,8,32,0.92);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:0.5px solid var(--glass-border);align-items:center;padding:0 8px;gap:6px}
+.mobile-header{display:none;position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:101;height:48px;pointer-events:auto;background:rgba(13,8,32,0.92);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:0.5px solid var(--glass-border);align-items:center;padding:0 8px;gap:6px}
 
 .mobile-header-icon:active{transform:scale(0.9)}
 .mobile-header-title{font-size:15px;font-weight:600;background:linear-gradient(135deg,var(--purple),var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex-shrink:0}
@@ -369,7 +366,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 </head>
-<body><div id="jsDiag" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:#ff4444;color:#fff;text-align:center;padding:8px;font-size:14px;font-weight:bold;font-family:sans-serif;">JS未加载</div>
+<body>
 
 <div class="app">
   <div class="mobile-header" id="mobileHeader">
@@ -380,16 +377,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
         <line x1="3" y1="18" x2="21" y2="18"/>
       </svg>
     </a>
-<script>
-// JS Diagnostic - if you see "JS已加载" in green, JS works
-(function(){
-  var d=document.getElementById('jsDiag');
-  if(d){d.textContent='JS已加载 - 点击下方测试';d.style.background='#22c55e';}
-  setTimeout(function(){
-    if(d){d.style.display='none';}
-  },3000);
-})();
-</script>
+
 
     <span class="mobile-header-title">拾壹工作台</span>
     <div class="mobile-menu" id="mobileMenu">
@@ -1972,7 +1960,7 @@ document.addEventListener('DOMContentLoaded',function(){
     else{sec.style.display='none';}
   });
   // Diagnostic log
-  console.log('v7.71 initialized, sections:',sections.length);
+  console.log('v7.72 initialized, sections:',sections.length);
 });</script>
 </body>
 </html>
