@@ -312,6 +312,23 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
   .content-header{padding:22px 24px 16px}
   .content-body{padding:0 24px 48px}
 }
+
+/* Stock Dashboard */
+.market-bar{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.market-bar-item{flex:1;min-width:80px;text-align:center;padding:4px 6px;border-radius:6px;background:rgba(255,255,255,0.03)}
+.market-bar-item .name{font-size:10px;color:var(--white-dim)}
+.market-bar-item .val{font-size:13px;font-weight:600}
+.market-bar-item .pct{font-size:10px;color:var(--white-dim)}
+.holding-card{background:rgba(255,255,255,0.03);border-radius:8px;padding:8px;margin-bottom:6px}
+.holding-card .h-name{font-size:13px;font-weight:600;color:var(--white)}
+.holding-card .h-row{display:flex;justify-content:space-between;font-size:11px;color:var(--white-dim);margin-top:2px}
+.holding-card .h-val{color:var(--white);font-weight:500}
+.key-news-item{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:11px;border-bottom:1px solid rgba(255,255,255,0.05)}
+.impact-tag{font-size:9px;padding:1px 4px;border-radius:3px;font-weight:600}
+.impact-bull{background:rgba(34,197,94,0.15);color:var(--green)}
+.impact-bear{background:rgba(239,68,68,0.15);color:var(--red)}
+.impact-neutral{background:rgba(255,255,255,0.05);color:var(--white-dim)}
+.reminder-item{font-size:11px;color:var(--white-dim);padding:2px 0}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 </head>
@@ -594,6 +611,12 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 
       <!-- REVIEW -->
       <div class="section" id="sec-review">
+        <div id="stockDashboard" class="card glass-strong" style="margin-bottom:8px">
+          <div class="card-glow"></div>
+          <div class="card-title"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 5-8"/></svg> 股票仪表盘 <span class="count-badge" id="stockDateBadge"></span></div>
+          <div id="stockContent" style="padding:8px">加载中...</div>
+        </div>
+
         <div class="card glass-strong">
           <div class="card-glow"></div>
           <div class="card-title"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/><path d="M9 12h6M9 16h4"/></svg>今日复盘 <span class="count-badge" id="reviewDateBadge"></span></div>
