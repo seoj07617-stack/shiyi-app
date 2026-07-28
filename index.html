@@ -397,8 +397,12 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
         <div class="date" id="todayDate"></div>
       </div>
     </div>
+    <div class="nav-item active" data-tab="home">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>首页</span>
+    </div>
     <div class="nav-section-label">生活</div>
-    <div class="nav-item active" data-tab="health">
+    <div class="nav-item" data-tab="health">
       <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
       <span>健康</span>
     </div>
@@ -458,8 +462,70 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
     </div>
     <div class="content-body">
 
-      <!-- HEALTH -->
-      <div class="section active" id="sec-health">
+            <!-- HOME -->
+      <div class="section active" id="sec-home">
+        <div class="content-header">
+          <div>
+            <div class="page-title"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>今日概览<span class="page-subtitle" id="homeGreeting"></span></div>
+          </div>
+          <div style="font-size:12px;color:var(--white-dim);font-variant-numeric:tabular-nums" id="homeDate"></div>
+        </div>
+        <div class="content-body" style="max-width:680px">
+
+        <!-- Today's tasks mini -->
+        <div class="card glass">
+          <div class="card-glow"></div>
+          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>今日待办</div>
+          <div id="homeTodos" style="display:flex;flex-direction:column;gap:6px"></div>
+          <div id="homeTodosEmpty" style="display:none;text-align:center;padding:12px 0;font-size:12px;color:var(--white-dim)">今天没有待办，歇着</div>
+        </div>
+
+        <!-- Today's training mini -->
+        <div class="card glass">
+          <div class="card-glow"></div>
+          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5h11v11h-11z" fill="none"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/><circle cx="12" cy="12" r="4" fill="none"/></svg>今日训练</div>
+          <div id="homeWorkout" style="display:flex;flex-direction:column;gap:6px"></div>
+        </div>
+
+        <!-- Habits -->
+        <div class="card glass">
+          <div class="card-glow"></div>
+          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>每日习惯</div>
+          <div id="habitList" style="display:flex;flex-direction:column;gap:8px"></div>
+        </div>
+
+        <!-- Pomodoro -->
+        <div class="card glass">
+          <div class="card-glow"></div>
+          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>专注计时</div>
+          <div style="text-align:center;padding:6px 0">
+            <div id="pomodoroDisplay" style="font-size:42px;font-weight:700;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,var(--purple),var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">25:00</div>
+            <div id="pomodoroLabel" style="font-size:11px;color:var(--white-dim);margin-top:2px">专注模式</div>
+            <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+              <button class="btn btn-primary btn-sm" id="pomStartBtn" onclick="startPomodoro()">开始</button>
+              <button class="btn btn-ghost btn-sm" onclick="resetPomodoro()">重置</button>
+            </div>
+            <div style="display:flex;gap:6px;justify-content:center;margin-top:10px">
+              <button class="chip" onclick="setPomTime(25)" id="pom25" style="font-size:10px;padding:3px 8px;border:1px solid var(--purple)">25分</button>
+              <button class="chip" onclick="setPomTime(15)" id="pom15" style="font-size:10px;padding:3px 8px">15分</button>
+              <button class="chip" onclick="setPomTime(5)" id="pom5" style="font-size:10px;padding:3px 8px">5分</button>
+            </div>
+            <div style="font-size:11px;color:var(--white-dim);margin-top:8px">今日专注 <span id="pomCount" style="color:var(--purple);font-weight:700">0</span> 次</div>
+          </div>
+        </div>
+
+        <!-- Countdowns -->
+        <div class="card glass">
+          <div class="card-glow"></div>
+          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V7a2 2 0 012-2h10a2 2 0 012 2v14"/><path d="M3 21h18"/><path d="M9 21v-4h6v4"/></svg>倒计时</div>
+          <div id="countdownList" style="display:flex;flex-direction:column;gap:10px"></div>
+        </div>
+
+        </div>
+      </div>
+
+<!-- HEALTH -->
+      <div class="section" id="sec-health">
         <div class="card glass" id="aiInsightCard" style="display:none;margin-bottom:14px"></div>
         <div class="card glass">
           <div class="card-glow"></div>
@@ -538,38 +604,6 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
             <div class="cal-row" id="checkinCal"></div>
           </div>
         </div>
-
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>每日习惯</div>
-          <div id="habitList" style="display:flex;flex-direction:column;gap:8px"></div>
-        </div>
-
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>专注计时</div>
-          <div style="text-align:center;padding:6px 0">
-            <div id="pomodoroDisplay" style="font-size:42px;font-weight:700;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,var(--purple),var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">25:00</div>
-            <div id="pomodoroLabel" style="font-size:11px;color:var(--white-dim);margin-top:2px">专注模式</div>
-            <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
-              <button class="btn btn-primary btn-sm" id="pomStartBtn" onclick="startPomodoro()">开始</button>
-              <button class="btn btn-ghost btn-sm" onclick="resetPomodoro()">重置</button>
-            </div>
-            <div style="display:flex;gap:6px;justify-content:center;margin-top:10px">
-              <button class="chip" onclick="setPomTime(25)" id="pom25" style="font-size:10px;padding:3px 8px;border:1px solid var(--purple)">25分</button>
-              <button class="chip" onclick="setPomTime(15)" id="pom15" style="font-size:10px;padding:3px 8px">15分</button>
-              <button class="chip" onclick="setPomTime(5)" id="pom5" style="font-size:10px;padding:3px 8px">5分</button>
-            </div>
-            <div style="font-size:11px;color:var(--white-dim);margin-top:8px">今日专注 <span id="pomCount" style="color:var(--purple);font-weight:700">0</span> 次</div>
-          </div>
-        </div>
-
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V7a2 2 0 012-2h10a2 2 0 012 2v14"/><path d="M3 21h18"/><path d="M9 21v-4h6v4"/></svg>倒计时</div>
-          <div id="countdownList" style="display:flex;flex-direction:column;gap:10px"></div>
-        </div>
-      </div>
 
       <!-- DIARY (每日感想) -->
       <div class="section" id="sec-diary">
@@ -863,7 +897,7 @@ const md=document.getElementById('mobileDate');if(md)md.textContent=today.getMon
 
 /* Navigation */
 const pageTitles={
-  health:{title:'健康',subtitle:'体重 · 饮食 · 习惯 · 专注 · 倒计时'},
+  health:{title:'健康',subtitle:'体重 · 饮食 · 打卡'},
   workout:{title:'训练',subtitle:'增肌 · 减脂 · PPL六天循环'},
   diary:{title:'每日感想',subtitle:'记录每一天'},
   todo:{title:'待办',subtitle:'任务管理'},
@@ -1047,7 +1081,88 @@ function renderCountdowns(){
   }).join('');
 }
 
-/* ===== DIET / 饮食追踪 ===== */
+
+/* ===== HOME / 首页 ===== */
+function getGreeting(){
+  const h=new Date().getHours();
+  if(h<6)return '夜深了';
+  if(h<9)return '早上好';
+  if(h<12)return '上午好';
+  if(h<14)return '中午好';
+  if(h<18)return '下午好';
+  return '晚上好';
+}
+function renderHome(){
+  const now=new Date();
+  document.getElementById('homeGreeting').textContent=' · '+getGreeting()+'，君';
+  document.getElementById('homeDate').textContent=now.toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
+  
+  // Today's todos
+  const todayStr=TODAY_STR;
+  const todayTodos=(data.todos||[]).filter(t=>!t.done&&t.date===todayStr);
+  const overdueTodos=(data.todos||[]).filter(t=>!t.done&&t.date&&t.date<todayStr);
+  const allShow=[...overdueTodos,...todayTodos].slice(0,5);
+  const el=document.getElementById('homeTodos');
+  const emptyEl=document.getElementById('homeTodosEmpty');
+  if(allShow.length===0){
+    el.style.display='none';emptyEl.style.display='block';
+  } else {
+    el.style.display='flex';emptyEl.style.display='none';
+    el.innerHTML=allShow.map(t=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.03);cursor:pointer" onclick="switchTab('todo')">
+      <div style="width:6px;height:6px;border-radius:50%;background:${t.date<todayStr?'var(--red)':'var(--purple)'};flex-shrink:0"></div>
+      <div style="font-size:13px;color:var(--white-mid);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.text}</div>
+      ${t.date<todayStr?'<div style="font-size:10px;color:var(--red)">逾期</div>':''}
+    </div>`).join('');
+    if((overdueTodos.length+todayTodos.length)>5){
+      el.innerHTML+=`<div style="text-align:center;padding:6px;font-size:11px;color:var(--white-dim)">还有 ${overdueTodos.length+todayTodos.length-5} 项，<span style="color:var(--purple);cursor:pointer" onclick="switchTab('todo')">查看全部</span></div>`;
+    }
+  }
+  
+  // Today's workout summary
+  const workoutEl=document.getElementById('homeWorkout');
+  const dayOfWeek=now.getDay();
+  const dayNames=['日','一','二','三','四','五','六'];
+  const checkedIn=data.checkins&&data.checkins.includes(todayStr);
+  workoutEl.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.03)">
+      <div style="font-size:13px;color:var(--white-mid)">周${dayNames[dayOfWeek]}训练</div>
+      <div style="font-size:12px;font-weight:600;color:${checkedIn?'var(--green)':'var(--white-dim)'}">${checkedIn?'已完成':'未完成'}</div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:4px">
+      <div style="flex:1;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.03)">
+        <div style="font-size:10px;color:var(--white-dim)">连续打卡</div>
+        <div style="font-size:18px;font-weight:700;color:var(--green);margin-top:2px">${getStreak()}</div>
+      </div>
+      <div style="flex:1;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.03)">
+        <div style="font-size:10px;color:var(--white-dim)">本月打卡</div>
+        <div style="font-size:18px;font-weight:700;color:var(--purple);margin-top:2px">${getMonthCount()}</div>
+      </div>
+    </div>
+  `;
+}
+
+function getStreak(){
+  if(!data.checkins||data.checkins.length===0)return 0;
+  const sorted=[...data.checkins].sort().reverse();
+  let streak=0;
+  const today=new Date();
+  for(let i=0;i<365;i++){
+    const d=new Date(today);
+    d.setDate(d.getDate()-i);
+    const ds=d.toISOString().slice(0,10);
+    if(sorted.includes(ds))streak++;
+    else if(i>0)break;
+  }
+  return streak;
+}
+
+function getMonthCount(){
+  if(!data.checkins)return 0;
+  const ym=TODAY_STR.slice(0,7);
+  return data.checkins.filter(d=>d.startsWith(ym)).length;
+}
+
+/* ===== DIET / 饩食追踪 ===== */
 const mealTypes=['早餐','午餐','晚餐','加餐'];
 let selectedMealType='早餐';
 const foodDB={
@@ -1791,6 +1906,7 @@ function renderAll(){
   try{renderCheckin();}catch(e){console.error(e)}
   try{renderHabits();}catch(e){console.error(e)}
   try{renderCountdowns();}catch(e){console.error(e)}
+  try{renderHome();}catch(e){console.error(e)}
   try{if(data.pomodoros&&data.pomodoros[TODAY_STR]){document.getElementById('pomCount').textContent=data.pomodoros[TODAY_STR];}}catch(e){}
   try{renderWeight();}catch(e){console.error(e)}
   try{renderMealTypeChips();renderQuickFoods();renderMeals();renderWater();}catch(e){console.error(e)}
