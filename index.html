@@ -764,6 +764,30 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 
 <script>console.log('拾壹工作台 v7.60 loaded at', new Date().toISOString());
 
+// Debug: global error handler
+window.onerror=function(msg,src,line,col,err){
+  const d=document.getElementById('debugPanel');
+  if(d)d.textContent='ERROR: '+msg+' @L'+line;
+  return false;
+};
+
+// Debug: visible panel
+(function(){
+  const p=document.createElement('div');
+  p.id='debugPanel';
+  p.style.cssText='position:fixed;bottom:10px;left:10px;right:10px;background:rgba(0,0,0,0.9);color:#0f0;font-size:11px;padding:8px;border-radius:8px;z-index:9999;pointer-events:none;max-height:60px;overflow:hidden;font-family:monospace';
+  p.textContent='v7.61 ready';
+  document.body.appendChild(p);
+  
+  // Test: can we find all sections?
+  setTimeout(function(){
+    const secs=document.querySelectorAll('.section');
+    const tabs=[];
+    secs.forEach(function(s){tabs.push(s.id+':'+s.classList.contains('active'));});
+    p.textContent='v7.61 | secs:'+secs.length+' | '+tabs.join(' ');
+  },500);
+})();
+
 const STORE_KEY='shiyi_desk_v2';
 const DATA_VERSION=8;
 let data=loadData();
