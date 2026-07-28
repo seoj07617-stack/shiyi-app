@@ -521,36 +521,22 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 
         <div class="card glass">
           <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24"><path d="M6.5 6.5v11M17.5 6.5v11M3 9v6M21 9v6M6.5 12h11"/></svg>今日训练</div>
-          <div style="margin-bottom:10px">
-            <div style="font-size:11px;color:var(--white-dim);font-weight:600;margin-bottom:6px;letter-spacing:0.04em">快捷模板</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap" id="quickTemplates"></div>
-          </div>
-          <div class="workout-grid" id="bodyParts"></div>
-          <div id="workoutSets" style="display:none;margin-top:14px">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-              <span style="font-size:13px;color:var(--purple);font-weight:600" id="selectedPart"></span>
-              <button class="btn btn-ghost btn-sm" onclick="addSet()"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>加一组</button>
+          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>健身打卡</div>
+          <div style="text-align:center;padding:10px 0">
+            <div style="font-size:11px;color:var(--white-dim);margin-bottom:10px">今天完成训练了吗？</div>
+            <button id="checkinBtn" class="btn btn-primary" style="font-size:16px;padding:14px 48px;border-radius:16px;letter-spacing:0.05em" onclick="doCheckin()">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><polyline points="20 6 9 17 4 12"/></svg>打卡
+            </button>
+            <div style="margin-top:14px;display:flex;justify-content:center;gap:24px;font-size:12px;color:var(--white-dim)">
+              <div>连续 <span id="streakCount" style="color:var(--green);font-weight:700;font-size:16px">0</span> 天</div>
+              <div>本月 <span id="monthCheckin" style="color:var(--purple);font-weight:700;font-size:16px">0</span> 天</div>
+              <div>累计 <span id="totalCheckin" style="color:var(--amber);font-weight:700;font-size:16px">0</span> 天</div>
             </div>
-            <div id="setsList"></div>
-            <button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="saveWorkout()">保存训练</button>
           </div>
-        </div>
-
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>训练日历</div>
-          <div class="cal-row" id="calRow"></div>
-          <div style="font-size:11px;color:var(--white-dim);margin-top:8px;font-weight:500;display:flex;justify-content:space-between">
-            <span>本月训练 <span id="monthCount" style="color:var(--green);font-weight:700">0</span> 天</span>
-            <span style="color:var(--white-faint)">点击日期查看详情</span>
+          <div style="margin-top:12px">
+            <div style="font-size:11px;color:var(--white-dim);font-weight:600;margin-bottom:6px;letter-spacing:0.04em">本月</div>
+            <div class="cal-row" id="checkinCal"></div>
           </div>
-          <div id="calDetail" style="display:none;margin-top:12px;padding-top:12px;border-top:0.5px solid var(--glass-border)"></div>
-        </div>
-        <div class="card glass" id="workoutHistoryCard" style="display:none">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8M3 3v5h5"/><path d="M12 7v5l3 3"/></svg>训练记录<span class="count-badge" id="workoutHistoryCount"></span></div>
-          <div id="workoutHistory"></div>
         </div>
       </div>
 
@@ -759,7 +745,7 @@ function defaultData(){
   return{
     __version:DATA_VERSION,
     weights:[{date:today,val:68.0}],
-    workouts:[],
+    workouts:[],checkins:[],
     todos:[
       {id:1,text:'打印签名起诉材料（7份Word→深圳数字法院）',priority:'high',cat:'工作',due:'2026-07-27',done:false},
       {id:2,text:'159655首笔定投1500元（盘前查溢价率）',priority:'high',cat:'投资',due:'2026-07-27',done:false},
@@ -789,31 +775,53 @@ function showToast(msg){
   if(si){const now=new Date();si.textContent=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0')+' 已保存';}
 }
 
-/* 快捷训练模板 */
-const workoutTemplates=[
-  {name:'推日',part:'胸',icon:'<svg viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px\"><path d=\"M6 9l6-6 6 6\"/><line x1=\"12\" y1=\"3\" x2=\"12\" y2=\"21\"/><line x1=\"5\" y1=\"21\" x2=\"19\" y2=\"21\"/></svg>',sets:[{name:'平板卧推',sets:4,reps:10,weight:0},{name:'上斜哑铃推',sets:3,reps:12,weight:0},{name:'绳索夹胸',sets:3,reps:15,weight:0},{name:'肩推',sets:4,reps:10,weight:0},{name:'侧平举',sets:3,reps:15,weight:0}]},
-  {name:'拉日',part:'背',icon:'<svg viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px\"><path d=\"M6 15l6 6 6-6\"/><line x1=\"12\" y1=\"21\" x2=\"12\" y2=\"3\"/><line x1=\"5\" y1=\"3\" x2=\"19\" y2=\"3\"/></svg>',sets:[{name:'高位下拉',sets:4,reps:10,weight:0},{name:'杠铃划船',sets:4,reps:10,weight:0},{name:'坐姿绳索划船',sets:3,reps:12,weight:0},{name:'面拉',sets:3,reps:15,weight:0},{name:'弯举',sets:3,reps:12,weight:0}]},
-  {name:'腿日',part:'腿',icon:'<svg viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px\"><path d=\"M4 4l4 8-4 8\"/><path d=\"M20 4l-4 8 4 8\"/><line x1=\"8\" y1=\"12\" x2=\"16\" y2=\"12\"/></svg>',sets:[{name:'深蹲',sets:4,reps:10,weight:0},{name:'腿举',sets:4,reps:12,weight:0},{name:'罗马尼亚硬拉',sets:3,reps:10,weight:0},{name:'腿弯举',sets:3,reps:12,weight:0},{name:'小腿提踵',sets:4,reps:15,weight:0}]},
-  {name:'核心',part:'核心',icon:'<svg viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px\"><path d=\"M12 2L22 12 12 22 2 12z\"/><line x1=\"12\" y1=\"8\" x2=\"12\" y2=\"16\"/></svg>',sets:[{name:'卷腹',sets:3,reps:20,weight:0},{name:'悬垂举腿',sets:3,reps:15,weight:0},{name:'平板支撑',sets:3,reps:60,weight:0},{name:'俄罗斯转体',sets:3,reps:20,weight:0}]},
-  {name:'有氧',part:'有氧',icon:'<svg viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px\"><path d=\"M3 12h4l3-9 4 18 3-9h4\"/></svg>',sets:[{name:'跑步/椭圆机',sets:1,reps:30,weight:0}]}
-];
-function renderQuickTemplates(){
-  const el=document.getElementById('quickTemplates');
-  if(!el)return;
-  el.innerHTML=workoutTemplates.map((t,i)=>`<div class="chip" onclick="applyTemplate(${i})" style="font-size:11px;padding:5px 11px;gap:4px">${t.icon} ${t.name}</div>`).join('');
+/* ===== 健身打卡 ===== */
+function doCheckin(){
+  if(!data.checkins)data.checkins=[];
+  const today=TODAY_STR;
+  if(data.checkins.includes(today)){showToast('今天已经打卡过了');return;}
+  data.checkins.push(today);
+  saveData();renderCheckin();
+  showToast('打卡成功！');
 }
-function applyTemplate(idx){
-  const t=workoutTemplates[idx];
-  selectedPart=t.part;document.getElementById('selectedPart').textContent=t.part;
-  document.getElementById('workoutSets').style.display='block';
-  const list=document.getElementById('setsList');list.innerHTML='';
-  t.sets.forEach(s=>{
-    const d=document.createElement('div');d.className='set-row';
-    d.innerHTML=`<input placeholder="动作" class="set-name" style="flex:2" value="${s.name}"><input type="number" placeholder="组" class="set-sets" min="1" style="flex:1" value="${s.sets}"><input type="number" placeholder="次" class="set-reps" min="1" style="flex:1" value="${s.reps}"><input type="number" placeholder="kg" class="set-weight" step="0.5" style="flex:1" value="${s.weight||''}"><button class="btn-icon" onclick="this.parentElement.remove()" style="flex:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>`;
-    list.appendChild(d);
-  });
-  renderBodyParts();
-  showToast('已填入「'+t.name+'」模板，修改重量后保存');
+function renderCheckin(){
+  if(!data.checkins)data.checkins=[];
+  const today=TODAY_STR;
+  const checked=data.checkins.includes(today);
+  const btn=document.getElementById('checkinBtn');
+  if(checked){
+    btn.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><polyline points="20 6 9 17 4 12"/></svg>已打卡';
+    btn.style.opacity='0.6';btn.style.pointerEvents='none';
+  }else{
+    btn.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><polyline points="20 6 9 17 4 12"/></svg>打卡';
+    btn.style.opacity='1';btn.style.pointerEvents='auto';
+  }
+  /* streak */
+  const sorted=[...data.checkins].sort().reverse();
+  let streak=0;
+  if(sorted.length){
+    const d=new Date();streak=0;
+    for(let i=0;i<365;i++){
+      const ds=d.toISOString().slice(0,10);
+      if(data.checkins.includes(ds)){streak++;d.setDate(d.getDate()-1);}
+      else{if(i===0){d.setDate(d.getDate()-1);continue;}break;}
+    }
+  }
+  document.getElementById('streakCount').textContent=streak;
+  /* month */
+  const now=new Date(),ym=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  const mc=data.checkins.filter(d=>d.startsWith(ym)).length;
+  document.getElementById('monthCheckin').textContent=mc;
+  document.getElementById('totalCheckin').textContent=data.checkins.length;
+  /* calendar dots */
+  const y=now.getFullYear(),m=now.getMonth(),days=new Date(y,m+1,0).getDate(),td=now.getDate();
+  let html='';
+  for(let d=1;d<=days;d++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isDone=data.checkins.includes(ds),isToday=d===td;
+    html+=`<div class="cal-day${isDone?' done':''}${isToday?' today':''}">${d}</div>`;
+  }
+  document.getElementById('checkinCal').innerHTML=html;
 }
 
 const today=new Date();
@@ -824,7 +832,7 @@ const md=document.getElementById('mobileDate');if(md)md.textContent=today.getMon
 
 /* Navigation */
 const pageTitles={
-  health:{title:'健康',subtitle:'体重 · 饮食 · 饮水 · 训练'},
+  health:{title:'健康',subtitle:'体重 · 饮食 · 打卡'},
   workout:{title:'训练',subtitle:'增肌 · 减脂 · PPL六天循环'},
   diary:{title:'每日感想',subtitle:'记录每一天'},
   todo:{title:'待办',subtitle:'任务管理'},
@@ -858,29 +866,6 @@ document.querySelectorAll('.nav-item').forEach(item=>{
 });
 
 /* ===== HEALTH ===== */
-const bodyPartsArr=['胸','背','腿','肩','手臂','核心'];
-let selectedPart='';
-function renderBodyParts(){
-  document.getElementById('bodyParts').innerHTML=bodyPartsArr.map(p=>`<div class="body-part${p===selectedPart?' selected':''}" onclick="selectPart('${p}')">${p}</div>`).join('');
-}
-function selectPart(p){
-  selectedPart=p;document.getElementById('selectedPart').textContent=p;
-  document.getElementById('workoutSets').style.display='block';document.getElementById('setsList').innerHTML='';renderBodyParts();
-}
-function addSet(){
-  const d=document.createElement('div');d.className='set-row';
-  d.innerHTML=`<input placeholder="动作" class="set-name" style="flex:2"><input type="number" placeholder="组" class="set-sets" min="1" style="flex:1"><input type="number" placeholder="次" class="set-reps" min="1" style="flex:1"><input type="number" placeholder="kg" class="set-weight" step="0.5" style="flex:1"><button class="btn-icon" onclick="this.parentElement.remove()" style="flex:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>`;
-  document.getElementById('setsList').appendChild(d);
-}
-function saveWorkout(){
-  if(!selectedPart){showToast('请先选择训练部位');return;}
-  const sets=[...document.querySelectorAll('#setsList .set-row')].map(r=>({name:r.querySelector('.set-name').value||'',sets:+r.querySelector('.set-sets').value||0,reps:+r.querySelector('.set-reps').value||0,weight:+r.querySelector('.set-weight').value||0})).filter(s=>s.name);
-  if(!sets.length){showToast('请至少填写一个动作');return;}
-  data.workouts.push({date:new Date().toISOString().slice(0,10),part:selectedPart,sets});
-  saveData();renderCalendar();renderWorkoutHistory();
-  document.getElementById('workoutSets').style.display='none';selectedPart='';document.getElementById('setsList').innerHTML='';renderBodyParts();
-  showToast('训练已保存');
-}
 function addWeight(){
   const v=+document.getElementById('weightInput').value;
   if(!v||v<30||v>200){showToast('请输入有效体重（30-200kg）');return;}
@@ -1128,39 +1113,7 @@ ${mealTypes.map(type=>{const items=todayMeals.filter(m=>m.type===type);if(!items
   showToast('饮食日志已导出，可粘贴到飞书');
 }
 
-function renderCalendar(){
-  const now=new Date(),y=now.getFullYear(),m=now.getMonth();
-  const days=new Date(y,m+1,0).getDate(),td=now.getDate();
-  const doneDates=new Set(data.workouts.map(w=>w.date));
-  let count=0,html='';
-  for(let d=1;d<=days;d++){
-    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isDone=doneDates.has(ds),isToday=d===td;
-    if(isDone&&d<=td)count++;
-    html+=`<div class="cal-day${isDone?' done':''}${isToday?' today':''}${selectedCalDate===ds?' selected-day':''}" onclick="selectCalDay('${ds}')">${d}</div>`;
-  }
-  document.getElementById('calRow').innerHTML=html;
-  document.getElementById('monthCount').textContent=count;
-}
-function selectCalDay(ds){
-  if(selectedCalDate===ds){selectedCalDate=null;document.getElementById('calDetail').style.display='none';renderCalendar();return;}
-  selectedCalDate=ds;renderCalendar();
-  const ws=data.workouts.filter(w=>w.date===ds);
-  const el=document.getElementById('calDetail');
-  el.innerHTML=ws.length?ws.map(w=>`<div style="margin-bottom:10px"><span class="tag tag-purple" style="margin-right:6px">${w.part}</span><span style="font-size:12px;color:var(--white-mid)">${w.sets.map(s=>`${s.name} ${s.sets}×${s.reps}${s.weight?'@'+s.weight+'kg':''}`).join('，')}</span></div>`).join(''):`<div style="font-size:12px;color:var(--white-dim);text-align:center;padding:8px">${ds.slice(5)} 无训练记录</div>`;
-  el.style.display='block';
-}
-function renderWorkoutHistory(){
-  const card=document.getElementById('workoutHistoryCard'),list=document.getElementById('workoutHistory');
-  if(!data.workouts.length){card.style.display='none';return;}
-  card.style.display='block';
-  document.getElementById('workoutHistoryCount').textContent=data.workouts.length+'条';
-  list.innerHTML=data.workouts.slice().reverse().map((w,i)=>`<div class="workout-history-item glass-sm"><div class="workout-history-date">${w.date}</div><div class="workout-history-detail"><span class="part-tag">${w.part}</span>${w.sets.map(s=>`${s.name} ${s.sets}×${s.reps}${s.weight?'@'+s.weight+'kg':''}`).join('，')}</div><button class="btn-icon" style="position:absolute;top:13px;right:13px" onclick="delWorkout(${data.workouts.length-1-i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div>`).join('');
-}
-function delWorkout(idx){
-  if(!confirm('删除这条训练记录？'))return;
-  data.workouts.splice(idx,1);saveData();renderCalendar();renderWorkoutHistory();renderWeight();showToast('已删除');
-}
+
 
 /* ===== DIARY (每日感想) ===== */
 function saveDiary(){
@@ -1696,12 +1649,10 @@ function selectWorkoutDay(day){
 }
 
 function renderAll(){
-  try{renderQuickTemplates();}catch(e){console.error(e)}
-  try{renderBodyParts();}catch(e){console.error(e)}
+  try{renderCheckin();}catch(e){console.error(e)}
   try{renderWeight();}catch(e){console.error(e)}
   try{renderMealTypeChips();renderQuickFoods();renderMeals();renderWater();}catch(e){console.error(e)}
-  try{renderCalendar();}catch(e){console.error(e)}
-  try{renderWorkoutHistory();}catch(e){console.error(e)}
+  
   try{renderDiaryStreak();renderDiaryHistory();loadTodayDiary();}catch(e){console.error(e)}
   try{renderTodoChips();renderTodos();fetchRemoteTodos();}catch(e){console.error(e)}
   try{renderJournal();}catch(e){console.error(e)}
