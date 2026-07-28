@@ -1,88 +1,114 @@
 {
-  "plan": "PPL六天循环",
-  "goal": "增肌为主+减脂",
+  "plan": "增肌+O腿纠正",
+  "goal": "增肌为主+减脂+O型腿/小腿外翻纠正",
   "level": "中级(卧推60kg×2)",
   "updated": "2026-07-28",
+  "correctionNote": "O型腿矫正逻辑：松外侧(髂胫束/腓骨肌)→练内侧(内收肌/胫骨后肌)→扎根基(足底)→回正力线。每次训练必须完成纠正部分。",
   "schedule": [
     {
-      "day": 1, "name": "推A", "muscles": "胸+肩+三头",
+      "day": 1,
+      "name": "推日+O腿纠正",
+      "muscles": "胸+肩+三头 | 内收肌+臀中肌",
       "exercises": [
-        {"name":"杠铃卧推","sets":4,"reps":"6","weight":"50-55kg","tip":"主力复合，第4组加到55kg","gif":"https://static.exercisedb.dev/media/EIeI8Vf.gif","steps":["平躺在长凳上，双脚平放在地上，背部紧贴长凳","正手握住杠铃，握距略宽于肩宽","将杠铃从架子上提起，直接放在胸部上方","慢慢降低到胸部，保持肘部内收","推起至双臂完全伸展"]},
-        {"name":"上斜哑铃卧推","sets":3,"reps":"10","weight":"中等","tip":"上胸填充，慢下快上","gif":"https://static.exercisedb.dev/media/TVdivgY.gif","steps":["坐在上斜凳上，每只手各拿一个哑铃","向后靠在长凳上，哑铃举至肩高","慢慢下放哑铃至上胸位置","推起至手臂伸直"]},
-        {"name":"绳索夹胸","sets":3,"reps":"12-15","weight":"轻","tip":"挤压感优先","gif":"https://static.exercisedb.dev/media/0CXGHya.gif","steps":["滑轮调至胸部高度，站在中央","手掌朝下抓住手柄，手臂向两侧伸展","双手并拢夹胸，挤压1秒","慢慢回到起始位"]},
-        {"name":"哑铃肩推","sets":4,"reps":"8","weight":"中等","tip":"核心收紧不借力","gif":"https://static.exercisedb.dev/media/84RyJf8.gif","steps":["站立或坐姿，哑铃举至肩高","掌心朝前，向上推至手臂伸直","在顶部停顿，慢慢下放"]},
-        {"name":"绳索侧平举","sets":3,"reps":"15","weight":"轻","tip":"肩膀增肌关键，慢控制","gif":"https://static.exercisedb.dev/media/goJ6ezq.gif","steps":["单手握住对侧绳索手柄","手臂向侧方举起至与地面平行","慢放回，不甩"]},
-        {"name":"绳索三头下压","sets":3,"reps":"12","weight":"中等","tip":"肘夹紧","gif":"https://static.exercisedb.dev/media/gAwDzB3.gif","steps":["V形杆接在高滑轮","正手握杆，肘靠身体两侧","下压至手臂伸直，挤压三头","慢放回"]},
-        {"name":"碎颅者(仰卧臂屈伸)","sets":3,"reps":"10","weight":"中等","tip":"上臂不动","gif":"https://static.exercisedb.dev/media/h8LFzo9.gif","steps":["平躺在长凳上，正手握杠铃","手臂伸直至胸部上方","保持上臂静止，弯曲肘部向额头降低","伸直手臂回到起始位"]}
+        {"name": "器械卧推", "sets": 3, "reps": "10", "weight": "选能做10个的重量", "tip": "比杠铃安全，轨迹固定", "gif": "https://static.exercisedb.dev/media/T0yTjgW.gif", "steps": ["调整座椅高度，背部平贴靠垫", "正手握住手柄，肘部90度", "推起至手臂伸直不锁死，缓慢下放"]},
+        {"name": "绳索肩推", "sets": 3, "reps": "10", "weight": "轻一点，肩容易受伤", "tip": "核心收紧，不要耸肩", "gif": "https://static.exercisedb.dev/media/PzQanLE.gif", "steps": ["调整绳索至肩部高度", "背对机器站立，正手握柄", "向上推至手臂伸直，缓慢回放"]},
+        {"name": "绳索夹胸", "sets": 3, "reps": "12", "weight": "中等", "tip": "感受胸肌收缩，别用手臂拽", "gif": "https://static.exercisedb.dev/media/j7XMAyn.gif", "steps": ["手柄调至胸部高度", "站在机器中间，微弓步", "双手向前向内合拢，顶峰收缩1秒"]},
+        {"name": "绳索侧平举", "sets": 3, "reps": "12", "weight": "很轻就够", "tip": "手臂不用举太高，肩平即可", "gif": "https://static.exercisedb.dev/media/goJ6ezq.gif", "steps": ["单手握低滑轮绳索", "手臂伸直向侧方举起至肩平", "控制下放，不要甩"]},
+        {"name": "绳索三头下压", "sets": 3, "reps": "12", "weight": "中等", "tip": "大臂贴身不动，只有小臂动", "gif": "https://static.exercisedb.dev/media/3ZflifB.gif", "steps": ["直杆连高滑轮，正手握杆", "大臂夹紧身体两侧", "下压至手臂伸直，慢放回"]},
+        {"name": "[纠正] 泡沫轴滚髂胫束", "sets": 2, "reps": "60秒/侧", "weight": "", "tip": "O腿必做！滚大腿外侧，找到痛点停留20秒", "gif": "", "steps": ["侧卧，泡沫轴放在大腿外侧下方", "从髋骨到膝盖外侧缓慢来回滚动", "找到特别酸痛的点停留20-30秒", "力度：酸胀能忍，不要痛得冒冷汗"], "isCorrective": true},
+        {"name": "[纠正] 坐姿夹球(内收肌)", "sets": 3, "reps": "15", "weight": "瑜伽球或篮球", "tip": "O腿核心动作！夹紧5秒再松，感受大腿内侧发酸", "gif": "https://static.exercisedb.dev/media/oHsrypV.gif", "steps": ["坐椅子上，球夹在两膝之间", "用力夹紧保持5秒，放松2秒", "全程感受大腿内侧发力", "膝盖不要内扣，朝向脚尖方向"], "isCorrective": true},
+        {"name": "[纠正] 蚌式开合(臀中肌)", "sets": 3, "reps": "15/侧", "weight": "徒手或弹力带", "tip": "臀中肌有力→走路膝盖不内扣→小腿不外翻", "gif": "", "steps": ["侧卧屈膝，双脚贴在一起", "上方膝盖像贝壳打开，脚不分开", "打开时感受臀部外侧发力2秒", "缓慢放下，不要用腰代偿"], "isCorrective": true}
       ]
     },
     {
-      "day": 2, "name": "拉A", "muscles": "背+二头+后束",
+      "day": 2,
+      "name": "腿日+O腿纠正",
+      "muscles": "腿整体+内收 | 足底+力线回正",
       "exercises": [
-        {"name":"杠铃俯身划船","sets":4,"reps":"6","weight":"中重","tip":"背部主力，肩胛骨先收再拉","gif":"https://static.exercisedb.dev/media/w2P4aQ5.gif","steps":["双脚肩宽，膝盖微弯","臀部前倾，背部挺直挺胸","正手握杠铃，收缩肩胛骨将杠铃拉向下胸","顶部挤压，慢放回"]},
-        {"name":"绳索下拉","sets":3,"reps":"10","weight":"中等","tip":"想象肘往下插","gif":"https://static.exercisedb.dev/media/KZ6gQr7.gif","steps":["绳索接高位，正手握","背部挺直微后倾","向下拉至胸前，挤压背阔肌","慢放回充分伸展"]},
-        {"name":"绳索坐姿划船","sets":3,"reps":"12","weight":"中等","tip":"背部厚度","gif":"https://static.exercisedb.dev/media/Xp3mKn8.gif","steps":["坐在划船机上，脚踏板踩稳","正手握手柄，背挺直","拉向身体，肩胛骨挤压","慢放回"]},
-        {"name":"哑铃后束飞鸟","sets":3,"reps":"15","weight":"轻","tip":"俯身45度不借力","gif":"https://static.exercisedb.dev/media/Rt5vWj9.gif","steps":["双脚肩宽，各握哑铃","臀部前倾保持背部挺直","手臂向两侧举起至平行地面","慢放回"]},
-        {"name":"杠铃弯举","sets":3,"reps":"8","weight":"中等","tip":"不晃身体","gif":"https://static.exercisedb.dev/media/Yq7nLm4.gif","steps":["站直，反手握杠铃","肘靠躯干，弯举至肩高","挤压二头肌，慢放回"]},
-        {"name":"绳索锤式弯举","sets":3,"reps":"12","weight":"轻","tip":"前臂+二头双打","gif":"https://static.exercisedb.dev/media/Zs8oNp5.gif","steps":["双手握绳索，掌心相对","上臂静止，弯举至肩高","慢放回"]}
+        {"name": "高脚杯深蹲", "sets": 3, "reps": "10", "weight": "哑铃抱胸前，比杠铃简单", "tip": "膝盖对准第二脚趾，不内扣！", "gif": "https://static.exercisedb.dev/media/yn8yg1r.gif", "steps": ["双脚与肩同宽，哑铃竖抱胸前", "臀部后坐下蹲至大腿平行地面", "全程膝盖朝脚尖方向，绝不能内扣", "起身时臀部发力站起"]},
+        {"name": "器械腿屈伸", "sets": 3, "reps": "12", "weight": "中等", "tip": "对膝盖压力小，适合O腿人群", "gif": "https://static.exercisedb.dev/media/my33uHU.gif", "steps": ["坐机器上，脚放脚垫", "伸直双腿至膝盖微屈不锁死", "顶峰收缩1秒，慢放回"]},
+        {"name": "器械腿弯举", "sets": 3, "reps": "12", "weight": "中等", "tip": "练大腿后侧，平衡前后力量", "gif": "https://static.exercisedb.dev/media/17lJ1kr.gif", "steps": ["趴在机器上，脚跟靠在杠杆上", "弯举至大腿后侧充分收缩", "缓慢放回，控制离心"]},
+        {"name": "器械内收", "sets": 3, "reps": "15", "weight": "轻-中", "tip": "O腿必练！强化内侧把膝盖往回拉", "gif": "https://static.exercisedb.dev/media/oHsrypV.gif", "steps": ["坐内收机器，脚放踏板", "双腿向中间并拢，挤压大腿内侧", "顶峰保持2秒，慢放回"]},
+        {"name": "坐姿提踵", "sets": 3, "reps": "15", "weight": "哑铃放膝盖上", "tip": "练小腿，注意脚尖朝前不外八", "gif": "https://static.exercisedb.dev/media/r29jP7S.gif", "steps": ["坐凳上，哑铃放大腿近膝盖处", "脚掌踩台阶，脚跟悬空", "踮脚至最高点停1秒，慢放下"]},
+        {"name": "[纠正] 靠墙夹膝静蹲", "sets": 3, "reps": "30秒", "weight": "膝盖夹枕头或球", "tip": "O腿黄金动作！膝盖对准脚尖+夹紧，同时练力和力线", "gif": "", "steps": ["背靠墙，双脚与肩同宽朝前", "膝盖间夹枕头或球，用力夹紧", "缓慢下蹲至大腿近水平，膝盖不超脚尖", "保持30秒，全程膝盖朝第二脚趾方向"], "isCorrective": true},
+        {"name": "[纠正] 足底抓地激活", "sets": 3, "reps": "30秒", "weight": "", "tip": "地基动作！足弓有力→力线从根正→小腿外翻慢慢回", "gif": "", "steps": ["光脚坐椅子上，脚平放地面", "大脚趾使劲踩地，足弓微微抬起", "感受足底内侧和小腿内侧在发力", "保持10秒松3秒，重复", "这是所有腿型矫正的地基，必须坚持"], "isCorrective": true},
+        {"name": "[纠正] 侧卧内收抬腿", "sets": 3, "reps": "15/侧", "weight": "", "tip": "强化内收肌，平衡外侧过强拉力", "gif": "https://static.exercisedb.dev/media/c8f5cSY.gif", "steps": ["侧躺，双腿伸直叠放", "下面那条腿慢慢向上抬起", "感受大腿内侧发力，不是腰", "抬到最高停1秒，慢放"], "isCorrective": true}
       ]
     },
     {
-      "day": 3, "name": "腿A", "muscles": "腿+核心",
+      "day": 3,
+      "name": "休息",
+      "muscles": "恢复",
       "exercises": [
-        {"name":"杠铃深蹲","sets":4,"reps":"6","weight":"中重","tip":"腿部王者，蹲到平行","gif":"https://static.exercisedb.dev/media/Ab2cDe1.gif","steps":["杠铃放肩上，正手握","双脚肩宽或略宽","收紧核心下蹲至大腿平行","推起站直"]},
-        {"name":"罗马尼亚硬拉","sets":3,"reps":"10","weight":"中等","tip":"臀+腿后，背挺直臀部铰链","gif":"https://static.exercisedb.dev/media/Cd4eFg2.gif","steps":["双脚肩宽，正手握杠铃","臀部铰链前倾，膝盖微弯","杠铃沿腿面下放至腿后拉伸感","臀部发力站起"]},
-        {"name":"腿举","sets":3,"reps":"12","weight":"中等","tip":"不锁死膝盖","gif":"https://static.exercisedb.dev/media/Ef6gHi3.gif","steps":["坐在腿举机上，背靠垫","双脚放在踏板上肩宽","推起至腿近伸直不锁死","慢放回"]},
-        {"name":"哑铃弓步蹲","sets":3,"reps":"10/腿","weight":"轻","tip":"平衡+单腿力量","gif":"https://static.exercisedb.dev/media/Gh8iJk4.gif","steps":["双手各握哑铃站立","一脚前迈下蹲至膝近地","前脚跟推回起始位","换腿"]},
-        {"name":"腿屈伸","sets":3,"reps":"15","weight":"轻","tip":"顶部挤压1秒","gif":"https://static.exercisedb.dev/media/Ij0kLm5.gif","steps":["坐在腿屈伸机上","伸腿至完全伸展，挤压1秒","慢放回"]},
-        {"name":"悬垂举腿","sets":3,"reps":"12","weight":"自重","tip":"核心主力","gif":"https://static.exercisedb.dev/media/Kl2mNn6.gif","steps":["悬挂在引体向上杆上","核心发力抬腿至平行地面","慢放回"]},
-        {"name":"俄罗斯转体","sets":3,"reps":"15/侧","weight":"自重","tip":"侧腹","gif":"https://static.exercisedb.dev/media/Mn4oPp7.gif","steps":["坐地，膝盖弯曲后倾","双脚可抬离地面","双手合拢左右转体","每侧15次"]}
+        {"name": "散步30分钟", "sets": 1, "reps": "30分钟", "weight": "", "tip": "注意走路脚跟先着地，脚尖朝前，不外八", "gif": "", "steps": ["脚跟先着地", "重心从足跟→足外侧→全脚掌", "大脚趾最后蹬离地面", "脚尖始终朝正前方"]},
+        {"name": "[纠正] 足底抓地激活", "sets": 2, "reps": "30秒", "weight": "", "tip": "休息日也要练地基", "gif": "", "steps": ["光脚坐椅子上", "大脚趾使劲踩地，足弓抬起", "保持10秒松3秒"], "isCorrective": true}
       ]
     },
     {
-      "day": 4, "name": "推B", "muscles": "胸+肩+三头(变式)",
+      "day": 4,
+      "name": "拉日+O腿纠正",
+      "muscles": "背+二头 | 臀中肌+足底",
       "exercises": [
-        {"name":"上斜杠铃卧推","sets":4,"reps":"8","weight":"中等","tip":"上胸主导","gif":"https://static.exercisedb.dev/media/TVdivgY.gif","steps":["上斜凳30度，正手握杠铃","下放至上胸位置","推起至伸直"]},
-        {"name":"哑铃飞鸟","sets":3,"reps":"12-15","weight":"轻","tip":"拉伸感优先","gif":"https://static.exercisedb.dev/media/0CXGHya.gif","steps":["平躺持哑铃，掌心相对","手臂以宽弧线向两侧放低","感受胸部拉伸","弧线收回"]},
-        {"name":"俯卧撑","sets":3,"reps":"力竭","weight":"自重","tip":"收尾榨干","gif":"https://static.exercisedb.dev/media/EIeI8Vf.gif","steps":["标准俯卧撑姿势","下放至胸触地","推起，做到力竭"]},
-        {"name":"哑铃肩推","sets":4,"reps":"10","weight":"中等","tip":"肩前束+中束","gif":"https://static.exercisedb.dev/media/84RyJf8.gif","steps":["站或坐，哑铃肩高","推过头顶","慢放回"]},
-        {"name":"哑铃侧平举","sets":3,"reps":"15","weight":"轻","tip":"控制慢放","gif":"https://static.exercisedb.dev/media/goJ6ezq.gif","steps":["站立持哑铃，掌心朝身","侧举至平行地面","慢放回"]},
-        {"name":"绳索三头下压","sets":3,"reps":"12","weight":"中等","tip":"","gif":"https://static.exercisedb.dev/media/gAwDzB3.gif","steps":["V形杆高滑轮，肘夹紧","下压伸直","慢放回"]},
-        {"name":"窄握卧推","sets":3,"reps":"10","weight":"中等","tip":"三头刺激","gif":"https://static.exercisedb.dev/media/h8LFzo9.gif","steps":["握距与肩同宽或略窄","下放至胸","推起，肘靠身体"]}
+        {"name": "高位下拉", "sets": 3, "reps": "10", "weight": "比引体向上简单多了", "tip": "背发力，别用手臂拽", "gif": "https://static.exercisedb.dev/media/CuaWCmC.gif", "steps": ["坐机器上，膝盖卡在护垫下", "正手握杆略宽于肩", "下拉至杆到胸口，肩胛骨后缩", "慢放回，手臂伸直不耸肩"]},
+        {"name": "坐姿绳索划船", "sets": 3, "reps": "10", "weight": "中等", "tip": "背挺直，拉到肚脐位置", "gif": "https://static.exercisedb.dev/media/hvV79Si.gif", "steps": ["坐机器上，脚踩踏板", "正手握手柄，背微前倾", "拉向身体，肩胛骨挤压", "慢放回，控制离心"]},
+        {"name": "单臂下拉", "sets": 3, "reps": "10/侧", "weight": "中等", "tip": "单侧训练，纠正左右不平衡", "gif": "https://static.exercisedb.dev/media/U5INZY6.gif", "steps": ["单手握高滑轮手柄", "下拉至手到胸口侧面", "感受背阔肌收缩，慢放"]},
+        {"name": "哑铃弯举", "sets": 3, "reps": "12", "weight": "中等", "tip": "大臂不动，只有小臂动", "gif": "https://static.exercisedb.dev/media/NbVPDMW.gif", "steps": ["站直，双手各握哑铃", "上臂贴身不动，弯举至肩高", "顶峰收缩1秒，慢放下"]},
+        {"name": "[纠正] 泡沫轴滚小腿外侧", "sets": 2, "reps": "60秒/侧", "weight": "", "tip": "小腿外翻就是外侧腓骨肌群太紧，必须松", "gif": "", "steps": ["坐地上，小腿外侧放在泡沫轴上", "从膝盖外侧滚到脚踝上方", "找到硬块痛点停留20秒", "力度适中，酸胀能忍即可"], "isCorrective": true},
+        {"name": "[纠正] 弹力带螃蟹走", "sets": 3, "reps": "12步/方向", "weight": "轻弹力带套膝盖上方", "tip": "臀中肌激活→骨盆稳定→膝盖不内扣→小腿不外翻", "gif": "", "steps": ["弹力带套在膝盖上方", "半蹲姿势，膝盖对抗弹力带往外推", "向侧面走12步，再倒走回来", "全程膝盖对准脚尖方向"], "isCorrective": true},
+        {"name": "[纠正] 侧卧抬腿(臀中肌)", "sets": 3, "reps": "15/侧", "weight": "", "tip": "臀中肌有力→走路膝盖不内拐→小腿不歪回去", "gif": "", "steps": ["侧躺，下方腿微屈，上方腿伸直", "上方腿脚尖微内扣，慢慢上抬", "感受臀部侧面发力，不是腰", "抬到约45度停2秒，慢放"], "isCorrective": true}
       ]
     },
     {
-      "day": 5, "name": "拉B", "muscles": "背+二头+后束(变式)",
+      "day": 5,
+      "name": "全身轻+O腿纠正",
+      "muscles": "胸+背+臀 | 内收+足底+力线",
       "exercises": [
-        {"name":"哑铃俯身划船","sets":4,"reps":"10","weight":"中等","tip":"单臂更集中","gif":"https://static.exercisedb.dev/media/w2P4aQ5.gif","steps":["俯身持哑铃","拉向髋部","挤压背部","慢放回"]},
-        {"name":"绳索下拉(绳索)","sets":3,"reps":"12","weight":"中等","tip":"外旋结尾拉","gif":"https://static.exercisedb.dev/media/KZ6gQr7.gif","steps":["绳索附件高位","下拉至胸前","底部外旋挤压","慢放回"]},
-        {"name":"绳索坐姿划船","sets":3,"reps":"12","weight":"中等","tip":"","gif":"https://static.exercisedb.dev/media/Xp3mKn8.gif","steps":["坐姿划船","拉向身体","慢放回"]},
-        {"name":"哑铃后束飞鸟","sets":3,"reps":"15","weight":"轻","tip":"","gif":"https://static.exercisedb.dev/media/Rt5vWj9.gif","steps":["俯身45度","侧举至平行","慢放回"]},
-        {"name":"绳索弯举","sets":3,"reps":"12","weight":"轻","tip":"","gif":"https://static.exercisedb.dev/media/Zs8oNp5.gif","steps":["低滑轮，掌心朝上","弯举至肩高","慢放回"]},
-        {"name":"杠铃弯举","sets":3,"reps":"8","weight":"中等","tip":"","gif":"https://static.exercisedb.dev/media/Yq7nLm4.gif","steps":["反手握杠铃","弯举","慢放回"]}
+        {"name": "器械卧推(轻)", "sets": 3, "reps": "12", "weight": "比Day1轻10-20%", "tip": "轻重量高质量，感受胸肌发力", "gif": "https://static.exercisedb.dev/media/T0yTjgW.gif", "steps": ["同Day1，重量减轻", "专注肌肉感受，慢起慢放", "每组最后2个稍吃力即可"]},
+        {"name": "坐姿划船", "sets": 3, "reps": "12", "weight": "中等", "tip": "背挺直拉向身体", "gif": "https://static.exercisedb.dev/media/fUBheHs.gif", "steps": ["坐划船机上，脚踩踏板", "握手柄，拉向腹部", "肩胛骨后缩，慢放回"]},
+        {"name": "器械外展", "sets": 3, "reps": "12", "weight": "轻-中", "tip": "练臀中肌，配合内收平衡内外侧", "gif": "https://static.exercisedb.dev/media/CHpahtl.gif", "steps": ["坐外展机器上", "双腿向外打开", "感受臀部外侧发力，慢回"]},
+        {"name": "俄罗斯转体", "sets": 3, "reps": "15/侧", "weight": "徒手或轻哑铃", "tip": "核心稳定=下肢力线稳定", "gif": "https://static.exercisedb.dev/media/XVDdcoj.gif", "steps": ["坐地上，膝盖弯曲，微后倾", "双手合拢或持轻物", "左右转体，感受腹斜肌发力"]},
+        {"name": "[纠正] 坐姿夹球(内收肌)", "sets": 3, "reps": "20", "weight": "瑜伽球", "tip": "次数增加，持续强化内侧", "gif": "https://static.exercisedb.dev/media/oHsrypV.gif", "steps": ["同Day1，次数加到20", "夹紧5秒松2秒", "感受内侧持续发酸"], "isCorrective": true},
+        {"name": "[纠正] 足内翻抗阻(胫骨后肌)", "sets": 3, "reps": "15/侧", "weight": "弹力带套前脚掌", "tip": "胫骨后肌=足弓支撑主力，O腿人群几乎都无力", "gif": "", "steps": ["坐椅子上，弹力带一端固定，一端套前脚掌", "脚掌向内侧翻转对抗弹力带阻力", "慢起慢放，感受小腿深层内侧发力", "这是足弓支撑的核心肌肉"], "isCorrective": true},
+        {"name": "[纠正] 靠墙静蹲(力线版)", "sets": 3, "reps": "30秒", "weight": "", "tip": "膝盖严格对准第二脚趾，训练正确力线记忆", "gif": "", "steps": ["背靠墙，双脚朝前与肩同宽", "下蹲至大腿近水平", "全程盯着膝盖，严格对准第二脚趾", "任何膝盖内扣立刻调整"], "isCorrective": true}
       ]
     },
     {
-      "day": 6, "name": "腿B+有氧", "muscles": "腿+核心+有氧",
+      "day": 6,
+      "name": "纠正专注日",
+      "muscles": "全身力线矫正",
       "exercises": [
-        {"name":"杠铃深蹲","sets":4,"reps":"8","weight":"中重","tip":"容量日","gif":"https://static.exercisedb.dev/media/Ab2cDe1.gif","steps":["标准深蹲","蹲至平行","推起"]},
-        {"name":"罗马尼亚硬拉","sets":3,"reps":"12","weight":"中等","tip":"","gif":"https://static.exercisedb.dev/media/Cd4eFg2.gif","steps":["臀部铰链","下放至拉伸","站起"]},
-        {"name":"绳索腿弯举","sets":3,"reps":"15","weight":"轻","tip":"腿后孤立","gif":"https://static.exercisedb.dev/media/Ef6gHi3.gif","steps":["俯卧在腿弯举机上","弯举至完全收缩","慢放回"]},
-        {"name":"腿举","sets":3,"reps":"12","weight":"中等","tip":"","gif":"https://static.exercisedb.dev/media/Ef6gHi3.gif","steps":["腿举","不锁死","慢放回"]},
-        {"name":"提踵","sets":4,"reps":"15","weight":"中等","tip":"小腿","gif":"https://static.exercisedb.dev/media/Ab2cDe1.gif","steps":["站在提踵机上","踮起至最高","慢放回"]},
-        {"name":"3/4卷腹","sets":3,"reps":"15","weight":"自重","tip":"","gif":"https://static.exercisedb.dev/media/Kl2mNn6.gif","steps":["平躺膝弯","卷起至45度","慢放回"]},
-        {"name":"侧平板支撑","sets":3,"reps":"30秒/侧","weight":"自重","tip":"","gif":"https://static.exercisedb.dev/media/Mn4oPp7.gif","steps":["侧躺，前臂撑地","抬臀至直线","保持30秒"]},
-        {"name":"坡度走(有氧)","sets":1,"reps":"15min","weight":"心率130-140","tip":"减脂收尾","gif":"","steps":["跑步机坡度8-10","速度5-6km/h","保持心率130-140"]}
+        {"name": "[纠正] 泡沫轴滚髂胫束", "sets": 3, "reps": "60秒/侧", "weight": "", "tip": "大腿外侧重点松解", "gif": "", "steps": ["侧卧，泡沫轴放大腿外侧", "从髋骨到膝盖外侧缓慢滚动", "痛点停留20-30秒"], "isCorrective": true},
+        {"name": "[纠正] 泡沫轴滚小腿外侧", "sets": 3, "reps": "60秒/侧", "weight": "", "tip": "小腿外侧腓骨肌群松解", "gif": "", "steps": ["坐地，小腿外侧放泡沫轴上", "从膝外侧到脚踝上方滚动", "痛点停留20秒"], "isCorrective": true},
+        {"name": "[纠正] 坐姿夹球(内收肌)", "sets": 4, "reps": "20", "weight": "瑜伽球", "tip": "纠正日加量", "gif": "https://static.exercisedb.dev/media/oHsrypV.gif", "steps": ["坐姿夹球，夹紧5秒松2秒", "感受大腿内侧持续发力"], "isCorrective": true},
+        {"name": "[纠正] 蚌式开合", "sets": 4, "reps": "15/侧", "weight": "弹力带套膝盖上方", "tip": "加弹力带增加阻力", "gif": "", "steps": ["侧卧屈膝，弹力带套膝盖上方", "上方膝盖打开对抗阻力", "臀部发力2秒，慢放"], "isCorrective": true},
+        {"name": "[纠正] 侧卧内收抬腿", "sets": 3, "reps": "15/侧", "weight": "", "tip": "强化大腿内侧", "gif": "https://static.exercisedb.dev/media/c8f5cSY.gif", "steps": ["侧躺双腿伸直", "下面腿向上抬起，内侧发力", "停1秒慢放"], "isCorrective": true},
+        {"name": "[纠正] 侧卧抬腿(臀中肌)", "sets": 3, "reps": "15/侧", "weight": "", "tip": "臀中肌=膝盖不内扣的保障", "gif": "", "steps": ["侧卧，上方腿伸直脚尖微内扣", "抬至45度停2秒慢放", "臀部侧面发力，不用腰"], "isCorrective": true},
+        {"name": "[纠正] 弹力带螃蟹走", "sets": 4, "reps": "12步/方向", "weight": "弹力带", "tip": "臀中肌+髋稳定", "gif": "", "steps": ["弹力带套膝盖上方，半蹲", "侧走12步再倒走回", "膝盖对抗弹力带往外推"], "isCorrective": true},
+        {"name": "[纠正] 足底抓地激活", "sets": 4, "reps": "30秒", "weight": "", "tip": "地基！地基！地基！", "gif": "", "steps": ["光脚，大脚趾踩地足弓抬起", "保持10秒松3秒", "感受足底内侧和小腿内侧发力"], "isCorrective": true},
+        {"name": "[纠正] 足内翻抗阻(胫骨后肌)", "sets": 3, "reps": "15/侧", "weight": "弹力带", "tip": "足弓核心支撑肌", "gif": "", "steps": ["坐姿，弹力带套前脚掌", "脚掌向内翻对抗阻力", "慢起慢放，小腿深层内侧发力"], "isCorrective": true},
+        {"name": "[纠正] 靠墙夹膝静蹲", "sets": 3, "reps": "40秒", "weight": "膝盖夹枕头", "tip": "力线回正+内侧力量同时练", "gif": "", "steps": ["背靠墙，膝夹枕头", "下蹲至大腿近水平", "膝盖对准第二脚趾+夹紧", "坚持40秒"], "isCorrective": true},
+        {"name": "[纠正] 直线步态训练", "sets": 3, "reps": "1分钟", "weight": "", "tip": "重新编程走路方式，脚尖朝前不外八", "gif": "", "steps": ["地上画或想象一条直线", "沿着直线走，脚掌踩在线上", "脚尖朝正前方，脚跟先着地", "收腹提臀，臀部主动发力推进", "走10步倒走10步为一组"], "isCorrective": true}
       ]
     },
     {
-      "day": 7, "name": "主动恢复", "muscles": "全身拉伸+轻有氧",
+      "day": 7,
+      "name": "休息/主动恢复",
+      "muscles": "恢复",
       "exercises": [
-        {"name":"坡度走","sets":1,"reps":"20-30min","weight":"轻松","tip":"促进恢复","gif":"","steps":["低强度有氧","不喘不累"]},
-        {"name":"全身拉伸","sets":1,"reps":"15min","weight":"自重","tip":"每个肌群30秒","gif":"","steps":["胸/背/腿/肩依次拉伸","每个部位30秒以上"]}
+        {"name": "散步30分钟", "sets": 1, "reps": "30分钟", "weight": "", "tip": "刻意练习正确步态：脚跟先着地、脚尖朝前、收腹提臀", "gif": "", "steps": ["走路时刻意注意：脚尖朝前不外八", "脚跟先着地→足外侧→全脚掌→大脚趾蹬离", "收腹提臀，臀部参与每一步", "这比任何训练都重要——你每天走几千步"]},
+        {"name": "[纠正] 足底抓地激活", "sets": 2, "reps": "30秒", "weight": "", "tip": "每天必做，哪怕休息日", "gif": "", "steps": ["光脚，大脚趾踩地足弓抬起", "保持10秒松3秒"], "isCorrective": true}
       ]
     }
   ],
-  "cardioRule": "每次力量后加10分钟有氧(坡度走/椭圆机，心率130-140)",
-  "progressRule": "复合动作每周+2.5kg或同重量多做1个，隔离动作做满上限次数就加重"
+  "cardioRule": "力量训练后可选10分钟有氧(椭圆机/快走)，心率130-140。O腿人群避免长时间跑步和爬楼梯，选椭圆机或游泳。",
+  "correctionRules": [
+    "每次训练必须完成[纠正]动作，不可跳过",
+    "纠正动作顺序：先松解(泡沫轴)→再强化(夹球/蚌式/抬腿)→最后力线回正(静蹲/步态)",
+    "足底抓地每天必做，包括休息日——地基不正上面全白练",
+    "走路时时刻注意：脚尖朝前、脚跟先着地、不外八",
+    "避免跷二郎腿、跪坐、W坐——这些习惯会加重O腿",
+    "预期：4-6周开始看到视觉改善，3-6个月明显效果",
+    "训练≠做够次数就完，每个动作要感受目标肌肉发力，做对比做多重要"
+  ],
+  "progressRule": "每2周评估：1)站立照镜子看膝盖间距变化 2)单腿下蹲测试看膝盖是否还内扣 3)湿脚印测试看足弓 4)训练重量/次数渐进"
 }
