@@ -538,6 +538,37 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
             <div class="cal-row" id="checkinCal"></div>
           </div>
         </div>
+
+        <div class="card glass">
+          <div class="card-glow"></div>
+          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>每日习惯</div>
+          <div id="habitList" style="display:flex;flex-direction:column;gap:8px"></div>
+        </div>
+
+        <div class="card glass">
+          <div class="card-glow"></div>
+          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>专注计时</div>
+          <div style="text-align:center;padding:6px 0">
+            <div id="pomodoroDisplay" style="font-size:42px;font-weight:700;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,var(--purple),var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">25:00</div>
+            <div id="pomodoroLabel" style="font-size:11px;color:var(--white-dim);margin-top:2px">专注模式</div>
+            <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+              <button class="btn btn-primary btn-sm" id="pomStartBtn" onclick="startPomodoro()">开始</button>
+              <button class="btn btn-ghost btn-sm" onclick="resetPomodoro()">重置</button>
+            </div>
+            <div style="display:flex;gap:6px;justify-content:center;margin-top:10px">
+              <button class="chip" onclick="setPomTime(25)" id="pom25" style="font-size:10px;padding:3px 8px;border:1px solid var(--purple)">25分</button>
+              <button class="chip" onclick="setPomTime(15)" id="pom15" style="font-size:10px;padding:3px 8px">15分</button>
+              <button class="chip" onclick="setPomTime(5)" id="pom5" style="font-size:10px;padding:3px 8px">5分</button>
+            </div>
+            <div style="font-size:11px;color:var(--white-dim);margin-top:8px">今日专注 <span id="pomCount" style="color:var(--purple);font-weight:700">0</span> 次</div>
+          </div>
+        </div>
+
+        <div class="card glass">
+          <div class="card-glow"></div>
+          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V7a2 2 0 012-2h10a2 2 0 012 2v14"/><path d="M3 21h18"/><path d="M9 21v-4h6v4"/></svg>倒计时</div>
+          <div id="countdownList" style="display:flex;flex-direction:column;gap:10px"></div>
+        </div>
       </div>
 
       <!-- DIARY (每日感想) -->
@@ -698,7 +729,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 
 <script>
 const STORE_KEY='shiyi_desk_v2';
-const DATA_VERSION=7;
+const DATA_VERSION=8;
 let data=loadData();
 let todoFilter='全部',newsFilter='全部',editingTodoId=null,selectedCalDate=null,selectedMood=null,selectedScore=0;
 
@@ -745,7 +776,7 @@ function defaultData(){
   return{
     __version:DATA_VERSION,
     weights:[{date:today,val:68.0}],
-    workouts:[],checkins:[],
+    workouts:[],checkins:[],habits:{},pomodoros:{},
     todos:[
       {id:1,text:'打印签名起诉材料（7份Word→深圳数字法院）',priority:'high',cat:'工作',due:'2026-07-27',done:false},
       {id:2,text:'159655首笔定投1500元（盘前查溢价率）',priority:'high',cat:'投资',due:'2026-07-27',done:false},
@@ -832,7 +863,7 @@ const md=document.getElementById('mobileDate');if(md)md.textContent=today.getMon
 
 /* Navigation */
 const pageTitles={
-  health:{title:'健康',subtitle:'体重 · 饮食 · 打卡'},
+  health:{title:'健康',subtitle:'体重 · 饮食 · 习惯 · 专注 · 倒计时'},
   workout:{title:'训练',subtitle:'增肌 · 减脂 · PPL六天循环'},
   diary:{title:'每日感想',subtitle:'记录每一天'},
   todo:{title:'待办',subtitle:'任务管理'},
@@ -906,6 +937,114 @@ function renderWeight(){
   ctx.fillStyle='rgba(255,255,255,0.25)';ctx.font='9px -apple-system';ctx.textAlign='left';
   if(days.length>=1)ctx.fillText(days[0].slice(5),padL,H-3);
   if(days.length>=2){ctx.textAlign='right';ctx.fillText(days[days.length-1].slice(5),padL+cw,H-3);}
+}
+
+/* ===== HABITS / 每日习惯 ===== */
+const defaultHabits=[
+  {id:'foot_grip',name:'足底抓地激活',icon:'🦶',tip:'O腿矫正根基动作'},
+  {id:'no_cross',name:'不跷二郎腿',icon:'🪑',tip:'防止骨盆倾斜加重O腿'},
+  {id:'gait',name:'走路脚尖朝前',icon:'🚶',tip:'步态重编程比训练影响更大'},
+  {id:'reading',name:'今日阅读',icon:'📖',tip:'《周期》→《曾国藩传》→《投资最重要的事》'},
+  {id:'corrective',name:'纠正训练完成',icon:'🦵',tip:'动作质量>数量'}
+];
+function toggleHabit(hid){
+  if(!data.habits)data.habits={};
+  const today=TODAY_STR;
+  if(!data.habits[today])data.habits[today]={};
+  data.habits[today][hid]=!data.habits[today][hid];
+  saveData();renderHabits();
+}
+function renderHabits(){
+  if(!data.habits)data.habits={};
+  const today=TODAY_STR;
+  const todayH=data.habits[today]||{};
+  const el=document.getElementById('habitList');
+  el.innerHTML=defaultHabits.map(h=>{
+    const done=todayH[h.id];
+    return `<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:${done?'rgba(139,92,246,0.15)':'rgba(255,255,255,0.03)'};cursor:pointer;transition:all .2s" onclick="toggleHabit('${h.id}')">
+      <div style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:${done?'var(--purple)':'rgba(255,255,255,0.08)'};font-size:14px;transition:all .2s">${done?'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>':h.icon}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;color:${done?'var(--white)':'var(--white-mid)'};font-weight:${done?'600':'400'};transition:all .2s">${h.name}</div>
+        <div style="font-size:10px;color:var(--white-dim);margin-top:1px">${h.tip}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ===== POMODORO / 专注计时 ===== */
+let pomTime=25*60,pomRunning=false,pomInterval=null,pomSessions=0;
+function setPomTime(min){
+  if(pomRunning)return;
+  pomTime=min*60;
+  document.getElementById('pom25').style.border=min===25?'1px solid var(--purple)':'none';
+  document.getElementById('pom15').style.border=min===15?'1px solid var(--purple)':'none';
+  document.getElementById('pom5').style.border=min===5?'1px solid var(--purple)':'none';
+  updatePomDisplay();
+}
+function updatePomDisplay(){
+  const m=Math.floor(pomTime/60),s=pomTime%60;
+  document.getElementById('pomodoroDisplay').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+function startPomodoro(){
+  if(pomRunning){
+    clearInterval(pomInterval);pomRunning=false;
+    document.getElementById('pomStartBtn').textContent='继续';
+    return;
+  }
+  pomRunning=true;
+  document.getElementById('pomStartBtn').textContent='暂停';
+  pomInterval=setInterval(()=>{
+    pomTime--;updatePomDisplay();
+    if(pomTime<=0){
+      clearInterval(pomInterval);pomRunning=false;
+      pomSessions++;
+      if(!data.pomodoros)data.pomodoros={};
+      const today=TODAY_STR;
+      data.pomodoros[today]=(data.pomodoros[today]||0)+1;
+      saveData();
+      document.getElementById('pomCount').textContent=data.pomodoros[today]||0;
+      document.getElementById('pomStartBtn').textContent='开始';
+      document.getElementById('pomodoroLabel').textContent='完成！休息一下';
+      document.getElementById('pomodoroLabel').style.color='var(--green)';
+      setTimeout(()=>{document.getElementById('pomodoroLabel').textContent='专注模式';document.getElementById('pomodoroLabel').style.color='';},3000);
+      pomTime=25*60;updatePomDisplay();
+    }
+  },1000);
+}
+function resetPomodoro(){
+  clearInterval(pomInterval);pomRunning=false;
+  pomTime=25*60;updatePomDisplay();
+  document.getElementById('pomStartBtn').textContent='开始';
+  document.getElementById('pomodoroLabel').textContent='专注模式';
+  document.getElementById('pomodoroLabel').style.color='';
+  setPomTime(25);
+}
+
+/* ===== COUNTDOWNS / 倒计时 ===== */
+const countdowns=[
+  {name:'纪律验证期结束',date:'2026-10-23',color:'var(--purple)',desc:'期间只操作ETF'},
+  {name:'暑假结束',date:'2026-08-31',color:'var(--amber)',desc:'8月31日'},
+  {name:'一级教师评审',date:'2026-12-31',color:'var(--green)',desc:'2026年内'},
+  {name:'159655二笔定投评估',date:'2026-09-01',color:'var(--cyan)',desc:'美联储议息后评估'}
+];
+function renderCountdowns(){
+  const el=document.getElementById('countdownList');
+  const now=new Date();
+  el.innerHTML=countdowns.map(cd=>{
+    const target=new Date(cd.date+'T00:00:00');
+    const diff=Math.ceil((target-now)/(1000*60*60*24));
+    const isPast=diff<=0;
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0">
+      <div>
+        <div style="font-size:13px;color:var(--white);font-weight:500">${cd.name}</div>
+        <div style="font-size:10px;color:var(--white-dim)">${cd.desc}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:18px;font-weight:700;color:${isPast?'var(--white-dim)':cd.color}">${isPast?'已到':diff}</div>
+        <div style="font-size:10px;color:var(--white-dim)">${isPast?'':'天'}</div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 /* ===== DIET / 饮食追踪 ===== */
@@ -1650,6 +1789,9 @@ function selectWorkoutDay(day){
 
 function renderAll(){
   try{renderCheckin();}catch(e){console.error(e)}
+  try{renderHabits();}catch(e){console.error(e)}
+  try{renderCountdowns();}catch(e){console.error(e)}
+  try{if(data.pomodoros&&data.pomodoros[TODAY_STR]){document.getElementById('pomCount').textContent=data.pomodoros[TODAY_STR];}}catch(e){}
   try{renderWeight();}catch(e){console.error(e)}
   try{renderMealTypeChips();renderQuickFoods();renderMeals();renderWater();}catch(e){console.error(e)}
   
