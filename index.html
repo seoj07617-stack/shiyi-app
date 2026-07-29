@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7.73 - mobile: all sections visible + scroll nav strip, no drawer/display toggle -->
+<!-- v7.74 - mobile: all sections visible + scroll nav strip, no drawer/display toggle -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -367,24 +367,6 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 </head>
 <body>
-<div id="touchDiag" style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;background:rgba(255,0,0,0.9);color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;pointer-events:auto;touch-action:manipulation;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,0.5)" onclick="this.remove()">TOUCH OK? tap here <span id="touchCount">0</span></div>
-<script>
-(function(){
-  var c=0;
-  function logTouch(e){
-    c++;
-    var el=document.getElementById('touchCount');
-    if(el)el.textContent=c;
-    var t=e.touches?e.touches[0]:e;
-    if(t&&t.clientX){
-      var hit=document.elementFromPoint(t.clientX,t.clientY);
-      console.log('TOUCH#'+c,'target:',e.target.tagName+'.'+e.target.className,'hitAtPoint:',hit?hit.tagName+'.'+hit.className:'null','id:',hit?hit.id:'');
-    }
-  }
-  document.addEventListener('touchstart',logTouch,{passive:true});
-  document.addEventListener('click',logTouch);
-})();
-</script>
 
 <div class="app">
   <div class="mobile-header" id="mobileHeader">
