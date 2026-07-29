@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7.72 - mobile: all sections visible + scroll nav strip, no drawer/display toggle -->
+<!-- v7.73 - mobile: all sections visible + scroll nav strip, no drawer/display toggle -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -29,7 +29,7 @@
   --ease:cubic-bezier(.4,0,.2,1);--ease-spring:cubic-bezier(.34,1.56,.64,1);
   --sidebar-w:220px;
 }
-html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue','PingFang SC',sans-serif;background:var(--bg);color:var(--white);overflow:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+html,body{height:100%;touch-action:manipulation;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue','PingFang SC',sans-serif;background:var(--bg);color:var(--white);overflow:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
 .app{display:flex;height:100vh;height:100dvh;position:relative;pointer-events:auto}
 /* SIDEBAR */
@@ -42,7 +42,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Displ
 .sidebar-logo h1{font-size:15px;font-weight:600;letter-spacing:-0.02em;background:linear-gradient(135deg,var(--purple),var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .sidebar-logo .date{font-size:11px;color:var(--white-dim);font-weight:400;margin-top:2px;font-variant-numeric:tabular-nums}
 .nav-section-label{font-size:10px;font-weight:600;color:var(--white-faint);text-transform:uppercase;letter-spacing:0.08em;padding:0 10px 8px;margin-top:6px}
-.nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--radius-xs);font-size:13px;font-weight:500;color:var(--white-mid);cursor:pointer;transition:all .25s var(--ease);position:relative;margin-bottom:2px;letter-spacing:-0.01em}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--radius-xs);font-size:13px;font-weight:500;color:var(--white-mid);cursor:pointer;touch-action:manipulation;transition:all .25s var(--ease);position:relative;margin-bottom:2px;letter-spacing:-0.01em}
 .nav-item:hover{color:var(--white);background:var(--glass)}
 .nav-item.active{color:var(--white);background:linear-gradient(135deg,var(--purple-glow),rgba(124,58,237,0.06))}
 .nav-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:18px;border-radius:0 2px 2px 0;background:linear-gradient(180deg,var(--purple),var(--purple-bright));box-shadow:0 0 8px var(--purple-glow-strong)}
@@ -61,7 +61,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Displ
 .save-indicator{font-size:10px;color:var(--white-faint);font-variant-numeric:tabular-nums}
 
 /* CONTENT */
-.content{flex:1;overflow-y:auto;pointer-events:auto;position:relative;z-index:1;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
+.content{flex:1;overflow-y:auto;pointer-events:auto;position:relative;z-index:1;scroll-behavior:smooth;touch-action:manipulation;}
 .content::-webkit-scrollbar{width:4px}
 .content::-webkit-scrollbar-track{background:transparent}
 .content::-webkit-scrollbar-thumb{background:var(--purple-deep);border-radius:2px;opacity:0.4}
@@ -79,7 +79,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Displ
 .glass-strong{background:var(--glass-strong);backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);border:0.5px solid rgba(255,255,255,0.08);border-radius:var(--radius)}
 .glass-sm{background:var(--glass);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border:0.5px solid var(--glass-border);border-radius:var(--radius-sm)}
 
-.card{padding:22px;margin-bottom:14px;position:relative;overflow:hidden;transition:transform .2s var(--ease)}
+.card{padding:22px;margin-bottom:14px;position:relative;overflow:hidden;transition:transform .2s var(--ease);touch-action:manipulation}
 .card:active{transform:scale(0.99)}
 .card-glow{position:absolute;top:-60%;left:-60%;width:220%;height:220%;background:radial-gradient(circle at 30% 30%,var(--purple-glow) 0%,transparent 60%);opacity:0;transition:opacity .4s;pointer-events:none}
 .card:hover .card-glow{opacity:0.5}
@@ -93,7 +93,7 @@ textarea{resize:vertical;min-height:76px;line-height:1.6}
 select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='none' stroke='%23ffffff80' stroke-width='1.5' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
 input::placeholder,textarea::placeholder{color:var(--white-dim)}
 
-.btn{padding:10px 18px;border:none;border-radius:var(--radius-xs);font-size:13px;cursor:pointer;transition:all .2s var(--ease);font-family:inherit;letter-spacing:-0.01em;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn{padding:10px 18px;border:none;border-radius:var(--radius-xs);font-size:13px;cursor:pointer;touch-action:manipulation;transition:all .2s var(--ease);font-family:inherit;letter-spacing:-0.01em;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:6px}
 .btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .btn-primary{background:linear-gradient(135deg,var(--purple-mid),var(--purple-deep));color:#fff;box-shadow:0 2px 10px var(--purple-glow-strong)}
 .btn-primary:active{transform:scale(0.96);box-shadow:0 1px 4px var(--purple-glow)}
@@ -119,7 +119,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 
 .chips{display:flex;gap:7px;padding:0 0 14px;overflow-x:auto;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
-.chip{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;background:var(--glass);color:var(--white-dim);border:0.5px solid var(--glass-border);white-space:nowrap;cursor:pointer;transition:all .25s var(--ease)}
+.chip{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;background:var(--glass);color:var(--white-dim);border:0.5px solid var(--glass-border);white-space:nowrap;cursor:pointer;touch-action:manipulation;transition:all .25s var(--ease)}
 .chip.active{background:var(--purple-glow);color:var(--purple);border-color:rgba(167,139,250,0.2)}
 .chip:active{transform:scale(0.95)}
 
@@ -162,7 +162,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 .set-row .set-name{width:auto;flex:2;text-align:left}
 .workout-history-item{padding:13px 15px;margin-bottom:8px;cursor:pointer;position:relative}
 .workout-history-date{font-size:12px;font-weight:600;color:var(--purple);margin-bottom:5px;font-variant-numeric:tabular-nums}
-.mobile-header{display:none;position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:101;height:48px;pointer-events:auto;background:rgba(13,8,32,0.92);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:0.5px solid var(--glass-border);align-items:center;padding:0 8px;gap:6px}
+.mobile-header{display:none;position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:101;height:48px;pointer-events:auto;background:rgba(13,8,32,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:0.5px solid var(--glass-border);align-items:center;padding:0 8px;gap:6px}
 
 .mobile-header-icon:active{transform:scale(0.9)}
 .mobile-header-title{font-size:15px;font-weight:600;background:linear-gradient(135deg,var(--purple),var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex-shrink:0}
@@ -257,8 +257,8 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 .collapse-toggle.expanded svg{transform:rotate(180deg)}
 
 /* Modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:200;display:none;align-items:flex-end;justify-content:center}
-.modal-overlay.show{display:flex;animation:fadeIn .25s var(--ease)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:200;display:none;align-items:flex-end;justify-content:center;pointer-events:none}
+.modal-overlay.show{display:flex;animation:fadeIn .25s var(--ease);pointer-events:auto}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .modal{width:100%;max-width:500px;max-height:85vh;padding:28px 22px;padding-bottom:calc(28px + env(safe-area-inset-bottom,0px));border-radius:26px 26px 0 0;overflow-y:auto;background:rgba(18,18,22,0.96);backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);border:0.5px solid rgba(255,255,255,0.10);animation:slideUp .35s var(--ease-spring)}
 .modal h3{font-size:18px;margin-bottom:22px;color:var(--white);font-weight:600;letter-spacing:-0.02em}
@@ -347,7 +347,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
     width:44px;height:44px;border-radius:10px;
     background:rgba(124,58,237,0.25);border:0.5px solid rgba(167,139,250,0.35);
     display:flex;align-items:center;justify-content:center;cursor:pointer;
-    flex-shrink:0;-webkit-tap-highlight-color:transparent;
+    flex-shrink:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;
   }
   .mobile-menu{
     display:none;position:absolute;top:48px;left:0;right:0;
@@ -360,17 +360,35 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
   
   .menu-item{
     display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;
-    cursor:pointer;-webkit-tap-highlight-color:transparent;text-decoration:none;
+    cursor:pointer;-webkit-tap-highlight-color:transparent;text-decoration:none;touch-action:manipulation;
   }
   .menu-item:active{background:rgba(124,58,237,0.3);}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 </head>
 <body>
+<div id="touchDiag" style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;background:rgba(255,0,0,0.9);color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;pointer-events:auto;touch-action:manipulation;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,0.5)" onclick="this.remove()">TOUCH OK? tap here <span id="touchCount">0</span></div>
+<script>
+(function(){
+  var c=0;
+  function logTouch(e){
+    c++;
+    var el=document.getElementById('touchCount');
+    if(el)el.textContent=c;
+    var t=e.touches?e.touches[0]:e;
+    if(t&&t.clientX){
+      var hit=document.elementFromPoint(t.clientX,t.clientY);
+      console.log('TOUCH#'+c,'target:',e.target.tagName+'.'+e.target.className,'hitAtPoint:',hit?hit.tagName+'.'+hit.className:'null','id:',hit?hit.id:'');
+    }
+  }
+  document.addEventListener('touchstart',logTouch,{passive:true});
+  document.addEventListener('click',logTouch);
+})();
+</script>
 
 <div class="app">
   <div class="mobile-header" id="mobileHeader">
-    <a href="javascript:void(0)" class="hamburger" id="hamburgerBtn" onclick="openMobileMenu();return false;" ontouchstart="openMobileMenu();return false;" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;text-decoration:none;">
+    <a href="javascript:void(0)" class="hamburger" id="hamburgerBtn" onclick="openMobileMenu();return false;" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;text-decoration:none;">
       <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round">
         <line x1="3" y1="6" x2="21" y2="6"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
@@ -381,14 +399,14 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 
     <span class="mobile-header-title">拾壹工作台</span>
     <div class="mobile-menu" id="mobileMenu">
-      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('health');closeMobileMenu();return false;" ontouchstart="switchTab('health');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">健康</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('workout');closeMobileMenu();return false;" ontouchstart="switchTab('workout');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">训练</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('diary');closeMobileMenu();return false;" ontouchstart="switchTab('diary');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">每日感想</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('todo');closeMobileMenu();return false;" ontouchstart="switchTab('todo');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">待办</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('progress');closeMobileMenu();return false;" ontouchstart="switchTab('progress');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">共同进步</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('journal');closeMobileMenu();return false;" ontouchstart="switchTab('journal');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">阅读</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('news');closeMobileMenu();return false;" ontouchstart="switchTab('news');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">新闻</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('review');closeMobileMenu();return false;" ontouchstart="switchTab('review');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">复盘</a>
+      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('health');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">健康</a>
+<a href="javascript:void(0)" class="menu-item" onclick="switchTab('workout');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">训练</a>
+<a href="javascript:void(0)" class="menu-item" onclick="switchTab('diary');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">每日感想</a>
+<a href="javascript:void(0)" class="menu-item" onclick="switchTab('todo');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">待办</a>
+<a href="javascript:void(0)" class="menu-item" onclick="switchTab('progress');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">共同进步</a>
+<a href="javascript:void(0)" class="menu-item" onclick="switchTab('journal');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">阅读</a>
+<a href="javascript:void(0)" class="menu-item" onclick="switchTab('news');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">新闻</a>
+<a href="javascript:void(0)" class="menu-item" onclick="switchTab('review');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">复盘</a>
     </div>
   </div>
   
@@ -726,7 +744,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 
 <div class="toast" id="toast"></div>
 
-<div id="askShiyiFab" onclick="window.open('https://www.feishu.cn/messenger/?p2p_msg=ou_75d267bcf68338bd0d6469757f1f4ca1','_blank')" style="position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--purple-mid),var(--purple-deep));color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px var(--purple-glow-strong);z-index:90;transition:all .25s var(--ease);border:0.5px solid rgba(167,139,250,0.3)" onmouseenter="this.style.transform='scale(1.08)'" onmouseleave="this.style.transform='scale(1)'" ontouchstart="this.style.transform='scale(0.95)'" ontouchend="this.style.transform='scale(1)'">
+<div id="askShiyiFab" onclick="window.open('https://www.feishu.cn/messenger/?p2p_msg=ou_75d267bcf68338bd0d6469757f1f4ca1','_blank')" style="position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--purple-mid),var(--purple-deep));color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px var(--purple-glow-strong);z-index:90;transition:all .25s var(--ease);border:0.5px solid rgba(167,139,250,0.3)" onmouseenter="this.style.transform='scale(1.08)'" onmouseleave="this.style.transform='scale(1)'">
   <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="12" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/></svg>
 </div>
 <div id="fabTooltip" style="position:fixed;bottom:76px;right:24px;font-size:11px;color:var(--white-mid);background:rgba(18,18,22,0.9);padding:6px 12px;border-radius:8px;z-index:90;pointer-events:none;opacity:0;transition:opacity .3s;backdrop-filter:blur(10px);border:0.5px solid var(--glass-border)">问拾壹</div>
