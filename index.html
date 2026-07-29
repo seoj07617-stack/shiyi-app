@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7.74 - mobile: all sections visible + scroll nav strip, no drawer/display toggle -->
+<!-- v7.75 - mobile: all sections visible + scroll nav strip, no drawer/display toggle -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -380,6 +380,7 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 
 
     <span class="mobile-header-title">拾壹工作台</span>
+    <span class="mobile-header-date" id="mobileDate"></span>
     <div class="mobile-menu" id="mobileMenu">
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('health');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">健康</a>
 <a href="javascript:void(0)" class="menu-item" onclick="switchTab('workout');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:rgba(255,255,255,0.85);font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">训练</a>
@@ -910,7 +911,7 @@ document.querySelectorAll('.nav-item').forEach(item=>{
     if(!tab)return;
     switchTab(tab);
   });
-}););
+});
 
 /* ===== HEALTH ===== */
 function addWeight(){
@@ -1949,7 +1950,7 @@ document.addEventListener('click',function(e){
   var menu=document.getElementById('mobileMenu');
   var btn=document.getElementById('hamburgerBtn');
   if(menu && btn && !menu.contains(e.target) && !btn.contains(e.target)){
-    menu.classList.remove('show');
+    menu.style.display='none';
   }
 });
 document.addEventListener('DOMContentLoaded',function(){
