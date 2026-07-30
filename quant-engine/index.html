@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUANT ENGINE v10.0</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+@font-face{font-family:'Mono';src:local('Consolas'),local('Monaco'),local('Courier New')}
+:root{--bg:#0a0a0f;--card:#0f0f18;--border:#1a1a2e;--red:#e74c3c;--green:#00c853;--gold:#ffc107;--cyan:#00bcd4;--blue:#2979ff;--text:#e0e0e0;--dim:#666}
+body{background:var(--bg);color:var(--text);font-family:'Mono',Consolas,Monaco,'Courier New',monospace;overflow:hidden;height:100vh;width:100vw}
+#loader{position:fixed;top:0;left:0;width:100%;height:3px;z-index:9999;background:var(--border)}
+#loader .bar{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--gold),var(--red));transition:width .3s;box-shadow:0 0 12px var(--cyan)}
+#topbar{height:40px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;justify-content:space-between}
+#topbar .logo{font-size:14px;font-weight:bold;letter-spacing:3px;color:var(--gold);text-shadow:0 0 8px rgba(255,193,7,.3)}
+#topbar .logo span{color:var(--cyan);font-size:10px;margin-left:8px;letter-spacing:1px}
+#topbar .status{font-size:11px;color:var(--dim)}
+#topbar .status .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);margin-right:6px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+#grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;height:calc(100vh - 40px);gap:1px;background:var(--border)}
+.panel{background:var(--card);overflow:hidden;display:flex;flex-direction:column;position:relative}
+.panel-head{height:32px;min-height:32px;background:rgba(255,255,255,.02);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;font-size:11px;letter-spacing:1px;color:var(--dim)}
+.panel-head .tag{background:var(--gold);color:#000;font-size:9px;padding:1px 6px;border-radius:2px;margin-left:auto;font-weight:bold}
+#chart-panel .chart-wrap{flex:1;width:100%;position:relative}
+#chart-panel .chart-controls{height:44px;min-height:44px;display:flex;align-items:center;padding:0 12px;gap:8px;border-top:1px solid var(--border)}
+#chart-panel .chart-controls button{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text);padding:4px 12px;font-size:11px;cursor:pointer;font-family:inherit;border-radius:2px;transition:all .2s}
+#chart-panel .chart-controls button:hover{background:rgba(255,255,255,.1);border-color:var(--cyan)}
+#chart-panel .chart-controls button.active{background:rgba(0,188,212,.15);border-color:var(--cyan);color:var(--cyan)}
+#chart-panel .chart-controls .slider-wrap{flex:1;display:flex;align-items:center;gap:8px;font-size:10px;color:var(--dim)}
+#chart-panel .chart-controls input[type=range]{flex:1;-webkit-appearance:none;height:3px;background:var(--border);border-radius:2px;outline:none}
+#chart-panel .chart-controls input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--cyan);cursor:pointer;box-shadow:0 0 6px var(--cyan)}
+#strategy-panel{display:flex;flex-direction:column}
+#strategy-panel .strat-input{padding:10px 12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+#strategy-panel .strat-input input{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text);padding:6px 8px;font-size:11px;font-family:inherit;border-radius:2px;outline:none;width:100%}
+#strategy-panel .strat-input input:focus{border-color:var(--cyan)}
+#strategy-panel .strat-input input::placeholder{color:var(--dim)}
+#strategy-panel .strat-btns{padding:6px 12px;display:flex;gap:6px;flex-wrap:wrap}
+#strategy-panel .strat-btns button{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text);padding:5px 10px;font-size:10px;cursor:pointer;font-family:inherit;border-radius:2px;transition:all .2s;letter-spacing:.5px}
+#strategy-panel .strat-btns button:hover{border-color:var(--gold);color:var(--gold)}
+#strategy-panel .strat-btns button.primary{background:rgba(255,193,7,.1);border-color:var(--gold);color:var(--gold)}
+#strategy-panel .strat-list{flex:1;overflow-y:auto;padding:8px 12px}
+#strategy-panel .strat-list::-webkit-scrollbar{width:4px}
+#strategy-panel .strat-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.strat-card{background:rgba(255,255,255,.02);border:1px solid var(--border);padding:10px;margin-bottom:6px;border-radius:3px;cursor:pointer;transition:all .2s}
+.strat-card:hover{border-color:var(--gold);background:rgba(255,193,7,.03)}
+.strat-card .s-name{font-size:12px;color:var(--gold);font-weight:bold;margin-bottom:4px}
+.strat-card .s-style{font-size:10px;color:var(--cyan);margin-bottom:6px}
+.strat-card .s-cond{font-size:10px;color:var(--dim);line-height:1.6}
+.strat-card .s-pos{font-size:10px;color:var(--green);margin-top:4px}
+#signal-panel{display:flex;flex-direction:column}
+.signal-grid{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(4,1fr);gap:1px;padding:1px}
+.sig-item{background:rgba(255,255,255,.02);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.sig-item .sig-label{font-size:9px;letter-spacing:1px;color:var(--dim);margin-bottom:4px}
+.sig-item .sig-value{font-size:22px;font-weight:bold;transition:color .3s}
+.sig-item .sig-tag{font-size:9px;padding:1px 6px;border-radius:2px;margin-top:4px;font-weight:bold}
+.sig-item .sig-tag.long{background:rgba(231,76,60,.15);color:var(--red)}
+.sig-item .sig-tag.short{background:rgba(0,200,83,.15);color:var(--green)}
+#log-panel{display:flex;flex-direction:column}
+#log-panel .log-wrap{flex:1;overflow:hidden;position:relative;padding:8px 12px}
+#log-panel .log-line{font-size:10px;line-height:1.7;color:var(--dim);opacity:1;transition:opacity 2s;white-space:nowrap}
+#log-panel .log-line:nth-child(1){opacity:1}
+#log-panel .log-line:nth-child(2){opacity:.9}
+#log-panel .log-line:nth-child(3){opacity:.7}
+#log-panel .log-line:nth-child(4){opacity:.5}
+#log-panel .log-line:nth-child(n+5){opacity:.3}
+#log-panel .log-line .ohlc-o{color:var(--text)}
+#log-panel .log-line .ohlc-h{color:var(--red)}
+#log-panel .log-line .ohlc-l{color:var(--green)}
+#log-panel .log-line .ohlc-c{color:var(--gold)}
+#report-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+#report-modal.show{display:flex}
+.report-box{background:var(--card);border:1px solid var(--gold);border-radius:4px;width:520px;max-height:80vh;overflow-y:auto;padding:20px}
+.report-box::-webkit-scrollbar{width:4px}
+.report-box::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.report-box h2{color:var(--gold);font-size:14px;letter-spacing:2px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.report-box .r-row{display:flex;justify-content:space-between;padding:6px 0;font-size:12px;border-bottom:1px solid rgba(255,255,255,.03)}
+.report-box .r-row .r-label{color:var(--dim)}
+.report-box .r-row .r-val{font-weight:bold}
+.report-box .r-row .r-val.pos{color:var(--red)}
+.report-box .r-row .r-val.neg{color:var(--green)}
+.report-box table{width:100%;border-collapse:collapse;margin-top:12px;font-size:10px}
+.report-box table th{color:var(--dim);text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);font-weight:normal}
+.report-box table td{padding:4px 6px;border-bottom:1px solid rgba(255,255,255,.03)}
+.report-box .close-btn{margin-top:16px;text-align:center}
+.report-box .close-btn button{background:rgba(255,193,7,.1);border:1px solid var(--gold);color:var(--gold);padding:6px 24px;font-family:inherit;font-size:11px;cursor:pointer;border-radius:2px}
+</style>
+</head>
+<body>
+<div id="loader"><div class="bar"></div></div>
+<div id="topbar">
+  <div class="logo">QUANT ENGINE <span>v10.0</span></div>
+  <div class="status"><span class="dot"></span>MARKET OPEN &mdash; REAL-TIME SIMULATION</div>
+</div>
+<div id="grid">
+  <div class="panel" id="chart-panel">
+    <div class="panel-head">BACKTEST / K-LINE + MA20<span class="tag">LIVE</span></div>
+    <div class="chart-wrap" id="chart-wrap"></div>
+    <div class="chart-controls">
+      <button id="btn-play" onclick="togglePlay()">&#9654; PLAY</button>
+      <button onclick="resetPlay()">&#8634; RESET</button>
+      <div class="slider-wrap">
+        <span>ZOOM</span>
+        <input type="range" id="zoom-slider" min="20" max="500" value="120" oninput="updateZoom(this.value)">
+        <span id="zoom-label">120</span>
+      </div>
+    </div>
+  </div>
+  <div class="panel" id="signal-panel">
+    <div class="panel-head">SIGNAL PANEL<span class="tag">AI</span></div>
+    <div class="signal-grid">
+      <div class="sig-item"><div class="sig-label">VOL</div><div class="sig-value" id="sig-vol" style="color:var(--cyan)">--</div></div>
+      <div class="sig-item"><div class="sig-label">SCORE</div><div class="sig-value" id="sig-score" style="color:var(--gold)">--</div></div>
+      <div class="sig-item"><div class="sig-label">WIN RATE</div><div class="sig-value" id="sig-win" style="color:var(--green)">--</div></div>
+      <div class="sig-item"><div class="sig-label">ODDS</div><div class="sig-value" id="sig-odds" style="color:var(--gold)">--</div></div>
+      <div class="sig-item"><div class="sig-label">RISK</div><div class="sig-value" id="sig-risk" style="color:var(--red)">--</div></div>
+      <div class="sig-item"><div class="sig-label">POSITION</div><div class="sig-value" id="sig-pos" style="color:var(--cyan)">--</div></div>
+      <div class="sig-item"><div class="sig-label">EV</div><div class="sig-value" id="sig-ev" style="color:var(--gold)">--</div></div>
+      <div class="sig-item"><div class="sig-label">SIGNAL</div><div class="sig-value" id="sig-signal" style="color:var(--red)">--</div><div class="sig-tag long" id="sig-tag">LONG</div></div>
+    </div>
+  </div>
+  <div class="panel" id="strategy-panel">
+    <div class="panel-head">STRATEGY ENGINE<span class="tag">AI</span></div>
+    <div class="strat-input">
+      <input id="in-symbol" placeholder="标的(如 159516)">
+      <input id="in-winrate" placeholder="胜率%" type="number">
+      <input id="in-stoploss" placeholder="止损%" type="number">
+      <input id="in-target" placeholder="目标%" type="number">
+      <input id="in-odds" placeholder="赔率" type="number">
+      <input id="in-capital" placeholder="资金(万)" type="number">
+    </div>
+    <div class="strat-btns">
+      <button class="primary" onclick="fetchData()">获取数据</button>
+      <button onclick="aiStrategy()">AI 生成策略</button>
+      <button onclick="gen10Strategies()">生成 10 策略</button>
+      <button onclick="reverseShort()">反向做空</button>
+    </div>
+    <div class="strat-list" id="strat-list"></div>
+  </div>
+  <div class="panel" id="log-panel">
+    <div class="panel-head">TERMINAL LOG / OHLC FEED<span class="tag">STREAM</span></div>
+    <div class="log-wrap" id="log-wrap"></div>
+  </div>
+</div>
+<div id="report-modal">
+  <div class="report-box" id="report-box">
+    <h2>BACKTEST PERFORMANCE REPORT</h2>
+    <div id="report-content"></div>
+    <div class="close-btn"><button onclick="closeReport()">CLOSE</button></div>
+  </div>
+</div>
+<script>
+// ============ DATA GENERATION ============
+const SYMBOL='159516.SZ';
+const START_DATE=new Date(2022,6,1);
+const TOTAL_DAYS=1000;
+let klineData=[];
+let ma20Data=[];
+let animIndex=0;
+let isPlaying=false;
+let playTimer=null;
+
+function genKLine(){
+  klineData=[];
+  let price=1.2;
+  const now=new Date();
+  for(let i=0;i<TOTAL_DAYS;i++){
+    const d=new Date(START_DATE.getTime()+i*86400000);
+    if(d.getDay()===0||d.getDay()===6)continue;
+    const vol=Math.random()*0.04-0.018;
+    const open=+(price*(1+(Math.random()-0.5)*0.02)).toFixed(3);
+    const trend=Math.sin(i/80)*0.01+vol*0.5;
+    price=price*(1+trend);
+    if(price<0.3)price=0.3+Math.random()*0.1;
+    if(price>2.5)price=2.5-Math.random()*0.1;
+    const close=+(price).toFixed(3);
+    const high=+(Math.max(open,close)*(1+Math.random()*0.015)).toFixed(3);
+    const low=+(Math.min(open,close)*(1-Math.random()*0.015)).toFixed(3);
+    const volume=Math.floor(5e7+Math.random()*8e7+Math.abs(trend)*3e8);
+    const ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    klineData.push({date:ds,open,high,low,close,volume});
+  }
+  ma20Data=[];
+  for(let i=0;i<klineData.length;i++){
+    if(i<19){ma20Data.push(null);continue}
+    let s=0;for(let j=i-19;j<=i;j++)s+=klineData[j].close;
+    ma20Data.push(+(s/20).toFixed(3));
+  }
+}
+
+// ============ CHART ============
+let chart;
+function initChart(){
+  chart=echarts.init(document.getElementById('chart-wrap'),null,{renderer:'canvas'});
+  updateChart(klineData.length);
+  window.addEventListener('resize',()=>chart.resize());
+}
+
+function updateChart(endIdx){
+  endIdx=Math.min(endIdx,klineData.length);
+  const dates=[],ohlc=[],vol=[],ma=[];
+  for(let i=0;i<endIdx;i++){
+    dates.push(klineData[i].date);
+    ohlc.push([klineData[i].open,klineData[i].close,klineData[i].low,klineData[i].high]);
+    vol.push(klineData[i].volume*(klineData[i].close>=klineData[i].open?1:-1));
+    ma.push(ma20Data[i]);
+  }
+  const zoomEnd=Math.min(100,120/Math.max(1,endIdx)*100);
+  chart.setOption({
+    animation:false,
+    backgroundColor:'transparent',
+    grid:[{left:50,right:16,top:20,height:'65%'},{left:50,right:16,top:'78%',height:'14%'}],
+    xAxis:[{type:'category',data:dates,axisLine:{lineStyle:{color:'#1a1a2e'}},axisTick:{show:false},axisLabel:{color:'#555',fontSize:9},splitLine:{show:false},gridIndex:0},
+           {type:'category',data:dates,gridIndex:1,show:false}],
+    yAxis:[{scale:true,axisLine:{show:false},axisTick:{show:false},axisLabel:{color:'#555',fontSize:9},splitLine:{lineStyle:{color:'#1a1a2e',type:'dashed'}},gridIndex:0},
+           {scale:true,gridIndex:1,axisLine:{show:false},axisTick:{show:false},axisLabel:{show:false},splitLine:{show:false}}],
+    dataZoom:[{type:'inside',xAxisIndex:[0,1],start:Math.max(0,100-120/Math.max(1,endIdx)*100),end:100}],
+    series:[
+      {name:'K',type:'candlestick',data:ohlc,xAxisIndex:0,yAxisIndex:0,itemStyle:{color:'#e74c3c',color0:'#00c853',borderColor:'#e74c3c',borderColor0:'#00c853'}},
+      {name:'MA20',type:'line',data:ma,xAxisIndex:0,yAxisIndex:0,smooth:true,showSymbol:false,lineStyle:{color:'#ffc107',width:1,opacity:.7}},
+      {name:'VOL',type:'bar',data:vol,xAxisIndex:1,yAxisIndex:1,itemStyle:{color:function(p){return p.value>=0?'rgba(231,76,60,.5)':'rgba(0,200,83,.5)'}}}
+    ]
+  },true);
+}
+
+// ============ ANIMATION ============
+function togglePlay(){
+  if(isPlaying){pausePlay()}else{startPlay()}
+}
+function startPlay(){
+  isPlaying=true;
+  document.getElementById('btn-play').innerHTML='&#9646;&#9646; PAUSE';
+  document.getElementById('btn-play').classList.add('active');
+  playStep();
+}
+function pausePlay(){
+  isPlaying=false;
+  clearTimeout(playTimer);
+  document.getElementById('btn-play').innerHTML='&#9654; PLAY';
+  document.getElementById('btn-play').classList.remove('active');
+}
+function playStep(){
+  if(!isPlaying)return;
+  if(animIndex>=klineData.length){pausePlay();return}
+  animIndex++;
+  updateChart(animIndex);
+  updateSignals(animIndex-1);
+  addLog(animIndex-1);
+  playTimer=setTimeout(playStep,80);
+}
+function resetPlay(){
+  pausePlay();
+  animIndex=0;
+  updateChart(klineData.length);
+  document.getElementById('log-wrap').innerHTML='';
+}
+
+function updateZoom(v){
+  document.getElementById('zoom-label').textContent=v;
+  const endIdx=Math.min(animIndex||klineData.length,klineData.length);
+  const start=Math.max(0,(1-v/endIdx)*100);
+  chart.dispatchAction({type:'dataZoom',start,end:100});
+}
+
+// ============ SIGNALS ============
+const sigEls={vol:document.getElementById('sig-vol'),score:document.getElementById('sig-score'),win:document.getElementById('sig-win'),odds:document.getElementById('sig-odds'),risk:document.getElementById('sig-risk'),pos:document.getElementById('sig-pos'),ev:document.getElementById('sig-ev'),signal:document.getElementById('sig-signal'),tag:document.getElementById('sig-tag')};
+
+function updateSignals(idx){
+  if(idx<20)return;
+  const d=klineData[idx],prev=klineData[idx-1];
+  const chg=((d.close-prev.close)/prev.close*100);
+  const vol20=klineData.slice(idx-19,idx+1).reduce((s,x)=>s+x.volume,0)/20;
+  const volRatio=(d.volume/vol20).toFixed(1);
+  const atr=klineData.slice(Math.max(0,idx-13),idx+1).reduce((s,x)=>s+(x.high-x.low),0)/Math.min(14,idx+1);
+  const vol=(atr/d.close*100).toFixed(1);
+  const score=Math.min(100,Math.max(0,Math.round(50+chg*10+Math.random()*10-5)));
+  const win=Math.min(85,Math.max(25,Math.round(40+chg*3+Math.random()*15))).toFixed(0);
+  const odds=(0.5+Math.random()*2.5).toFixed(1);
+  const risk=Math.min(10,Math.max(1,Math.round(Math.abs(chg)*2+vol*0.5+Math.random()*3)));
+  const pos=Math.min(100,Math.max(0,Math.round((score/100)*80+Math.random()*10)));
+  const ev=((win/100)*odds-(1-win/100)).toFixed(2);
+  const isLong=chg>0||score>55;
+
+  animateNum(sigEls.vol,vol);
+  animateNum(sigEls.score,score);
+  animateNum(sigEls.win,win+'%');
+  animateNum(sigEls.odds,odds+':1');
+  animateNum(sigEls.risk,risk+'/10');
+  animateNum(sigEls.pos,pos+'%');
+  animateNum(sigEls.ev,(ev>0?'+':'')+ev);
+
+  sigEls.signal.style.color=isLong?'var(--red)':'var(--green)';
+  sigEls.signal.textContent=isLong?'BULL':'BEAR';
+  sigEls.tag.textContent=isLong?'LONG':'SHORT';
+  sigEls.tag.className='sig-tag '+(isLong?'long':'short');
+}
+
+function animateNum(el,val){
+  el.style.transform='scale(1.1)';
+  el.textContent=val;
+  setTimeout(()=>{el.style.transform='scale(1)'},150);
+}
+
+// ============ LOG ============
+function addLog(idx){
+  const d=klineData[idx];
+  const wrap=document.getElementById('log-wrap');
+  const chg=((d.close-d.open)/d.open*100).toFixed(2);
+  const line=document.createElement('div');
+  line.className='log-line';
+  line.innerHTML=`<span style="color:var(--dim)">${d.date}</span> <span class="ohlc-o">O:${d.open.toFixed(3)}</span> <span class="ohlc-h">H:${d.high.toFixed(3)}</span> <span class="ohlc-l">L:${d.low.toFixed(3)}</span> <span class="ohlc-c">C:${d.close.toFixed(3)}</span> <span style="color:${chg>=0?'var(--red)':'var(--green)'}">${chg>=0?'+':''}${chg}%</span> V:${(d.volume/1e6).toFixed(1)}M`;
+  wrap.insertBefore(line,wrap.firstChild);
+  while(wrap.children.length>80)wrap.removeChild(wrap.lastChild);
+  // fade old lines
+  for(let i=0;i<wrap.children.length;i++){
+    wrap.children[i].style.opacity=Math.max(0.1,1-i*0.04);
+  }
+}
+
+// ============ STRATEGY ENGINE ============
+const STYLES=['趋势跟踪','均值回归','动量突破','网格交易','波动率套利','量价背离','支撑反弹','均线交叉','通道突破','自适应动量'];
+const NAMES=['AlphaViper','NeonCobra','QuantFang','ShadowPulse','GridMaster','MomentumX','ReversalPro','TrendRider','VolHunter','SignalForge'];
+
+function fetchData(){
+  const sym=document.getElementById('in-symbol').value||'159516';
+  const el=document.getElementById('strat-list');
+  el.innerHTML='<div style="color:var(--cyan);font-size:11px;padding:8px;text-align:center">Fetching '+sym+' market data...</div>';
+  setTimeout(()=>{el.innerHTML='<div style="color:var(--green);font-size:11px;padding:8px;text-align:center">'+sym+' data loaded. '+klineData.length+' bars.</div>'},800);
+}
+
+function aiStrategy(){
+  const sym=document.getElementById('in-symbol').value||'159516';
+  const wr=document.getElementById('in-winrate').value||'55';
+  const sl=document.getElementById('in-stoploss').value||'5';
+  const tgt=document.getElementById('in-target').value||'8';
+  const odds=document.getElementById('in-odds').value||'1.5';
+  const strat=genStrategy(sym,wr,sl,tgt,odds);
+  renderStrategies([strat]);
+}
+
+function gen10Strategies(){
+  const sym=document.getElementById('in-symbol').value||'159516';
+  const strats=[];
+  for(let i=0;i<10;i++){
+    const wr=Math.round(35+Math.random()*40);
+    const sl=(1+Math.random()*8).toFixed(1);
+    const tgt=(2+Math.random()*15).toFixed(1);
+    const odds=(0.5+Math.random()*3).toFixed(1);
+    strats.push(genStrategy(sym,wr,sl,tgt,odds));
+  }
+  renderStrategies(strats);
+}
+
+function reverseShort(){
+  const sym=document.getElementById('in-symbol').value||'159516';
+  const wr=document.getElementById('in-winrate').value||'45';
+  const sl=document.getElementById('in-stoploss').value||'4';
+  const tgt=document.getElementById('in-target').value||'6';
+  const odds=document.getElementById('in-odds').value||'1.2';
+  const strat=genStrategy(sym,wr,sl,tgt,odds,true);
+  renderStrategies([strat]);
+}
+
+function genStrategy(sym,wr,sl,tgt,odds,isShort=false){
+  const idx=Math.floor(Math.random()*NAMES.length);
+  const style=STYLES[idx];
+  const buyCond=isShort?
+    `MA5下穿MA20 + RSI>70 + 成交量突破1.5倍均值`:
+    `MA5上穿MA20 + RSI<30 + 成交量突破1.5倍均值`;
+  const sellCond=isShort?
+    `跌破前低${sl}%止损 / 盈利${tgt}%止盈 / MA5回穿MA20平仓`:
+    `突破前高${sl}%止损 / 盈利${tgt}%止盈 / MA5回穿MA20平仓`;
+  const posSize=Math.min(90,Math.max(10,Math.round(wr*0.8+Math.random()*10)));
+  return{
+    name:NAMES[idx]+(isShort?' [SHORT]':''),
+    style:style+(isShort?' / 反向做空':''),
+    buy:buyCond,
+    sell:sellCond,
+    pos:posSize+'%',
+    wr:+wr,sl:+sl,tgt:+tgt,odds:+odds,
+    backtest:genBacktest(wr,sl,tgt,odds)
+  };
+}
+
+function genBacktest(wr,sl,tgt,odds){
+  const trades=[];
+  let cum=0;const n=50;
+  for(let i=0;i<n;i++){
+    const win=Math.random()<wr/100;
+    const pnl=win?(+tgt*Math.random()):( -sl*Math.random());
+    cum+=pnl;
+    const d=new Date(START_DATE.getTime()+Math.floor(Math.random()*TOTAL_DAYS)*86400000);
+    trades.push({date:d.toISOString().slice(0,10),side:Math.random()>0.5?'BUY':'SELL',pnl:pnl.toFixed(2),cum:cum.toFixed(2),win});
+  }
+  const wins=trades.filter(t=>t.win).length;
+  const maxDD=calcMaxDD(trades);
+  return{
+    cumReturn:(cum).toFixed(2)+'%',
+    winRate:wins+'/'+n+' ('+((wins/n)*100).toFixed(0)+'%)',
+    profitFactor:(wins/(n-wins+1)*odds).toFixed(2),
+    maxDD:maxDD.toFixed(2)+'%',
+    trades
+  };
+}
+
+function calcMaxDD(trades){
+  let peak=0,dd=0,cum=0;
+  trades.forEach(t=>{cum+=parseFloat(t.pnl);if(cum>peak)peak=cum;const d=(peak-cum)/Math.max(1,peak)*100;if(d>dd)dd=d;});
+  return dd;
+}
+
+function renderStrategies(strats){
+  const el=document.getElementById('strat-list');
+  el.innerHTML='';
+  strats.forEach((s,i)=>{
+    const card=document.createElement('div');
+    card.className='strat-card';
+    card.innerHTML=`<div class="s-name">${s.name}</div><div class="s-style">${s.style}</div><div class="s-cond">BUY: ${s.buy}<br>SELL: ${s.sell}</div><div class="s-pos">仓位建议: ${s.pos} | 胜率${s.wr}% | 赔率${s.odds}:1</div>`;
+    card.onclick=()=>showReport(s);
+    el.appendChild(card);
+  });
+}
+
+function showReport(s){
+  const r=s.backtest;
+  let html=`<div class="r-row"><span class="r-label">策略名称</span><span class="r-val" style="color:var(--gold)">${s.name}</span></div>
+    <div class="r-row"><span class="r-label">策略风格</span><span class="r-val" style="color:var(--cyan)">${s.style}</span></div>
+    <div class="r-row"><span class="r-label">累计收益</span><span class="r-val ${parseFloat(r.cumReturn)>=0?'pos':'neg'}">${r.cumReturn}</span></div>
+    <div class="r-row"><span class="r-label">胜率</span><span class="r-val">${r.winRate}</span></div>
+    <div class="r-row"><span class="r-label">盈亏比</span><span class="r-val" style="color:var(--gold)">${r.profitFactor}</span></div>
+    <div class="r-row"><span class="r-label">最大回撤</span><span class="r-val neg">${r.maxDD}</span></div>
+    <table><tr><th>DATE</th><th>SIDE</th><th>PNL</th><th>CUM</th><th>W/L</th></tr>`;
+  r.trades.slice(0,30).forEach(t=>{
+    html+=`<tr><td>${t.date}</td><td>${t.side}</td><td style="color:${parseFloat(t.pnl)>=0?'var(--red)':'var(--green)'}">${t.pnl}%</td><td>${t.cum}%</td><td style="color:${t.win?'var(--red)':'var(--green)'}">${t.win?'W':'L'}</td></tr>`;
+  });
+  html+='</table>';
+  document.getElementById('report-content').innerHTML=html;
+  document.getElementById('report-modal').classList.add('show');
+}
+function closeReport(){document.getElementById('report-modal').classList.remove('show')}
+
+// ============ BOOT ============
+function boot(){
+  const bar=document.querySelector('#loader .bar');
+  let pct=0;
+  const loadInt=setInterval(()=>{
+    pct+=Math.random()*15;
+    if(pct>=100){pct=100;clearInterval(loadInt);setTimeout(()=>{document.getElementById('loader').style.opacity='0'},300)}
+    bar.style.width=pct+'%';
+  },100);
+
+  genKLine();
+  initChart();
+  updateSignals(klineData.length-1);
+
+  // initial log lines
+  for(let i=Math.max(0,klineData.length-5);i<klineData.length;i++)addLog(i);
+
+  // live log simulation
+  setInterval(()=>{
+    if(!isPlaying){
+      const idx=klineData.length-1;
+      const d=klineData[idx];
+      const fake={...d,close:+(d.close*(1+(Math.random()-0.5)*0.002)).toFixed(3),volume:d.volume+Math.floor(Math.random()*1e6)};
+      const wrap=document.getElementById('log-wrap');
+      const chg=((fake.close-d.open)/d.open*100).toFixed(2);
+      const line=document.createElement('div');
+      line.className='log-line';
+      line.innerHTML=`<span style="color:var(--dim)">${d.date} *</span> <span class="ohlc-o">O:${fake.open.toFixed(3)}</span> <span class="ohlc-h">H:${fake.high.toFixed(3)}</span> <span class="ohlc-l">L:${fake.low.toFixed(3)}</span> <span class="ohlc-c">C:${fake.close.toFixed(3)}</span> <span style="color:${chg>=0?'var(--red)':'var(--green)'}">${chg>=0?'+':''}${chg}%</span> V:${(fake.volume/1e6).toFixed(1)}M`;
+      wrap.insertBefore(line,wrap.firstChild);
+      if(wrap.children.length>80)wrap.removeChild(wrap.lastChild);
+      for(let j=0;j<wrap.children.length;j++)wrap.children[j].style.opacity=Math.max(0.1,1-j*0.04);
+    }
+  },3000);
+
+  // live signal flicker
+  setInterval(()=>{
+    if(!isPlaying){
+      const idx=klineData.length-1;
+      updateSignals(idx);
+    }
+  },4000);
+}
+
+boot();
+</script>
+</body>
+</html>
