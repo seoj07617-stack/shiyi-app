@@ -801,6 +801,7 @@ function migrateData(d){
   d.health=d.health||{};
   d.meals=d.meals||[];
   d.water=d.water||{};
+  d.userProfile=d.userProfile||def.userProfile;
   const maxId=d.todos.reduce((mx,t)=>Math.max(mx,t.id||0),0);
   d.nextId=Math.max(d.nextId||0,maxId+1);
   return d;
@@ -854,6 +855,21 @@ function switchTab(tab){
     if(onclick.includes("'"+tab+"'")){item.classList.add('current');}
     else{item.classList.remove('current');}
   });
+  // Update page title and subtitle
+  var titleMap={
+    health:['健康','体重 · 训练 · 饮食 · 饮水'],
+    workout:['训练','计划 · 动作 · 记录'],
+    diary:['每日感想','记录 · 回顾'],
+    todo:['待办','管理 · 追踪'],
+    progress:['共同进步','里程碑 · 成长'],
+    journal:['阅读','笔记 · 进度'],
+    news:['新闻','关注 · 动态'],
+    review:['每日复盘','交易 · 反思']
+  };
+  var titleEl=document.getElementById('pageTitleText');
+  var subEl=document.getElementById('pageSubtitle');
+  if(titleMap[tab]&&titleEl)titleEl.textContent=titleMap[tab][0];
+  if(titleMap[tab]&&subEl)subEl.textContent=titleMap[tab][1];
   // Scroll to top
   var content=document.querySelector('.content');
   if(content)content.scrollTop=0;
@@ -878,6 +894,7 @@ function defaultData(){
     health:{},
     meals:[],
     water:{},
+    userProfile:{height:175,age:24},
     nextId:7
   };
 }
@@ -1369,7 +1386,7 @@ function generateDietAnalysis(){
   const proPct=totalKcal?Math.round(totalProtein*4/totalKcal*100):0;
   const fatPct=totalKcal?Math.round(totalFat*9/totalKcal*100):0;
   const currentWeight=data.weights.length?data.weights.slice(-1)[0].val:68;
-  const bmr=Math.round(10*currentWeight+6.25*175-5*24-5);
+  const bmr=Math.round(10*currentWeight+6.25*(data.userProfile&&data.userProfile.height||175)-5*(data.userProfile&&data.userProfile.age||24)-5);
   const tdee=Math.round(bmr*1.55);
   const proteinTarget=Math.round(currentWeight*1.6);
   let tips=[];
@@ -1701,7 +1718,7 @@ function renderAIInsights(){
   let totalKcal=0,totalP=0,totalC=0,totalF=0,mealCount=0;
   todayMeals.forEach(m=>{totalKcal+=m.kcal||0;totalP+=m.protein||0;totalC+=m.carb||0;totalF+=m.fat||0;mealCount++;});
   const w=data.weights&&data.weights.length?data.weights[data.weights.length-1].val:68;
-  const bmr=10*w+6.25*175-5*24-5;
+  const bmr=10*w+6.25*(data.userProfile&&data.userProfile.height||175)-5*(data.userProfile&&data.userProfile.age||24)-5;
   const tdee=bmr*1.55;
   const proteinTarget=w*1.6;
   const kcalPct=Math.round(totalKcal/tdee*100);
@@ -1946,22 +1963,22 @@ function selectWorkoutDay(day){
 }
 
 function renderAll(){
-  try{renderCheckin();}catch(e){console.error(e)}
-  try{renderHabits();}catch(e){console.error(e)}
-  try{renderHeatmap();}catch(e){console.error(e)}
-  try{renderCountdowns();}catch(e){console.error(e)}
-  try{if(data.pomodoros&&data.pomodoros[TODAY_STR]){document.getElementById('pomCount').textContent=data.pomodoros[TODAY_STR];}}catch(e){}
-  try{renderWeight();}catch(e){console.error(e)}
-  try{renderMealTypeChips();renderQuickFoods();renderMeals();renderWater();}catch(e){console.error(e)}
+  try{renderCheckin();}catch(e){console.error('[renderAll] renderCheckin:',e)}
+  try{renderHabits();}catch(e){console.error('[renderAll] renderHabits:',e)}
+  try{renderHeatmap();}catch(e){console.error('[renderAll] renderHeatmap:',e)}
+  try{renderCountdowns();}catch(e){console.error('[renderAll] renderCountdowns:',e)}
+  try{if(data.pomodoros&&data.pomodoros[TODAY_STR]){document.getElementById('pomCount').textContent=data.pomodoros[TODAY_STR];}}catch(e){console.error('[renderAll] pomCount:',e)}
+  try{renderWeight();}catch(e){console.error('[renderAll] renderWeight:',e)}
+  try{renderMealTypeChips();renderQuickFoods();renderMeals();renderWater();}catch(e){console.error('[renderAll] diet:',e)}
   
-  try{renderDiaryStreak();renderDiaryHistory();loadTodayDiary();}catch(e){console.error(e)}
-  try{renderTodoChips();renderTodos();fetchRemoteTodos();}catch(e){console.error(e)}
-  try{renderJournal();}catch(e){console.error(e)}
-  try{renderNewsChips();renderNews();fetchRemoteNews();}catch(e){console.error(e)}
-  try{fetchRemoteProgress();}catch(e){console.error(e)}
-  try{renderMoodGrid();renderScoreRow();renderReviewHistory();loadTodayReview();}catch(e){console.error(e)}
-  try{renderAIInsights();}catch(e){console.error(e)}
-  try{fetchWorkoutData();}catch(e){console.error(e)}
+  try{renderDiaryStreak();renderDiaryHistory();loadTodayDiary();}catch(e){console.error('[renderAll] diary:',e)}
+  try{renderTodoChips();renderTodos();fetchRemoteTodos();}catch(e){console.error('[renderAll] todo:',e)}
+  try{renderJournal();}catch(e){console.error('[renderAll] journal:',e)}
+  try{renderNewsChips();renderNews();fetchRemoteNews();}catch(e){console.error('[renderAll] news:',e)}
+  try{fetchRemoteProgress();}catch(e){console.error('[renderAll] progress:',e)}
+  try{renderMoodGrid();renderScoreRow();renderReviewHistory();loadTodayReview();}catch(e){console.error('[renderAll] review:',e)}
+  try{renderAIInsights();}catch(e){console.error('[renderAll] renderAIInsights:',e)}
+  try{fetchWorkoutData();}catch(e){console.error('[renderAll] workout:',e)}
 }
 renderAll();
 
@@ -2043,13 +2060,19 @@ function renderStockDashboard(data){
   
   el.innerHTML=html;
   
+  // Destroy old Chart instances before creating new ones
+  if(window._stockCharts){
+    window._stockCharts.forEach(function(c){if(c)c.destroy();});
+  }
+  window._stockCharts=[];
+  
   // Render charts
   data.holdings.forEach((h,i)=>{
     const canvas=document.getElementById('stockChart'+i);
     if(!canvas||!h.history||!h.history.length)return;
     const ctx=canvas.getContext('2d');
     const isNeg=h.change<0;
-    new Chart(ctx,{
+    var chart=new Chart(ctx,{
       type:'line',
       data:{
         labels:h.history.map(p=>p.date),
@@ -2075,6 +2098,7 @@ function renderStockDashboard(data){
         interaction:{mode:'nearest',axis:'x',intersect:false}
       }
     });
+    window._stockCharts.push(chart);
   });
 }
 
