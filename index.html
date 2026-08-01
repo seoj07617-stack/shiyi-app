@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7.76 - mobile: all sections visible + scroll nav strip, no drawer/display toggle -->
+<!-- v7.77 - mobile: all sections visible + scroll nav strip, no drawer/display toggle -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -147,6 +147,15 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 .weight-change.down{color:var(--green)}
 .weight-change.up{color:var(--red)}
 .weight-target{font-size:11px;color:var(--white-dim);margin-top:3px}
+
+/* HEATMAP */
+.heatmap-wrap{overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.heatmap-wrap::-webkit-scrollbar{height:3px}
+.heatmap-wrap::-webkit-scrollbar-thumb{background:var(--purple-deep);border-radius:2px}
+.heatmap-svg{display:block;min-width:fit-content}
+.heatmap-tip{position:fixed;padding:7px 11px;border-radius:8px;font-size:12px;background:rgba(10,10,14,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:0.5px solid var(--glass-border);color:var(--white);pointer-events:none;z-index:999;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.5);font-variant-numeric:tabular-nums}
+.heatmap-legend{display:flex;align-items:center;gap:5px;margin-top:10px;font-size:10px;color:var(--white-dim)}
+.heatmap-legend-box{width:10px;height:10px;border-radius:2px}
 
 /* WORKOUT */
 .workout-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 4px}
@@ -572,6 +581,21 @@ input::placeholder,textarea::placeholder{color:var(--white-dim)}
 
         <div class="card glass">
           <div class="card-glow"></div>
+          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>活跃热力图<span class="count-badge" id="heatmapBadge"></span></div>
+          <div class="heatmap-wrap" id="heatmapWrap"></div>
+          <div class="heatmap-legend">
+            <span>少</span>
+            <div class="heatmap-legend-box" style="background:rgba(128,128,128,0.15)"></div>
+            <div class="heatmap-legend-box" style="background:rgba(124,58,237,0.3)"></div>
+            <div class="heatmap-legend-box" style="background:rgba(124,58,237,0.55)"></div>
+            <div class="heatmap-legend-box" style="background:rgba(124,58,237,0.8)"></div>
+            <div class="heatmap-legend-box" style="background:rgba(167,139,250,1)"></div>
+            <span>多</span>
+          </div>
+        </div>
+
+        <div class="card glass">
+          <div class="card-glow"></div>
           <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>专注计时</div>
           <div style="text-align:center;padding:6px 0">
             <div id="pomodoroDisplay" style="font-size:42px;font-weight:700;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,var(--purple),var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">25:00</div>
@@ -876,6 +900,7 @@ function doCheckin(){
   if(data.checkins.includes(today)){showToast('今天已经打卡过了');return;}
   data.checkins.push(today);
   saveData();renderCheckin();
+  try{renderHeatmap();}catch(e){}
   showToast('打卡成功！');
 }
 function renderCheckin(){
@@ -996,6 +1021,81 @@ function renderWeight(){
   if(days.length>=2){ctx.textAlign='right';ctx.fillText(days[days.length-1].slice(5),padL+cw,H-3);}
 }
 
+/* ===== HEATMAP / 活跃热力图 ===== */
+function renderHeatmap(){
+  var wrap=document.getElementById('heatmapWrap');
+  if(!wrap)return;
+  var DAYS=84,CELL=14,GAP=3,PAD_L=32,PAD_T=20,COL_W=CELL+GAP;
+  /* collect last 84 days */
+  var days=[];
+  for(var i=DAYS-1;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);days.push(d);}
+  /* group by week columns (Mon-Sun) */
+  var weeks=[],curWeek=null;
+  days.forEach(function(d){
+    var dow=d.getDay(),col=dow===0?6:dow-1;/* Mon=0..Sun=6 */
+    if(!curWeek||col===0){curWeek=[];weeks.push(curWeek);}
+    curWeek.push({date:d,col:col});
+  });
+  /* activity count per date */
+  function countFor(ds){
+    var c=0;
+    if(data.checkins&&data.checkins.includes(ds))c++;
+    if(data.habits&&data.habits[ds]){var h=data.habits[ds];for(var k in h)if(h[k])c++;}
+    if(data.pomodoros&&data.pomodoros[ds])c+=data.pomodoros[ds];
+    return c;
+  }
+  function getColor(n){
+    if(n===0)return'rgba(128,128,128,0.15)';
+    if(n===1)return'rgba(124,58,237,0.3)';
+    if(n===2)return'rgba(124,58,237,0.55)';
+    if(n===3)return'rgba(124,58,237,0.8)';
+    if(n>=4)return'rgba(167,139,250,1)';
+    return'rgba(128,128,128,0.15)';
+  }
+  var svgW=PAD_L+weeks.length*COL_W+4,svgH=PAD_T+7*(CELL+GAP)+4;
+  var svg='<svg class="heatmap-svg" width="'+svgW+'" height="'+svgH+'" viewBox="0 0 '+svgW+' '+svgH+'">';
+  /* month labels */
+  var lastMonth=-1;
+  weeks.forEach(function(w,wi){
+    var d=w[0].date,m=d.getMonth();
+    if(m!==lastMonth){
+      lastMonth=m;
+      var labels=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+      svg+='<text x="'+(PAD_L+wi*COL_W)+'" y="12" style="font-size:10px;fill:var(--white-dim);font-weight:500">'+labels[m]+'</text>';
+    }
+  });
+  /* day labels */
+  ['一','三','五'].forEach(function(label,i){
+    svg+='<text x="2" y="'+(PAD_T+14+i*2*(CELL+GAP))+'" style="font-size:9px;fill:var(--white-dim)">'+label+'</text>';
+  });
+  /* cells */
+  var totalActivity=0;
+  weeks.forEach(function(w,wi){
+    w.forEach(function(item){
+      var ds=item.date.toISOString().slice(0,10);
+      var n=countFor(ds),color=getColor(n);
+      totalActivity+=n;
+      var x=PAD_L+wi*COL_W,y=PAD_T+item.col*(CELL+GAP);
+      svg+='<rect x="'+x+'" y="'+y+'" width="'+CELL+'" height="'+CELL+'" rx="2.5" fill="'+color+'" style="cursor:pointer;transition:opacity .15s" data-date="'+ds+'" data-count="'+n+'" onmouseenter="heatmapTip(this)" onmouseleave="heatmapHide()" />';
+    });
+  });
+  svg+='</svg>';
+  wrap.innerHTML=svg;
+  var badge=document.getElementById('heatmapBadge');
+  if(badge)badge.textContent=DAYS+'天';
+}
+var _hmTip=document.createElement('div');_hmTip.className='heatmap-tip';_hmTip.style.display='none';document.body.appendChild(_hmTip);
+function heatmapTip(el){
+  var ds=el.getAttribute('data-date'),n=+el.getAttribute('data-count');
+  var d=new Date(ds),labels=['日','一','二','三','四','五','六'];
+  var txt=(d.getMonth()+1)+'/'+d.getDate()+' 周'+labels[d.getDay()]+' — '+(n===0?'无活跃':n+'项活跃');
+  _hmTip.textContent=txt;_hmTip.style.display='block';
+  var r=el.getBoundingClientRect();
+  _hmTip.style.left=Math.min(r.left,window.innerWidth-160)+'px';
+  _hmTip.style.top=(r.top-36)+'px';
+}
+function heatmapHide(){_hmTip.style.display='none';}
+
 /* ===== HABITS / 每日习惯 ===== */
 const defaultHabits=[
   {id:'foot_grip',name:'足底抓地激活',icon:'🦶',tip:'O腿矫正根基动作'},
@@ -1010,6 +1110,7 @@ function toggleHabit(hid){
   if(!data.habits[today])data.habits[today]={};
   data.habits[today][hid]=!data.habits[today][hid];
   saveData();renderHabits();
+  try{renderHeatmap();}catch(e){}
 }
 function renderHabits(){
   if(!data.habits)data.habits={};
@@ -1847,6 +1948,7 @@ function selectWorkoutDay(day){
 function renderAll(){
   try{renderCheckin();}catch(e){console.error(e)}
   try{renderHabits();}catch(e){console.error(e)}
+  try{renderHeatmap();}catch(e){console.error(e)}
   try{renderCountdowns();}catch(e){console.error(e)}
   try{if(data.pomodoros&&data.pomodoros[TODAY_STR]){document.getElementById('pomCount').textContent=data.pomodoros[TODAY_STR];}}catch(e){}
   try{renderWeight();}catch(e){console.error(e)}
@@ -2005,7 +2107,7 @@ document.addEventListener('DOMContentLoaded',function(){
     var onclick=item.getAttribute('onclick')||'';
     if(onclick.includes("'health'")){item.classList.add('current');}
   });
-  console.log('v7.76 initialized');
+  console.log('v7.77 initialized');
 });</script>
 </body>
 </html>
