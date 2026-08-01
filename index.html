@@ -406,6 +406,63 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
   .glass{backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%)}
   .glass-strong{backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%)}
 }
+
+/* AI Chat Panel */
+.ai-chat-btn{position:fixed;bottom:28px;right:28px;width:52px;height:52px;border-radius:50%;background:var(--purple);color:#fff;border:none;cursor:pointer;z-index:190;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(124,58,237,0.35);transition:all .3s var(--ease-spring);touch-action:manipulation}
+.ai-chat-btn:active{transform:scale(0.9)}
+.ai-chat-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ai-chat-btn.open{transform:rotate(45deg);background:#ef4444;box-shadow:0 4px 16px rgba(239,68,68,0.35)}
+.ai-chat-panel{position:fixed;bottom:96px;right:28px;width:380px;max-height:560px;background:#fff;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06);border:1px solid #e8e8ef;z-index:189;display:none;flex-direction:column;overflow:hidden;animation:slideUpChat .3s var(--ease-spring)}
+.ai-chat-panel.open{display:flex}
+@keyframes slideUpChat{from{opacity:0;transform:translateY(20px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.ai-chat-header{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid #e8e8ef;flex-shrink:0}
+.ai-chat-header .icon{width:28px;height:28px;border-radius:8px;background:var(--purple-glow);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ai-chat-header .icon svg{width:15px;height:15px;stroke:var(--purple);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ai-chat-header .title{font-size:14px;font-weight:700;color:var(--white);flex:1}
+.ai-chat-header .close-btn{width:28px;height:28px;border-radius:7px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--white-dim);transition:all .2s}
+.ai-chat-header .close-btn:active{background:#f5f5f7}
+.ai-chat-header .close-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6}
+.ai-chat-messages{flex:1;overflow-y:auto;padding:16px 18px;min-height:200px;max-height:380px;display:flex;flex-direction:column;gap:10px}
+.ai-chat-messages::-webkit-scrollbar{width:4px}
+.ai-chat-messages::-webkit-scrollbar-thumb{background:#c4c4c4;border-radius:2px}
+.ai-chat-msg{max-width:88%;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.6;word-break:break-word;white-space:pre-wrap}
+.ai-chat-msg.bot{background:#f4f4f8;color:var(--white);align-self:flex-start;border-bottom-left-radius:4px}
+.ai-chat-msg.user{background:var(--purple);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.ai-chat-msg.loading{background:#f4f4f8;color:var(--white-dim);align-self:flex-start;border-bottom-left-radius:4px;display:flex;align-items:center;gap:6px}
+.ai-chat-msg.loading .dot{width:6px;height:6px;border-radius:50%;background:var(--purple-mid);animation:bounce 1.4s infinite ease-in-out}
+.ai-chat-msg.loading .dot:nth-child(2){animation-delay:.16s}
+.ai-chat-msg.loading .dot:nth-child(3){animation-delay:.32s}
+@keyframes bounce{0%,80%,100%{transform:scale(0.6)}40%{transform:scale(1)}}
+.ai-chat-empty{padding:32px 18px;text-align:center;color:var(--white-dim);font-size:13px;line-height:1.7}
+.ai-chat-empty svg{width:36px;height:36px;stroke:#c4c4c4;fill:none;stroke-width:1.3;stroke-linecap:round;margin-bottom:8px}
+.ai-chat-input-row{display:flex;gap:8px;padding:12px 16px 16px;border-top:1px solid #e8e8ef;flex-shrink:0}
+.ai-chat-input-row input{flex:1;padding:10px 14px;border:1px solid #e5e5e5;border-radius:12px;font-size:13px;outline:none;transition:border-color .2s;font-family:inherit}
+.ai-chat-input-row input:focus{border-color:var(--purple);box-shadow:0 0 0 3px var(--purple-glow)}
+.ai-chat-input-row .send-btn{width:40px;height:40px;border-radius:12px;border:none;background:var(--purple);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.ai-chat-input-row .send-btn:active{transform:scale(0.9);background:var(--purple-deep)}
+.ai-chat-input-row .send-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ai-chat-input-row .send-btn:disabled{opacity:0.4}
+.ai-write-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;font-size:11px;font-weight:600;border:1px solid var(--glass-border);background:#fff;color:var(--purple);cursor:pointer;transition:all .2s var(--ease);margin-top:6px;touch-action:manipulation}
+.ai-write-btn:active{background:var(--purple-glow);transform:scale(0.96)}
+.ai-write-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round}
+.ai-write-btn:disabled{opacity:0.4;cursor:default}
+.ai-config-bar{display:flex;align-items:center;gap:4px;padding:6px 10px;background:rgba(0,0,0,0.02);border-radius:8px;margin:4px 0;font-size:10px;color:var(--white-dim)}
+.ai-config-bar button{font-size:10px;padding:3px 8px;border-radius:5px;border:1px solid #e5e5e5;background:#fff;color:var(--white-mid);cursor:pointer}
+.ai-config-modal{position:fixed;inset:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);z-index:210;display:none;align-items:center;justify-content:center}
+.ai-config-modal.show{display:flex}
+.ai-config-modal .modal-box{background:#fff;border-radius:18px;padding:24px;width:380px;max-width:90vw;box-shadow:0 8px 32px rgba(0,0,0,0.15)}
+.ai-config-modal h3{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--white)}
+.ai-config-modal label{display:block;font-size:11px;font-weight:600;color:var(--white-dim);margin-bottom:4px;margin-top:12px}
+.ai-config-modal input{width:100%;padding:9px 12px;border:1px solid #e5e5e5;border-radius:10px;font-size:12px;outline:none}
+.ai-config-modal input:focus{border-color:var(--purple)}
+.ai-config-modal .hint{font-size:10px;color:var(--white-dim);margin-top:3px;line-height:1.5}
+.ai-config-modal .actions{display:flex;gap:8px;margin-top:18px}
+.ai-config-modal .actions button{flex:1;padding:9px;border-radius:10px;font-size:12px;font-weight:600;border:none;cursor:pointer}
+@media(max-width:480px){
+  .ai-chat-panel{right:12px;left:12px;width:auto;bottom:88px;max-height:70vh}
+  .ai-chat-btn{bottom:20px;right:20px;width:48px;height:48px}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
         <line x1="3" y1="12" x2="21" y2="12"/>
@@ -682,6 +739,7 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
           <textarea id="diaryText" placeholder="今天有什么想法、感受、收获……写下来" rows="5" oninput="updateDiaryCount()" style="min-height:100px"></textarea>
           <div class="char-count" id="diaryCharCount">0 字</div>
           <button class="btn btn-primary" style="width:100%;margin-top:10px" onclick="saveDiary()">保存感想</button>
+          <button class="ai-write-btn" onclick="aiPolishDiary()" id="diaryPolishBtn"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/><path d="M15 6l3 3"/></svg>AI润色</button>
         </div>
         <div id="diaryHistory"></div>
       </div>
@@ -783,6 +841,9 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
           <div class="review-field">
             <label>反思与纪律</label>
             <textarea id="reviewReflection" placeholder="是否遵守纪律？有什么可以改进？明日计划……" rows="4"></textarea>
+          </div>
+          <div class="review-field" style="margin-top:-4px">
+            <button class="ai-write-btn" onclick="aiPolishReview()" id="reviewPolishBtn"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/><path d="M15 6l3 3"/></svg>AI润色</button>
           </div>
           <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="saveReview()">保存复盘</button>
         </div>
@@ -2183,5 +2244,233 @@ document.addEventListener('DOMContentLoaded',function(){
   });
   console.log('v8.0 initialized');
 });</script>
+
+<script>
+
+/* ===== AI Chat & Writing Assistant ===== */
+(function(){
+  var aiCfg = JSON.parse(localStorage.getItem('shiyi_ai_config') || '{}');
+  var statusEl = document.getElementById('aiStatusText');
+  if(statusEl){
+    statusEl.textContent = (aiCfg.botId && aiCfg.token) ? '已配置' : '未配置';
+  }
+})();
+
+var aiMessages = [];
+var aiSending = false;
+
+function showAiConfig(){
+  var cfg = JSON.parse(localStorage.getItem('shiyi_ai_config') || '{}');
+  if(cfg.botId) document.getElementById('aiBotId').value = cfg.botId;
+  if(cfg.token) document.getElementById('aiToken').value = cfg.token;
+  document.getElementById('aiConfigModal').classList.add('show');
+}
+
+function closeAiConfig(){
+  document.getElementById('aiConfigModal').classList.remove('show');
+}
+
+function saveAiConfig(){
+  var botId = document.getElementById('aiBotId').value.trim();
+  var token = document.getElementById('aiToken').value.trim();
+  if(!botId || !token){
+    showToast('请填写 Bot ID 和 Token');
+    return;
+  }
+  localStorage.setItem('shiyi_ai_config', JSON.stringify({botId: botId, token: token}));
+  var st = document.getElementById('aiStatusText');
+  if(st) st.textContent = '已配置';
+  closeAiConfig();
+  showToast('配置已保存');
+}
+
+function toggleAiChat(){
+  var btn = document.getElementById('aiChatBtn');
+  var panel = document.getElementById('aiChatPanel');
+  var isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open');
+  btn.classList.toggle('open');
+  if(!isOpen) document.getElementById('aiChatInput').focus();
+}
+
+function addAiMessage(role, text){
+  var container = document.getElementById('aiChatMessages');
+  var empty = document.getElementById('aiChatEmpty');
+  if(empty) empty.style.display = 'none';
+  
+  var div = document.createElement('div');
+  div.className = 'ai-chat-msg ' + role;
+  div.textContent = text;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  aiMessages.push({role: role, text: text});
+}
+
+function addLoadingIndicator(){
+  var container = document.getElementById('aiChatMessages');
+  var div = document.createElement('div');
+  div.className = 'ai-chat-msg loading';
+  div.id = 'aiLoading';
+  div.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function removeLoading(){
+  var el = document.getElementById('aiLoading');
+  if(el) el.remove();
+}
+
+function sendAiMessage(){
+  if(aiSending) return;
+  var input = document.getElementById('aiChatInput');
+  var text = input.value.trim();
+  if(!text) return;
+  
+  var cfg = JSON.parse(localStorage.getItem('shiyi_ai_config') || '{}');
+  if(!cfg.botId || !cfg.token){
+    showToast('请先配置 AI 助手');
+    input.value = '';
+    showAiConfig();
+    return;
+  }
+  
+  input.value = '';
+  addAiMessage('user', text);
+  aiSending = true;
+  document.getElementById('aiSendBtn').disabled = true;
+  addLoadingIndicator();
+  
+  var user_id = 'shiyi_' + (localStorage.getItem('shiyi_user_id') || Math.random().toString(36).slice(2, 10));
+  if(!localStorage.getItem('shiyi_user_id')) localStorage.setItem('shiyi_user_id', user_id.replace('shiyi_', ''));
+  
+  fetch('https://api.coze.cn/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + cfg.token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      bot_id: cfg.botId,
+      user_id: user_id,
+      query: text,
+      stream: false,
+      auto_save: true
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    removeLoading();
+    if(data && data.choices && data.choices.length > 0){
+      var reply = data.choices[0].message ? data.choices[0].message.content : '';
+      if(!reply && data.choices[0].content) reply = data.choices[0].content;
+      if(!reply) reply = data.answer || data.response || '';
+      if(reply){
+        addAiMessage('bot', reply);
+      } else {
+        addAiMessage('bot', '没有收到回复，请重试');
+      }
+    } else if(data && data.answer){
+      addAiMessage('bot', data.answer);
+    } else {
+      addAiMessage('bot', '请求失败：' + (data.msg || JSON.stringify(data).slice(0,100)));
+    }
+    aiSending = false;
+    document.getElementById('aiSendBtn').disabled = false;
+  })
+  .catch(function(err){
+    removeLoading();
+    addAiMessage('bot', '网络错误：' + err.message);
+    aiSending = false;
+    document.getElementById('aiSendBtn').disabled = false;
+  });
+}
+
+function aiPolish(id){
+  var textarea = document.getElementById(id);
+  var text = textarea.value.trim();
+  if(!text){
+    showToast('请先写点内容再润色');
+    return;
+  }
+  
+  var cfg = JSON.parse(localStorage.getItem('shiyi_ai_config') || '{}');
+  if(!cfg.botId || !cfg.token){
+    showToast('请先配置 AI 助手');
+    showAiConfig();
+    return;
+  }
+  
+  // Open chat panel
+  var panel = document.getElementById('aiChatPanel');
+  var btn = document.getElementById('aiChatBtn');
+  if(!panel.classList.contains('open')){
+    panel.classList.add('open');
+    btn.classList.add('open');
+  }
+  
+  // Send polish request
+  var input = document.getElementById('aiChatInput');
+  var prompt = '润色以下内容，保持原意但让表达更流畅、更清晰：
+
+' + text;
+  input.value = prompt;
+  sendAiMessage();
+}
+
+function aiPolishDiary(){
+  aiPolish('diaryText');
+}
+
+function aiPolishReview(){
+  aiPolish('reviewReflection');
+}
+
+</script>
+
+<!-- AI Chat Panel -->
+<div class="ai-config-modal" id="aiConfigModal">
+  <div class="modal-box">
+    <h3>AI 助手配置</h3>
+    <label>Bot ID</label>
+    <input id="aiBotId" placeholder="从扣子发布页获取" />
+    <div class="hint">在扣子机器人编排页面 URL 中 bot/ 后面的字符串</div>
+    <label>Token</label>
+    <input id="aiToken" type="password" placeholder="个人访问令牌或 OAuth Token" />
+    <div class="hint">扣子个人访问令牌，需要 bot 对话权限</div>
+    <div class="actions">
+      <button style="background:#f5f5f7;color:var(--white-mid)" onclick="closeAiConfig()">取消</button>
+      <button style="background:var(--purple);color:#fff" onclick="saveAiConfig()">保存</button>
+    </div>
+  </div>
+</div>
+<button class="ai-chat-btn" id="aiChatBtn" onclick="toggleAiChat()">
+  <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+</button>
+<div class="ai-chat-panel" id="aiChatPanel">
+  <div class="ai-chat-header">
+    <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+    <div class="title">AI 助手</div>
+    <button class="close-btn" onclick="toggleAiChat()"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="ai-chat-messages" id="aiChatMessages">
+    <div class="ai-chat-empty" id="aiChatEmpty">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <div>有什么想问的？</div>
+      <div style="font-size:11px;margin-top:4px;color:var(--white-faint)">可以问问题、写东西、整理思路</div>
+    </div>
+  </div>
+  <div class="ai-chat-input-row">
+    <input id="aiChatInput" placeholder="输入消息..." onkeydown="if(event.key==='Enter')sendAiMessage()" />
+    <button class="send-btn" id="aiSendBtn" onclick="sendAiMessage()"><svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+  </div>
+</div>
+  <div class="ai-config-bar" id="aiConfigBar">
+    <span>AI 助手</span>
+    <span style="margin:0 4px">·</span>
+    <span id="aiStatusText">未配置</span>
+    <button style="margin-left:auto" onclick="showAiConfig()">配置</button>
+  </div>
+</div>
 </body>
 </html>
