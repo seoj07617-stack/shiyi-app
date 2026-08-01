@@ -328,6 +328,20 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
 .stock-metric .label{font-size:9px;color:#536471}
 .stock-metric .value{font-size:12px;font-weight:600;color:#0f1419}
 .stock-metric .change{font-size:9px;color:#536471}
+
+/* Section group labels */
+.section-group{margin-bottom:6px;padding:0 2px}
+.section-group-label{font-size:10px;font-weight:600;color:#536471;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;padding:0 2px}
+.section-group:not(:first-child){margin-top:18px}
+.overview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+.overview-card{padding:16px;border-radius:var(--radius-sm);background:#fff;border:1px solid #eff3f4;text-align:center;position:relative;overflow:hidden;transition:all .2s var(--ease)}
+.overview-card:active{transform:scale(0.97)}
+.overview-card .ov-label{font-size:10px;color:#536471;font-weight:500;margin-bottom:6px;letter-spacing:0.03em}
+.overview-card .ov-value{font-size:24px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;line-height:1.2}
+.overview-card .ov-sub{font-size:10px;color:#536471;margin-top:3px}
+.overview-card .ov-icon{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px}
+.overview-card .ov-icon svg{width:14px;height:14px;stroke-width:1.8}
+@media(max-width:767px){.overview-grid{grid-template-columns:repeat(3,1fr);gap:6px}}
 .stock-chart-wrap canvas{max-height:120px!important;display:block}
 .stock-news-item{display:flex;align-items:center;gap:6px;padding:3px 0;font-size:10px;border-bottom:1px solid rgba(0,0,0,0.04)}
 .stock-news-impact{width:6px;height:6px;border-radius:50%;flex-shrink:0}
@@ -492,135 +506,160 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
     </div>
     <div class="content-body">
 
-      <!-- HEALTH -->
+            <!-- HEALTH -->
       <div class="section active" id="sec-health" style="display:block">
         <div class="card glass" id="aiInsightCard" style="display:none;margin-bottom:14px"></div>
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>体重追踪</div>
-          <div class="weight-display"><span class="num" id="weightVal">--</span><span class="weight-unit">kg</span><span class="weight-change" id="weightChange"></span></div>
-          <div class="weight-target" id="weightTarget"></div>
-          <div style="display:flex;gap:8px;margin-top:12px">
-            <input type="number" id="weightInput" placeholder="今日体重" step="0.1" style="flex:1">
-            <button class="btn btn-primary btn-sm" onclick="addWeight()">记录</button>
-          </div>
-          <canvas id="weightChart" height="90" style="width:100%;margin-top:16px"></canvas>
-        </div>
 
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>今日饮食</div>
-          <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap" id="mealTypeChips"></div>
-          <div style="display:flex;gap:8px;margin-bottom:10px">
-            <input id="foodInput" placeholder="输入食物，如：2个馒头、1杯牛奶250ml" style="flex:1" onkeydown="if(event.key==='Enter')addFood()">
-            <button class="btn btn-primary btn-sm" onclick="addFood()"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>添加</button>
-          </div>
-          <div style="font-size:11px;color:var(--white-dim);font-weight:600;margin-bottom:6px;letter-spacing:0.04em">快捷添加</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px" id="quickFoods"></div>
-          <div id="mealList"></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:0.5px solid var(--glass-border)">
-            <div style="font-size:11px;color:var(--white-dim)">今日摄入</div>
-            <div style="font-size:20px;font-weight:700;font-variant-numeric:tabular-nums"><span id="dailyKcal" style="color:var(--purple);font-weight:700">0</span><span style="font-size:12px;color:var(--white-dim);margin-left:3px">kcal</span></div>
-          </div>
-          <div style="display:flex;gap:12px;margin-top:8px;font-size:11px;color:var(--white-dim)">
-            <span>碳水 <span id="dailyCarb" style="color:var(--amber);font-weight:600">0</span>g</span>
-            <span>蛋白 <span id="dailyProtein" style="color:var(--green);font-weight:600">0</span>g</span>
-            <span>脂肪 <span id="dailyFat" style="color:var(--pink);font-weight:600">0</span>g</span>
-          </div>
-        </div>
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>今日饮水</div>
-          <div style="display:flex;align-items:center;justify-content:center;gap:16px;padding:8px 0">
-            <button class="btn btn-ghost btn-sm" onclick="addWater(-250)" style="font-size:16px;padding:6px 12px">−</button>
-            <div style="text-align:center"><div style="font-size:28px;font-weight:700;font-variant-numeric:tabular-nums"><span id="waterVal" style="color:var(--cyan);font-weight:700">0</span></div><div style="font-size:11px;color:var(--white-dim);margin-top:2px">ml / 2500ml</div></div>
-            <button class="btn btn-ghost btn-sm" onclick="addWater(250)" style="font-size:16px;padding:6px 12px">+</button>
-          </div>
-          <div style="height:6px;border-radius:3px;background:rgba(0,0,0,0.08);margin-top:8px;overflow:hidden"><div id="waterBar" style="height:100%;border-radius:3px;background:var(--purple);transition:width .3s;width:0%"></div></div>
-          <div style="display:flex;gap:6px;margin-top:8px;justify-content:center">
-            <button class="chip" onclick="addWater(250)" style="font-size:10px;padding:3px 8px">+250</button>
-            <button class="chip" onclick="addWater(500)" style="font-size:10px;padding:3px 8px">+500</button>
-            <button class="chip" onclick="addWater(350)" style="font-size:10px;padding:3px 8px">+350</button>
-          </div>
-        </div>
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm0 18a8 8 0 118-8 8 8 0 01-8 8z"/><path d="M12 6v6l4 2"/></svg>饮食分析</div>
-          <div id="dietAnalysis" style="font-size:13px;color:var(--white-mid);line-height:1.7"></div>
-          <div style="display:flex;gap:8px;margin-top:12px">
-            <button class="btn btn-ghost btn-sm" style="flex:1" onclick="generateDietAnalysis()"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>生成分析</button>
-            <button class="btn btn-primary btn-sm" style="flex:1" onclick="exportDietToFeishu()"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>同步飞书</button>
-          </div>
-        </div>
-
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>健身打卡</div>
-          <div style="text-align:center;padding:10px 0">
-            <div style="font-size:11px;color:var(--white-dim);margin-bottom:10px">今天完成训练了吗？</div>
-            <button id="checkinBtn" class="btn btn-primary" style="font-size:16px;padding:14px 48px;border-radius:16px;letter-spacing:0.05em" onclick="doCheckin()">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><polyline points="20 6 9 17 4 12"/></svg>打卡
-            </button>
-            <div style="margin-top:14px;display:flex;justify-content:center;gap:24px;font-size:12px;color:var(--white-dim)">
-              <div>连续 <span id="streakCount" style="color:var(--green);font-weight:700;font-size:16px">0</span> 天</div>
-              <div>本月 <span id="monthCheckin" style="color:var(--purple);font-weight:700;font-size:16px">0</span> 天</div>
-              <div>累计 <span id="totalCheckin" style="color:var(--amber);font-weight:700;font-size:16px">0</span> 天</div>
+        <!-- Group 1: Today Overview -->
+        <div class="section-group">
+          <div class="section-group-label">今日概览</div>
+          <div class="overview-grid">
+            <div class="overview-card">
+              <div class="ov-icon" style="background:var(--purple-glow);color:var(--purple)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+              <div class="ov-label">体重</div>
+              <div class="ov-value" style="color:var(--purple)"><span id="weightVal">--</span><span style="font-size:12px;color:#536471;font-weight:400;margin-left:2px">kg</span></div>
+              <div class="ov-sub"><span id="weightChange"></span></div>
+            </div>
+            <div class="overview-card">
+              <div class="ov-icon" style="background:var(--amber-glow);color:var(--amber)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+              <div class="ov-label">今日摄入</div>
+              <div class="ov-value" style="color:var(--amber)"><span id="dailyKcal">0</span><span style="font-size:12px;color:#536471;font-weight:400;margin-left:2px">kcal</span></div>
+              <div class="ov-sub">碳水 <span class="ov-macro-val" style="color:var(--white-mid)">0</span>g · 蛋白 <span class="ov-macro-val" style="color:var(--white-mid)">0</span>g · 脂肪 <span class="ov-macro-val" style="color:var(--white-mid)">0</span>g</div>
+            </div>
+            <div class="overview-card">
+              <div class="ov-icon" style="background:var(--cyan-glow);color:var(--cyan)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg></div>
+              <div class="ov-label">饮水</div>
+              <div class="ov-value" style="color:var(--cyan)"><span id="waterVal">0</span><span style="font-size:12px;color:#536471;font-weight:400;margin-left:2px">ml</span></div>
+              <div class="ov-sub">目标 2500ml</div>
             </div>
           </div>
-          <div style="margin-top:12px">
-            <div style="font-size:11px;color:var(--white-dim);font-weight:600;margin-bottom:6px;letter-spacing:0.04em">本月</div>
-            <div class="cal-row" id="checkinCal"></div>
-          </div>
         </div>
 
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>每日习惯</div>
-          <div id="habitList" style="display:flex;flex-direction:column;gap:8px"></div>
-        </div>
-
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>活跃热力图<span class="count-badge" id="heatmapBadge"></span></div>
-          <div class="heatmap-wrap" id="heatmapWrap"></div>
-          <div class="heatmap-legend">
-            <span>少</span>
-            <div class="heatmap-legend-box" style="background:#ebedf0"></div>
-            <div class="heatmap-legend-box" style="background:rgba(124,58,237,0.3)"></div>
-            <div class="heatmap-legend-box" style="background:rgba(124,58,237,0.55)"></div>
-            <div class="heatmap-legend-box" style="background:rgba(124,58,237,0.8)"></div>
-            <div class="heatmap-legend-box" style="background:rgba(167,139,250,1)"></div>
-            <span>多</span>
-          </div>
-        </div>
-
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>专注计时</div>
-          <div style="text-align:center;padding:6px 0">
-            <div id="pomodoroDisplay" style="font-size:42px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--purple)">25:00</div>
-            <div id="pomodoroLabel" style="font-size:11px;color:var(--white-dim);margin-top:2px">专注模式</div>
-            <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
-              <button class="btn btn-primary btn-sm" id="pomStartBtn" onclick="startPomodoro()">开始</button>
-              <button class="btn btn-ghost btn-sm" onclick="resetPomodoro()">重置</button>
+        <!-- Group 2: Diet Tracking -->
+        <div class="section-group">
+          <div class="section-group-label">饮食追踪</div>
+          <div class="card glass">
+            <div class="card-glow"></div>
+            <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap" id="mealTypeChips"></div>
+            <div style="display:flex;gap:8px;margin-bottom:10px">
+              <input id="foodInput" placeholder="输入食物，如：2个馒头、1杯牛奶250ml" style="flex:1" onkeydown="if(event.key==='Enter')addFood()">
+              <button class="btn btn-primary btn-sm" onclick="addFood()"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>添加</button>
             </div>
-            <div style="display:flex;gap:6px;justify-content:center;margin-top:10px">
-              <button class="chip" onclick="setPomTime(25)" id="pom25" style="font-size:10px;padding:3px 8px;border:1px solid var(--purple)">25分</button>
-              <button class="chip" onclick="setPomTime(15)" id="pom15" style="font-size:10px;padding:3px 8px">15分</button>
-              <button class="chip" onclick="setPomTime(5)" id="pom5" style="font-size:10px;padding:3px 8px">5分</button>
+            <div style="font-size:11px;color:var(--white-dim);font-weight:600;margin-bottom:6px;letter-spacing:0.04em">快捷添加</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px" id="quickFoods"></div>
+            <div id="mealList"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:0.5px solid var(--glass-border)">
+              <div style="font-size:11px;color:var(--white-dim)">今日摄入</div>
+              <div style="font-size:20px;font-weight:700;font-variant-numeric:tabular-nums"><span id="totalKcalDisplay" style="color:var(--purple);font-weight:700">0</span><span style="font-size:12px;color:var(--white-dim);margin-left:3px">kcal</span></div>
             </div>
-            <div style="font-size:11px;color:var(--white-dim);margin-top:8px">今日专注 <span id="pomCount" style="color:var(--purple);font-weight:700">0</span> 次</div>
+            <div style="display:flex;gap:12px;margin-top:8px;font-size:11px;color:var(--white-dim)">
+              <span>碳水 <span id="dailyCarb" style="color:var(--amber);font-weight:600">0</span>g</span>
+              <span>蛋白 <span id="dailyProtein" style="color:var(--green);font-weight:600">0</span>g</span>
+              <span>脂肪 <span id="dailyFat" style="color:var(--pink);font-weight:600">0</span>g</span>
+            </div>
+          </div>
+          <div class="card glass" style="margin-top:10px">
+            <div class="card-glow"></div>
+            <div class="card-title"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm0 18a8 8 0 118-8 8 8 0 01-8 8z"/><path d="M12 6v6l4 2"/></svg>饮食分析</div>
+            <div id="dietAnalysis" style="font-size:13px;color:var(--white-mid);line-height:1.7"></div>
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <button class="btn btn-ghost btn-sm" style="flex:1" onclick="generateDietAnalysis()"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>生成分析</button>
+              <button class="btn btn-primary btn-sm" style="flex:1" onclick="exportDietToFeishu()"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>同步飞书</button>
+            </div>
           </div>
         </div>
 
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V7a2 2 0 012-2h10a2 2 0 012 2v14"/><path d="M3 21h18"/><path d="M9 21v-4h6v4"/></svg>倒计时</div>
-          <div id="countdownList" style="display:flex;flex-direction:column;gap:10px"></div>
+        <!-- Group 3: Habits & Check-in -->
+        <div class="section-group">
+          <div class="section-group-label">健康习惯</div>
+          <div class="card glass">
+            <div class="card-glow"></div>
+            <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>健身打卡</div>
+            <div style="text-align:center;padding:10px 0">
+              <div style="font-size:11px;color:var(--white-dim);margin-bottom:10px">今天完成训练了吗？</div>
+              <button id="checkinBtn" class="btn btn-primary" style="font-size:16px;padding:14px 48px;border-radius:16px;letter-spacing:0.05em" onclick="doCheckin()">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><polyline points="20 6 9 17 4 12"/></svg>打卡
+              </button>
+              <div style="margin-top:14px;display:flex;justify-content:center;gap:24px;font-size:12px;color:var(--white-dim)">
+                <div>连续 <span id="streakCount" style="color:var(--green);font-weight:700;font-size:16px">0</span> 天</div>
+                <div>本月 <span id="monthCheckin" style="color:var(--purple);font-weight:700;font-size:16px">0</span> 天</div>
+                <div>累计 <span id="totalCheckin" style="color:var(--amber);font-weight:700;font-size:16px">0</span> 天</div>
+              </div>
+            </div>
+            <div style="margin-top:12px">
+              <div style="font-size:11px;color:var(--white-dim);font-weight:600;margin-bottom:6px;letter-spacing:0.04em">本月</div>
+              <div class="cal-row" id="checkinCal"></div>
+            </div>
+          </div>
+          <div class="card glass" style="margin-top:10px">
+            <div class="card-glow"></div>
+            <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>每日习惯</div>
+            <div id="habitList" style="display:flex;flex-direction:column;gap:8px"></div>
+          </div>
         </div>
+
+        <!-- Group 4: Weight Track -->
+        <div class="section-group">
+          <div class="section-group-label">体重趋势</div>
+          <div class="card glass">
+            <div class="card-glow"></div>
+            <div class="card-title"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>体重追踪</div>
+            <div class="weight-display"><span class="num" id="weightValDetail">--</span><span class="weight-unit">kg</span><span class="weight-change" id="weightChangeDetail"></span></div>
+            <div class="weight-target" id="weightTarget"></div>
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <input type="number" id="weightInput" placeholder="今日体重" step="0.1" style="flex:1">
+              <button class="btn btn-primary btn-sm" onclick="addWeight()">记录</button>
+            </div>
+            <canvas id="weightChart" height="90" style="width:100%;margin-top:16px"></canvas>
+          </div>
+        </div>
+
+        <!-- Group 5: Tools -->
+        <div class="section-group">
+          <div class="section-group-label">数据与工具</div>
+          <div class="card glass">
+            <div class="card-glow"></div>
+            <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>活跃热力图<span class="count-badge" id="heatmapBadge"></span></div>
+            <div class="heatmap-wrap" id="heatmapWrap"></div>
+            <div class="heatmap-legend">
+              <span>少</span>
+              <div class="heatmap-legend-box" style="background:#ebedf0"></div>
+              <div class="heatmap-legend-box" style="background:rgba(124,58,237,0.3)"></div>
+              <div class="heatmap-legend-box" style="background:rgba(124,58,237,0.55)"></div>
+              <div class="heatmap-legend-box" style="background:rgba(124,58,237,0.8)"></div>
+              <div class="heatmap-legend-box" style="background:rgba(167,139,250,1)"></div>
+              <span>多</span>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+            <div class="card glass" style="margin-bottom:0">
+              <div class="card-glow"></div>
+              <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>专注计时</div>
+              <div style="text-align:center;padding:6px 0">
+                <div id="pomodoroDisplay" style="font-size:32px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--purple)">25:00</div>
+                <div id="pomodoroLabel" style="font-size:11px;color:var(--white-dim);margin-top:2px">专注模式</div>
+                <div style="display:flex;gap:6px;justify-content:center;margin-top:10px">
+                  <button class="btn btn-primary btn-sm" id="pomStartBtn" onclick="startPomodoro()" style="padding:6px 14px">开始</button>
+                  <button class="btn btn-ghost btn-sm" onclick="resetPomodoro()" style="padding:6px 14px">重置</button>
+                </div>
+                <div style="display:flex;gap:4px;justify-content:center;margin-top:8px;flex-wrap:wrap">
+                  <button class="chip" onclick="setPomTime(25)" id="pom25" style="font-size:9px;padding:2px 6px;border:1px solid var(--purple)">25分</button>
+                  <button class="chip" onclick="setPomTime(15)" id="pom15" style="font-size:9px;padding:2px 6px">15分</button>
+                  <button class="chip" onclick="setPomTime(5)" id="pom5" style="font-size:9px;padding:2px 6px">5分</button>
+                </div>
+                <div style="font-size:10px;color:var(--white-dim);margin-top:6px">今日专注 <span id="pomCount" style="color:var(--purple);font-weight:700">0</span> 次</div>
+              </div>
+            </div>
+            <div class="card glass" style="margin-bottom:0">
+              <div class="card-glow"></div>
+              <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V7a2 2 0 012-2h10a2 2 0 012 2v14"/><path d="M3 21h18"/><path d="M9 21v-4h6v4"/></svg>倒计时</div>
+              <div id="countdownList" style="display:flex;flex-direction:column;gap:8px"></div>
+            </div>
+          </div>
+        </div>
+
       </div>
-
-      <!-- DIARY (每日感想) -->
+<!-- DIARY (每日感想) -->
       <div class="section" id="sec-diary" style="display:none">
         <div class="card glass-strong diary-card">
           <div class="card-glow"></div>
@@ -1004,13 +1043,13 @@ function addWeight(){
 }
 function renderWeight(){
   const ws=data.weights.slice(-30);
-  const el=document.getElementById('weightVal'),changeEl=document.getElementById('weightChange'),targetEl=document.getElementById('weightTarget');
+  const el=document.getElementById('weightVal'),changeEl=document.getElementById('weightChange'),targetEl=document.getElementById('weightTarget'),elDetail=document.getElementById('weightValDetail'),changeElDetail=document.getElementById('weightChangeDetail');
   if(!ws.length){el.textContent='--';return;}
   const dedup={};ws.forEach(w=>dedup[w.date]=w.val);
   const days=Object.keys(dedup).sort(),vals=days.map(d=>dedup[d]);
   const last=ws[ws.length-1];
-  el.textContent=last.val.toFixed(1);
-  if(ws.length>=2){const prev=ws[ws.length-2].val,diff=last.val-prev;changeEl.textContent=(diff>0?'+':'')+diff.toFixed(1)+'kg';changeEl.className='weight-change '+(diff<0?'down':'up');}
+  el.textContent=last.val.toFixed(1);if(elDetail)elDetail.textContent=last.val.toFixed(1);
+  if(ws.length>=2){const prev=ws[ws.length-2].val,diff=last.val-prev;changeEl.textContent=(diff>0?'+':'')+diff.toFixed(1)+'kg';changeEl.className='weight-change '+(diff<0?'down':'up');if(changeElDetail){changeElDetail.textContent=changeEl.textContent;changeElDetail.className=changeEl.className;}}
   const target=65,diff=last.val-target;
   targetEl.textContent=diff>0?`距目标 ${target}kg 还差 ${diff.toFixed(1)}kg`:`已达标（目标 ${target}kg）`;
   const cv=document.getElementById('weightChart'),ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1,W=cv.offsetWidth,H=90;
@@ -1115,11 +1154,11 @@ function heatmapHide(){_hmTip.style.display='none';}
 
 /* ===== HABITS / 每日习惯 ===== */
 const defaultHabits=[
-  {id:'foot_grip',name:'足底抓地激活',icon:'🦶',tip:'O腿矫正根基动作'},
-  {id:'no_cross',name:'不跷二郎腿',icon:'🪑',tip:'防止骨盆倾斜加重O腿'},
-  {id:'gait',name:'走路脚尖朝前',icon:'🚶',tip:'步态重编程比训练影响更大'},
-  {id:'reading',name:'今日阅读',icon:'📖',tip:'《周期》→《曾国藩传》→《投资最重要的事》'},
-  {id:'corrective',name:'纠正训练完成',icon:'🦵',tip:'动作质量>数量'}
+  {id:'foot_grip',name:'足底抓地激活',icon:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>',tip:'O腿矫正根基动作'},
+  {id:'no_cross',name:'不跷二郎腿',icon:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2v10M4 22h16M8 14h8"/></svg>',tip:'防止骨盆倾斜加重O腿'},
+  {id:'gait',name:'走路脚尖朝前',icon:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="13" cy="4" r="1"/><path d="M8 21l2-6 3-2 2-5"/><path d="M10 13l-3 4-1 4"/><path d="M15 8l-2 5 2 3 1 5"/></svg>',tip:'步态重编程比训练影响更大'},
+  {id:'reading',name:'今日阅读',icon:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14z"/><path d="M4 19.5A2.5 2.5 0 006.5 22H20"/></svg>',tip:'《周期》→《曾国藩传》→《投资最重要的事》'},
+  {id:'corrective',name:'纠正训练完成',icon:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M16 2L9 12l-3 5 4 3 5-7 2-4 2-7z"/></svg>',tip:'动作质量>数量'}
 ];
 function toggleHabit(hid){
   if(!data.habits)data.habits={};
@@ -1352,7 +1391,7 @@ function renderMeals(){
   const totalCarb=todayMeals.reduce((s,m)=>s+m.carb,0);
   const totalProtein=todayMeals.reduce((s,m)=>s+m.protein,0);
   const totalFat=todayMeals.reduce((s,m)=>s+m.fat,0);
-  document.getElementById('dailyKcal').textContent=totalKcal;
+  document.getElementById('dailyKcal').textContent=totalKcal;var tkd=document.getElementById('totalKcalDisplay');if(tkd)tkd.textContent=totalKcal;
   document.getElementById('dailyCarb').textContent=Math.round(totalCarb);
   document.getElementById('dailyProtein').textContent=Math.round(totalProtein);
   document.getElementById('dailyFat').textContent=Math.round(totalFat);
