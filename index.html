@@ -605,6 +605,24 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
               <div class="ov-sub">目标 2500ml</div>
             </div>
           </div>
+          <div class="card glass" style="margin-top:10px">
+            <div class="card-glow"></div>
+            <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>饮水追踪</div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+              <div style="font-size:24px;font-weight:700;color:var(--cyan);font-variant-numeric:tabular-nums"><span id="waterValDetail">0</span><span style="font-size:12px;color:#536471;font-weight:400;margin-left:2px">ml</span></div>
+              <div style="font-size:11px;color:var(--white-dim)" id="waterPctText">0% / 2500ml</div>
+            </div>
+            <div style="height:8px;background:rgba(0,0,0,0.05);border-radius:4px;overflow:hidden;margin-bottom:12px">
+              <div id="waterBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),#22d3ee);transition:width .3s var(--ease)"></div>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <button class="btn btn-ghost btn-sm" onclick="addWater(200)" style="flex:1;min-width:60px">+200</button>
+              <button class="btn btn-ghost btn-sm" onclick="addWater(250)" style="flex:1;min-width:60px">+250</button>
+              <button class="btn btn-ghost btn-sm" onclick="addWater(500)" style="flex:1;min-width:60px">+500</button>
+              <button class="btn btn-ghost btn-sm" onclick="addWater(-200)" style="flex:1;min-width:60px;color:var(--white-dim)">−200</button>
+              <button class="btn btn-ghost btn-sm" onclick="resetWater()" style="color:var(--red)">重置</button>
+            </div>
+          </div>
         </div>
 
         <!-- Group 2: Diet Tracking -->
@@ -814,6 +832,21 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
           <div id="workoutPlanSelector" style="padding:8px 0"></div>
         </div>
         <div id="workoutExercises"></div>
+        <div class="card glass" style="margin-top:10px">
+          <div class="card-glow"></div>
+          <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>今日训练记录 <span class="count-badge" id="workoutLogBadge"></span></div>
+          <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+            <input id="workoutLogPart" placeholder="部位，如：胸/背/腿" style="flex:1;min-width:90px">
+            <input id="workoutLogName" placeholder="动作名，如：卧推" style="flex:1.5;min-width:120px">
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:8px">
+            <input id="workoutLogSets" type="number" min="1" placeholder="组数" style="flex:1">
+            <input id="workoutLogReps" type="number" min="1" placeholder="次数" style="flex:1">
+            <input id="workoutLogWeight" type="number" step="0.5" placeholder="重量kg(可空)" style="flex:1">
+          </div>
+          <button class="btn btn-primary btn-sm" style="width:100%" onclick="addWorkoutLog()"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>添加一组</button>
+          <div id="workoutLogList" style="margin-top:10px"></div>
+        </div>
       </div>
 
       <div class="section" id="sec-review" style="display:none">
@@ -893,6 +926,11 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
 <script>
 const STORE_KEY='shiyi_desk_v2';
 const DATA_VERSION=8;
+/* 本地日期字符串，避免 toISOString 的 UTC 时区偏移问题 */
+function localDate(d){
+  d=d||new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
 let data=loadData();
 let todoFilter='全部',newsFilter='全部',editingTodoId=null,selectedCalDate=null,selectedMood=null,selectedScore=0;
 
@@ -989,7 +1027,7 @@ function switchTab(tab){
   if(content)content.scrollTop=0;
 }
 function defaultData(){
-  const today=new Date().toISOString().slice(0,10);
+  const today=localDate();
   return{
     __version:DATA_VERSION,
     weights:[{date:today,val:68.0}],
@@ -1052,7 +1090,7 @@ function renderCheckin(){
   if(sorted.length){
     const d=new Date();streak=0;
     for(let i=0;i<365;i++){
-      const ds=d.toISOString().slice(0,10);
+      const ds=localDate(d);
       if(data.checkins.includes(ds)){streak++;d.setDate(d.getDate()-1);}
       else{if(i===0){d.setDate(d.getDate()-1);continue;}break;}
     }
@@ -1075,7 +1113,7 @@ function renderCheckin(){
 }
 
 const today=new Date();
-const TODAY_STR=new Date().toISOString().slice(0,10);
+const TODAY_STR=localDate();
 const dateStr=`${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}.${String(today.getDate()).padStart(2,'0')} ${['SUN','MON','TUE','WED','THU','FRI','SAT'][today.getDay()]}`;
 document.getElementById('todayDate').textContent=dateStr;
 const md=document.getElementById('mobileDate');if(md)md.textContent=today.getMonth()+1+'/'+today.getDate();
@@ -1113,7 +1151,7 @@ document.querySelectorAll('.nav-item').forEach(item=>{
 function addWeight(){
   const v=+document.getElementById('weightInput').value;
   if(!v||v<30||v>200){showToast('请输入有效体重（30-200kg）');return;}
-  data.weights.push({date:new Date().toISOString().slice(0,10),val:v});
+  data.weights.push({date:localDate(),val:v});
   saveData();renderWeight();document.getElementById('weightInput').value='';showToast('体重已记录');
 }
 function renderWeight(){
@@ -1203,7 +1241,7 @@ function renderHeatmap(){
   var totalActivity=0;
   weeks.forEach(function(w,wi){
     w.forEach(function(item){
-      var ds=item.date.toISOString().slice(0,10);
+      var ds=localDate(item.date);
       var n=countFor(ds),color=getColor(n);
       totalActivity+=n;
       var x=PAD_L+wi*COL_W,y=PAD_T+item.col*(CELL+GAP);
@@ -1480,13 +1518,25 @@ function addWater(ml){
   saveData();renderWater();
   if(ml>0)showToast(`+${ml}ml`);
 }
+function resetWater(){
+  if(!data.water)data.water={};
+  if(!confirm('重置今日饮水记录？'))return;
+  data.water[TODAY_STR]=0;
+  saveData();renderWater();showToast('已重置');
+}
 function renderWater(){
   if(!data.water)data.water={};
   const val=data.water[TODAY_STR]||0;
   const target=2500;
-  document.getElementById('waterVal').textContent=val;
   const pct=Math.min(100,Math.round(val/target*100));
-  document.getElementById('waterBar').style.width=pct+'%';
+  const valEl=document.getElementById('waterVal');
+  const detailEl=document.getElementById('waterValDetail');
+  const barEl=document.getElementById('waterBar');
+  const pctEl=document.getElementById('waterPctText');
+  if(valEl)valEl.textContent=val;
+  if(detailEl)detailEl.textContent=val;
+  if(barEl)barEl.style.width=pct+'%';
+  if(pctEl)pctEl.textContent=pct+'% / '+target+'ml'+(val>=target?' · 已达标':'');
 }
 function generateDietAnalysis(){
   if(!data.meals)data.meals=[];
@@ -1559,7 +1609,7 @@ function renderDiaryStreak(){
   let streak=0;
   const dates=new Set(data.diaries.map(d=>d.date));
   let d=new Date();
-  while(dates.has(d.toISOString().slice(0,10))){streak++;d.setDate(d.getDate()-1);}
+  while(dates.has(localDate(d))){streak++;d.setDate(d.getDate()-1);}
   const el=document.getElementById('diaryStreak');
   el.innerHTML=streak>0?`<svg viewBox="0 0 24 24"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg>${streak}天连续`:'';
 }
@@ -1632,7 +1682,7 @@ function renderJournal(){
 function saveJournal(){
   const text=document.getElementById('journalText').value.trim();
   if(!text){showToast('请输入笔记内容');return;}
-  data.journals.push({date:new Date().toISOString().slice(0,10),text});
+  data.journals.push({date:localDate(),text});
   saveData();renderJournal();document.getElementById('journalText').value='';updateCharCount();showToast('笔记已保存');
 }
 function delJournal(idx){if(!confirm('删除这条笔记？'))return;data.journals.splice(idx,1);saveData();renderJournal();showToast('已删除');}
@@ -1650,10 +1700,6 @@ function renderNewsChips(){document.getElementById('newsChips').innerHTML=newsCa
 function setNewsFilter(c){newsFilter=c;renderNewsChips();renderRemoteNews();renderNews();}
 /* ===== REMOTE NEWS / 远程新闻自动加载 ===== */
 let remoteNewsData=null;
-function toggleManualNews(){
-  const f=document.getElementById('manualNewsForm');
-  f.style.display=f.style.display==='none'?'block':'none';
-}
 function toggleNewsContent(id){
   const el=document.getElementById(id);
   if(!el)return;
@@ -1730,14 +1776,6 @@ function renderNews(){
     }).join('');
   });
   el.innerHTML=html;
-}
-function addNews(){
-  const headline=document.getElementById('newsHeadline').value.trim();
-  if(!headline){showToast('请输入新闻标题');return;}
-  const url=document.getElementById('newsUrl').value.trim();
-  const content=document.getElementById('newsContent').value.trim();
-  data.news.push({date:new Date().toISOString().slice(0,10),headline,content:content||null,cat:document.getElementById('newsCat').value,impact:document.getElementById('newsImpact').value,relevance:document.getElementById('newsRelevance').value,url:url||null});
-  saveData();renderNews();document.getElementById('newsHeadline').value='';document.getElementById('newsContent').value='';document.getElementById('newsUrl').value='';showToast('已添加');
 }
 function delNews(idx){if(!confirm('删除这条新闻？'))return;data.news.splice(idx,1);saveData();renderNews();showToast('已删除');}
 
@@ -2076,6 +2114,61 @@ function selectWorkoutDay(day){
   renderWorkoutPlan();
 }
 
+/* ===== 训练记录（用户手动添加） ===== */
+function addWorkoutLog(){
+  const part=document.getElementById('workoutLogPart').value.trim();
+  const name=document.getElementById('workoutLogName').value.trim();
+  const sets=parseInt(document.getElementById('workoutLogSets').value,10);
+  const reps=parseInt(document.getElementById('workoutLogReps').value,10);
+  const weightRaw=document.getElementById('workoutLogWeight').value.trim();
+  if(!part||!name){showToast('请填写部位和动作名');return;}
+  if(!sets||!reps){showToast('请填写有效的组数和次数');return;}
+  if(!data.workouts)data.workouts=[];
+  const today=TODAY_STR;
+  let todayLog=data.workouts.find(w=>w.date===today);
+  if(!todayLog){todayLog={date:today,part,sets:[]};data.workouts.push(todayLog);}
+  const set={name,sets,reps};
+  if(weightRaw&&+weightRaw>0)set.weight=+weightRaw;
+  todayLog.sets.push(set);
+  // 若今天还没打卡，自动补打卡
+  if(!data.checkins)data.checkins=[];
+  if(!data.checkins.includes(today)){data.checkins.push(today);try{renderCheckin();renderHeatmap();}catch(e){}}
+  saveData();renderWorkoutLog();
+  document.getElementById('workoutLogName').value='';
+  document.getElementById('workoutLogSets').value='';
+  document.getElementById('workoutLogReps').value='';
+  document.getElementById('workoutLogWeight').value='';
+  document.getElementById('workoutLogName').focus();
+  showToast('已记录 '+name);
+}
+function renderWorkoutLog(){
+  if(!data.workouts)data.workouts=[];
+  const el=document.getElementById('workoutLogList');
+  const badge=document.getElementById('workoutLogBadge');
+  if(!el)return;
+  const today=TODAY_STR;
+  const todayLog=data.workouts.find(w=>w.date===today);
+  const sets=todayLog&&todayLog.sets?todayLog.sets:[];
+  if(badge)badge.textContent=sets.length?sets.length+'组':'';
+  if(!sets.length){el.innerHTML='<div style="text-align:center;color:var(--white-dim);padding:14px;font-size:13px">今天还没有训练记录</div>';return;}
+  el.innerHTML=sets.map((s,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;margin-bottom:4px;border-radius:8px;background:#f9f9f9;border:1px solid #f0f0f0">
+    <div>
+      <div style="font-size:13px;font-weight:600;color:var(--white)">${s.name}</div>
+      <div style="font-size:11px;color:var(--white-dim);margin-top:2px">${s.sets}×${s.reps}${s.weight?' @ '+s.weight+'kg':''}</div>
+    </div>
+    <button class="btn-icon" style="padding:2px;width:24px;height:24px" onclick="delWorkoutLog(${i})"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>`).join('');
+}
+function delWorkoutLog(idx){
+  if(!confirm('删除这一组？'))return;
+  const today=TODAY_STR;
+  const todayLog=data.workouts.find(w=>w.date===today);
+  if(!todayLog||!todayLog.sets)return;
+  todayLog.sets.splice(idx,1);
+  if(todayLog.sets.length===0){data.workouts=data.workouts.filter(w=>w.date!==today);}
+  saveData();renderWorkoutLog();showToast('已删除');
+}
+
 function renderAll(){
   try{renderCheckin();}catch(e){console.error('[renderAll] renderCheckin:',e)}
   try{renderHabits();}catch(e){console.error('[renderAll] renderHabits:',e)}
@@ -2093,6 +2186,7 @@ function renderAll(){
   try{renderMoodGrid();renderScoreRow();renderReviewHistory();loadTodayReview();}catch(e){console.error('[renderAll] review:',e)}
   try{renderAIInsights();}catch(e){console.error('[renderAll] renderAIInsights:',e)}
   try{fetchWorkoutData();}catch(e){console.error('[renderAll] workout:',e)}
+  try{renderWorkoutLog();}catch(e){console.error('[renderAll] renderWorkoutLog:',e)}
 }
 renderAll();
 
@@ -2245,22 +2339,24 @@ document.addEventListener('DOMContentLoaded',function(){
     var onclick=item.getAttribute('onclick')||'';
     if(onclick.includes("'health'")){item.classList.add('current');}
   });
+  // 初始化 AI 助手状态（元素此时已就绪）
+  if(typeof initAiStatus==='function')initAiStatus();
   console.log('v8.0 initialized');
 });</script>
 
 <script>
 
 /* ===== AI Chat & Writing Assistant ===== */
-(function(){
+var aiMessages = [];
+var aiSending = false;
+
+function initAiStatus(){
   var aiCfg = JSON.parse(localStorage.getItem('shiyi_ai_config') || '{}');
   var statusEl = document.getElementById('aiStatusText');
   if(statusEl){
     statusEl.textContent = (aiCfg.botId && aiCfg.token) ? '已配置' : '未配置';
   }
-})();
-
-var aiMessages = [];
-var aiSending = false;
+}
 
 function showAiConfig(){
   var cfg = JSON.parse(localStorage.getItem('shiyi_ai_config') || '{}');
@@ -2281,8 +2377,7 @@ function saveAiConfig(){
     return;
   }
   localStorage.setItem('shiyi_ai_config', JSON.stringify({botId: botId, token: token}));
-  var st = document.getElementById('aiStatusText');
-  if(st) st.textContent = '已配置';
+  initAiStatus();
   closeAiConfig();
   showToast('配置已保存');
 }
@@ -2414,9 +2509,7 @@ function aiPolish(id){
   
   // Send polish request
   var input = document.getElementById('aiChatInput');
-  var prompt = '润色以下内容，保持原意但让表达更流畅、更清晰：
-
-' + text;
+  var prompt = '润色以下内容，保持原意但让表达更流畅、更清晰：\n\n' + text;
   input.value = prompt;
   sendAiMessage();
 }
