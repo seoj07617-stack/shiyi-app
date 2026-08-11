@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>拾壹工作台</title>
+<title>拾壹 · 个人工作台</title>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -13,11 +13,11 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#f4f4f8;--bg-elev:#ffffff;
+  --bg:#f7f7f8;--bg-elev:#ffffff;
   --sidebar-bg:rgba(255,255,255,0.97);
   --glass:rgba(255,255,255,0.85);--glass-border:rgba(0,0,0,0.06);--glass-hover:rgba(0,0,0,0.04);--glass-strong:rgba(255,255,255,0.95);
-  --purple:#7c3aed;--purple-bright:#a78bfa;--purple-mid:#7c3aed;--purple-deep:#5b21b6;
-  --purple-glow:rgba(124,58,237,0.08);--purple-glow-strong:rgba(124,58,237,0.15);
+  --purple:#5b5bd6;--purple-bright:#8b8be8;--purple-mid:#5b5bd6;--purple-deep:#4545ad;
+  --purple-glow:rgba(91,91,214,0.08);--purple-glow-strong:rgba(91,91,214,0.15);
   --indigo-glow:rgba(99,102,241,0.05);
   --green:#10b981;--green-glow:rgba(16,185,129,0.08);
   --red:#ef4444;--red-glow:rgba(239,68,68,0.08);
@@ -70,6 +70,23 @@ html,body{height:100%;touch-action:manipulation;font-family:-apple-system,BlinkM
 .content-header .page-title svg{width:22px;height:22px;stroke:var(--purple);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .content-header .page-subtitle{font-size:12px;color:var(--white-dim);font-weight:400;margin-left:4px}
 .content-body{padding:0 32px 48px;max-width:720px}
+
+/* Refined visual system: fewer decorative effects, clearer grouping. */
+.section-group{margin:0 0 24px}
+.section-group-label{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--white-dim);margin:0 2px 9px;text-transform:uppercase}
+.card{margin-bottom:8px}
+.card-glow{display:none}
+.content-header{border-bottom:1px solid rgba(15,20,25,.06)}
+.content-header .page-title{font-weight:650}
+.sidebar-logo h1,.content-header .page-title{color:#17171c}
+.nav-section-label{margin-top:14px}
+.nav-item{border-radius:10px}
+.content-body{max-width:1080px}
+.dashboard-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:12px}
+.health-diet{display:none}.health-diet~*{position:relative}
+#sec-health .overview-card:nth-child(2),#sec-health .overview-card:nth-child(3){display:none}
+.focus-list{display:grid;gap:8px}.focus-item{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--glass-border);border-radius:10px;background:#fff}.focus-num{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--purple-glow);color:var(--purple);font-size:11px;font-weight:700}.focus-text{flex:1;font-size:13px}.insight-stat{padding:16px;border-radius:12px;background:#fbfbfc;border:1px solid var(--glass-border)}.insight-stat b{display:block;font-size:24px;letter-spacing:-.04em;margin-top:5px}.plan-field{margin-bottom:14px}.plan-field label{display:block;font-size:11px;font-weight:700;color:var(--white-dim);margin-bottom:7px;letter-spacing:.04em}
+@media(max-width:767px){.dashboard-grid{grid-template-columns:1fr}.content-body{padding:0 16px 32px}.overview-grid{grid-template-columns:repeat(2,1fr)}}
 
 
 .section{display:none;opacity:0;transition:opacity .2s ease}
@@ -475,17 +492,20 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
     </a>
 
 
-    <span class="mobile-header-title">拾壹工作台</span>
+    <span class="mobile-header-title">拾壹 · 个人工作台</span>
     <span class="mobile-header-date" id="mobileDate"></span>
     <div class="mobile-menu" id="mobileMenu">
-      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('health');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">健康</a>
+      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('today');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none">今日焦点</a>
+      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('week');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none">周复盘</a>
+<a href="javascript:void(0)" class="menu-item" onclick="switchTab('health');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">健康</a>
+<a href="javascript:void(0)" class="menu-item" onclick="switchTab('tools');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">工具箱</a>
 <a href="javascript:void(0)" class="menu-item" onclick="switchTab('workout');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">训练</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('diary');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">每日感想</a>
+<a href="javascript:void(0)" class="menu-item" onclick="switchTab('diary');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">日记</a>
 <a href="javascript:void(0)" class="menu-item" onclick="switchTab('todo');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">待办</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('progress');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">共同进步</a>
 <a href="javascript:void(0)" class="menu-item" onclick="switchTab('journal');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">阅读</a>
 <a href="javascript:void(0)" class="menu-item" onclick="switchTab('news');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">新闻</a>
 <a href="javascript:void(0)" class="menu-item" onclick="switchTab('review');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">复盘</a>
+<a href="javascript:void(0)" class="menu-item" onclick="switchTab('investment');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">投资计划</a>
     </div>
   </div>
   
@@ -495,14 +515,27 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
         <svg viewBox="0 0 40 40" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c4b5fd"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><rect x="7" y="8" width="5.5" height="20" rx="1.8" fill="url(#lg1)" opacity="0.95"/><rect x="16" y="4" width="5.5" height="28" rx="1.8" fill="url(#lg1)"/><rect x="25" y="10" width="5.5" height="18" rx="1.8" fill="url(#lg1)" opacity="0.7"/><circle cx="18.75" cy="3" r="1.2" fill="#c4b5fd" opacity="0.5"/><circle cx="18.75" cy="33" r="1" fill="#7c3aed" opacity="0.4"/></svg>
       </div>
       <div class="logo-text">
-        <h1>拾壹工作台</h1>
+        <h1>拾壹 · 个人工作台</h1>
         <div class="date" id="todayDate"></div>
       </div>
     </div>
+    <div class="nav-section-label">现在</div>
+    <div class="nav-item active" data-tab="today">
+      <svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+      <span>今日焦点</span>
+    </div>
+    <div class="nav-item" data-tab="week">
+      <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 2 4-6"/></svg>
+      <span>周复盘</span>
+    </div>
     <div class="nav-section-label">生活</div>
-    <div class="nav-item active" data-tab="health">
+    <div class="nav-item" data-tab="health">
       <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
       <span>健康</span>
+    </div>
+    <div class="nav-item" data-tab="tools">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>工具箱</span>
     </div>
     <div class="nav-item" data-tab="workout">
       <svg viewBox="0 0 24 24"><path d="M6.5 6.5h11v11h-11z" fill="none"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/><circle cx="12" cy="12" r="4" fill="none"/></svg>
@@ -510,19 +543,15 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
     </div>
     <div class="nav-item" data-tab="diary">
       <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      <span>每日感想</span>
+      <span>日记</span>
     </div>
-    <div class="nav-section-label">效率</div>
+    <div class="nav-section-label">执行</div>
     <div class="nav-item" data-tab="todo">
       <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
       <span>待办</span>
       <span class="nav-badge" id="navTodoBadge" style="display:none"></span>
     </div>
-    <div class="nav-item" data-tab="progress">
-      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-      <span>共同进步</span>
-    </div>
-    <div class="nav-section-label">学习</div>
+    <div class="nav-section-label">沉淀</div>
     <div class="nav-item" data-tab="journal">
       <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14zM4 19.5A2.5 2.5 0 006.5 22H20"/></svg>
       <span>阅读</span>
@@ -531,7 +560,11 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
       <svg viewBox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2zM7 9h7M7 13h7M7 17h4"/></svg>
       <span>新闻</span>
     </div>
-    <div class="nav-section-label">交易</div>
+    <div class="nav-section-label">投资</div>
+    <div class="nav-item" data-tab="investment">
+      <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 2 4-6"/></svg>
+      <span>投资计划</span>
+    </div>
     <div class="nav-item" data-tab="review">
       <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/><path d="M9 12h6M9 16h4"/></svg>
       <span>每日复盘</span>
@@ -572,14 +605,27 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
     <div class="content-header">
       <div class="page-title" id="pageTitle">
         <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-        <span id="pageTitleText">健康</span>
-        <span class="page-subtitle" id="pageSubtitle">体重 · 训练 · 睡眠 · 饮水</span>
+        <span id="pageTitleText">今日焦点</span>
+        <span class="page-subtitle" id="pageSubtitle">重要的事，先完成</span>
       </div>
     </div>
     <div class="content-body">
 
+      <div class="section active" id="sec-today" style="display:block">
+        <div class="dashboard-grid">
+          <div class="card glass-strong"><div class="card-title">今天最重要的三件事 <span class="count-badge" id="todayFocusCount"></span></div><div id="todayFocusList" class="focus-list"></div><button class="btn btn-primary btn-sm" style="margin-top:12px;width:100%" onclick="showTodoModal()">添加今日事项</button></div>
+          <div class="card glass"><div class="card-title">今日节奏</div><div class="insight-stat"><span style="font-size:11px;color:var(--white-dim)">待完成</span><b id="todayTodoCount">0</b><span style="font-size:11px;color:var(--white-dim)">项任务等待推进</span></div><div class="insight-stat" style="margin-top:8px"><span style="font-size:11px;color:var(--white-dim)">训练状态</span><b id="todayWorkoutState">未打卡</b><span style="font-size:11px;color:var(--white-dim)">完成训练后在健康页打卡</span></div></div>
+        </div>
+        <div class="card glass" style="margin-top:12px"><div class="card-title">一句话计划</div><input id="todayIntention" placeholder="今天结束前，我希望完成……" onkeydown="if(event.key==='Enter')saveTodayIntention()"><button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="saveTodayIntention()">保存</button></div>
+      </div>
+
+      <div class="section" id="sec-week" style="display:none">
+        <div class="dashboard-grid"><div class="card glass-strong"><div class="card-title">本周进度</div><div id="weekMetrics" class="overview-grid"></div></div><div class="card glass"><div class="card-title">周复盘提示</div><p style="font-size:13px;color:var(--white-mid);line-height:1.8">先看结果，再找原因。保留有效做法，只调整一个最关键的问题。</p></div></div>
+        <div class="card glass" style="margin-top:12px"><div class="card-title">本周复盘</div><textarea id="weekNote" placeholder="本周做得好的事、需要调整的事、下周唯一重点……" rows="6"></textarea><button class="btn btn-primary" style="margin-top:10px" onclick="saveWeekNote()">保存复盘</button></div>
+      </div>
+
             <!-- HEALTH -->
-      <div class="section active" id="sec-health" style="display:block">
+      <div class="section" id="sec-health" style="display:none">
         <div class="card glass" id="aiInsightCard" style="display:none;margin-bottom:14px"></div>
 
         <!-- Group 1: Today Overview -->
@@ -607,8 +653,8 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
           </div>
         </div>
 
-        <!-- Group 2: Diet Tracking -->
-        <div class="section-group">
+        <!-- Dietary tracking removed by design -->
+        <div class="section-group health-diet" aria-hidden="true">
           <div class="section-group-label">饮食追踪</div>
           <div class="card glass">
             <div class="card-glow"></div>
@@ -687,8 +733,8 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
         </div>
 
         <!-- Group 5: Tools -->
-        <div class="section-group">
-          <div class="section-group-label">数据与工具</div>
+        <div class="section-group" id="healthToolsGroup">
+          <div class="section-group-label">工具箱</div>
           <div class="card glass">
             <div class="card-glow"></div>
             <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>活跃热力图<span class="count-badge" id="heatmapBadge"></span></div>
@@ -731,6 +777,7 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
         </div>
 
       </div>
+      <div class="section" id="sec-tools" style="display:none"></div>
 <!-- DIARY (每日感想) -->
       <div class="section" id="sec-diary" style="display:none">
         <div class="card glass-strong diary-card">
@@ -816,6 +863,15 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
         <div id="workoutExercises"></div>
       </div>
 
+      <div class="section" id="sec-investment" style="display:none">
+        <div class="card glass-strong"><div class="card-title">投资计划 <span class="count-badge">先计划，后交易</span></div>
+          <div class="plan-field"><label>本阶段目标</label><textarea id="investGoal" rows="2" placeholder="例如：保持仓位纪律，等待符合条件的机会"></textarea></div>
+          <div class="plan-field"><label>买入条件</label><textarea id="investEntry" rows="3" placeholder="估值、趋势、仓位、催化剂等明确条件"></textarea></div>
+          <div class="plan-field"><label>风险线与退出条件</label><textarea id="investRisk" rows="3" placeholder="最大仓位、止损条件、逻辑失效信号"></textarea></div>
+          <button class="btn btn-primary" style="width:100%" onclick="saveInvestmentPlan()">保存计划</button>
+        </div>
+      </div>
+
       <div class="section" id="sec-review" style="display:none">
         <div id="stockDashboard" class="card glass-strong" style="margin-bottom:8px">
           <div class="card-glow"></div>
@@ -854,15 +910,6 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
         <div id="reviewHistory"></div>
       </div>
 
-      <!-- PROGRESS (共同进步) -->
-      <div class="section" id="sec-progress" style="display:none">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <span style="font-size:11px;color:var(--white-dim)" id="progressStatus">加载中...</span>
-          <button class="btn-icon" onclick="fetchRemoteProgress()" style="padding:4px;width:24px;height:24px"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg></button>
-        </div>
-        <div id="progressTimeline"></div>
-      </div>
-
     </div>
   </main>
 
@@ -870,6 +917,7 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
   <div class="modal">
     <h3 id="todoModalTitle">新增待办</h3>
     <div class="form-group"><label>任务内容</label><input id="todoText" placeholder="要做什么……"></div>
+    <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--white-mid);margin:-2px 0 14px;cursor:pointer"><input type="checkbox" id="todoPinned" style="width:16px;height:16px">置顶到今日焦点</label>
     <div class="form-row">
       <div class="form-group"><label>优先级</label><select id="todoPriority"><option value="high">高</option><option value="mid" selected>中</option><option value="low">低</option></select></div>
       <div class="form-group"><label>分类</label><select id="todoCat"><option>工作</option><option>投资</option><option>生活</option><option>学习</option></select></div>
@@ -913,6 +961,12 @@ function migrateData(d){
   d.reviews=d.reviews||[];
   d.diaries=d.diaries||[];
   d.health=d.health||{};
+  d.checkins=d.checkins||[];
+  d.habits=d.habits||{};
+  d.pomodoros=d.pomodoros||{};
+  d.todayIntention=d.todayIntention||'';
+  d.weekNote=d.weekNote||'';
+  d.investPlan=d.investPlan||{goal:'',entry:'',risk:''};
   d.meals=d.meals||[];
   d.water=d.water||{};
   d.userProfile=d.userProfile||def.userProfile;
@@ -971,14 +1025,17 @@ function switchTab(tab){
   });
   // Update page title and subtitle
   var titleMap={
-    health:['健康','体重 · 训练 · 饮食 · 饮水'],
+    today:['今日焦点','重要的事，先完成'],
+    week:['周复盘','结果 · 调整 · 下周重点'],
+    health:['健康','体重 · 训练 · 习惯'],
+    tools:['工具箱','专注 · 时间 · 活跃记录'],
     workout:['训练','计划 · 动作 · 记录'],
-    diary:['每日感想','记录 · 回顾'],
+    diary:['日记','记录 · 回顾'],
     todo:['待办','管理 · 追踪'],
-    progress:['共同进步','里程碑 · 成长'],
     journal:['阅读','笔记 · 进度'],
     news:['新闻','关注 · 动态'],
     review:['每日复盘','交易 · 反思']
+    ,investment:['投资计划','条件 · 仓位 · 风险线']
   };
   var titleEl=document.getElementById('pageTitleText');
   var subEl=document.getElementById('pageSubtitle');
@@ -988,28 +1045,26 @@ function switchTab(tab){
   var content=document.querySelector('.content');
   if(content)content.scrollTop=0;
 }
+function localDateKey(date=new Date()){
+  const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,'0'),d=String(date.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
 function defaultData(){
-  const today=new Date().toISOString().slice(0,10);
+  const today=localDateKey();
   return{
     __version:DATA_VERSION,
     weights:[{date:today,val:68.0}],
     workouts:[],checkins:[],habits:{},pomodoros:{},
-    todos:[
-      {id:1,text:'打印签名起诉材料（7份Word→深圳数字法院）',priority:'high',cat:'工作',due:'2026-07-27',done:false},
-      {id:2,text:'159655首笔定投1500元（盘前查溢价率）',priority:'high',cat:'投资',due:'2026-07-27',done:false},
-      {id:3,text:'《周期》继续推进（风险定义章节）',priority:'mid',cat:'学习',due:'2026-07-28',done:false},
-      {id:4,text:'二级教师认定材料整理',priority:'mid',cat:'工作',due:'2026-08-15',done:false},
-      {id:5,text:'港卡办理：确认通行证签注+地址证明',priority:'mid',cat:'生活',due:'2026-08-10',done:false},
-      {id:6,text:'整理足球队训练教案归档',priority:'low',cat:'工作',due:'2026-08-20',done:false}
-    ],
+    todos:[],
     journals:[],news:[],
     books:{'《周期》':35,'《曾国藩传》':20},
     reviews:[],diaries:[],
     health:{},
     meals:[],
     water:{},
+    todayIntention:'',weekNote:'',investPlan:{goal:'',entry:'',risk:''},
     userProfile:{height:175,age:24},
-    nextId:7
+    nextId:1
   };
 }
 
@@ -1052,7 +1107,7 @@ function renderCheckin(){
   if(sorted.length){
     const d=new Date();streak=0;
     for(let i=0;i<365;i++){
-      const ds=d.toISOString().slice(0,10);
+      const ds=localDateKey(d);
       if(data.checkins.includes(ds)){streak++;d.setDate(d.getDate()-1);}
       else{if(i===0){d.setDate(d.getDate()-1);continue;}break;}
     }
@@ -1075,31 +1130,37 @@ function renderCheckin(){
 }
 
 const today=new Date();
-const TODAY_STR=new Date().toISOString().slice(0,10);
+const TODAY_STR=localDateKey();
 const dateStr=`${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}.${String(today.getDate()).padStart(2,'0')} ${['SUN','MON','TUE','WED','THU','FRI','SAT'][today.getDay()]}`;
 document.getElementById('todayDate').textContent=dateStr;
 const md=document.getElementById('mobileDate');if(md)md.textContent=today.getMonth()+1+'/'+today.getDate();
 
 /* Navigation */
 const pageTitles={
+  today:{title:'今日焦点',subtitle:'重要的事，先完成'},
+  week:{title:'周复盘',subtitle:'结果 · 调整 · 下周重点'},
+  tools:{title:'工具箱',subtitle:'专注 · 时间 · 活跃记录'},
   health:{title:'健康',subtitle:'体重 · 饮食 · 习惯 · 专注 · 倒计时'},
   workout:{title:'训练',subtitle:'增肌 · 减脂 · PPL六天循环'},
-  diary:{title:'每日感想',subtitle:'记录每一天'},
+  diary:{title:'日记',subtitle:'记录每一天'},
   todo:{title:'待办',subtitle:'任务管理'},
   journal:{title:'阅读',subtitle:'进度 · 读书笔记'},
   news:{title:'新闻',subtitle:'关注 · 简报'},
-  progress:{title:'共同进步',subtitle:'里程碑 · 成长轨迹'},
   review:{title:'每日复盘',subtitle:'交易日志 · 反思'}
+  ,investment:{title:'投资计划',subtitle:'条件 · 仓位 · 风险线'}
 };
 const navIcons={
+  today:'<path d="M4 5h16M4 12h16M4 19h10"/>',
+  week:'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 2 4-6"/>',
+  tools:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
   health:'<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>',
   workout:'<path d="M3 12h3M18 12h3M12 3v3M12 18v3"/><circle cx="12" cy="12" r="4"/>',
   diary:'<path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>',
   todo:'<path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>',
   journal:'<path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14zM4 19.5A2.5 2.5 0 006.5 22H20"/>',
   news:'<path d="M19 20H5a2 2 0 01-2-3V6a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2zM7 9h7M7 13h7M7 17h4"/>',
-  progress:'<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>',
   review:'<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/><path d="M9 12h6M9 16h4"/>'
+  ,investment:'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 2 4-6"/>'
 };
 document.querySelectorAll('.nav-item').forEach(item=>{
   item.addEventListener('click',()=>{
@@ -1113,7 +1174,7 @@ document.querySelectorAll('.nav-item').forEach(item=>{
 function addWeight(){
   const v=+document.getElementById('weightInput').value;
   if(!v||v<30||v>200){showToast('请输入有效体重（30-200kg）');return;}
-  data.weights.push({date:new Date().toISOString().slice(0,10),val:v});
+  data.weights.push({date:localDateKey(),val:v});
   saveData();renderWeight();document.getElementById('weightInput').value='';showToast('体重已记录');
 }
 function renderWeight(){
@@ -1203,7 +1264,7 @@ function renderHeatmap(){
   var totalActivity=0;
   weeks.forEach(function(w,wi){
     w.forEach(function(item){
-      var ds=item.date.toISOString().slice(0,10);
+      var ds=localDateKey(item.date);
       var n=countFor(ds),color=getColor(n);
       totalActivity+=n;
       var x=PAD_L+wi*COL_W,y=PAD_T+item.col*(CELL+GAP);
@@ -1559,7 +1620,7 @@ function renderDiaryStreak(){
   let streak=0;
   const dates=new Set(data.diaries.map(d=>d.date));
   let d=new Date();
-  while(dates.has(d.toISOString().slice(0,10))){streak++;d.setDate(d.getDate()-1);}
+  while(dates.has(localDateKey(d))){streak++;d.setDate(d.getDate()-1);}
   const el=document.getElementById('diaryStreak');
   el.innerHTML=streak>0?`<svg viewBox="0 0 24 24"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg>${streak}天连续`:'';
 }
@@ -1606,18 +1667,18 @@ function renderTodos(){
 }
 function catColor(c){return{工作:'purple',投资:'green',生活:'amber',学习:'purple'}[c]||'dim'}
 function isOverdue(t){if(t.done||!t.due)return false;return t.due<TODAY_STR;}
-function toggleTodo(id){const t=data.todos.find(x=>x.id===id);if(t){t.done=!t.done;saveData();renderTodos();}}
-function showTodoModal(){editingTodoId=null;document.getElementById('todoModalTitle').textContent='新增待办';document.getElementById('todoText').value='';document.getElementById('todoPriority').value='mid';document.getElementById('todoCat').value='工作';document.getElementById('todoDue').value='';document.getElementById('todoModal').classList.add('show');}
+function toggleTodo(id){const t=data.todos.find(x=>x.id===id);if(t){t.done=!t.done;saveData();renderTodos();renderTodayFocus();renderWeekReview();}}
+function showTodoModal(){editingTodoId=null;document.getElementById('todoModalTitle').textContent='新增待办';document.getElementById('todoText').value='';document.getElementById('todoPriority').value='mid';document.getElementById('todoCat').value='工作';document.getElementById('todoDue').value='';document.getElementById('todoPinned').checked=false;document.getElementById('todoModal').classList.add('show');}
 function closeTodoModal(){document.getElementById('todoModal').classList.remove('show');}
-function editTodo(id){const t=data.todos.find(x=>x.id===id);if(!t)return;editingTodoId=id;document.getElementById('todoModalTitle').textContent='编辑待办';document.getElementById('todoText').value=t.text;document.getElementById('todoPriority').value=t.priority;document.getElementById('todoCat').value=t.cat;document.getElementById('todoDue').value=t.due||'';document.getElementById('todoModal').classList.add('show');}
+function editTodo(id){const t=data.todos.find(x=>x.id===id);if(!t)return;editingTodoId=id;document.getElementById('todoModalTitle').textContent='编辑待办';document.getElementById('todoText').value=t.text;document.getElementById('todoPriority').value=t.priority;document.getElementById('todoCat').value=t.cat;document.getElementById('todoDue').value=t.due||'';document.getElementById('todoPinned').checked=!!t.pinned;document.getElementById('todoModal').classList.add('show');}
 function saveTodo(){
   const text=document.getElementById('todoText').value.trim();
   if(!text){showToast('请输入任务内容');return;}
-  if(editingTodoId){const t=data.todos.find(x=>x.id===editingTodoId);if(t){t.text=text;t.priority=document.getElementById('todoPriority').value;t.cat=document.getElementById('todoCat').value;t.due=document.getElementById('todoDue').value;showToast('已更新');}}
-  else{data.todos.push({id:data.nextId++,text,priority:document.getElementById('todoPriority').value,cat:document.getElementById('todoCat').value,due:document.getElementById('todoDue').value,done:false});showToast('已添加');}
-  saveData();renderTodos();closeTodoModal();
+  if(editingTodoId){const t=data.todos.find(x=>x.id===editingTodoId);if(t){t.text=text;t.priority=document.getElementById('todoPriority').value;t.cat=document.getElementById('todoCat').value;t.due=document.getElementById('todoDue').value;t.pinned=document.getElementById('todoPinned').checked;showToast('已更新');}}
+  else{data.todos.push({id:data.nextId++,text,priority:document.getElementById('todoPriority').value,cat:document.getElementById('todoCat').value,due:document.getElementById('todoDue').value,pinned:document.getElementById('todoPinned').checked,done:false});showToast('已添加');}
+  saveData();renderTodos();renderTodayFocus();renderWeekReview();closeTodoModal();
 }
-function delTodo(id){if(!confirm('删除这条待办？'))return;data.todos=data.todos.filter(x=>x.id!==id);saveData();renderTodos();showToast('已删除');}
+function delTodo(id){if(!confirm('删除这条待办？'))return;data.todos=data.todos.filter(x=>x.id!==id);saveData();renderTodos();renderTodayFocus();renderWeekReview();showToast('已删除');}
 function toggleDoneList(){const d=document.getElementById('doneList'),t=document.getElementById('doneToggle');const show=d.style.display==='none';d.style.display=show?'block':'none';t.classList.toggle('expanded',show);}
 
 /* ===== JOURNAL (阅读) ===== */
@@ -1632,7 +1693,7 @@ function renderJournal(){
 function saveJournal(){
   const text=document.getElementById('journalText').value.trim();
   if(!text){showToast('请输入笔记内容');return;}
-  data.journals.push({date:new Date().toISOString().slice(0,10),text});
+  data.journals.push({date:localDateKey(),text});
   saveData();renderJournal();document.getElementById('journalText').value='';updateCharCount();showToast('笔记已保存');
 }
 function delJournal(idx){if(!confirm('删除这条笔记？'))return;data.journals.splice(idx,1);saveData();renderJournal();showToast('已删除');}
@@ -1736,7 +1797,7 @@ function addNews(){
   if(!headline){showToast('请输入新闻标题');return;}
   const url=document.getElementById('newsUrl').value.trim();
   const content=document.getElementById('newsContent').value.trim();
-  data.news.push({date:new Date().toISOString().slice(0,10),headline,content:content||null,cat:document.getElementById('newsCat').value,impact:document.getElementById('newsImpact').value,relevance:document.getElementById('newsRelevance').value,url:url||null});
+  data.news.push({date:localDateKey(),headline,content:content||null,cat:document.getElementById('newsCat').value,impact:document.getElementById('newsImpact').value,relevance:document.getElementById('newsRelevance').value,url:url||null});
   saveData();renderNews();document.getElementById('newsHeadline').value='';document.getElementById('newsContent').value='';document.getElementById('newsUrl').value='';showToast('已添加');
 }
 function delNews(idx){if(!confirm('删除这条新闻？'))return;data.news.splice(idx,1);saveData();renderNews();showToast('已删除');}
@@ -1775,51 +1836,6 @@ function renderRemoteTodos(){
   listEl.innerHTML=items.map(t=>{
     const isOverdue=t.due&&t.due<TODAY_STR;
     return '<div class="todo-item glass-sm" style="border-left:2px solid var(--purple)"><div class="todo-check" style="border-color:var(--purple);cursor:default;background:rgba(124,58,237,0.08)"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><div style="flex:1"><div class="todo-text">'+t.text+'</div><div class="todo-meta"><span class="priority p-'+t.priority+'"></span><span class="tag tag-'+(prioColor[t.priority]||'dim')+'">'+(prioLabel[t.priority]||'')+'</span><span class="tag tag-'+(catColor[t.cat]||'dim')+'">'+(t.cat||'')+'</span>'+(t.due?'<span class="todo-due'+(isOverdue?' overdue':'')+'">'+(isOverdue?'逾期 ':'')+t.due.slice(5)+'</span>':'')+'</div></div></div>';
-  }).join('');
-}
-
-/* ===== PROGRESS / 共同进步 ===== */
-let progressData=null;
-const progressIconSvgs={
-  star:'<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>',
-  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
-  chart:'<path d="M18 20V10M12 20V4M6 20v-6"/>',
-  brain:'<circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/>',
-  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
-  rocket:'<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c1-1 1-2.5 0-3.5s-2.5-1-3.5 0z"/><path d="M12 2l-5.5 9.5L12 14l2.5-2.5L12 2z"/><path d="M12 2l5.5 9.5L12 14"/>',
-  book:'<path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14z"/>',
-  flag:'<path d="M4 15s1-1 4-1 5 2 8 2V6s-3-2-6-2-4 1-4 1v14"/>'
-};
-const progressCatColor={里程碑:'purple',投资纪律:'green',认知升级:'cyan',思维训练:'amber',规划:'purple',工具:'green',阅读:'cyan'};
-async function fetchRemoteProgress(){
-  const statusEl=document.getElementById('progressStatus');
-  const timelineEl=document.getElementById('progressTimeline');
-  statusEl.textContent='加载中...';statusEl.style.color='#536471';
-  try{
-    const resp=await fetch('https://seoj07617-stack.github.io/shiyi-app/progress.json?t='+Date.now());
-    if(!resp.ok)throw new Error('HTTP '+resp.status);
-    progressData=await resp.json();
-    renderProgress();
-  }catch(e){
-    console.error('fetchRemoteProgress error',e);
-    statusEl.textContent='加载失败';statusEl.style.color='var(--amber)';
-    timelineEl.innerHTML='';
-  }
-}
-function renderProgress(){
-  const statusEl=document.getElementById('progressStatus');
-  const timelineEl=document.getElementById('progressTimeline');
-  if(!progressData||!progressData.milestones||!progressData.milestones.length){
-    statusEl.textContent='暂无记录';statusEl.style.color='#536471';
-    timelineEl.innerHTML='<div style="text-align:center;color:var(--white-dim);padding:32px;font-size:13px">共同进步的路上，每一步都算数</div>';return;
-  }
-  const ms=progressData.milestones;
-  statusEl.textContent=ms.length+'个里程碑';statusEl.style.color='var(--purple)';
-  timelineEl.innerHTML=ms.map((m,i)=>{
-    const isLast=i===ms.length-1;
-    const iconSvg=progressIconSvgs[m.icon]||progressIconSvgs.star;
-    const catClr=progressCatColor[m.cat]||'purple';
-    return '<div style="display:flex;gap:14px;position:relative;margin-bottom:'+(isLast?'0':'4')+'px"><div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0"><div style="width:36px;height:36px;border-radius:10px;background:var(--'+catClr+'-glow);border:0.5px solid rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:center;color:var(--'+catClr+')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+iconSvg+'</svg></div>'+(isLast?'':'<div style="width:1.5px;flex:1;min-height:20px;background:linear-gradient(180deg,var(--'+catClr+'-glow),rgba(0,0,0,0.03));margin-top:4px"></div>')+'</div><div style="flex:1;padding:2px 0 '+(isLast?'0':'12')+'px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span style="font-size:13px;font-weight:600;color:var(--white)">'+m.title+'</span><span class="tag tag-'+catClr+'">'+m.cat+'</span></div><div style="font-size:12px;color:var(--white-mid);line-height:1.6">'+m.desc+'</div><div style="font-size:10px;color:var(--white-faint);margin-top:4px;font-variant-numeric:tabular-nums">'+m.date+'</div></div></div>';
   }).join('');
 }
 
@@ -2076,6 +2092,27 @@ function selectWorkoutDay(day){
   renderWorkoutPlan();
 }
 
+function renderTodayFocus(){
+  const open=(data.todos||[]).filter(t=>!t.done).sort((a,b)=>(Number(!!b.pinned)-Number(!!a.pinned))||(({high:0,mid:1,low:2}[a.priority]||3)-({high:0,mid:1,low:2}[b.priority]||3))).slice(0,3);
+  const list=document.getElementById('todayFocusList'); if(!list)return;
+  list.innerHTML=open.length?open.map((t,i)=>`<div class="focus-item"><span class="focus-num">${i+1}</span><span class="focus-text">${t.text}${t.pinned?' <span style="font-size:10px;color:var(--purple)">置顶</span>':''}</span><span class="tag tag-${catColor(t.cat)}">${t.cat}</span></div>`).join(''):'<div style="padding:22px 4px;color:var(--white-dim);font-size:13px">今天还没有重点事项。把最重要的一件事写下来。</div>';
+  document.getElementById('todayFocusCount').textContent=open.length+'/3';
+  document.getElementById('todayTodoCount').textContent=(data.todos||[]).filter(t=>!t.done).length;
+  document.getElementById('todayWorkoutState').textContent=(data.checkins||[]).includes(TODAY_STR)?'已打卡':'未打卡';
+  document.getElementById('todayIntention').value=data.todayIntention||'';
+}
+function saveTodayIntention(){data.todayIntention=document.getElementById('todayIntention').value.trim();saveData();showToast('今日计划已保存');}
+function renderWeekReview(){
+  const start=new Date();start.setDate(start.getDate()-6);const days=Array.from({length:7},(_,i)=>localDateKey(new Date(start.getFullYear(),start.getMonth(),start.getDate()+i)));
+  const done=(data.todos||[]).filter(t=>t.done).length,total=(data.todos||[]).length,checks=(data.checkins||[]).filter(d=>days.includes(d)).length;
+  const metrics=[['任务完成',total?Math.round(done/total*100)+'%':'—'],['训练打卡',checks+' 次'],['阅读笔记',(data.journals||[]).filter(j=>days.includes(j.date)).length+' 条']];
+  const el=document.getElementById('weekMetrics');if(el)el.innerHTML=metrics.map(([a,b])=>`<div class="overview-card"><div class="ov-label">${a}</div><div class="ov-value" style="color:var(--purple)">${b}</div></div>`).join('');
+  const note=document.getElementById('weekNote');if(note)note.value=data.weekNote||'';
+}
+function saveWeekNote(){data.weekNote=document.getElementById('weekNote').value.trim();saveData();showToast('周复盘已保存');}
+function renderInvestmentPlan(){const p=data.investPlan||{};['Goal','Entry','Risk'].forEach(k=>{const el=document.getElementById('invest'+k);if(el)el.value=p[k.toLowerCase()]||'';});}
+function saveInvestmentPlan(){data.investPlan={goal:document.getElementById('investGoal').value.trim(),entry:document.getElementById('investEntry').value.trim(),risk:document.getElementById('investRisk').value.trim()};saveData();showToast('投资计划已保存');}
+
 function renderAll(){
   try{renderCheckin();}catch(e){console.error('[renderAll] renderCheckin:',e)}
   try{renderHabits();}catch(e){console.error('[renderAll] renderHabits:',e)}
@@ -2083,15 +2120,12 @@ function renderAll(){
   try{renderCountdowns();}catch(e){console.error('[renderAll] renderCountdowns:',e)}
   try{if(data.pomodoros&&data.pomodoros[TODAY_STR]){document.getElementById('pomCount').textContent=data.pomodoros[TODAY_STR];}}catch(e){console.error('[renderAll] pomCount:',e)}
   try{renderWeight();}catch(e){console.error('[renderAll] renderWeight:',e)}
-  try{renderMealTypeChips();renderQuickFoods();renderMeals();renderWater();}catch(e){console.error('[renderAll] diet:',e)}
-  
+  try{renderTodayFocus();renderWeekReview();renderInvestmentPlan();}catch(e){console.error('[renderAll] dashboard:',e)}
   try{renderDiaryStreak();renderDiaryHistory();loadTodayDiary();}catch(e){console.error('[renderAll] diary:',e)}
   try{renderTodoChips();renderTodos();fetchRemoteTodos();}catch(e){console.error('[renderAll] todo:',e)}
   try{renderJournal();}catch(e){console.error('[renderAll] journal:',e)}
   try{renderNewsChips();renderNews();fetchRemoteNews();}catch(e){console.error('[renderAll] news:',e)}
-  try{fetchRemoteProgress();}catch(e){console.error('[renderAll] progress:',e)}
   try{renderMoodGrid();renderScoreRow();renderReviewHistory();loadTodayReview();}catch(e){console.error('[renderAll] review:',e)}
-  try{renderAIInsights();}catch(e){console.error('[renderAll] renderAIInsights:',e)}
   try{fetchWorkoutData();}catch(e){console.error('[renderAll] workout:',e)}
 }
 renderAll();
@@ -2099,7 +2133,7 @@ renderAll();
 /* Ensure first section visible */
 (function(){
   try{
-    var firstSec=document.getElementById('sec-health');
+    var firstSec=document.getElementById('sec-today');
     if(firstSec){firstSec.style.display='block';firstSec.classList.add('active');}
   }catch(e){}
 })();
@@ -2235,15 +2269,17 @@ document.addEventListener('click',function(e){
   }
 });
 document.addEventListener('DOMContentLoaded',function(){
+  var toolsGroup=document.getElementById('healthToolsGroup'),toolsSection=document.getElementById('sec-tools');
+  if(toolsGroup&&toolsSection)toolsSection.appendChild(toolsGroup);
   var sections=document.querySelectorAll('.section');
   sections.forEach(function(sec){
-    if(sec.id==='sec-health'){sec.style.display='block';sec.classList.add('active');}
+    if(sec.id==='sec-today'){sec.style.display='block';sec.classList.add('active');}
     else{sec.style.display='none';sec.classList.remove('active');}
   });
   // Set initial mobile menu highlight
   document.querySelectorAll('.menu-item').forEach(function(item){
     var onclick=item.getAttribute('onclick')||'';
-    if(onclick.includes("'health'")){item.classList.add('current');}
+    if(onclick.includes("'today'")){item.classList.add('current');}
   });
   console.log('v8.0 initialized');
 });</script>
