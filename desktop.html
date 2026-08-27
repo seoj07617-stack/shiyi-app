@@ -1069,10 +1069,12 @@ function onSyncReceived(e){
 }
 
 if(syncChannel)syncChannel.onmessage=onSyncReceived;
-// storage 事件作为兜底（跨标签页）
+// storage 事件作为兜底(跨标签页)
 window.addEventListener('storage',function(e){
   if(e.key===STORE_KEY&&e.newValue){
     onSyncReceived({data:{type:'data_updated',source:'storage',timestamp:Date.now()}});
+  }
+});
 
 // ========== Desktop 仪表盘渲染 ==========
 function isDesktop(){return window.innerWidth>=1024;}
@@ -2575,9 +2577,9 @@ function aiPolish(id){
   
   // Send polish request
   var input = document.getElementById('aiChatInput');
-  var prompt = '润色以下内容，保持原意但让表达更流畅、更清晰：
+  var prompt = `润色以下内容，保持原意但让表达更流畅、更清晰：
 
-' + text;
+` + text;
   input.value = prompt;
   sendAiMessage();
 }
