@@ -440,16 +440,23 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
 
 
 /* ===== Desktop 优化 ===== */
+@media(min-width:768px){
+  :root{--sidebar-w:220px}
+  .mobile-header{display:none!important;}
+  .sidebar{display:flex!important;padding:20px 14px 16px;}
+  .content{padding-top:0!important;max-width:none;}
+  .content-header{padding:20px 32px 16px;}
+  .content-body{padding:0 32px 48px;max-width:100%;}
+  .app{flex-direction:row!important;}
+}
 @media(min-width:1024px){
   :root{--sidebar-w:240px}
   .sidebar{padding:24px 16px 16px;}
   .sidebar-logo h1{font-size:16px;}
   .nav-item{padding:10px 14px;margin:2px 6px;border-radius:10px;}
-  .content{max-width:none;}
-  .content-header{padding:32px 40px 20px;}
+  .content-header{padding:24px 40px 16px;}
   .content-header .page-title{font-size:26px;}
   .content-body{padding:0 40px 60px;max-width:1200px;}
-  .mobile-header{display:none!important;}
   .dashboard-grid{grid-template-columns:1.5fr 1fr!important;gap:20px!important;}
   .overview-grid{grid-template-columns:repeat(4,1fr)!important;gap:16px!important;}
   .card{border-radius:16px;}
