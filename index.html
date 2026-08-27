@@ -974,6 +974,45 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
 
 <script>
 const STORE_KEY='shiyi_desk_v2';
+// ========== 实时数据同步 (BroadcastChannel) ==========
+const SYNC_CHANNEL='shiyi_desk_sync';
+let syncChannel=null;
+try{syncChannel=new BroadcastChannel(SYNC_CHANNEL);}catch(e){console.warn('BroadcastChannel not supported');}
+let _isSyncing=false;
+
+function broadcastSync(){
+  if(_isSyncing)return;
+  try{
+    if(syncChannel)syncChannel.postMessage({type:'data_updated',source:location.pathname,timestamp:Date.now()});
+  }catch(e){}
+}
+
+function onSyncReceived(e){
+  if(e.data&&e.data.type==='data_updated'&&e.data.source!==location.pathname){
+    _isSyncing=true;
+    data=loadData();
+    // 重新渲染当前视图
+    try{renderAll();}catch(err){}
+    try{renderTodos();}catch(err){}
+    try{renderWeight();}catch(err){}
+    try{renderNews();}catch(err){}
+    try{renderJournals();}catch(err){}
+    try{renderDiaries();}catch(err){}
+    try{renderWorkout();}catch(err){}
+    try{renderReview();}catch(err){}
+    try{updateBadges();}catch(err){}
+    setTimeout(()=>{_isSyncing=false;},300);
+  }
+}
+
+if(syncChannel)syncChannel.onmessage=onSyncReceived;
+// storage 事件作为兜底（跨标签页）
+window.addEventListener('storage',function(e){
+  if(e.key===STORE_KEY&&e.newValue){
+    onSyncReceived({data:{type:'data_updated',source:'storage',timestamp:Date.now()}});
+  }
+});
+
 const DATA_VERSION=8;
 let data=loadData();
 let todoFilter='全部',newsFilter='全部',editingTodoId=null,selectedCalDate=null,selectedMood=null,selectedScore=0;
@@ -1007,7 +1046,7 @@ function migrateData(d){
   d.nextId=Math.max(d.nextId||0,maxId+1);
   return d;
 }
-function saveData(){try{localStorage.setItem(STORE_KEY,JSON.stringify(data));}catch(e){showToast('保存失败：存储空间不足');}}
+function saveData(){try{localStorage.setItem(STORE_KEY,JSON.stringify(data));broadcastSync();}catch(e){showToast('保存失败：存储空间不足');}}
 function openMobileMenu(){
   var m=document.getElementById('mobileMenu');
   var b=document.getElementById('hamburgerBtn');
