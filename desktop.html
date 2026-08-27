@@ -900,11 +900,6 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
 </div>
 
 <div class="toast" id="toast"></div>
-
-<div id="askShiyiFab" onclick="window.open('https://www.feishu.cn/messenger/?p2p_msg=ou_75d267bcf68338bd0d6469757f1f4ca1','_blank')" style="position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:14px;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 12px rgba(124,58,237,0.25);z-index:90;transition:all .25s var(--ease);border:none" onmouseenter="this.style.transform='scale(1.08)'" onmouseleave="this.style.transform='scale(1)'">
-  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="12" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/></svg>
-</div>
-<div id="fabTooltip" style="position:fixed;bottom:76px;right:24px;font-size:11px;color:#0f1419;background:#fff;padding:6px 12px;border-radius:8px;z-index:90;pointer-events:none;opacity:0;transition:opacity .3s;border:1px solid #eff3f4">问拾壹</div>
 <div class="install-banner" id="installBanner"><span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="var(--purple)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>添加到主屏幕</span><button class="btn btn-primary" onclick="installPWA()">安装</button><button class="btn-icon" onclick="dismissInstall()" style="margin-left:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
 
 <script>
@@ -2340,9 +2335,7 @@ function aiPolish(id){
   
   // Send polish request
   var input = document.getElementById('aiChatInput');
-  var prompt = '润色以下内容，保持原意但让表达更流畅、更清晰：
-
-' + text;
+  var prompt = '润色以下内容，保持原意但让表达更流畅、更清晰：\n\n' + text;
   input.value = prompt;
   sendAiMessage();
 }
