@@ -336,50 +336,6 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
   .content-body{padding:0 24px 48px}
 }
 
-/* Stock Dashboard */
-/* Stock Dashboard */
-.stock-chart-wrap{background:rgba(0,0,0,0.02);border-radius:8px;padding:6px 8px;margin-bottom:6px}
-.stock-chart-title{font-size:12px;font-weight:600;color:#0f1419;margin-bottom:4px}
-.stock-chart-title .code{font-size:10px;color:#536471;margin-left:4px}
-.stock-metrics{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:4px}
-.stock-metric{background:rgba(0,0,0,0.03);border-radius:4px;padding:3px 6px}
-.stock-metric .label{font-size:9px;color:#536471}
-.stock-metric .value{font-size:12px;font-weight:600;color:#0f1419}
-.stock-metric .change{font-size:9px;color:#536471}
-
-/* Section group labels */
-.section-group{margin-bottom:6px;padding:0 2px}
-.section-group-label{font-size:10px;font-weight:600;color:#536471;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;padding:0 2px}
-.section-group:not(:first-child){margin-top:18px}
-.overview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
-.overview-card{padding:16px;border-radius:var(--radius-sm);background:#fff;border:1px solid #eff3f4;text-align:center;position:relative;overflow:hidden;transition:all .2s var(--ease)}
-.overview-card:active{transform:scale(0.97)}
-.overview-card .ov-label{font-size:10px;color:#536471;font-weight:500;margin-bottom:6px;letter-spacing:0.03em}
-.overview-card .ov-value{font-size:24px;font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;line-height:1.2}
-.overview-card .ov-sub{font-size:10px;color:#536471;margin-top:3px}
-.overview-card .ov-icon{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px}
-.overview-card .ov-icon svg{width:14px;height:14px;stroke-width:1.8}
-@media(max-width:767px){.overview-grid{grid-template-columns:repeat(3,1fr);gap:6px}}
-.stock-chart-wrap canvas{max-height:120px!important;display:block}
-.stock-news-item{display:flex;align-items:center;gap:6px;padding:3px 0;font-size:10px;border-bottom:1px solid rgba(0,0,0,0.04)}
-.stock-news-impact{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.stock-news-text{color:#536471;line-height:1.3}
-.stock-reminder{font-size:10px;color:#536471;padding:2px 0;border-left:2px solid var(--purple);padding-left:6px;margin:2px 0}
-.market-bar{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
-.market-bar-item{flex:1;min-width:80px;text-align:center;padding:4px 6px;border-radius:6px;background:rgba(0,0,0,0.03)}
-.market-bar-item .name{font-size:10px;color:#536471}
-.market-bar-item .val{font-size:13px;font-weight:600}
-.market-bar-item .pct{font-size:10px;color:#536471}
-.holding-card{background:rgba(0,0,0,0.03);border-radius:8px;padding:8px;margin-bottom:6px}
-.holding-card .h-name{font-size:13px;font-weight:600;color:#0f1419}
-.holding-card .h-row{display:flex;justify-content:space-between;font-size:11px;color:#536471;margin-top:2px}
-.holding-card .h-val{color:#0f1419;font-weight:500}
-.key-news-item{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:11px;border-bottom:1px solid rgba(0,0,0,0.06)}
-.impact-tag{font-size:9px;padding:1px 4px;border-radius:3px;font-weight:600}
-.impact-bull{background:rgba(5,150,105,0.1);color:var(--green)}
-.impact-bear{background:rgba(220,38,38,0.1);color:var(--red)}
-.impact-neutral{background:rgba(0,0,0,0.06);color:var(--white-dim)}
-.reminder-item{font-size:11px;color:#536471;padding:2px 0}
 
   
   
@@ -505,7 +461,6 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
 <a href="javascript:void(0)" class="menu-item" onclick="switchTab('journal');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">阅读</a>
 <a href="javascript:void(0)" class="menu-item" onclick="switchTab('news');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">新闻</a>
 <a href="javascript:void(0)" class="menu-item" onclick="switchTab('review');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">复盘</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('investment');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">投资计划</a>
     </div>
   </div>
   
@@ -559,11 +514,6 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
     <div class="nav-item" data-tab="news">
       <svg viewBox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2zM7 9h7M7 13h7M7 17h4"/></svg>
       <span>新闻</span>
-    </div>
-    <div class="nav-section-label">投资</div>
-    <div class="nav-item" data-tab="investment">
-      <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 2 4-6"/></svg>
-      <span>投资计划</span>
     </div>
     <div class="nav-item" data-tab="review">
       <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/><path d="M9 12h6M9 16h4"/></svg>
@@ -862,22 +812,7 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
         </div>
         <div id="workoutExercises"></div>
       </div>
-
-      <div class="section" id="sec-investment" style="display:none">
-        <div class="card glass-strong"><div class="card-title">投资计划 <span class="count-badge">先计划，后交易</span></div>
-          <div class="plan-field"><label>本阶段目标</label><textarea id="investGoal" rows="2" placeholder="例如：保持仓位纪律，等待符合条件的机会"></textarea></div>
-          <div class="plan-field"><label>买入条件</label><textarea id="investEntry" rows="3" placeholder="估值、趋势、仓位、催化剂等明确条件"></textarea></div>
-          <div class="plan-field"><label>风险线与退出条件</label><textarea id="investRisk" rows="3" placeholder="最大仓位、止损条件、逻辑失效信号"></textarea></div>
-          <button class="btn btn-primary" style="width:100%" onclick="saveInvestmentPlan()">保存计划</button>
-        </div>
-      </div>
-
-      <div class="section" id="sec-review" style="display:none">
-        <div id="stockDashboard" class="card glass-strong" style="margin-bottom:8px">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 5-8"/></svg> 股票仪表盘 <span class="count-badge" id="stockDateBadge"></span></div>
-          <div id="stockContent" style="padding:8px">加载中...</div>
-        </div>
+<div class="section" id="sec-review" style="display:none">
 
         <div class="card glass-strong">
           <div class="card-glow"></div>
@@ -931,11 +866,95 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
 </div>
 
 <div class="toast" id="toast"></div>
-
-<div id="askShiyiFab" onclick="window.open('https://www.feishu.cn/messenger/?p2p_msg=ou_75d267bcf68338bd0d6469757f1f4ca1','_blank')" style="position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:14px;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 12px rgba(124,58,237,0.25);z-index:90;transition:all .25s var(--ease);border:none" onmouseenter="this.style.transform='scale(1.08)'" onmouseleave="this.style.transform='scale(1)'">
-  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="12" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/></svg>
+<!-- AI Chat Panel -->
+<div id="aiChatOverlay" onclick="if(event.target===this)toggleAIChat()" style="position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:95;display:none;opacity:0;transition:opacity .3s;backdrop-filter:blur(4px)"></div>
+<div id="aiChatPanel" style="position:fixed;bottom:0;right:0;width:420px;max-width:100vw;height:100vh;max-height:800px;background:#fafafa;z-index:96;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .35s cubic-bezier(.34,1.56,.64,1);box-shadow:-8px 0 40px rgba(0,0,0,0.15)">
+  <!-- Header -->
+  <div style="background:linear-gradient(135deg,#7c3aed 0%,#a78bfa 100%);color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(10px)">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 014 4v1a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M8 10a4 4 0 00-4 4v2a4 4 0 004 4h8a4 4 0 004-4v-2a4 4 0 00-4-4"/></svg>
+      </div>
+      <div>
+        <div style="font-size:16px;font-weight:700;letter-spacing:-0.02em">拾壹 AI</div>
+        <div style="font-size:11px;opacity:0.8;display:flex;align-items:center;gap:4px"><span style="width:6px;height:6px;background:#4ade80;border-radius:50%;display:inline-block"></span>在线 · 随时为你服务</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:4px">
+      <button onclick="clearAIChat()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;width:32px;height:32px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s" onmouseenter="this.style.background='rgba(255,255,255,0.25)'" onmouseleave="this.style.background='rgba(255,255,255,0.15)'" title="清空对话">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+      </button>
+      <button onclick="toggleAIChat()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;width:32px;height:32px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s" onmouseenter="this.style.background='rgba(255,255,255,0.25)'" onmouseleave="this.style.background='rgba(255,255,255,0.15)'" title="关闭">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+  <!-- Quick Actions -->
+  <div style="padding:10px 16px;background:#fff;border-bottom:1px solid #f0f0f0;display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0">
+    <button onclick="sendQuickMsg('今天有什么待办？')" style="font-size:11px;padding:5px 10px;border-radius:16px;border:1px solid #e9d5ff;background:#faf5ff;color:#7c3aed;cursor:pointer;transition:all .2s" onmouseenter="this.style.background='#f3e8ff'" onmouseleave="this.style.background='#faf5ff'">📋 今日待办</button>
+    <button onclick="sendQuickMsg('帮我总结今天的日记')" style="font-size:11px;padding:5px 10px;border-radius:16px;border:1px solid #e9d5ff;background:#faf5ff;color:#7c3aed;cursor:pointer;transition:all .2s" onmouseenter="this.style.background='#f3e8ff'" onmouseleave="this.style.background='#faf5ff'">📝 日记总结</button>
+    <button onclick="sendQuickMsg('本周训练情况怎么样？')" style="font-size:11px;padding:5px 10px;border-radius:16px;border:1px solid #e9d5ff;background:#faf5ff;color:#7c3aed;cursor:pointer;transition:all .2s" onmouseenter="this.style.background='#f3e8ff'" onmouseleave="this.style.background='#faf5ff'">💪 训练分析</button>
+    <button onclick="openAISettings()" style="font-size:11px;padding:5px 10px;border-radius:16px;border:1px solid #e5e7eb;background:#f9fafb;color:#6b7280;cursor:pointer;transition:all .2s" onmouseenter="this.style.background='#f3f4f6'" onmouseleave="this.style.background='#f9fafb'">⚙️ 设置</button>
+  </div>
+  <!-- Messages -->
+  <div id="aiMessages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#a78bfa);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 014 4v1a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M8 10a4 4 0 00-4 4v2a4 4 0 004 4h8a4 4 0 004-4v-2a4 4 0 00-4-4"/></svg>
+      </div>
+      <div style="background:#fff;border:1px solid #f0f0f0;border-radius:4px 14px 14px 14px;padding:10px 14px;max-width:80%;font-size:13px;line-height:1.6;color:#1f2937;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
+        你好！我是拾壹 AI，你的个人工作台助手。<br><br>
+        我可以帮你：<br>
+        • 分析你的待办、日记、训练数据<br>
+        • 回答问题、提供建议<br>
+        • 整理和总结你的记录<br><br>
+        <span style="color:#7c3aed;font-size:12px">💡 点击右下角设置按钮配置 API 后即可开始对话</span>
+      </div>
+    </div>
+  </div>
+  <!-- Input -->
+  <div style="padding:12px 16px 16px;background:#fff;border-top:1px solid #f0f0f0;flex-shrink:0">
+    <div style="display:flex;gap:8px;align-items:flex-end">
+      <textarea id="aiInput" placeholder="输入消息..." rows="1" style="flex:1;border:1px solid #e5e7eb;border-radius:12px;padding:10px 14px;font-size:13px;resize:none;outline:none;transition:border-color .2s;font-family:inherit;max-height:120px;line-height:1.5" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='#e5e7eb'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAIMessage()}" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+      <button id="aiSendBtn" onclick="sendAIMessage()" style="width:40px;height:40px;border-radius:12px;border:none;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s" onmouseenter="this.style.transform='scale(1.05)'" onmouseleave="this.style.transform='scale(1)'">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
 </div>
-<div id="fabTooltip" style="position:fixed;bottom:76px;right:24px;font-size:11px;color:#0f1419;background:#fff;padding:6px 12px;border-radius:8px;z-index:90;pointer-events:none;opacity:0;transition:opacity .3s;border:1px solid #eff3f4">问拾壹</div>
+<!-- AI Settings Modal -->
+<div id="aiSettingsModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:97;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
+  <div style="background:#fff;border-radius:16px;padding:24px;width:380px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3 style="font-size:18px;font-weight:700;color:#1f2937;margin:0">AI 设置</h3>
+      <button onclick="closeAISettings()" style="background:none;border:none;cursor:pointer;color:#9ca3af;font-size:20px">×</button>
+    </div>
+    <div style="margin-bottom:16px">
+      <label style="display:block;font-size:12px;font-weight:600;color:#6b7280;margin-bottom:6px">API 地址</label>
+      <input id="aiApiUrl" type="text" placeholder="https://api.openai.com/v1/chat/completions" style="width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;font-size:13px;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='#e5e7eb'">
+    </div>
+    <div style="margin-bottom:16px">
+      <label style="display:block;font-size:12px;font-weight:600;color:#6b7280;margin-bottom:6px">API Key</label>
+      <input id="aiApiKey" type="password" placeholder="sk-..." style="width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;font-size:13px;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='#e5e7eb'">
+    </div>
+    <div style="margin-bottom:20px">
+      <label style="display:block;font-size:12px;font-weight:600;color:#6b7280;margin-bottom:6px">模型名称</label>
+      <input id="aiModel" type="text" placeholder="gpt-4o-mini" style="width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;font-size:13px;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='#e5e7eb'">
+    </div>
+    <div style="display:flex;gap:8px">
+      <button onclick="saveAISettings()" style="flex:1;padding:10px;border:none;border-radius:8px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-size:13px;font-weight:600;cursor:pointer">保存设置</button>
+      <button onclick="closeAISettings()" style="padding:10px 16px;border:1px solid #e5e7eb;border-radius:8px;background:#fff;color:#6b7280;font-size:13px;cursor:pointer">取消</button>
+    </div>
+    <p style="font-size:11px;color:#9ca3af;margin-top:12px;line-height:1.5">支持任何 OpenAI 兼容格式的 API。设置保存在本地浏览器，不会上传。</p>
+  </div>
+</div>
+
+
+<div id="aiFab" onclick="toggleAIChat()" style="position:fixed;bottom:24px;right:24px;width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#7c3aed 0%,#a78bfa 100%);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(124,58,237,0.35);z-index:90;transition:all .3s cubic-bezier(.34,1.56,.64,1);border:none" onmouseenter="this.style.transform='scale(1.1)';this.style.boxShadow='0 6px 28px rgba(124,58,237,0.45)'" onmouseleave="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(124,58,237,0.35)'">
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 014 4v1a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M8 10a4 4 0 00-4 4v2a4 4 0 004 4h8a4 4 0 004-4v-2a4 4 0 00-4-4"/><line x1="9" y1="15" x2="9" y2="15.01"/><line x1="15" y1="15" x2="15" y2="15.01"/></svg>
+  <span id="aiFabDot" style="position:absolute;top:2px;right:2px;width:8px;height:8px;background:#22c55e;border-radius:50%;border:2px solid #fff"></span>
+</div>
+<div id="fabTooltip" style="position:fixed;bottom:80px;right:24px;font-size:11px;color:#0f1419;background:#fff;padding:6px 12px;border-radius:8px;z-index:90;pointer-events:none;opacity:0;transition:opacity .3s;border:1px solid #eff3f4;box-shadow:0 2px 8px rgba(0,0,0,0.08)">AI 对话</div>
 <div class="install-banner" id="installBanner"><span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="var(--purple)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>添加到主屏幕</span><button class="btn btn-primary" onclick="installPWA()">安装</button><button class="btn-icon" onclick="dismissInstall()" style="margin-left:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
 
 <script>
@@ -966,8 +985,7 @@ function migrateData(d){
   d.pomodoros=d.pomodoros||{};
   d.todayIntention=d.todayIntention||'';
   d.weekNote=d.weekNote||'';
-  d.investPlan=d.investPlan||{goal:'',entry:'',risk:''};
-  d.meals=d.meals||[];
+    d.meals=d.meals||[];
   d.water=d.water||{};
   d.userProfile=d.userProfile||def.userProfile;
   const maxId=d.todos.reduce((mx,t)=>Math.max(mx,t.id||0),0);
@@ -1035,7 +1053,7 @@ function switchTab(tab){
     journal:['阅读','笔记 · 进度'],
     news:['新闻','关注 · 动态'],
     review:['每日复盘','交易 · 反思']
-    ,investment:['投资计划','条件 · 仓位 · 风险线']
+    
   };
   var titleEl=document.getElementById('pageTitleText');
   var subEl=document.getElementById('pageSubtitle');
@@ -1147,7 +1165,7 @@ const pageTitles={
   journal:{title:'阅读',subtitle:'进度 · 读书笔记'},
   news:{title:'新闻',subtitle:'关注 · 简报'},
   review:{title:'每日复盘',subtitle:'交易日志 · 反思'}
-  ,investment:{title:'投资计划',subtitle:'条件 · 仓位 · 风险线'}
+  
 };
 const navIcons={
   today:'<path d="M4 5h16M4 12h16M4 19h10"/>',
@@ -2111,7 +2129,6 @@ function renderWeekReview(){
 }
 function saveWeekNote(){data.weekNote=document.getElementById('weekNote').value.trim();saveData();showToast('周复盘已保存');}
 function renderInvestmentPlan(){const p=data.investPlan||{};['Goal','Entry','Risk'].forEach(k=>{const el=document.getElementById('invest'+k);if(el)el.value=p[k.toLowerCase()]||'';});}
-function saveInvestmentPlan(){data.investPlan={goal:document.getElementById('investGoal').value.trim(),entry:document.getElementById('investEntry').value.trim(),risk:document.getElementById('investRisk').value.trim()};saveData();showToast('投资计划已保存');}
 
 function renderAll(){
   try{renderCheckin();}catch(e){console.error('[renderAll] renderCheckin:',e)}
@@ -2150,114 +2167,6 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPro
 function installPWA(){if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt.userChoice.then(r=>{if(r.outcome==='accepted')showToast('已安装到桌面');deferredPrompt=null;document.getElementById('installBanner').classList.remove('show');});}
 function dismissInstall(){document.getElementById('installBanner').classList.remove('show');localStorage.setItem('installDismissed','1');}
 
-// === Stock Dashboard ===
-async function loadStockData(){
-  try{
-    const r=await fetch('https://seoj07617-stack.github.io/shiyi-app/stock-data.json?v='+Date.now());
-    if(!r.ok)return null;
-    return await r.json();
-  }catch(e){return null}
-}
-
-function renderStockDashboard(data){
-  if(!data)return;
-  const el=document.getElementById('stockDashboard');
-  if(!el)return;
-  
-  let html='';
-  
-  // Market overview bars
-  html+='<div class="market-bar">';
-  for(const[name,info]of Object.entries(data.market)){
-    const clr=info.change>=0?'var(--green)':'var(--red)';
-    html+=`<div class="market-bar-item"><div class="name">${name}</div><div class="val" style="color:${clr}">${info.change>=0?'+':''}${info.change.toFixed(2)}%</div><div class="pct" style="color:var(--white-dim)">${info.price.toFixed(2)}</div></div>`;
-  }
-  html+='</div>';
-  
-  // Holdings metrics
-  data.holdings.forEach((h,i)=>{
-    const clr=h.change>=0?'var(--green)':'var(--red)';
-    const pnlClr=h.pnl>=0?'var(--green)':'var(--red)';
-    html+=`<div class="stock-chart-wrap">`;
-    html+=`<div class="stock-chart-title">${h.name} <span class="code">${h.code}</span></div>`;
-    html+=`<div class="stock-metrics">`;
-    html+=`<div class="stock-metric"><div class="label">现价</div><div class="value" style="color:${clr}">${h.price.toFixed(3)}</div><div class="change" style="color:${clr}">${h.change>=0?'+':''}${h.change.toFixed(2)}%</div></div>`;
-    html+=`<div class="stock-metric"><div class="label">盈亏</div><div class="value" style="color:${pnlClr}">${(h.pnl*100).toFixed(1)}%</div><div class="change" style="color:var(--white-dim)">成本${h.cost.toFixed(3)}</div></div>`;
-    html+=`<div class="stock-metric"><div class="label">市值</div><div class="value" style="color:var(--white)">¥${(h.marketValue/10000).toFixed(2)}万</div><div class="change" style="color:var(--white-dim)">${h.shares}份</div></div>`;
-    html+=`<div class="stock-metric"><div class="label">成交额</div><div class="value" style="color:var(--white)">${h.volume}</div><div class="change" style="color:var(--white-dim)">${h.notes}</div></div>`;
-    html+=`</div>`;
-    html+=`<div style="height:120px;position:relative"><canvas id="stockChart${i}"></canvas></div>`;
-    html+=`</div>`;
-  });
-  
-  // Key news
-  html+=`<div style="margin-top:4px">`;
-  data.keyNews.forEach(n=>{
-    const impactClr=n.impact==='bull'?'var(--green)':n.impact==='bear'?'var(--red)':'var(--amber)';
-    const prefix=n.impact==='bull'?'利多':n.impact==='bear'?'利空':'中性';
-    html+=`<div class="stock-news-item"><div class="stock-news-impact" style="background:${impactClr}"></div><div class="stock-news-text"><span style="color:${impactClr};font-weight:600">[${prefix}]</span> ${n.headline}</div></div>`;
-  });
-  html+=`</div>`;
-  
-  // Reminders
-  html+=`<div style="margin-top:8px">`;
-  data.reminders.forEach(r=>{
-    html+=`<div class="stock-reminder">${r}</div>`;
-  });
-  html+=`</div>`;
-  
-  el.innerHTML=html;
-  
-  // Destroy old Chart instances before creating new ones
-  if(window._stockCharts){
-    window._stockCharts.forEach(function(c){if(c)c.destroy();});
-  }
-  window._stockCharts=[];
-  
-  // Render charts
-  data.holdings.forEach((h,i)=>{
-    const canvas=document.getElementById('stockChart'+i);
-    if(!canvas||!h.history||!h.history.length)return;
-    const ctx=canvas.getContext('2d');
-    const isNeg=h.change<0;
-    var chart=new Chart(ctx,{
-      type:'line',
-      data:{
-        labels:h.history.map(p=>p.date),
-        datasets:[{
-          data:h.history.map(p=>p.price),
-          borderColor:isNeg?'#dc2626':'#059669',
-          backgroundColor:isNeg?'rgba(220,38,38,0.08)':'rgba(5,150,105,0.08)',
-          borderWidth:1.5,
-          fill:true,
-          tension:0.3,
-          pointRadius:0,
-          pointHitRadius:8
-        }]
-      },
-      options:{
-        responsive:true,
-        maintainAspectRatio:false,
-        plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,padding:8,titleFont:{size:10},bodyFont:{size:11},callbacks:{label:function(ctx){return ctx.parsed.y.toFixed(3)}}}},
-        scales:{
-          x:{display:true,ticks:{maxTicksLimit:5,font:{size:9},color:'rgba(0,0,0,0.3)'},grid:{display:false}},
-          y:{display:true,ticks:{font:{size:9},color:'rgba(0,0,0,0.3)',callback:v=>v.toFixed(3)},grid:{color:'rgba(0,0,0,0.04)'}}
-        },
-        interaction:{mode:'nearest',axis:'x',intersect:false}
-      }
-    });
-    window._stockCharts.push(chart);
-  });
-}
-
-// Auto-load stock data on review tab
-var _origSwitchTab=window.switchTab;
-window.switchTab=function(tab){
-  if(_origSwitchTab)_origSwitchTab(tab);
-  if(tab==='review'){
-    loadStockData().then(d=>{if(d)renderStockDashboard(d)});
-  }
-};
 
 
 document.addEventListener('click',function(e){
@@ -2464,6 +2373,151 @@ function aiPolishDiary(){
 function aiPolishReview(){
   aiPolish('reviewReflection');
 }
+
+
+// ========== AI Chat Panel ==========
+const AI_STORE_KEY='shiyi_ai_config';
+const AI_CHAT_KEY='shiyi_ai_chat';
+let aiConfig=loadAIConfig();
+let aiChatHistory=loadAIChat();
+let aiIsTyping=false;
+
+function loadAIConfig(){try{const c=localStorage.getItem(AI_STORE_KEY);return c?JSON.parse(c):{apiUrl:'',apiKey:'',model:'gpt-4o-mini'};}catch(e){return{apiUrl:'',apiKey:'',model:'gpt-4o-mini'};}}
+function saveAIConfigToStore(){localStorage.setItem(AI_STORE_KEY,JSON.stringify(aiConfig));}
+function loadAIChat(){try{const c=localStorage.getItem(AI_CHAT_KEY);return c?JSON.parse(c):[];}catch(e){return[];}}
+function saveAIChat(){localStorage.setItem(AI_CHAT_KEY,JSON.stringify(aiChatHistory));}
+
+function toggleAIChat(){
+  const panel=document.getElementById('aiChatPanel');
+  const overlay=document.getElementById('aiChatOverlay');
+  if(!panel)return;
+  const isOpen=panel.style.transform==='translateX(0)';
+  if(isOpen){
+    panel.style.transform='translateX(100%)';
+    overlay.style.opacity='0';
+    setTimeout(()=>{overlay.style.display='none';},300);
+  }else{
+    overlay.style.display='block';
+    requestAnimationFrame(()=>{overlay.style.opacity='1';panel.style.transform='translateX(0)';});
+    if(aiChatHistory.length>0)renderAIChatHistory();
+    setTimeout(()=>{const inp=document.getElementById('aiInput');if(inp)inp.focus();},400);
+  }
+}
+
+function openAISettings(){
+  const modal=document.getElementById('aiSettingsModal');
+  if(modal){modal.style.display='flex';
+  document.getElementById('aiApiUrl').value=aiConfig.apiUrl||'';
+  document.getElementById('aiApiKey').value=aiConfig.apiKey||'';
+  document.getElementById('aiModel').value=aiConfig.model||'gpt-4o-mini';}
+}
+function closeAISettings(){const m=document.getElementById('aiSettingsModal');if(m)m.style.display='none';}
+function saveAISettings(){
+  aiConfig.apiUrl=document.getElementById('aiApiUrl').value.trim();
+  aiConfig.apiKey=document.getElementById('aiApiKey').value.trim();
+  aiConfig.model=document.getElementById('aiModel').value.trim()||'gpt-4o-mini';
+  saveAIConfigToStore();
+  closeAISettings();
+  showToast('AI 设置已保存');
+}
+
+function renderAIChatHistory(){
+  const container=document.getElementById('aiMessages');
+  if(!container)return;
+  container.innerHTML='';
+  aiChatHistory.forEach(msg=>appendAIMessage(msg.role,msg.content,false));
+}
+
+function appendAIMessage(role,content,save=true){
+  const container=document.getElementById('aiMessages');
+  if(!container)return;
+  const isUser=role==='user';
+  const div=document.createElement('div');
+  div.style.display='flex';
+  div.style.gap='10px';
+  div.style.alignItems='flex-start';
+  div.style.flexDirection=isUser?'row-reverse':'row';
+  div.style.opacity='0';
+  div.style.transform='translateY(8px)';
+  div.style.transition='all .3s ease';
+  const avatar=document.createElement('div');
+  avatar.style.width='32px';avatar.style.height='32px';avatar.style.borderRadius='10px';avatar.style.flexShrink='0';avatar.style.display='flex';avatar.style.alignItems='center';avatar.style.justifyContent='center';avatar.style.color='#fff';
+  if(isUser){avatar.style.background='linear-gradient(135deg,#059669,#34d399)';avatar.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';}
+  else{avatar.style.background='linear-gradient(135deg,#7c3aed,#a78bfa)';avatar.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 014 4v1a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M8 10a4 4 0 00-4 4v2a4 4 0 004 4h8a4 4 0 004-4v-2a4 4 0 00-4-4"/></svg>';}
+  const bubble=document.createElement('div');
+  bubble.style.background=isUser?'linear-gradient(135deg,#7c3aed,#a78bfa)':'#fff';
+  bubble.style.color=isUser?'#fff':'#1f2937';
+  bubble.style.border=isUser?'none':'1px solid #f0f0f0';
+  bubble.style.borderRadius=isUser?'14px 4px 14px 14px':'4px 14px 14px 14px';
+  bubble.style.padding='10px 14px';bubble.style.maxWidth='80%';bubble.style.fontSize='13px';bubble.style.lineHeight='1.6';bubble.style.wordBreak='break-word';
+  if(!isUser)bubble.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';
+  bubble.innerHTML=content.replace(/
+/g,'<br>');
+  div.appendChild(avatar);div.appendChild(bubble);
+  container.appendChild(div);
+  requestAnimationFrame(()=>{div.style.opacity='1';div.style.transform='translateY(0)';});
+  container.scrollTop=container.scrollHeight;
+  if(save){aiChatHistory.push({role,content});saveAIChat();}
+}
+
+function showTypingIndicator(){
+  const container=document.getElementById('aiMessages');if(!container)return;
+  const div=document.createElement('div');div.id='aiTyping';
+  div.style.cssText='display:flex;gap:10px;align-items:flex-start;opacity:0;transform:translateY(8px);transition:all .3s ease';
+  div.innerHTML='<div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#a78bfa);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 014 4v1a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M8 10a4 4 0 00-4 4v2a4 4 0 004 4h8a4 4 0 004-4v-2a4 4 0 00-4-4"/></svg></div><div style="background:#fff;border:1px solid #f0f0f0;border-radius:4px 14px 14px 14px;padding:12px 16px;display:flex;gap:4px;align-items:center"><span style="width:6px;height:6px;background:#a78bfa;border-radius:50%;animation:aiBounce 1.4s infinite ease-in-out both"></span><span style="width:6px;height:6px;background:#a78bfa;border-radius:50%;animation:aiBounce 1.4s infinite ease-in-out both;animation-delay:.16s"></span><span style="width:6px;height:6px;background:#a78bfa;border-radius:50%;animation:aiBounce 1.4s infinite ease-in-out both;animation-delay:.32s"></span></div>';
+  container.appendChild(div);
+  requestAnimationFrame(()=>{div.style.opacity='1';div.style.transform='translateY(0)';});
+  container.scrollTop=container.scrollHeight;
+}
+function removeTypingIndicator(){const t=document.getElementById('aiTyping');if(t)t.remove();}
+
+async function sendAIMessage(){
+  if(aiIsTyping)return;
+  const input=document.getElementById('aiInput');if(!input)return;
+  const text=input.value.trim();if(!text)return;
+  if(!aiConfig.apiUrl||!aiConfig.apiKey){showToast('请先配置 API 地址和 Key');openAISettings();return;}
+  appendAIMessage('user',text);
+  input.value='';input.style.height='auto';
+  aiIsTyping=true;showTypingIndicator();
+  try{
+    const messages=[{role:'system',content:'你是拾壹，一个个人工作台AI助手。性格温暖、理性、有条理。回答简洁实用，适当使用emoji。'}];
+    aiChatHistory.slice(-10).forEach(m=>messages.push({role:m.role,content:m.content}));
+    const resp=await fetch(aiConfig.apiUrl,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+aiConfig.apiKey},
+      body:JSON.stringify({model:aiConfig.model,messages:messages,temperature:0.7,max_tokens:2000})
+    });
+    if(!resp.ok)throw new Error('API 请求失败: '+resp.status);
+    const data=await resp.json();
+    const reply=data.choices?.[0]?.message?.content||'抱歉，我没有理解你的意思。';
+    removeTypingIndicator();
+    appendAIMessage('assistant',reply);
+  }catch(e){
+    removeTypingIndicator();
+    appendAIMessage('assistant','⚠️ 出错了: '+e.message+'\n\n请检查 API 配置是否正确。');
+  }finally{aiIsTyping=false;}
+}
+
+function sendQuickMsg(msg){
+  const input=document.getElementById('aiInput');if(input){input.value=msg;sendAIMessage();}
+}
+function clearAIChat(){
+  aiChatHistory=[];saveAIChat();
+  const container=document.getElementById('aiMessages');if(container){
+    container.innerHTML='<div style="display:flex;gap:10px;align-items:flex-start"><div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#a78bfa);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 014 4v1a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M8 10a4 4 0 00-4 4v2a4 4 0 004 4h8a4 4 0 004-4v-2a4 4 0 00-4-4"/></svg></div><div style="background:#fff;border:1px solid #f0f0f0;border-radius:4px 14px 14px 14px;padding:10px 14px;max-width:80%;font-size:13px;line-height:1.6;color:#1f2937;box-shadow:0 1px 3px rgba(0,0,0,0.04)">对话已清空，有什么可以帮你的？</div></div>';
+  }
+  showToast('对话已清空');
+}
+
+// FAB tooltip
+const aiFab=document.getElementById('aiFab');
+const aiTip=document.getElementById('fabTooltip');
+if(aiFab&&aiTip){aiFab.addEventListener('mouseenter',()=>aiTip.style.opacity='1');aiFab.addEventListener('mouseleave',()=>aiTip.style.opacity='0');}
+
+// Add typing animation CSS
+const aiStyle=document.createElement('style');
+aiStyle.textContent='@keyframes aiBounce{0%,80%,100%{transform:scale(0);opacity:.5}40%{transform:scale(1);opacity:1}}';
+document.head.appendChild(aiStyle);
 
 </script>
 
