@@ -950,9 +950,24 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
 </div>
 
 
-<div id="aiFab" onclick="toggleAIChat()" style="position:fixed;bottom:24px;right:24px;width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#7c3aed 0%,#a78bfa 100%);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(124,58,237,0.35);z-index:90;transition:all .3s cubic-bezier(.34,1.56,.64,1);border:none" onmouseenter="this.style.transform='scale(1.1)';this.style.boxShadow='0 6px 28px rgba(124,58,237,0.45)'" onmouseleave="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(124,58,237,0.35)'">
-  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 014 4v1a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M8 10a4 4 0 00-4 4v2a4 4 0 004 4h8a4 4 0 004-4v-2a4 4 0 00-4-4"/><line x1="9" y1="15" x2="9" y2="15.01"/><line x1="15" y1="15" x2="15" y2="15.01"/></svg>
-  <span id="aiFabDot" style="position:absolute;top:2px;right:2px;width:8px;height:8px;background:#22c55e;border-radius:50%;border:2px solid #fff"></span>
+<div id="aiFab" onclick="toggleAIChat()" style="position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#1c1c1e 0%,#2c2c2e 50%,#1c1c1e 100%);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 24px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.1);z-index:90;transition:all .3s cubic-bezier(.34,1.56,.64,1);border:none;overflow:hidden" onmouseenter="this.style.transform='scale(1.12)';this.style.boxShadow='0 8px 32px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.15)'" onmouseleave="this.style.transform='scale(1)';this.style.boxShadow='0 4px 24px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.1)'">
+  <div style="position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,#ff2d55,#ff9500,#ffcc00,#34c759,#00c7be,#007aff,#5856d6,#af52de,#ff2d55);opacity:0.25;filter:blur(2px)"></div>
+  <svg viewBox="0 0 48 48" width="30" height="30" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:relative;z-index:1">
+    <defs>
+      <linearGradient id="siriGrad1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff2d55"/><stop offset="100%" stop-color="#ff9500"/></linearGradient>
+      <linearGradient id="siriGrad2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff9500"/><stop offset="100%" stop-color="#ffcc00"/></linearGradient>
+      <linearGradient id="siriGrad3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34c759"/><stop offset="100%" stop-color="#00c7be"/></linearGradient>
+      <linearGradient id="siriGrad4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#007aff"/><stop offset="100%" stop-color="#5856d6"/></linearGradient>
+      <linearGradient id="siriGrad5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#af52de"/><stop offset="100%" stop-color="#ff2d55"/></linearGradient>
+    </defs>
+    <rect x="10" y="14" width="3.5" height="20" rx="1.75" fill="url(#siriGrad1)"/>
+    <rect x="15.5" y="10" width="3.5" height="28" rx="1.75" fill="url(#siriGrad2)"/>
+    <rect x="21" y="6" width="3.5" height="36" rx="1.75" fill="url(#siriGrad3)"/>
+    <rect x="26.5" y="10" width="3.5" height="28" rx="1.75" fill="url(#siriGrad4)"/>
+    <rect x="32" y="14" width="3.5" height="20" rx="1.75" fill="url(#siriGrad5)"/>
+    <rect x="37.5" y="18" width="3.5" height="12" rx="1.75" fill="url(#siriGrad1)" opacity="0.6"/>
+  </svg>
+  <span id="aiFabDot" style="position:absolute;top:3px;right:3px;width:10px;height:10px;background:#34c759;border-radius:50%;border:2px solid #1c1c1e;z-index:2"></span>
 </div>
 <div id="fabTooltip" style="position:fixed;bottom:80px;right:24px;font-size:11px;color:#0f1419;background:#fff;padding:6px 12px;border-radius:8px;z-index:90;pointer-events:none;opacity:0;transition:opacity .3s;border:1px solid #eff3f4;box-shadow:0 2px 8px rgba(0,0,0,0.08)">AI 对话</div>
 <div class="install-banner" id="installBanner"><span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="var(--purple)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>添加到主屏幕</span><button class="btn btn-primary" onclick="installPWA()">安装</button><button class="btn-icon" onclick="dismissInstall()" style="margin-left:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
