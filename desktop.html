@@ -441,30 +441,75 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
 
 /* ===== Desktop 优化 ===== */
 @media(min-width:768px){
-  :root{--sidebar-w:220px}
+  :root{--sidebar-w:200px}
   .mobile-header{display:none!important;}
-  .sidebar{display:flex!important;padding:20px 14px 16px;}
+  .mobile-menu{display:none!important;}
+  .sidebar{display:flex!important;padding:20px 12px 16px;}
   .content{padding-top:0!important;max-width:none;}
-  .content-header{padding:20px 32px 16px;}
-  .content-body{padding:0 32px 48px;max-width:100%;}
+  .content-header{padding:18px 28px 14px;}
+  .content-body{padding:0 28px 48px;max-width:100%;}
   .app{flex-direction:row!important;}
+  /* 工具箱网格 */
+  #sec-tools .tool-card,#sec-tools .bookmark-card{min-width:0;}
 }
 @media(min-width:1024px){
   :root{--sidebar-w:240px}
-  .sidebar{padding:24px 16px 16px;}
+  .sidebar{padding:24px 14px 16px;}
+  .sidebar-logo{padding:0 8px 18px;margin-bottom:14px;}
   .sidebar-logo h1{font-size:16px;}
-  .nav-item{padding:10px 14px;margin:2px 6px;border-radius:10px;}
-  .content-header{padding:24px 40px 16px;}
-  .content-header .page-title{font-size:26px;}
-  .content-body{padding:0 40px 60px;max-width:1200px;}
-  .dashboard-grid{grid-template-columns:1.5fr 1fr!important;gap:20px!important;}
-  .overview-grid{grid-template-columns:repeat(4,1fr)!important;gap:16px!important;}
-  .card{border-radius:16px;}
-  .ai-chat-panel{width:420px!important;max-height:80vh!important;bottom:24px!important;right:24px!important;border-radius:20px!important;}
-  .ai-chat-btn{bottom:28px;right:28px;width:56px;height:56px;}
-  .content::-webkit-scrollbar{width:8px;}
-  .content::-webkit-scrollbar-thumb{background:rgba(124,58,237,0.2);border-radius:4px;}
-  .metric-grid{grid-template-columns:repeat(4,1fr)!important;}
+  .sidebar-logo .date{font-size:11px;}
+  .nav-section-label{padding:0 10px;margin:12px 0 4px;font-size:10px;}
+  .nav-item{padding:9px 12px;margin:1px 6px;border-radius:10px;font-size:13px;gap:10px;}
+  .nav-item .nav-icon{width:18px;height:18px;}
+  .content-header{padding:20px 36px 14px;z-index:10;}
+  .content-header .page-title{font-size:22px;font-weight:700;}
+  .content-header .page-subtitle{font-size:12px;}
+  .content-body{padding:0 36px 60px;max-width:1200px;}
+  /* 今日焦点：左右分栏 */
+  #sec-today .dashboard-grid{display:grid!important;grid-template-columns:1.6fr 1fr!important;gap:16px!important;align-items:start;}
+  #sec-today .overview-grid{display:grid!important;grid-template-columns:repeat(2,1fr)!important;gap:12px!important;}
+  /* 健康页：卡片网格 */
+  #sec-health{display:grid!important;grid-template-columns:1fr 1fr;gap:14px;align-items:start;}
+  #sec-health .card{margin-bottom:0!important;}
+  #sec-health .card:nth-child(1){grid-column:1/-1;}
+  #sec-health .card:nth-child(2){grid-column:1/-1;}
+  /* 周复盘：概览卡片横排 */
+  #sec-week .overview-grid{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:12px!important;}
+  /* 工具箱：多列网格 */
+  #sec-tools .dashboard-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:14px!important;}
+  /* 日记/阅读/新闻：更宽的内容区 */
+  #sec-diary .card,#sec-journal .card,#sec-news .card,#sec-review .card{max-width:800px;}
+  /* 训练页 */
+  #sec-workout{max-width:900px;}
+  /* 投资计划 */
+  #sec-investment{max-width:800px;}
+  /* 待办页 */
+  #sec-todo{max-width:800px;}
+  /* 卡片样式 */
+  .card{border-radius:14px;transition:border-color .2s,box-shadow .2s,transform .2s;}
+  .card:hover{box-shadow:0 4px 20px rgba(124,58,237,0.06);}
+  /* AI 面板 */
+  .ai-chat-panel{width:400px!important;max-height:75vh!important;bottom:24px!important;right:24px!important;border-radius:18px!important;}
+  .ai-chat-btn{bottom:28px;right:28px;width:54px;height:54px;}
+  /* 滚动条 */
+  .content::-webkit-scrollbar{width:6px;}
+  .content::-webkit-scrollbar-thumb{background:rgba(124,58,237,0.15);border-radius:3px;}
+  .content::-webkit-scrollbar-thumb:hover{background:rgba(124,58,237,0.3);}
+  /* 模态框居中 */
+  .modal-overlay{align-items:center!important;}
+  .modal{max-width:520px;width:90%;max-height:85vh;border-radius:18px!important;}
+  /* 输入框和按钮更大 */
+  input,textarea,select{font-size:14px;}
+  .btn{padding:9px 18px;font-size:13px;}
+  /* 热力图 */
+  .heatmap-grid{gap:3px;}
+}
+@media(min-width:1400px){
+  :root{--sidebar-w:260px}
+  .content-body{max-width:1300px;}
+  #sec-health{grid-template-columns:1fr 1fr 1fr;}
+  #sec-health .card:nth-child(1),#sec-health .card:nth-child(2){grid-column:1/-1;}
+  #sec-tools .dashboard-grid{grid-template-columns:repeat(4,1fr)!important;}
 }
 
 
@@ -1048,6 +1093,11 @@ function switchTab(tab){
   var subEl=document.getElementById('pageSubtitle');
   if(titleMap[tab]&&titleEl)titleEl.textContent=titleMap[tab][0];
   if(titleMap[tab]&&subEl)subEl.textContent=titleMap[tab][1];
+  // 更新页面图标
+  if(typeof navIcons!=='undefined'&&navIcons[tab]){
+    var svg=document.querySelector('#pageTitle svg');
+    if(svg)svg.innerHTML=navIcons[tab];
+  }
   // Scroll to top
   var content=document.querySelector('.content');
   if(content)content.scrollTop=0;
