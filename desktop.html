@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v8.0 - mobile: all sections visible + scroll nav strip, no drawer/display toggle -->
+<!-- v13.0 - PWA安装+离线缓存 | 饮水快捷记录 | 倒计时自定义 | JSON备份导出 -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -10,6 +10,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#ffffff">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='38' fill='none' stroke='%237c3aed' stroke-width='4'/><circle cx='50' cy='50' r='10' fill='%237c3aed'/></svg>">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
@@ -84,7 +86,14 @@ html,body{height:100%;touch-action:manipulation;font-family:-apple-system,BlinkM
 .content-body{max-width:1080px}
 .dashboard-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:12px}
 .health-diet{display:none}.health-diet~*{position:relative}
-#sec-health .overview-card:nth-child(2),#sec-health .overview-card:nth-child(3){display:none}
+.overview-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.overview-card{padding:14px;border-radius:var(--radius-sm);background:#fff;border:1px solid #eff3f4;position:relative;overflow:hidden}
+.overview-card .ov-icon{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.overview-card .ov-icon svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.overview-card .ov-label{font-size:11px;color:#536471;font-weight:500}
+.overview-card .ov-value{font-size:24px;font-weight:700;letter-spacing:-0.03em;line-height:1.1;margin-top:3px;font-variant-numeric:tabular-nums}
+.overview-card .ov-sub{font-size:10.5px;color:var(--white-dim);margin-top:4px;line-height:1.5}
+#sec-health .overview-card:nth-child(2){display:none}
 .focus-list{display:grid;gap:8px}.focus-item{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--glass-border);border-radius:10px;background:#fff}.focus-num{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--purple-glow);color:var(--purple);font-size:11px;font-weight:700}.focus-text{flex:1;font-size:13px}.insight-stat{padding:16px;border-radius:12px;background:#fbfbfc;border:1px solid var(--glass-border)}.insight-stat b{display:block;font-size:24px;letter-spacing:-.04em;margin-top:5px}.plan-field{margin-bottom:14px}.plan-field label{display:block;font-size:11px;font-weight:700;color:var(--white-dim);margin-bottom:7px;letter-spacing:.04em}
 @media(max-width:767px){.dashboard-grid{grid-template-columns:1fr}.content-body{padding:0 16px 32px}.overview-grid{grid-template-columns:repeat(2,1fr)}}
 
@@ -557,6 +566,11 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
 <a href="javascript:void(0)" class="menu-item" onclick="switchTab('news');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">新闻</a>
 <a href="javascript:void(0)" class="menu-item" onclick="switchTab('review');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">复盘</a>
 <a href="javascript:void(0)" class="menu-item" onclick="switchTab('investment');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">投资计划</a>
+      <div style="display:flex;gap:8px;padding:10px 16px 14px;border-top:1px solid #eff3f4;margin-top:6px">
+        <button class="btn btn-ghost btn-sm" style="flex:1" onclick="exportData();closeMobileMenu()">导出</button>
+        <button class="btn btn-ghost btn-sm" style="flex:1" onclick="exportBackup();closeMobileMenu()">备份</button>
+        <button class="btn btn-ghost btn-sm" style="flex:1" onclick="importData();closeMobileMenu()">导入</button>
+      </div>
     </div>
   </div>
   
@@ -645,6 +659,10 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
         <span class="footer-text">导出</span>
       </button>
+      <button class="btn btn-ghost" onclick="exportBackup()">
+        <svg viewBox="0 0 24 24"><path d="M4 7V5a2 2 0 012-2h12a2 2 0 012 2v2M4 7h16M4 7v12a2 2 0 002 2h12a2 2 0 002-2V7M10 11h4"/></svg>
+        <span class="footer-text">备份</span>
+      </button>
       <button class="btn btn-ghost" onclick="importData()">
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
         <span class="footer-text">导入</span>
@@ -700,6 +718,12 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
               <div class="ov-label">饮水</div>
               <div class="ov-value" style="color:var(--cyan)"><span id="waterVal">0</span><span style="font-size:12px;color:#536471;font-weight:400;margin-left:2px">ml</span></div>
               <div class="ov-sub">目标 2500ml</div>
+              <div style="height:4px;background:rgba(0,0,0,0.06);border-radius:2px;overflow:hidden;margin-top:8px"><div id="waterBar" style="height:100%;width:0%;background:var(--cyan);border-radius:2px;transition:width .4s var(--ease)"></div></div>
+              <div style="display:flex;gap:5px;margin-top:8px">
+                <button class="btn btn-ghost btn-sm" style="flex:1;font-size:10.5px;padding:5px 2px" onclick="addWater(250)">+250</button>
+                <button class="btn btn-ghost btn-sm" style="flex:1;font-size:10.5px;padding:5px 2px" onclick="addWater(500)">+500</button>
+                <button class="btn btn-ghost btn-sm" style="flex:1;font-size:10.5px;padding:5px 2px" onclick="addWater(-250)">撤销</button>
+              </div>
             </div>
           </div>
         </div>
@@ -821,8 +845,15 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
             </div>
             <div class="card glass" style="margin-bottom:0">
               <div class="card-glow"></div>
-              <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V7a2 2 0 012-2h10a2 2 0 012 2v14"/><path d="M3 21h18"/><path d="M9 21v-4h6v4"/></svg>倒计时</div>
+              <div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V7a2 2 0 012-2h10a2 2 0 012 2v14"/><path d="M3 21h18"/><path d="M9 21v-4h6v4"/></svg>倒计时<button class="btn-icon" style="margin-left:auto" onclick="toggleCountdownForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
               <div id="countdownList" style="display:flex;flex-direction:column;gap:8px"></div>
+              <div id="countdownForm" style="display:none;margin-top:10px;padding-top:10px;border-top:0.5px solid var(--glass-border)">
+                <input id="cdName" placeholder="事件名称，如：考研报名" style="margin-bottom:6px">
+                <div style="display:flex;gap:6px">
+                  <input type="date" id="cdDate" style="flex:1">
+                  <button class="btn btn-primary btn-sm" onclick="addCountdown()">添加</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1011,6 +1042,12 @@ window.addEventListener('storage',function(e){
 });
 
 const DATA_VERSION=8;
+const defaultCountdowns=[
+  {name:'纪律验证期结束',date:'2026-10-23',color:'var(--purple)',desc:'期间只操作ETF'},
+  {name:'暑假结束',date:'2026-08-31',color:'var(--amber)',desc:'8月31日'},
+  {name:'一级教师评审',date:'2026-12-31',color:'var(--green)',desc:'2026年内'},
+  {name:'159655二笔定投评估',date:'2026-09-01',color:'var(--cyan)',desc:'美联储议息后评估'}
+];
 let data=loadData();
 let todoFilter='全部',newsFilter='全部',editingTodoId=null,selectedCalDate=null,selectedMood=null,selectedScore=0;
 
@@ -1040,6 +1077,7 @@ function migrateData(d){
   d.meals=d.meals||[];
   d.water=d.water||{};
   d.userProfile=d.userProfile||def.userProfile;
+  d.countdowns=d.countdowns||defaultCountdowns.slice();
   const maxId=d.todos.reduce((mx,t)=>Math.max(mx,t.id||0),0);
   d.nextId=Math.max(d.nextId||0,maxId+1);
   return d;
@@ -1134,6 +1172,7 @@ function defaultData(){
     journals:[],news:[],
     books:{'《周期》':35,'《曾国藩传》':20},
     reviews:[],diaries:[],
+    countdowns:defaultCountdowns.slice(),
     health:{},
     meals:[],
     water:{},
@@ -1446,30 +1485,50 @@ function resetPomodoro(){
 }
 
 /* ===== COUNTDOWNS / 倒计时 ===== */
-const countdowns=[
-  {name:'纪律验证期结束',date:'2026-10-23',color:'var(--purple)',desc:'期间只操作ETF'},
-  {name:'暑假结束',date:'2026-08-31',color:'var(--amber)',desc:'8月31日'},
-  {name:'一级教师评审',date:'2026-12-31',color:'var(--green)',desc:'2026年内'},
-  {name:'159655二笔定投评估',date:'2026-09-01',color:'var(--cyan)',desc:'美联储议息后评估'}
-];
 function renderCountdowns(){
   const el=document.getElementById('countdownList');
+  if(!el)return;
+  if(!data.countdowns)data.countdowns=defaultCountdowns.slice();
   const now=new Date();
-  el.innerHTML=countdowns.map(cd=>{
+  const delSvg='<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+  el.innerHTML=data.countdowns.map((cd,i)=>{
     const target=new Date(cd.date+'T00:00:00');
     const diff=Math.ceil((target-now)/(1000*60*60*24));
     const isPast=diff<=0;
     return `<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0">
-      <div>
+      <div style="flex:1;min-width:0">
         <div style="font-size:13px;color:var(--white);font-weight:500">${cd.name}</div>
-        <div style="font-size:10px;color:var(--white-dim)">${cd.desc}</div>
+        <div style="font-size:10px;color:var(--white-dim)">${cd.desc||cd.date}</div>
       </div>
-      <div style="text-align:right">
+      <div style="text-align:right;margin-left:8px;flex-shrink:0">
         <div style="font-size:18px;font-weight:700;color:${isPast?'var(--white-dim)':cd.color}">${isPast?'已到':diff}</div>
         <div style="font-size:10px;color:var(--white-dim)">${isPast?'':'天'}</div>
       </div>
+      <button class="btn-icon" style="width:22px;height:22px;margin-left:4px;flex-shrink:0" onclick="delCountdown(${i})">${delSvg}</button>
     </div>`;
-  }).join('');
+  }).join('')||'<div style="text-align:center;color:var(--white-dim);padding:12px;font-size:12px">暂无倒计时，点右上角 + 添加</div>';
+}
+function toggleCountdownForm(){
+  const f=document.getElementById('countdownForm');
+  if(!f)return;
+  const show=f.style.display==='none';
+  f.style.display=show?'block':'none';
+  if(show)document.getElementById('cdName').focus();
+}
+function addCountdown(){
+  const name=document.getElementById('cdName').value.trim();
+  const date=document.getElementById('cdDate').value;
+  if(!name||!date){showToast('请填写事件名称和日期');return;}
+  if(!data.countdowns)data.countdowns=defaultCountdowns.slice();
+  data.countdowns.push({name,date,color:'var(--purple)',desc:date});
+  saveData();renderCountdowns();
+  document.getElementById('cdName').value='';document.getElementById('cdDate').value='';
+  document.getElementById('countdownForm').style.display='none';
+  showToast('倒计时已添加');
+}
+function delCountdown(i){
+  if(!confirm('删除这个倒计时？'))return;
+  data.countdowns.splice(i,1);saveData();renderCountdowns();showToast('已删除');
 }
 
 /* ===== DIET / 饮食追踪 ===== */
@@ -1620,9 +1679,10 @@ function renderWater(){
   if(!data.water)data.water={};
   const val=data.water[TODAY_STR]||0;
   const target=2500;
-  document.getElementById('waterVal').textContent=val;
-  const pct=Math.min(100,Math.round(val/target*100));
-  document.getElementById('waterBar').style.width=pct+'%';
+  const wv=document.getElementById('waterVal');
+  if(wv)wv.textContent=val;
+  const bar=document.getElementById('waterBar');
+  if(bar)bar.style.width=Math.min(100,Math.round(val/target*100))+'%';
 }
 function generateDietAnalysis(){
   if(!data.meals)data.meals=[];
@@ -2068,6 +2128,11 @@ ${todayReview?`**情绪**: ${moodLabel[todayReview.mood]||'未记录'}
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`拾壹工作台_${today}.md`;a.click();
   showToast('已导出');
 }
+function exportBackup(){
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`shiyi_backup_${TODAY_STR}.json`;a.click();
+  showToast('备份已导出，可用于导入恢复');
+}
 function importData(){
   const input=document.createElement('input');input.type='file';input.accept='.json';
   input.onchange=e=>{
@@ -2194,7 +2259,7 @@ function renderAll(){
   try{renderHeatmap();}catch(e){console.error('[renderAll] renderHeatmap:',e)}
   try{renderCountdowns();}catch(e){console.error('[renderAll] renderCountdowns:',e)}
   try{if(data.pomodoros&&data.pomodoros[TODAY_STR]){document.getElementById('pomCount').textContent=data.pomodoros[TODAY_STR];}}catch(e){console.error('[renderAll] pomCount:',e)}
-  try{renderWeight();}catch(e){console.error('[renderAll] renderWeight:',e)}
+  try{renderWeight();renderWater();}catch(e){console.error('[renderAll] renderWeight:',e)}
   try{renderTodayFocus();renderWeekReview();renderInvestmentPlan();}catch(e){console.error('[renderAll] dashboard:',e)}
   try{renderDiaryStreak();renderDiaryHistory();loadTodayDiary();}catch(e){console.error('[renderAll] diary:',e)}
   try{renderTodoChips();renderTodos();fetchRemoteTodos();}catch(e){console.error('[renderAll] todo:',e)}
@@ -2225,6 +2290,15 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPro
 function installPWA(){if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt.userChoice.then(r=>{if(r.outcome==='accepted')showToast('已安装到桌面');deferredPrompt=null;document.getElementById('installBanner').classList.remove('show');});}
 function dismissInstall(){document.getElementById('installBanner').classList.remove('show');localStorage.setItem('installDismissed','1');}
 
+/* ===== SERVICE WORKER（离线缓存） ===== */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      console.log('v13.0 SW registered, scope:',reg.scope);
+    }).catch(function(e){console.warn('SW注册失败',e);});
+  });
+}
+
 
 
 document.addEventListener('click',function(e){
@@ -2248,7 +2322,7 @@ document.addEventListener('DOMContentLoaded',function(){
     var onclick=item.getAttribute('onclick')||'';
     if(onclick.includes("'today'")){item.classList.add('current');}
   });
-  console.log('v8.0 initialized');
+  console.log('v13.0 initialized');
 });</script>
 
 <script>
@@ -2450,7 +2524,7 @@ function aiPolishReview(){
 </div>
 <button class="ai-chat-btn" id="aiChatBtn" onclick="toggleAiChat()">
   <span class="siri-glow"></span>
-  <svg class="siri-wave" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff2d55"/><stop offset="100%" stop-color="#ff9500"/></linearGradient><linearGradient id="sg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff9500"/><stop offset="100%" stop-color="#ffcc00"/></linearGradient><linearGradient id="sg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34c759"/><stop offset="100%" stop-color="#00c7be"/></linearGradient><linearGradient id="sg4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#007aff"/><stop offset="100%" stop-color="#5856d6"/></linearGradient><linearGradient id="sg5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#af52de"/><stop offset="100%" stop-color="#ff2d55"/></linearGradient></defs><rect x="10" y="14" width="3.5" height="20" rx="1.75" fill="url(#sg1)"/><rect x="15.5" y="10" width="3.5" height="28" rx="1.75" fill="url(#sg2)"/><rect x="21" y="6" width="3.5" height="36" rx="1.75" fill="url(#sg3)"/><rect x="26.5" y="10" width="3.5" height="28" rx="1.75" fill="url(#sg4)"/><rect x="32" y="14" width="3.5" height="20" rx="1.75" fill="url(#sg5)"/></svg>
+  <svg class="siri-wave" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ai-sg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff2d55"/><stop offset="100%" stop-color="#ff9500"/></linearGradient><linearGradient id="ai-sg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff9500"/><stop offset="100%" stop-color="#ffcc00"/></linearGradient><linearGradient id="ai-sg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34c759"/><stop offset="100%" stop-color="#00c7be"/></linearGradient><linearGradient id="ai-sg4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#007aff"/><stop offset="100%" stop-color="#5856d6"/></linearGradient><linearGradient id="ai-sg5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#af52de"/><stop offset="100%" stop-color="#ff2d55"/></linearGradient></defs><rect x="10" y="14" width="3.5" height="20" rx="1.75" fill="url(#ai-sg1)"/><rect x="15.5" y="10" width="3.5" height="28" rx="1.75" fill="url(#ai-sg2)"/><rect x="21" y="6" width="3.5" height="36" rx="1.75" fill="url(#ai-sg3)"/><rect x="26.5" y="10" width="3.5" height="28" rx="1.75" fill="url(#ai-sg4)"/><rect x="32" y="14" width="3.5" height="20" rx="1.75" fill="url(#ai-sg5)"/></svg>
 </button>
 <div class="ai-chat-panel" id="aiChatPanel">
   <div class="ai-chat-header">
@@ -2470,12 +2544,6 @@ function aiPolishReview(){
     <button class="send-btn" id="aiSendBtn" onclick="sendAiMessage()"><svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
   </div>
 </div>
-  <div class="ai-config-bar" id="aiConfigBar">
-    <span>AI 助手</span>
-    <span style="margin:0 4px">·</span>
-    <span id="aiStatusText">未配置</span>
-    <button style="margin-left:auto" onclick="showAiConfig()">配置</button>
-  </div>
 </div>
 </body>
 </html>
