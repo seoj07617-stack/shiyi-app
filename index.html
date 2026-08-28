@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v14.0 - JUN 品牌重塑 | 导航重组 | 图标细化 | 简约高级 -->
+<!-- v14.1 - 投资纪律卡 | 复盘闭环 | 周报生成 | Gist云备份 -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -129,6 +129,8 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
 .btn-ghost{background:#f5f5f7;color:var(--white);border:1px solid #e5e5e5}
 .btn-ghost:active{background:#eee;transform:scale(0.96)}
 .btn-sm{padding:7px 13px;font-size:12px;border-radius:8px}
+.btn.needs-backup{position:relative}
+.btn.needs-backup::after{content:'';position:absolute;top:3px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--red)}
 .btn-icon{padding:7px;width:30px;height:30px;border-radius:8px;background:transparent;color:var(--white-dim);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .btn-icon:active{background:#f5f5f7;transform:scale(0.92)}
 .btn-icon svg{width:15px;height:15px;stroke-width:1.6}
@@ -479,6 +481,7 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
       <div style="display:flex;gap:8px;padding:10px 16px 14px;border-top:1px solid #eff3f4;margin-top:6px">
         <button class="btn btn-ghost btn-sm" style="flex:1" onclick="exportData();closeMobileMenu()">导出</button>
         <button class="btn btn-ghost btn-sm" style="flex:1" onclick="exportBackup();closeMobileMenu()">备份</button>
+        <button class="btn btn-ghost btn-sm" style="flex:1" onclick="openCloudModal()">云端</button>
         <button class="btn btn-ghost btn-sm" style="flex:1" onclick="importData();closeMobileMenu()">导入</button>
       </div>
     </div>
@@ -569,9 +572,13 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
         <span class="footer-text">导出</span>
       </button>
-      <button class="btn btn-ghost" onclick="exportBackup()">
+      <button class="btn btn-ghost" id="backupLocalBtn" onclick="exportBackup()">
         <svg viewBox="0 0 24 24"><path d="M4 7V5a2 2 0 012-2h12a2 2 0 012 2v2M4 7h16M4 7v12a2 2 0 002 2h12a2 2 0 002-2V7M10 11h4"/></svg>
         <span class="footer-text">备份</span>
+      </button>
+      <button class="btn btn-ghost" onclick="openCloudModal()">
+        <svg viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 100-9 6 6 0 00-11.3 2A4 4 0 006.5 19z"/></svg>
+        <span class="footer-text">云端</span>
       </button>
       <button class="btn btn-ghost" onclick="importData()">
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
@@ -591,6 +598,7 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
     <div class="content-body">
 
       <div class="section active" id="sec-today" style="display:block">
+        <div id="todayNotice"></div>
         <div class="dashboard-grid">
           <div class="card glass-strong"><div class="card-title">今天最重要的三件事 <span class="count-badge" id="todayFocusCount"></span></div><div id="todayFocusList" class="focus-list"></div><button class="btn btn-primary btn-sm" style="margin-top:12px;width:100%" onclick="showTodoModal()">添加今日事项</button></div>
           <div class="card glass"><div class="card-title">今日节奏</div><div class="insight-stat"><span style="font-size:11px;color:var(--white-dim)">待完成</span><b id="todayTodoCount">0</b><span style="font-size:11px;color:var(--white-dim)">项任务等待推进</span></div><div class="insight-stat" style="margin-top:8px"><span style="font-size:11px;color:var(--white-dim)">训练状态</span><b id="todayWorkoutState">未打卡</b><span style="font-size:11px;color:var(--white-dim)">完成训练后在健康页打卡</span></div></div>
@@ -600,7 +608,7 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
 
       <div class="section" id="sec-week" style="display:none">
         <div class="dashboard-grid"><div class="card glass-strong"><div class="card-title">本周进度</div><div id="weekMetrics" class="overview-grid"></div></div><div class="card glass"><div class="card-title">周复盘提示</div><p style="font-size:13px;color:var(--white-mid);line-height:1.8">先看结果，再找原因。保留有效做法，只调整一个最关键的问题。</p></div></div>
-        <div class="card glass" style="margin-top:12px"><div class="card-title">本周复盘</div><textarea id="weekNote" placeholder="本周做得好的事、需要调整的事、下周唯一重点……" rows="6"></textarea><button class="btn btn-primary" style="margin-top:10px" onclick="saveWeekNote()">保存复盘</button></div>
+        <div class="card glass" style="margin-top:12px"><div class="card-title">本周复盘</div><textarea id="weekNote" placeholder="本周做得好的事、需要调整的事、下周唯一重点……" rows="6"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-ghost" style="flex:1" onclick="generateWeekReport()">生成本周报告</button><button class="btn btn-primary" style="flex:1" onclick="saveWeekNote()">保存复盘</button></div></div>
       </div>
 
             <!-- HEALTH -->
@@ -856,6 +864,7 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
       </div>
 
       <div class="section" id="sec-investment" style="display:none">
+        <div class="card glass-strong" id="disciplineCard" style="margin-bottom:12px"></div>
         <div class="card glass-strong"><div class="card-title">投资计划 <span class="count-badge">先计划，后交易</span></div>
           <div class="plan-field"><label>本阶段目标</label><textarea id="investGoal" rows="2" placeholder="例如：保持仓位纪律，等待符合条件的机会"></textarea></div>
           <div class="plan-field"><label>买入条件</label><textarea id="investEntry" rows="3" placeholder="估值、趋势、仓位、催化剂等明确条件"></textarea></div>
@@ -869,6 +878,7 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
         <div class="card glass-strong">
           <div class="card-glow"></div>
           <div class="card-title"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/><path d="M9 12h6M9 16h4"/></svg>今日复盘 <span class="count-badge" id="reviewDateBadge"></span></div>
+          <div id="reviewFocusSummary"></div>
           <div class="review-field">
             <label>市场情绪</label>
             <div class="review-mood-grid" id="moodGrid"></div>
@@ -894,6 +904,7 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
           </div>
           <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="saveReview()">保存复盘</button>
         </div>
+        <div id="reviewTrend" class="card glass" style="display:none;margin-bottom:10px;padding:14px 16px"></div>
         <div id="reviewHistory"></div>
       </div>
 
@@ -952,6 +963,7 @@ window.addEventListener('storage',function(e){
 });
 
 const DATA_VERSION=8;
+const defaultInvestDiscipline={start:'2026-07-23',end:'2026-10-23',targets:[['浮动层加仓','0.65'],['浮动层补仓','0.60'],['浮动层止盈','0.75'],['底仓止损','0.30']],rules:['验证期内只操作ETF','买跌不买涨，不追涨','不做T，拿住底仓']};
 const defaultCountdowns=[
   {name:'纪律验证期结束',date:'2026-10-23',color:'var(--purple)',desc:'期间只操作ETF'},
   {name:'暑假结束',date:'2026-08-31',color:'var(--amber)',desc:'8月31日'},
@@ -988,6 +1000,8 @@ function migrateData(d){
   d.water=d.water||{};
   d.userProfile=d.userProfile||def.userProfile;
   d.countdowns=d.countdowns||defaultCountdowns.slice();
+  d.investDiscipline=d.investDiscipline||defaultInvestDiscipline;
+  d.lastBackupAt=d.lastBackupAt||'';
   const maxId=d.todos.reduce((mx,t)=>Math.max(mx,t.id||0),0);
   d.nextId=Math.max(d.nextId||0,maxId+1);
   return d;
@@ -1083,6 +1097,8 @@ function defaultData(){
     books:{'《周期》':35,'《曾国藩传》':20},
     reviews:[],diaries:[],
     countdowns:defaultCountdowns.slice(),
+    investDiscipline:JSON.parse(JSON.stringify(defaultInvestDiscipline)),
+    lastBackupAt:'',
     health:{},
     meals:[],
     water:{},
@@ -1712,7 +1728,7 @@ function renderTodos(){
 }
 function catColor(c){return{工作:'purple',投资:'green',生活:'amber',学习:'purple'}[c]||'dim'}
 function isOverdue(t){if(t.done||!t.due)return false;return t.due<TODAY_STR;}
-function toggleTodo(id){const t=data.todos.find(x=>x.id===id);if(t){t.done=!t.done;saveData();renderTodos();renderTodayFocus();renderWeekReview();}}
+function toggleTodo(id){const t=data.todos.find(x=>x.id===id);if(t){t.done=!t.done;t.doneDate=t.done?TODAY_STR:null;saveData();renderTodos();renderTodayFocus();renderWeekReview();try{renderFocusSummary();renderReviewTrend();}catch(e){}}}
 function showTodoModal(){editingTodoId=null;document.getElementById('todoModalTitle').textContent='新增待办';document.getElementById('todoText').value='';document.getElementById('todoPriority').value='mid';document.getElementById('todoCat').value='工作';document.getElementById('todoDue').value='';document.getElementById('todoPinned').checked=false;document.getElementById('todoModal').classList.add('show');}
 function closeTodoModal(){document.getElementById('todoModal').classList.remove('show');}
 function editTodo(id){const t=data.todos.find(x=>x.id===id);if(!t)return;editingTodoId=id;document.getElementById('todoModalTitle').textContent='编辑待办';document.getElementById('todoText').value=t.text;document.getElementById('todoPriority').value=t.priority;document.getElementById('todoCat').value=t.cat;document.getElementById('todoDue').value=t.due||'';document.getElementById('todoPinned').checked=!!t.pinned;document.getElementById('todoModal').classList.add('show');}
@@ -2040,7 +2056,8 @@ ${todayReview?`**情绪**: ${moodLabel[todayReview.mood]||'未记录'}
 }
 function exportBackup(){
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`shiyi_backup_${TODAY_STR}.json`;a.click();
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`jun_backup_${TODAY_STR}.json`;a.click();
+  data.lastBackupAt=TODAY_STR;saveData();updateBackupDot();
   showToast('备份已导出，可用于导入恢复');
 }
 function importData(){
@@ -2160,6 +2177,148 @@ function renderWeekReview(){
   const note=document.getElementById('weekNote');if(note)note.value=data.weekNote||'';
 }
 function saveWeekNote(){data.weekNote=document.getElementById('weekNote').value.trim();saveData();showToast('周复盘已保存');}
+function generateWeekReport(){
+  const days=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(localDateKey(d));}
+  const checks=days.filter(d=>(data.checkins||[]).includes(d)).length;
+  const pomo=days.reduce((s,d)=>s+((data.pomodoros||{})[d]||0),0);
+  const journals=(data.journals||[]).filter(j=>days.includes(j.date)).length;
+  const diaries=(data.diaries||[]).filter(x=>days.includes(x.date)).length;
+  const reviews=(data.reviews||[]).filter(r=>days.includes(r.date));
+  const waterDays=days.filter(d=>((data.water||{})[d]||0)>=2500).length;
+  const ws=(data.weights||[]).filter(w=>days.includes(w.date));
+  const wDelta=ws.length>=2?(ws[ws.length-1].val-ws[0].val).toFixed(1):null;
+  const scores=reviews.filter(r=>r.score>0).map(r=>r.score);
+  const avgScore=scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1):null;
+  const doneWeek=(data.todos||[]).filter(t=>t.done&&t.doneDate&&days.includes(t.doneDate)).length;
+  const openNow=(data.todos||[]).filter(t=>!t.done).length;
+  const L=['【本周数据 · 自动生成 '+TODAY_STR+'】',
+    '训练打卡 '+checks+' 次 · 专注 '+pomo+' 番茄 · 饮水达标 '+waterDays+'/7 天',
+    '阅读笔记 '+journals+' 条 · 日记 '+diaries+' 篇 · 复盘 '+reviews.length+' 次',
+    '本周完成任务 '+doneWeek+' 项 · 当前待办 '+openNow+' 项'];
+  if(wDelta!==null)L.push('体重变化 '+(wDelta>0?'+':'')+wDelta+'kg');
+  if(avgScore)L.push('平均纪律评分 '+avgScore+'/5');
+  L.push('','做得好的：','','需要调整的：','','下周唯一重点：');
+  document.getElementById('weekNote').value=L.join('\n');
+  showToast('本周报告已生成，补充后保存');
+}
+/* ===== 投资纪律卡 ===== */
+function renderDisciplineCard(){
+  const el=document.getElementById('disciplineCard');
+  if(!el)return;
+  const dd=data.investDiscipline||{};
+  const now=new Date();
+  const start=new Date((dd.start||'2026-07-23')+'T00:00:00');
+  const end=new Date((dd.end||'2026-10-23')+'T00:00:00');
+  const total=Math.max(1,Math.ceil((end-start)/864e5));
+  const passed=Math.min(total,Math.max(0,Math.ceil((now-start)/864e5)));
+  const left=Math.max(0,Math.ceil((end-now)/864e5));
+  const pct=Math.min(100,Math.round(passed/total*100));
+  const soon=(data.countdowns||[]).map(c=>({c,diff:Math.ceil((new Date(c.date+'T00:00:00')-now)/864e5)})).filter(x=>x.diff>=0&&x.diff<=30).sort((a,b)=>a.diff-b.diff)[0];
+  let html='<div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l7.5 3v6c0 4.8-3.2 8.4-7.5 10-4.3-1.6-7.5-5.2-7.5-10v-6z"/></svg>纪律验证期 <span class="count-badge">'+(dd.start||'')+' ~ '+(dd.end||'')+'</span></div>';
+  html+='<div style="height:6px;background:rgba(0,0,0,0.06);border-radius:3px;overflow:hidden;margin:2px 0 8px"><div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,var(--purple-deep),var(--purple));border-radius:3px;transition:width .5s var(--ease)"></div></div>';
+  html+='<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--white-dim);margin-bottom:12px"><span>第 '+passed+' / '+total+' 天</span><span style="color:var(--purple);font-weight:600">剩 '+left+' 天</span></div>';
+  const targets=dd.targets||[];
+  if(targets.length)html+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">'+targets.map(t=>'<span class="tag tag-purple">'+t[0]+' '+t[1]+'</span>').join('')+'</div>';
+  if(soon)html+='<div style="font-size:12px;color:var(--white-mid);padding:8px 10px;border-radius:8px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15)">⏰ '+soon.c.name+(soon.diff===0?' · 就是今天':' · 还有 '+soon.diff+' 天')+'</div>';
+  const rules=dd.rules||[];
+  if(rules.length)html+='<div style="margin-top:10px;padding-top:10px;border-top:0.5px solid var(--glass-border);font-size:11px;color:var(--white-dim);line-height:1.9">'+rules.map(r=>'· '+r).join('<br>')+'</div>';
+  el.innerHTML=html;
+}
+function renderTodayNotice(){
+  const el=document.getElementById('todayNotice');
+  if(!el)return;
+  const now=new Date();
+  const soon=(data.countdowns||[]).map(c=>({c,diff:Math.ceil((new Date(c.date+'T00:00:00')-now)/864e5)})).filter(x=>x.diff<=7).sort((a,b)=>a.diff-b.diff)[0];
+  if(!soon){el.innerHTML='';return;}
+  const txt=soon.diff<0?soon.c.name+' 已到期':(soon.diff===0?soon.c.name+' · 就是今天':soon.c.name+' · 还有 '+soon.diff+' 天');
+  el.innerHTML='<div class="card glass" style="margin-bottom:12px;border-left:3px solid var(--amber);padding:11px 14px;font-size:13px;color:var(--white-mid);display:flex;align-items:center;gap:8px"><span>⏰</span><span>'+txt+'</span></div>';
+}
+/* ===== 复盘闭环 ===== */
+function renderFocusSummary(){
+  const el=document.getElementById('reviewFocusSummary');
+  if(!el)return;
+  const doneToday=(data.todos||[]).filter(t=>t.done&&t.doneDate===TODAY_STR);
+  const open=(data.todos||[]).filter(t=>!t.done).length;
+  let html='<div style="margin-bottom:14px;padding:10px 12px;border-radius:10px;background:rgba(0,0,0,0.02);border:0.5px solid var(--glass-border)">';
+  html+='<div style="font-size:11px;color:var(--white-dim);margin-bottom:6px;letter-spacing:0.04em">今日进展</div>';
+  if(doneToday.length){
+    html+='<div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:4px">已完成 '+doneToday.length+' 项</div>';
+    html+=doneToday.slice(0,3).map(t=>'<div style="font-size:12px;color:var(--white-mid);line-height:1.7">· '+t.text+'</div>').join('');
+  }else{
+    html+='<div style="font-size:12px;color:var(--white-dim)">今日还没有勾选完成的待办</div>';
+  }
+  html+='<div style="font-size:11px;color:var(--white-dim);margin-top:6px">待完成 '+open+' 项</div></div>';
+  el.innerHTML=html;
+}
+function renderReviewTrend(){
+  const el=document.getElementById('reviewTrend');
+  if(!el)return;
+  const rs=(data.reviews||[]).filter(r=>r.score>0).slice(-30);
+  if(rs.length<2){el.style.display='none';return;}
+  el.style.display='block';
+  requestAnimationFrame(function(){
+    const W=Math.max(200,el.clientWidth-32),H=64,pad=8;
+    const pts=rs.map((r,i)=>[pad+i*(W-2*pad)/(rs.length-1),pad+(1-(r.score-1)/4)*(H-2*pad)]);
+    const line=pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+    const dots=pts.map((p,i)=>'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(i===pts.length-1?4:2.5)+'" fill="'+(i===pts.length-1?'var(--purple)':'rgba(124,58,237,0.45)')+'"/>').join('');
+    el.innerHTML='<div style="font-size:11px;font-weight:700;color:var(--white-mid);margin-bottom:8px;display:flex;align-items:center;gap:8px">纪律评分趋势 <span style="font-weight:400;color:var(--white-dim)">最近 '+rs.length+' 次</span></div><svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'"><polyline points="'+line+'" fill="none" stroke="var(--purple)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'+dots+'</svg>';
+  });
+}
+/* ===== 云备份（GitHub Gist） ===== */
+function getCloudCfg(){try{return JSON.parse(localStorage.getItem('shiyi_cloud_config')||'{}');}catch(e){return {};}}
+function openCloudModal(){
+  const cfg=getCloudCfg();
+  if(cfg.token)document.getElementById('cloudToken').value=cfg.token;
+  if(cfg.gistId)document.getElementById('cloudGistId').value=cfg.gistId;
+  document.getElementById('cloudModal').classList.add('show');
+}
+function closeCloudModal(){document.getElementById('cloudModal').classList.remove('show');}
+function readCloudInputs(){
+  const cfg=getCloudCfg();
+  cfg.token=document.getElementById('cloudToken').value.trim()||cfg.token||'';
+  cfg.gistId=document.getElementById('cloudGistId').value.trim()||cfg.gistId||'';
+  localStorage.setItem('shiyi_cloud_config',JSON.stringify(cfg));
+  return cfg;
+}
+async function cloudUpload(){
+  const cfg=readCloudInputs();
+  if(!cfg.token){showToast('请先填写 GitHub Token（需 gist 权限）');return;}
+  showToast('正在上传备份…');
+  try{
+    const payload={description:'JUN workspace backup',files:{'jun_backup.json':{content:JSON.stringify({savedAt:new Date().toISOString(),data:data})}}};
+    const resp=await fetch(cfg.gistId?('https://api.github.com/gists/'+cfg.gistId):'https://api.github.com/gists',{method:cfg.gistId?'PATCH':'POST',headers:{'Authorization':'Bearer '+cfg.token,'Content-Type':'application/json','Accept':'application/vnd.github+json'},body:JSON.stringify(payload)});
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    const j=await resp.json();
+    if(!cfg.gistId&&j.id){cfg.gistId=j.id;localStorage.setItem('shiyi_cloud_config',JSON.stringify(cfg));document.getElementById('cloudGistId').value=j.id;}
+    data.lastBackupAt=TODAY_STR;saveData();updateBackupDot();
+    showToast('已上传到云端 Gist');
+  }catch(e){showToast('上传失败：'+e.message);}
+}
+async function cloudRestore(){
+  const cfg=readCloudInputs();
+  if(!cfg.token){showToast('请先填写 GitHub Token');return;}
+  if(!cfg.gistId){showToast('还没有云端备份，先上传一次');return;}
+  showToast('正在读取云端备份…');
+  try{
+    const resp=await fetch('https://api.github.com/gists/'+cfg.gistId,{headers:{'Authorization':'Bearer '+cfg.token,'Accept':'application/vnd.github+json'}});
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    const j=await resp.json();
+    const content=j.files&&j.files['jun_backup.json']?j.files['jun_backup.json'].content:null;
+    if(!content)throw new Error('备份文件不存在');
+    const parsed=JSON.parse(content);
+    if(!parsed.data)throw new Error('备份格式错误');
+    if(!confirm('用云端备份覆盖当前数据？（备份时间：'+(parsed.savedAt||'未知').slice(0,19).replace('T',' ')+'）'))return;
+    data=migrateData(parsed.data);saveData();renderAll();
+    closeCloudModal();showToast('已从云端恢复');
+  }catch(e){showToast('恢复失败：'+e.message);}
+}
+function updateBackupDot(){
+  const b=document.getElementById('backupLocalBtn');
+  if(!b)return;
+  const last=data.lastBackupAt;
+  const days=last?Math.floor((new Date(TODAY_STR)-new Date(last))/864e5):999;
+  b.classList.toggle('needs-backup',days>=7);
+}
 function renderInvestmentPlan(){const p=data.investPlan||{};['Goal','Entry','Risk'].forEach(k=>{const el=document.getElementById('invest'+k);if(el)el.value=p[k.toLowerCase()]||'';});}
 function saveInvestmentPlan(){data.investPlan={goal:document.getElementById('investGoal').value.trim(),entry:document.getElementById('investEntry').value.trim(),risk:document.getElementById('investRisk').value.trim()};saveData();showToast('投资计划已保存');}
 
@@ -2169,13 +2328,13 @@ function renderAll(){
   try{renderHeatmap();}catch(e){console.error('[renderAll] renderHeatmap:',e)}
   try{renderCountdowns();}catch(e){console.error('[renderAll] renderCountdowns:',e)}
   try{if(data.pomodoros&&data.pomodoros[TODAY_STR]){document.getElementById('pomCount').textContent=data.pomodoros[TODAY_STR];}}catch(e){console.error('[renderAll] pomCount:',e)}
-  try{renderWeight();renderWater();}catch(e){console.error('[renderAll] renderWeight:',e)}
-  try{renderTodayFocus();renderWeekReview();renderInvestmentPlan();}catch(e){console.error('[renderAll] dashboard:',e)}
+  try{renderWeight();renderWater();updateBackupDot();}catch(e){console.error('[renderAll] renderWeight:',e)}
+  try{renderTodayFocus();renderTodayNotice();renderWeekReview();renderInvestmentPlan();renderDisciplineCard();}catch(e){console.error('[renderAll] dashboard:',e)}
   try{renderDiaryStreak();renderDiaryHistory();loadTodayDiary();}catch(e){console.error('[renderAll] diary:',e)}
   try{renderTodoChips();renderTodos();fetchRemoteTodos();}catch(e){console.error('[renderAll] todo:',e)}
   try{renderJournal();}catch(e){console.error('[renderAll] journal:',e)}
   try{renderNewsChips();renderNews();fetchRemoteNews();}catch(e){console.error('[renderAll] news:',e)}
-  try{renderMoodGrid();renderScoreRow();renderReviewHistory();loadTodayReview();}catch(e){console.error('[renderAll] review:',e)}
+  try{renderMoodGrid();renderScoreRow();renderReviewHistory();loadTodayReview();renderFocusSummary();renderReviewTrend();}catch(e){console.error('[renderAll] review:',e)}
   try{fetchWorkoutData();}catch(e){console.error('[renderAll] workout:',e)}
 }
 renderAll();
@@ -2204,7 +2363,7 @@ function dismissInstall(){document.getElementById('installBanner').classList.rem
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('sw.js').then(function(reg){
-      console.log('v14.0 SW registered, scope:',reg.scope);
+      console.log('v14.1 SW registered, scope:',reg.scope);
     }).catch(function(e){console.warn('SW注册失败',e);});
   });
 }
@@ -2232,7 +2391,13 @@ document.addEventListener('DOMContentLoaded',function(){
     var onclick=item.getAttribute('onclick')||'';
     if(onclick.includes("'today'")){item.classList.add('current');}
   });
-  console.log('v14.0 initialized');
+  try{
+    updateBackupDot();
+    const last=data.lastBackupAt;
+    const days=last?Math.floor((new Date(TODAY_STR)-new Date(last))/864e5):999;
+    if(days>=7)setTimeout(function(){showToast('数据已 '+Math.min(days,99)+' 天未备份，记得备份一次');},2500);
+  }catch(e){}
+  console.log('v14.1 initialized');
 });</script>
 
 <script>
@@ -2429,6 +2594,22 @@ function aiPolishReview(){
     <div class="actions">
       <button style="background:#f5f5f7;color:var(--white-mid)" onclick="closeAiConfig()">取消</button>
       <button style="background:var(--purple);color:#fff" onclick="saveAiConfig()">保存</button>
+    </div>
+  </div>
+</div>
+<div class="ai-config-modal" id="cloudModal">
+  <div class="modal-box">
+    <h3>云端备份（GitHub Gist）</h3>
+    <label>GitHub Token</label>
+    <input id="cloudToken" type="password" placeholder="需要 gist 权限的个人访问令牌" />
+    <div class="hint">GitHub → Settings → Developer settings → Personal access tokens 创建，勾选 gist 权限。令牌只保存在本机浏览器，不会上传。</div>
+    <label>Gist ID（可留空）</label>
+    <input id="cloudGistId" placeholder="首次上传备份后自动创建并回填" />
+    <div class="hint">备份为私密 Gist 中的 jun_backup.json，只有你的 Token 能读取。</div>
+    <div class="actions">
+      <button style="background:#f5f5f7;color:var(--white-mid)" onclick="closeCloudModal()">关闭</button>
+      <button style="background:#f5f5f7;color:var(--purple)" onclick="cloudRestore()">从云端恢复</button>
+      <button style="background:var(--purple);color:#fff" onclick="cloudUpload()">上传备份</button>
     </div>
   </div>
 </div>
