@@ -1019,6 +1019,11 @@ function switchTab(tab){
   var subEl=document.getElementById('pageSubtitle');
   if(titleMap[tab]&&titleEl)titleEl.textContent=titleMap[tab][0];
   if(titleMap[tab]&&subEl)subEl.textContent=titleMap[tab][1];
+  // 更新页面图标
+  if(typeof navIcons!=='undefined'&&navIcons[tab]){
+    var svg=document.querySelector('#pageTitle svg');
+    if(svg)svg.innerHTML=navIcons[tab];
+  }
   // Scroll to top
   var content=document.querySelector('.content');
   if(content)content.scrollTop=0;
