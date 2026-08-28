@@ -1,7 +1,7 @@
 {
-  "name": "拾壹 · 个人工作台",
-  "short_name": "拾壹",
-  "description": "个人效率工作台：今日焦点、健康追踪、训练计划、待办管理、投资复盘",
+  "name": "JUN · 个人工作台",
+  "short_name": "JUN",
+  "description": "JUN 个人工作台：今日焦点、健康追踪、训练计划、待办管理、投资复盘",
   "lang": "zh-CN",
   "start_url": "./index.html",
   "scope": "./",

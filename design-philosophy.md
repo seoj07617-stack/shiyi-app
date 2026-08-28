@@ -15,4 +15,4 @@
 
 **Craftsmanship**: Every curve tension, every opacity value, every spacing ratio — refined through painstaking iteration. The result should feel like a data visualization artist spent years perfecting this single piece. It whispers "data" without shouting, invites contemplation without demanding attention.
 
-**Text**: Minimal. Only essential labels — "data flow" as a quiet anchor, "shiyi" as a subtle signature. The visual carries the meaning; words merely ground it.
+**Text**: Minimal. Only essential labels — "data flow" as a quiet anchor, "JUN" as a subtle signature. The visual carries the meaning; words merely ground it.

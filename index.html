@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<!-- v13.0 - PWA安装+离线缓存 | 饮水快捷记录 | 倒计时自定义 | JSON备份导出 -->
+<!-- v14.0 - JUN 品牌重塑 | 导航重组 | 图标细化 | 简约高级 -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>拾壹 · 个人工作台</title>
+<title>JUN · 个人工作台</title>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#ffffff">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='38' fill='none' stroke='%237c3aed' stroke-width='4'/><circle cx='50' cy='50' r='10' fill='%237c3aed'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='%238b5cf6'/><stop offset='100%' stop-color='%234c1d95'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><path d='M58 26v34a13 13 0 01-26 0' fill='none' stroke='white' stroke-width='9' stroke-linecap='round'/></svg>">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <style>
@@ -390,12 +390,12 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
 }
 
 /* AI Chat Panel */
-.ai-chat-btn{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#1c1c1e 0%,#2c2c2e 50%,#1c1c1e 100%);color:#fff;border:none;cursor:pointer;z-index:190;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.1);transition:all .3s cubic-bezier(.34,1.56,.64,1);touch-action:manipulation;overflow:hidden}
+.ai-chat-btn{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6 0%,#5b21b6 100%);color:#fff;border:none;cursor:pointer;z-index:190;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(124,58,237,0.4),inset 0 1px 0 rgba(255,255,255,0.2);transition:all .3s cubic-bezier(.34,1.56,.64,1);touch-action:manipulation;overflow:hidden}
 .ai-chat-btn:active{transform:scale(0.92)}
-.ai-chat-btn svg{width:28px;height:28px}
-.ai-chat-btn.open{transform:rotate(45deg);background:#ef4444}
+.ai-chat-btn svg{width:26px;height:26px}
+.ai-chat-btn.open{transform:rotate(45deg);background:#4c1d95}
 .ai-chat-btn .siri-wave{position:relative;z-index:1}
-.ai-chat-btn .siri-glow{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,#ff2d55,#ff9500,#ffcc00,#34c759,#00c7be,#007aff,#5856d6,#af52de,#ff2d55);opacity:0.2;filter:blur(2px)}
+.ai-chat-btn .siri-glow{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,0.3),transparent 55%)}
 .ai-chat-panel{position:fixed;bottom:96px;right:28px;width:380px;max-height:560px;background:#fff;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06);border:1px solid #e8e8ef;z-index:189;display:none;flex-direction:column;overflow:hidden;animation:slideUpChat .3s var(--ease-spring)}
 .ai-chat-panel.open{display:flex}
 @keyframes slideUpChat{from{opacity:0;transform:translateY(20px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -462,20 +462,20 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
     </a>
 
 
-    <span class="mobile-header-title">拾壹 · 个人工作台</span>
+    <span class="mobile-header-title">JUN</span>
     <span class="mobile-header-date" id="mobileDate"></span>
     <div class="mobile-menu" id="mobileMenu">
-      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('today');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none">今日焦点</a>
-      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('week');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none">周复盘</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('health');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">健康</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('tools');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">工具箱</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('workout');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">训练</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('diary');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">日记</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('todo');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">待办</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('journal');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">阅读</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('news');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">新闻</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('review');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">复盘</a>
-<a href="javascript:void(0)" class="menu-item" onclick="switchTab('investment');closeMobileMenu();return false;" style="display:block;padding:14px 20px;color:#0f1419;font-size:15px;text-decoration:none;-webkit-tap-highlight-color:transparent;">投资计划</a>
+      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('today');closeMobileMenu();return false;">今日焦点</a>
+      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('todo');closeMobileMenu();return false;">待办</a>
+      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('review');closeMobileMenu();return false;">每日复盘</a>
+      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('health');closeMobileMenu();return false;">健康</a>
+      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('workout');closeMobileMenu();return false;">训练</a>
+      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('diary');closeMobileMenu();return false;">日记</a>
+      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('journal');closeMobileMenu();return false;">阅读</a>
+      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('tools');closeMobileMenu();return false;">工具箱</a>
+      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('week');closeMobileMenu();return false;">周复盘</a>
+      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('news');closeMobileMenu();return false;">新闻</a>
+      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('investment');closeMobileMenu();return false;">投资计划</a>
       <div style="display:flex;gap:8px;padding:10px 16px 14px;border-top:1px solid #eff3f4;margin-top:6px">
         <button class="btn btn-ghost btn-sm" style="flex:1" onclick="exportData();closeMobileMenu()">导出</button>
         <button class="btn btn-ghost btn-sm" style="flex:1" onclick="exportBackup();closeMobileMenu()">备份</button>
@@ -486,63 +486,63 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
   
   <nav class="sidebar">
     <div class="sidebar-logo" onclick="this.querySelector('.logo-icon').classList.toggle('pressed')">
-      <div class="logo-icon" style="width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#f3f0ff 0%,#ede9fe 100%);border:1px solid rgba(124,58,237,0.15);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(124,58,237,0.3),inset 0 1px 0 rgba(0,0,0,0.08);flex-shrink:0;cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1)">
-        <svg viewBox="0 0 40 40" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c4b5fd"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><rect x="7" y="8" width="5.5" height="20" rx="1.8" fill="url(#lg1)" opacity="0.95"/><rect x="16" y="4" width="5.5" height="28" rx="1.8" fill="url(#lg1)"/><rect x="25" y="10" width="5.5" height="18" rx="1.8" fill="url(#lg1)" opacity="0.7"/><circle cx="18.75" cy="3" r="1.2" fill="#c4b5fd" opacity="0.5"/><circle cx="18.75" cy="33" r="1" fill="#7c3aed" opacity="0.4"/></svg>
+      <div class="logo-icon" style="width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#8b5cf6 0%,#5b21b6 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(124,58,237,0.35);flex-shrink:0;cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1)">
+        <svg viewBox="0 0 40 40" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24.5 10.5v14.2a5.2 5.2 0 01-10.4 0" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>
       </div>
       <div class="logo-text">
-        <h1>拾壹 · 个人工作台</h1>
+        <h1>JUN</h1>
         <div class="date" id="todayDate"></div>
       </div>
     </div>
-    <div class="nav-section-label">现在</div>
+    <div class="nav-section-label">今日</div>
     <div class="nav-item active" data-tab="today">
-      <svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2"/></svg>
       <span>今日焦点</span>
     </div>
-    <div class="nav-item" data-tab="week">
-      <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 2 4-6"/></svg>
-      <span>周复盘</span>
-    </div>
-    <div class="nav-section-label">生活</div>
-    <div class="nav-item" data-tab="health">
-      <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-      <span>健康</span>
-    </div>
-    <div class="nav-item" data-tab="tools">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      <span>工具箱</span>
-    </div>
-    <div class="nav-item" data-tab="workout">
-      <svg viewBox="0 0 24 24"><path d="M6.5 6.5h11v11h-11z" fill="none"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/><circle cx="12" cy="12" r="4" fill="none"/></svg>
-      <span>训练</span>
-    </div>
-    <div class="nav-item" data-tab="diary">
-      <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      <span>日记</span>
-    </div>
-    <div class="nav-section-label">执行</div>
     <div class="nav-item" data-tab="todo">
-      <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4.5"/><path d="M8.6 12.3l2.3 2.3 4.7-5"/></svg>
       <span>待办</span>
       <span class="nav-badge" id="navTodoBadge" style="display:none"></span>
     </div>
-    <div class="nav-section-label">沉淀</div>
+    <div class="nav-item" data-tab="review">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.8"/><path d="M12 8.4v3.8l2.4 1.4"/><path d="M4.2 4.6v3h3"/></svg>
+      <span>每日复盘</span>
+    </div>
+    <div class="nav-section-label">生活</div>
+    <div class="nav-item" data-tab="health">
+      <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/><path d="M7.8 12.2h2l1.1-2.1 1.9 3.6 1.1-1.8h2.3"/></svg>
+      <span>健康</span>
+    </div>
+    <div class="nav-item" data-tab="workout">
+      <svg viewBox="0 0 24 24"><path d="M7 7.2v9.6M4.2 9.3v5.4M17 7.2v9.6M19.8 9.3v5.4M7 12h10"/></svg>
+      <span>训练</span>
+    </div>
+    <div class="nav-item" data-tab="diary">
+      <svg viewBox="0 0 24 24"><path d="M5.5 5.2A1.7 1.7 0 017.2 3.5H18a1 1 0 011 1v13.2"/><path d="M5.5 5.2V18.6a2 2 0 002 2h11.5"/><path d="M9.5 8.5h5.5"/></svg>
+      <span>日记</span>
+    </div>
+    <div class="nav-section-label">成长</div>
     <div class="nav-item" data-tab="journal">
-      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14zM4 19.5A2.5 2.5 0 006.5 22H20"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 6.5C10.6 5 8.5 4.5 4 4.5v13.5c4.5 0 6.6.6 8 2 1.4-1.4 3.5-2 8-2V4.5c-4.5 0-6.6.5-8 2z"/><path d="M12 6.5v13.5"/></svg>
       <span>阅读</span>
     </div>
+    <div class="nav-item" data-tab="tools">
+      <svg viewBox="0 0 24 24"><path d="M4.5 7h15M4.5 12h15M4.5 17h15"/><circle cx="10" cy="7" r="1.9"/><circle cx="14.8" cy="12" r="1.9"/><circle cx="8.2" cy="17" r="1.9"/></svg>
+      <span>工具箱</span>
+    </div>
+    <div class="nav-item" data-tab="week">
+      <svg viewBox="0 0 24 24"><path d="M4 4.5V20h16.2"/><path d="M8.6 16.2v-3.6M12.4 16.2V9.4M16.2 16.2V6.6"/></svg>
+      <span>周复盘</span>
+    </div>
+    <div class="nav-section-label">资讯</div>
     <div class="nav-item" data-tab="news">
-      <svg viewBox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2zM7 9h7M7 13h7M7 17h4"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M4.5 5.6A1.6 1.6 0 016.1 4h8.2l4.7 4.7V19a1.6 1.6 0 01-1.6 1.6H6.1A1.6 1.6 0 014.5 19z"/><path d="M14.2 4v4.8H19"/><path d="M8.2 12.4h7M8.2 15.8h4.4"/></svg>
       <span>新闻</span>
     </div>
     <div class="nav-section-label">投资</div>
     <div class="nav-item" data-tab="investment">
-      <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 2 4-6"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="3.8" y="3.8" width="16.4" height="16.4" rx="3.4"/><path d="M7.6 14.6l3-3 2.2 2 3.8-4.4"/><path d="M13.9 9.2h2.7v2.7"/></svg>
       <span>投资计划</span>
-    </div>
-    <div class="nav-item" data-tab="review">
-      <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/><path d="M9 12h6M9 16h4"/></svg>
-      <span>每日复盘</span>
     </div>
     <div class="sidebar-spacer">
       <div style="padding:16px 12px 0;opacity:0.5">
@@ -583,7 +583,7 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
   <main class="content">
     <div class="content-header">
       <div class="page-title" id="pageTitle">
-        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2"/></svg>
         <span id="pageTitleText">今日焦点</span>
         <span class="page-subtitle" id="pageSubtitle">重要的事，先完成</span>
       </div>
@@ -1174,17 +1174,17 @@ const pageTitles={
   ,investment:{title:'投资计划',subtitle:'条件 · 仓位 · 风险线'}
 };
 const navIcons={
-  today:'<path d="M4 5h16M4 12h16M4 19h10"/>',
-  week:'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 2 4-6"/>',
-  tools:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
-  health:'<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>',
-  workout:'<path d="M3 12h3M18 12h3M12 3v3M12 18v3"/><circle cx="12" cy="12" r="4"/>',
-  diary:'<path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>',
-  todo:'<path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>',
-  journal:'<path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14zM4 19.5A2.5 2.5 0 006.5 22H20"/>',
-  news:'<path d="M19 20H5a2 2 0 01-2-3V6a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2zM7 9h7M7 13h7M7 17h4"/>',
-  review:'<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/><path d="M9 12h6M9 16h4"/>'
-  ,investment:'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 2 4-6"/>'
+  today:'<circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2"/>',
+  todo:'<rect x="4" y="4" width="16" height="16" rx="4.5"/><path d="M8.6 12.3l2.3 2.3 4.7-5"/>',
+  review:'<circle cx="12" cy="12" r="7.8"/><path d="M12 8.4v3.8l2.4 1.4"/><path d="M4.2 4.6v3h3"/>',
+  health:'<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/><path d="M7.8 12.2h2l1.1-2.1 1.9 3.6 1.1-1.8h2.3"/>',
+  workout:'<path d="M7 7.2v9.6M4.2 9.3v5.4M17 7.2v9.6M19.8 9.3v5.4M7 12h10"/>',
+  diary:'<path d="M5.5 5.2A1.7 1.7 0 017.2 3.5H18a1 1 0 011 1v13.2"/><path d="M5.5 5.2V18.6a2 2 0 002 2h11.5"/><path d="M9.5 8.5h5.5"/>',
+  journal:'<path d="M12 6.5C10.6 5 8.5 4.5 4 4.5v13.5c4.5 0 6.6.6 8 2 1.4-1.4 3.5-2 8-2V4.5c-4.5 0-6.6.5-8 2z"/><path d="M12 6.5v13.5"/>',
+  tools:'<path d="M4.5 7h15M4.5 12h15M4.5 17h15"/><circle cx="10" cy="7" r="1.9"/><circle cx="14.8" cy="12" r="1.9"/><circle cx="8.2" cy="17" r="1.9"/>',
+  week:'<path d="M4 4.5V20h16.2"/><path d="M8.6 16.2v-3.6M12.4 16.2V9.4M16.2 16.2V6.6"/>',
+  news:'<path d="M4.5 5.6A1.6 1.6 0 016.1 4h8.2l4.7 4.7V19a1.6 1.6 0 01-1.6 1.6H6.1A1.6 1.6 0 014.5 19z"/><path d="M14.2 4v4.8H19"/><path d="M8.2 12.4h7M8.2 15.8h4.4"/>',
+  investment:'<rect x="3.8" y="3.8" width="16.4" height="16.4" rx="3.4"/><path d="M7.6 14.6l3-3 2.2 2 3.8-4.4"/><path d="M13.9 9.2h2.7v2.7"/>'
 };
 document.querySelectorAll('.nav-item').forEach(item=>{
   item.addEventListener('click',()=>{
@@ -1630,7 +1630,7 @@ function exportDietToFeishu(){
   const totalCarb=todayMeals.reduce((s,m)=>s+m.carb,0);
   const totalProtein=todayMeals.reduce((s,m)=>s+m.protein,0);
   const totalFat=todayMeals.reduce((s,m)=>s+m.fat,0);
-  const md=`# 拾壹饮食日志 · ${TODAY_STR}
+  const md=`# JUN 饮食日志 · ${TODAY_STR}
 
 ## 今日摄入
 **总热量**: ${totalKcal} kcal
@@ -1640,10 +1640,10 @@ function exportDietToFeishu(){
 ${mealTypes.map(type=>{const items=todayMeals.filter(m=>m.type===type);if(!items.length)return '';return `### ${type}（${items.reduce((s,m)=>s+m.kcal,0)} kcal）\n${items.map(m=>`- ${m.display||m.name}: ${m.kcal}kcal`).join('\n')}`;}).filter(Boolean).join('\n\n')}
 
 ---
-*由拾壹工作台导出*
+*由 JUN 导出*
 `;
   const blob=new Blob([md],{type:'text/markdown'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`拾壹饮食_${TODAY_STR}.md`;a.click();
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`JUN饮食_${TODAY_STR}.md`;a.click();
   showToast('饮食日志已导出，可粘贴到飞书');
 }
 
@@ -1847,7 +1847,7 @@ function addNews(){
 }
 function delNews(idx){if(!confirm('删除这条新闻？'))return;data.news.splice(idx,1);saveData();renderNews();showToast('已删除');}
 
-/* ===== REMOTE TODOS / 拾壹推送的待办 ===== */
+/* ===== REMOTE TODOS / JUN 推送的待办 ===== */
 let remoteTodosData=null;
 async function fetchRemoteTodos(){
   const statusEl=document.getElementById('remoteTodoStatus');
@@ -1873,7 +1873,7 @@ function renderRemoteTodos(){
   }
   const items=remoteTodosData.items.filter(t=>!t.done);
   const doneCount=remoteTodosData.items.filter(t=>t.done).length;
-  statusEl.textContent='拾壹推送 '+items.length+'项'+(doneCount?' · '+doneCount+'项已完成':'');
+  statusEl.textContent='JUN 推送 '+items.length+'项'+(doneCount?' · '+doneCount+'项已完成':'');
   statusEl.style.color='var(--purple)';
   const prioColor={high:'red',mid:'amber',low:'green'};
   const prioLabel={high:'高',mid:'中',low:'低'};
@@ -1910,7 +1910,7 @@ function renderAIInsights(){
   if(totalC>totalKcal*0.55/4){tips.push('碳水占比偏高，可以适当替换为蛋白质');}
   if(mealCount>=3){tips.push('已记录'+mealCount+'餐，保持记录习惯');}
   card.style.display='block';
-  card.innerHTML='<div class="card-glow"></div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:28px;height:28px;border-radius:8px;background:var(--green-glow);display:flex;align-items:center;justify-content:center;color:var(--green)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--white)">拾壹健康洞察</div><div style="font-size:10px;color:var(--white-dim)">基于今日数据实时分析</div></div></div><div style="display:flex;gap:8px;margin-bottom:10px"><div style="flex:1;padding:8px;border-radius:8px;background:rgba(0,0,0,0.03);border:0.5px solid rgba(0,0,0,0.08);text-align:center"><div style="font-size:14px;font-weight:600;color:var(--green)">'+totalKcal+'</div><div style="font-size:9px;color:var(--white-dim)">kcal / '+Math.round(tdee)+'</div></div><div style="flex:1;padding:8px;border-radius:8px;background:rgba(0,0,0,0.03);border:0.5px solid rgba(0,0,0,0.08);text-align:center"><div style="font-size:14px;font-weight:600;color:var(--cyan)">'+Math.round(totalP)+'g</div><div style="font-size:9px;color:var(--white-dim)">蛋白 / '+Math.round(proteinTarget)+'g</div></div></div><div style="font-size:13px;color:var(--white-mid);line-height:1.7">'+summary+'</div>'+(tips.length?'<div style="margin-top:10px;padding-top:10px;border-top:0.5px solid var(--glass-border)">'+tips.map(t=>'<div style="display:flex;gap:6px;align-items:flex-start;margin-bottom:4px;font-size:12px"><span style="color:var(--green);flex-shrink:0">·</span><span style="color:var(--white-mid);line-height:1.5">'+t+'</span></div>').join('')+'</div>':'');
+  card.innerHTML='<div class="card-glow"></div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:28px;height:28px;border-radius:8px;background:var(--green-glow);display:flex;align-items:center;justify-content:center;color:var(--green)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--white)">JUN 健康洞察</div><div style="font-size:10px;color:var(--white-dim)">基于今日数据实时分析</div></div></div><div style="display:flex;gap:8px;margin-bottom:10px"><div style="flex:1;padding:8px;border-radius:8px;background:rgba(0,0,0,0.03);border:0.5px solid rgba(0,0,0,0.08);text-align:center"><div style="font-size:14px;font-weight:600;color:var(--green)">'+totalKcal+'</div><div style="font-size:9px;color:var(--white-dim)">kcal / '+Math.round(tdee)+'</div></div><div style="flex:1;padding:8px;border-radius:8px;background:rgba(0,0,0,0.03);border:0.5px solid rgba(0,0,0,0.08);text-align:center"><div style="font-size:14px;font-weight:600;color:var(--cyan)">'+Math.round(totalP)+'g</div><div style="font-size:9px;color:var(--white-dim)">蛋白 / '+Math.round(proteinTarget)+'g</div></div></div><div style="font-size:13px;color:var(--white-mid);line-height:1.7">'+summary+'</div>'+(tips.length?'<div style="margin-top:10px;padding-top:10px;border-top:0.5px solid var(--glass-border)">'+tips.map(t=>'<div style="display:flex;gap:6px;align-items:flex-start;margin-bottom:4px;font-size:12px"><span style="color:var(--green);flex-shrink:0">·</span><span style="color:var(--white-mid);line-height:1.5">'+t+'</span></div>').join('')+'</div>':'');
 }
 
 /* ===== REVIEW ===== */
@@ -1999,7 +1999,7 @@ function exportData(){
   const prioLabel={high:'高',mid:'中',low:'低'};
   const impactLabel={bull:'利多',bear:'利空',neutral:'中性'};
   const moodLabel={};moods.forEach(m=>moodLabel[m.id]=m.label);
-  const md=`# 拾壹工作台 · ${today}
+  const md=`# JUN · ${today}
 
 ## 健康
 **体重**: ${data.weights.length?data.weights.slice(-1)[0].val.toFixed(1)+'kg':'无记录'}
@@ -2035,7 +2035,7 @@ ${todayReview?`**情绪**: ${moodLabel[todayReview.mood]||'未记录'}
 **反思与纪律**: ${todayReview.reflection||'无'}`:'- 今日未复盘'}
 `;
   const blob=new Blob([md],{type:'text/markdown'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`拾壹工作台_${today}.md`;a.click();
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`JUN_${today}.md`;a.click();
   showToast('已导出');
 }
 function exportBackup(){
@@ -2204,7 +2204,7 @@ function dismissInstall(){document.getElementById('installBanner').classList.rem
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('sw.js').then(function(reg){
-      console.log('v13.0 SW registered, scope:',reg.scope);
+      console.log('v14.0 SW registered, scope:',reg.scope);
     }).catch(function(e){console.warn('SW注册失败',e);});
   });
 }
@@ -2232,7 +2232,7 @@ document.addEventListener('DOMContentLoaded',function(){
     var onclick=item.getAttribute('onclick')||'';
     if(onclick.includes("'today'")){item.classList.add('current');}
   });
-  console.log('v13.0 initialized');
+  console.log('v14.0 initialized');
 });</script>
 
 <script>
@@ -2434,7 +2434,7 @@ function aiPolishReview(){
 </div>
 <button class="ai-chat-btn" id="aiChatBtn" onclick="toggleAiChat()">
   <span class="siri-glow"></span>
-  <svg class="siri-wave" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ai-sg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff2d55"/><stop offset="100%" stop-color="#ff9500"/></linearGradient><linearGradient id="ai-sg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff9500"/><stop offset="100%" stop-color="#ffcc00"/></linearGradient><linearGradient id="ai-sg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34c759"/><stop offset="100%" stop-color="#00c7be"/></linearGradient><linearGradient id="ai-sg4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#007aff"/><stop offset="100%" stop-color="#5856d6"/></linearGradient><linearGradient id="ai-sg5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#af52de"/><stop offset="100%" stop-color="#ff2d55"/></linearGradient></defs><rect x="10" y="14" width="3.5" height="20" rx="1.75" fill="url(#ai-sg1)"/><rect x="15.5" y="10" width="3.5" height="28" rx="1.75" fill="url(#ai-sg2)"/><rect x="21" y="6" width="3.5" height="36" rx="1.75" fill="url(#ai-sg3)"/><rect x="26.5" y="10" width="3.5" height="28" rx="1.75" fill="url(#ai-sg4)"/><rect x="32" y="14" width="3.5" height="20" rx="1.75" fill="url(#ai-sg5)"/></svg>
+  <svg class="siri-wave" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l2.1 6.9L21 12l-6.9 2.1L12 21l-2.1-6.9L3 12l6.9-2.1z"/></svg>
 </button>
 <div class="ai-chat-panel" id="aiChatPanel">
   <div class="ai-chat-header">
