@@ -1,4 +1,4 @@
-/* JUN 个人工作台 Service Worker v14.0 — 离线缓存 */
+/* JUN 个人工作台 Service Worker v14.1 — 离线缓存 */
 const SW_VERSION = 'jun-v14.1.0';
 const CORE_ASSETS = [
   './',
