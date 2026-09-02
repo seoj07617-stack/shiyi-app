@@ -441,6 +441,9 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
 .ai-config-modal label{display:block;font-size:11px;font-weight:600;color:var(--white-dim);margin-bottom:4px;margin-top:12px}
 .ai-config-modal input{width:100%;padding:9px 12px;border:1px solid #e5e5e5;border-radius:10px;font-size:12px;outline:none}
 .ai-config-modal input:focus{border-color:var(--purple)} .ai-config-modal select{width:100%;padding:9px 12px;border:1px solid #e5e5e5;border-radius:10px;font-size:12px;outline:none;background:#fff}
+.voice-btn{margin-top:8px;padding:7px 14px;border-radius:10px;border:1px solid #e5e5e5;background:#fff;font-size:12px;font-weight:600;color:#7c3aed;cursor:pointer}
+.voice-btn.rec{background:#fee2e2;border-color:#ef4444;color:#dc2626;animation:voicepulse 1s infinite}
+@keyframes voicepulse{50%{opacity:.55}}
 .ai-config-modal .hint{font-size:10px;color:var(--white-dim);margin-top:3px;line-height:1.5}
 .ai-config-modal .actions{display:flex;gap:8px;margin-top:18px}
 .ai-config-modal .actions button{flex:1;padding:9px;border-radius:10px;font-size:12px;font-weight:600;border:none;cursor:pointer}
@@ -878,6 +881,7 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
             <span class="count-badge" id="diaryStreak"></span>
           </div>
           <textarea id="diaryText" placeholder="今天有什么想法、感受、收获……写下来" rows="5" oninput="updateDiaryCount()" style="min-height:100px"></textarea>
+          <div style="margin-top:8px"><button type="button" class="voice-btn" onclick="toggleVoice('diaryText',this)">🎤 语音输入 · 自动润色</button></div>
           <div class="char-count" id="diaryCharCount">0 字</div>
           <button class="btn btn-primary" style="width:100%;margin-top:10px" onclick="saveDiary()">保存感想</button>
           <button class="ai-write-btn" onclick="aiPolishDiary()" id="diaryPolishBtn"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/><path d="M15 6l3 3"/></svg>AI润色</button>
@@ -988,6 +992,7 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
           <div class="review-field">
             <label>反思与纪律</label>
             <textarea id="reviewReflection" placeholder="是否遵守纪律？有什么可以改进？明日计划……" rows="4"></textarea>
+          <div style="margin-top:8px"><button type="button" class="voice-btn" onclick="toggleVoice('reviewReflection',this)">🎤 语音输入 · 自动润色</button></div>
           </div>
           <div class="review-field" style="margin-top:-4px">
             <button class="ai-write-btn" onclick="aiPolishReview()" id="reviewPolishBtn"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/><path d="M15 6l3 3"/></svg>AI润色</button>
@@ -2601,6 +2606,86 @@ function buildAiContext(){
     if(!out.length)return '';
     return '你是用户的个人工作台助手。以下是用户工作台的最新数据，回答时可自然引用：\n'+out.join('\n')+'\n（当前日期 '+today+'）';
   }catch(e){return ''}
+}
+
+var voiceState=null;
+function toggleVoice(targetId,btn){
+  if(voiceState){voiceState.stop();return;}
+  var cfg=JSON.parse(localStorage.getItem('shiyi_ai_config')||'{}');
+  if(cfg.provider!=='zhipu'||!cfg.token){showToast('语音输入需要智谱接口，请先配置');showAiConfig();return;}
+  if(!navigator.mediaDevices||!window.MediaRecorder){showToast('当前浏览器不支持录音，请用Chrome/Edge');return;}
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    var rec=new MediaRecorder(stream);
+    var chunks=[];
+    rec.ondataavailable=function(e){if(e.data&&e.data.size)chunks.push(e.data);};
+    var ta=document.getElementById(targetId);
+    rec.onstop=function(){
+      stream.getTracks().forEach(function(t){t.stop();});
+      btn.classList.remove('rec');btn.textContent=btn.dataset.label;voiceState=null;
+      if(!chunks.length){showToast('没有录到声音');return;}
+      btn.disabled=true;btn.textContent='识别中…';
+      var blob=new Blob(chunks,{type:rec.mimeType||'audio/webm'});
+      blobToWav(blob).then(function(wavBuf){
+        var fd=new FormData();
+        fd.append('model','glm-asr');
+        fd.append('file',new Blob([wavBuf],{type:'audio/wav'}),'voice.wav');
+        return fetch('https://open.bigmodel.cn/api/paas/v4/audio/transcriptions',{method:'POST',headers:{'Authorization':'Bearer '+cfg.token},body:fd});
+      }).then(function(r){return r.json();}).then(function(d){
+        if(!d.text){throw new Error((d.error&&d.error.message)||'未识别到文字');}
+        btn.textContent='润色中…';
+        return polishVoiceText(d.text).then(function(p){
+          ta.value=p;
+          ta.dispatchEvent(new Event('input',{bubbles:true}));
+          showToast('语音已转写并润色');
+        });
+      }).catch(function(err){
+        showToast('语音识别出错：'+err.message);
+      }).then(function(){
+        btn.disabled=false;
+        if(btn.textContent!=='🎤 语音输入 · 自动润色')btn.textContent='🎤 语音输入 · 自动润色';
+      });
+    };
+    rec.start();
+    voiceState={stop:function(){try{rec.stop();}catch(e){}}};
+    btn.dataset.label=btn.textContent;
+    btn.classList.add('rec');
+    btn.textContent='● 录音中，点此结束';
+  }).catch(function(){showToast('无法访问麦克风，请检查权限');});
+}
+function blobToWav(blob){
+  return blob.arrayBuffer().then(function(buf){
+    var AC=window.AudioContext||window.webkitAudioContext;
+    var ac=new AC();
+    return ac.decodeAudioData(buf).then(function(audio){
+      var src=audio.getChannelData(0);
+      var rate=16000;
+      var len=Math.floor(src.length*rate/audio.sampleRate);
+      var out=new Float32Array(len);
+      for(var i=0;i<len;i++)out[i]=src[Math.floor(i*audio.sampleRate/rate)];
+      var buf2=new ArrayBuffer(44+len*2);
+      var v=new DataView(buf2);
+      var ws=function(o,s){for(var j=0;j<s.length;j++)v.setUint8(o+j,s.charCodeAt(j));};
+      ws(0,'RIFF');v.setUint32(4,36+len*2,true);ws(8,'WAVE');ws(12,'fmt ');
+      v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);
+      v.setUint32(24,rate,true);v.setUint32(28,rate*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);
+      ws(36,'data');v.setUint32(40,len*2,true);
+      for(i=0;i<len;i++){var s=Math.max(-1,Math.min(1,out[i]));v.setInt16(44+i*2,s<0?s*0x8000:s*0x7FFF,true);}
+      ac.close();
+      return buf2;
+    });
+  });
+}
+function polishVoiceText(text){
+  var cfg=JSON.parse(localStorage.getItem('shiyi_ai_config')||'{}');
+  return fetch('https://open.bigmodel.cn/api/paas/v4/chat/completions',{
+    method:'POST',
+    headers:{'Authorization':'Bearer '+cfg.token,'Content-Type':'application/json'},
+    body:JSON.stringify({model:cfg.model||'glm-4-flash',messages:[{role:'system',content:'你是文字润色助手。用户给你一段语音转写的口语文字，请整理成通顺清晰的书面表达：去掉口语赘词、修正转写错别字，保持第一人称和原意，保留具体细节，直接输出润色后的文字，不要任何解释或前缀。'},{role:'user',content:text}]})
+  }).then(function(r){return r.json();}).then(function(d){
+    var out=d&&d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content;
+    if(!out)throw new Error((d.error&&d.error.message)||'润色失败');
+    return out.trim();
+  });
 }
 
 function sendAiMessage(){
