@@ -2482,6 +2482,37 @@ function removeLoading(){
   if(el) el.remove();
 }
 
+function buildAiContext(){
+  try{
+    var today=TODAY_STR,out=[];
+    var pl=function(p){return {high:'高',mid:'中',low:'低'}[p]||'';};
+    var undone=data.todos.filter(function(t){return !t.done;});
+    if(undone.length)out.push('未完成待办: '+undone.slice(0,10).map(function(t){return t.text+'('+pl(t.priority)+(t.due?',截止'+t.due:'')+')';}).join('；'));
+    var doneT=data.todos.filter(function(t){return t.done&&t.doneDate===today;});
+    if(doneT.length)out.push('今日已完成: '+doneT.slice(0,8).map(function(t){return t.text;}).join('；'));
+    var pinned=data.todos.filter(function(t){return t.pinned&&!t.done;});
+    if(pinned.length)out.push('今日焦点: '+pinned.slice(0,3).map(function(t){return t.text;}).join('；'));
+    if(data.weights&&data.weights.length){var w=data.weights[data.weights.length-1];out.push('体重: '+w.val+'kg('+(w.date===today?'今日':w.date)+')');}
+    var wT=(data.water||{})[today];
+    if(wT)out.push('今日饮水: '+wT+'ml');
+    var meals=(data.meals||[]).filter(function(m){return m.date===today;});
+    if(meals.length)out.push('今日饮食: '+meals.slice(0,6).map(function(m){return (m.display||m.name)+'约'+m.kcal+'千卡';}).join('；'));
+    if(data.checkins&&data.checkins.length)out.push('训练打卡: 共'+data.checkins.length+'次'+(data.checkins.indexOf(today)>-1?'，今日已打卡':'，今日未打卡'));
+    var bk=[];
+    for(var k in (data.books||{}))bk.push(k+' '+data.books[k]+'%');
+    if(bk.length)out.push('阅读进度: '+bk.join('，'));
+    if(data.diaries&&data.diaries.length){var d=data.diaries[data.diaries.length-1];out.push('最近日记('+d.date+'): '+(d.text||'').slice(0,60));}
+    if(data.reviews&&data.reviews.length){var r=data.reviews[data.reviews.length-1];out.push('最近复盘('+r.date+'): 评分'+(r.score||'-')+'，反思'+(r.reflection||'').slice(0,50));}
+    if(data.investPlan&&data.investPlan.goal)out.push('投资计划: 目标'+data.investPlan.goal);
+    if(data.investDiscipline)out.push('投资纪律验证期: '+data.investDiscipline.start+'~'+data.investDiscipline.end);
+    if(data.countdowns&&data.countdowns.length){var cds=data.countdowns.map(function(c){return (c.name||c.title||c.text||'')+(c.date?'('+c.date+')':'');}).slice(0,4);if(cds.join(''))out.push('倒计时: '+cds.join('，'));}
+    if(data.todayIntention)out.push('今日一句话计划: '+data.todayIntention);
+    if(data.userProfile)out.push('用户资料: 身高'+(data.userProfile.height||'-')+'cm，年龄'+(data.userProfile.age||'-'));
+    if(!out.length)return '';
+    return '你是用户的个人工作台助手。以下是用户工作台的最新数据，回答时可自然引用：\n'+out.join('\n')+'\n（当前日期 '+today+'）';
+  }catch(e){return ''}
+}
+
 function sendAiMessage(){
   if(aiSending) return;
   var input = document.getElementById('aiChatInput');
@@ -2514,11 +2545,11 @@ function sendAiMessage(){
     },
     body: JSON.stringify(isZhipu ? {
       model: cfg.model || 'glm-4-flash',
-      messages: [{ role: 'user', content: text }]
+      messages: [{ role: 'system', content: buildAiContext() }, { role: 'user', content: text }]
     } : {
       bot_id: cfg.botId,
       user_id: user_id,
-      query: text,
+      query: buildAiContext() ? '【我的工作台数据】\n' + buildAiContext() + '\n\n【我的问题】' + text : text,
       stream: false,
       auto_save: true
     })
