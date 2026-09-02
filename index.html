@@ -971,7 +971,6 @@ const DATA_VERSION=8;
 const defaultInvestDiscipline={start:'2026-07-23',end:'2026-10-23',targets:[['浮动层加仓','0.65'],['浮动层补仓','0.60'],['浮动层止盈','0.75'],['底仓止损','0.30']],rules:['验证期内只操作ETF','买跌不买涨，不追涨','不做T，拿住底仓']};
 const defaultCountdowns=[
   {name:'纪律验证期结束',date:'2026-10-23',color:'var(--purple)',desc:'期间只操作ETF'},
-  {name:'暑假结束',date:'2026-08-31',color:'var(--amber)',desc:'8月31日'},
   {name:'一级教师评审',date:'2026-12-31',color:'var(--green)',desc:'2026年内'},
   {name:'159655二笔定投评估',date:'2026-09-01',color:'var(--cyan)',desc:'美联储议息后评估'}
 ];
@@ -1004,7 +1003,7 @@ function migrateData(d){
   d.meals=d.meals||[];
   d.water=d.water||{};
   d.userProfile=d.userProfile||def.userProfile;
-  d.countdowns=d.countdowns||defaultCountdowns.slice();
+  d.countdowns=(d.countdowns||defaultCountdowns.slice()).filter(function(c){return c.name!=='暑假结束';});
   d.investDiscipline=d.investDiscipline||defaultInvestDiscipline;
   d.lastBackupAt=d.lastBackupAt||'';
   const maxId=d.todos.reduce((mx,t)=>Math.max(mx,t.id||0),0);
