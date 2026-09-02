@@ -440,7 +440,7 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
 .ai-config-modal h3{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--white)}
 .ai-config-modal label{display:block;font-size:11px;font-weight:600;color:var(--white-dim);margin-bottom:4px;margin-top:12px}
 .ai-config-modal input{width:100%;padding:9px 12px;border:1px solid #e5e5e5;border-radius:10px;font-size:12px;outline:none}
-.ai-config-modal input:focus{border-color:var(--purple)}
+.ai-config-modal input:focus{border-color:var(--purple)} .ai-config-modal select{width:100%;padding:9px 12px;border:1px solid #e5e5e5;border-radius:10px;font-size:12px;outline:none;background:#fff}
 .ai-config-modal .hint{font-size:10px;color:var(--white-dim);margin-top:3px;line-height:1.5}
 .ai-config-modal .actions{display:flex;gap:8px;margin-top:18px}
 .ai-config-modal .actions button{flex:1;padding:9px;border-radius:10px;font-size:12px;font-weight:600;border:none;cursor:pointer}
@@ -2414,10 +2414,14 @@ document.addEventListener('DOMContentLoaded',function(){
 var aiMessages = [];
 var aiSending = false;
 
+function aiProviderChanged(){var p=document.getElementById('aiProvider').value;document.getElementById('aiBotIdRow').style.display=p==='coze'?'block':'none';document.getElementById('aiModelRow').style.display=p==='zhipu'?'block':'none';}
 function showAiConfig(){
   var cfg = JSON.parse(localStorage.getItem('shiyi_ai_config') || '{}');
   if(cfg.botId) document.getElementById('aiBotId').value = cfg.botId;
   if(cfg.token) document.getElementById('aiToken').value = cfg.token;
+  document.getElementById('aiProvider').value = cfg.provider || 'coze';
+  document.getElementById('aiModel').value = cfg.model || 'glm-4-flash';
+  aiProviderChanged();
   document.getElementById('aiConfigModal').classList.add('show');
 }
 
@@ -2426,13 +2430,15 @@ function closeAiConfig(){
 }
 
 function saveAiConfig(){
+  var provider = document.getElementById('aiProvider').value;
   var botId = document.getElementById('aiBotId').value.trim();
   var token = document.getElementById('aiToken').value.trim();
-  if(!botId || !token){
-    showToast('请填写 Bot ID 和 Token');
+  var model = document.getElementById('aiModel').value.trim() || 'glm-4-flash';
+  if(!token || (provider === 'coze' && !botId)){
+    showToast(provider === 'coze' ? '请填写 Bot ID 和 Token' : '请填写 API Key');
     return;
   }
-  localStorage.setItem('shiyi_ai_config', JSON.stringify({botId: botId, token: token}));
+  localStorage.setItem('shiyi_ai_config', JSON.stringify({provider: provider, botId: botId, token: token, model: model}));
   var st = document.getElementById('aiStatusText');
   if(st) st.textContent = '已配置';
   closeAiConfig();
@@ -2483,7 +2489,7 @@ function sendAiMessage(){
   if(!text) return;
   
   var cfg = JSON.parse(localStorage.getItem('shiyi_ai_config') || '{}');
-  if(!cfg.botId || !cfg.token){
+  if(!cfg.token || (cfg.provider !== 'zhipu' && !cfg.botId)){
     showToast('请先配置 AI 助手');
     input.value = '';
     showAiConfig();
@@ -2499,13 +2505,17 @@ function sendAiMessage(){
   var user_id = 'shiyi_' + (localStorage.getItem('shiyi_user_id') || Math.random().toString(36).slice(2, 10));
   if(!localStorage.getItem('shiyi_user_id')) localStorage.setItem('shiyi_user_id', user_id.replace('shiyi_', ''));
   
-  fetch('https://api.coze.cn/v1/chat/completions', {
+  var isZhipu = cfg.provider === 'zhipu';
+  fetch(isZhipu ? 'https://open.bigmodel.cn/api/paas/v4/chat/completions' : 'https://api.coze.cn/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Authorization': 'Bearer ' + cfg.token,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
+    body: JSON.stringify(isZhipu ? {
+      model: cfg.model || 'glm-4-flash',
+      messages: [{ role: 'user', content: text }]
+    } : {
       bot_id: cfg.botId,
       user_id: user_id,
       query: text,
@@ -2528,7 +2538,7 @@ function sendAiMessage(){
     } else if(data && data.answer){
       addAiMessage('bot', data.answer);
     } else {
-      addAiMessage('bot', '请求失败：' + (data.msg || JSON.stringify(data).slice(0,100)));
+      addAiMessage('bot', '请求失败：' + ((data.error && data.error.message) || data.msg || JSON.stringify(data).slice(0,100)));
     }
     aiSending = false;
     document.getElementById('aiSendBtn').disabled = false;
@@ -2585,12 +2595,21 @@ function aiPolishReview(){
 <div class="ai-config-modal" id="aiConfigModal">
   <div class="modal-box">
     <h3>AI 助手配置</h3>
+    <label>接口类型</label>
+    <select id="aiProvider" onchange="aiProviderChanged()"><option value="coze">扣子 Coze</option><option value="zhipu">智谱 GLM</option></select>
+    <div id="aiBotIdRow">
     <label>Bot ID</label>
     <input id="aiBotId" placeholder="从扣子发布页获取" />
     <div class="hint">在扣子机器人编排页面 URL 中 bot/ 后面的字符串</div>
+    </div>
+    <div id="aiModelRow" style="display:none">
+    <label>模型</label>
+    <input id="aiModel" placeholder="glm-4-flash" />
+    <div class="hint">智谱模型名：glm-4-flash（免费）/ glm-4-plus 等</div>
+    </div>
     <label>Token</label>
     <input id="aiToken" type="password" placeholder="个人访问令牌或 OAuth Token" />
-    <div class="hint">扣子个人访问令牌，需要 bot 对话权限</div>
+    <div class="hint">扣子个人访问令牌，或智谱 API Key（bigmodel.cn 控制台获取）</div>
     <div class="actions">
       <button style="background:#f5f5f7;color:var(--white-mid)" onclick="closeAiConfig()">取消</button>
       <button style="background:var(--purple);color:#fff" onclick="saveAiConfig()">保存</button>
