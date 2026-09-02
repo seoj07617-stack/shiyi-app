@@ -1877,7 +1877,7 @@ async function fetchRemoteNews(){
   statusEl.textContent='加载中...';
   statusEl.style.color='#536471';
   try{
-    const resp=await fetch('https://seoj07617-stack.github.io/shiyi-app/news.json?t='+Date.now());
+    const resp=await fetch('news.json?t='+Date.now());
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     remoteNewsData=await resp.json();
     renderRemoteNews();
@@ -1960,7 +1960,7 @@ async function fetchRemoteTodos(){
   const listEl=document.getElementById('remoteTodoList');
   statusEl.textContent='同步中...';statusEl.style.color='#536471';
   try{
-    const resp=await fetch('https://seoj07617-stack.github.io/shiyi-app/todos.json?t='+Date.now());
+    const resp=await fetch('todos.json?t='+Date.now());
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     remoteTodosData=await resp.json();
     renderRemoteTodos();
