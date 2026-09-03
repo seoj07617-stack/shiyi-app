@@ -2670,17 +2670,19 @@ function extractMemory(userText,aiText){
     var cfg=JSON.parse(localStorage.getItem('shiyi_ai_config')||'{}');
     if(cfg.provider!=='zhipu'||!cfg.token)return;
     var mem=getAiMemory();
-    var prompt='以下是助手的长期记忆列表：\n'+(mem.length?mem.map(function(x){return '- '+x.content;}).join('\n'):'（空）')+'\n\n【用户刚说】'+String(userText).slice(0,300)+'\n【助手刚答】'+String(aiText).slice(0,300)+'\n\n判断这轮对话是否透露了值得长期记住的稳定信息（身份、重要计划、习惯、偏好、关键事实）。若有且与已有条目不重复，只输出一行不超过50字的记忆；否则只输出：无';
+    var prompt='你在维护助手的长期记忆列表（关于用户的稳定事实：身份、计划、习惯、偏好、重要事项）。\n当前记忆列表：\n'+(mem.length?mem.map(function(x,i){return (i+1)+'. '+x.content;}).join('\n'):'（空）')+'\n\n【用户刚说】'+String(userText).slice(0,300)+'\n【助手刚答】'+String(aiText).slice(0,300)+'\n\n请输出更新后的完整记忆列表。规则：\n- 保留仍然有效的旧条目；已过时或被推翻的条目要更新措辞或删除\n- 本轮对话若透露了新的稳定信息，新增一条\n- 每条不超过50字，最多30条，不带序号\n- 若无需任何变更，原样输出当前列表\n- 只输出列表，每行一条，不要解释';
     fetch('https://open.bigmodel.cn/api/paas/v4/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+cfg.token,'Content-Type':'application/json'},body:JSON.stringify({model:cfg.model||'glm-4-flash',messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(d){
       var out=d&&d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content;
       if(!out)return;
-      out=out.trim();
-      if(!out||out.replace(/[。.！!\s]/g,'')==='无')return;
-      if(out.length>100)out=out.slice(0,100);
-      if(mem.some(function(x){return x.content===out;}))return;
-      mem.push({time:TODAY_STR,content:out});
-      while(mem.length>30)mem.shift();
-      localStorage.setItem('shiyi_ai_memory',JSON.stringify(mem));
+      var lines=out.split('\n').map(function(s){return s.replace(/^\s*\d+[.、)]\s*/,'').replace(/^[-•]\s*/,'').trim();}).filter(function(s){return s&&s.length>=4&&s.length<=100&&s.indexOf('（空）')<0;});
+      var uniq=[];
+      lines.forEach(function(s){if(uniq.indexOf(s)<0)uniq.push(s);});
+      if(!uniq.length&&mem.length)return;
+      if(uniq.length===mem.length&&uniq.every(function(s,i){return mem[i]&&mem[i].content===s;}))return;
+      var oldMap={};
+      mem.forEach(function(x){oldMap[x.content]=x.time;});
+      var next=uniq.slice(0,30).map(function(s){return {time:oldMap[s]||TODAY_STR,content:s};});
+      localStorage.setItem('shiyi_ai_memory',JSON.stringify(next));
       updateAiMemBadge();
     }).catch(function(){});
   }catch(e){}
