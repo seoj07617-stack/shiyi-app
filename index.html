@@ -2477,6 +2477,7 @@ function showAiConfig(){
   document.getElementById('aiProvider').value = cfg.provider || 'coze';
   document.getElementById('aiModel').value = cfg.model || 'glm-4-flash';
   aiProviderChanged();
+  updateAiMemBadge();
   document.getElementById('aiConfigModal').classList.add('show');
 }
 
@@ -2648,6 +2649,43 @@ function polishVoiceText(text){
   });
 }
 
+function getAiMemory(){try{return JSON.parse(localStorage.getItem('shiyi_ai_memory')||'[]');}catch(e){return [];}}
+function buildAiMemory(){
+  var m=getAiMemory();
+  if(!m.length)return '';
+  return '【关于用户的长期记忆】\n'+m.map(function(x){return '- '+x.content;}).join('\n');
+}
+function updateAiMemBadge(){
+  var el=document.getElementById('aiMemCount');
+  if(el)el.textContent=getAiMemory().length+' 条';
+}
+function clearAiMemory(){
+  if(!confirm('清空全部 AI 长期记忆？'))return;
+  localStorage.removeItem('shiyi_ai_memory');
+  updateAiMemBadge();
+  showToast('AI 记忆已清空');
+}
+function extractMemory(userText,aiText){
+  try{
+    var cfg=JSON.parse(localStorage.getItem('shiyi_ai_config')||'{}');
+    if(cfg.provider!=='zhipu'||!cfg.token)return;
+    var mem=getAiMemory();
+    var prompt='以下是助手的长期记忆列表：\n'+(mem.length?mem.map(function(x){return '- '+x.content;}).join('\n'):'（空）')+'\n\n【用户刚说】'+String(userText).slice(0,300)+'\n【助手刚答】'+String(aiText).slice(0,300)+'\n\n判断这轮对话是否透露了值得长期记住的稳定信息（身份、重要计划、习惯、偏好、关键事实）。若有且与已有条目不重复，只输出一行不超过50字的记忆；否则只输出：无';
+    fetch('https://open.bigmodel.cn/api/paas/v4/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+cfg.token,'Content-Type':'application/json'},body:JSON.stringify({model:cfg.model||'glm-4-flash',messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(d){
+      var out=d&&d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content;
+      if(!out)return;
+      out=out.trim();
+      if(!out||out.replace(/[。.！!\s]/g,'')==='无')return;
+      if(out.length>100)out=out.slice(0,100);
+      if(mem.some(function(x){return x.content===out;}))return;
+      mem.push({time:TODAY_STR,content:out});
+      while(mem.length>30)mem.shift();
+      localStorage.setItem('shiyi_ai_memory',JSON.stringify(mem));
+      updateAiMemBadge();
+    }).catch(function(){});
+  }catch(e){}
+}
+
 function sendAiMessage(){
   if(aiSending) return;
   var input = document.getElementById('aiChatInput');
@@ -2680,11 +2718,11 @@ function sendAiMessage(){
     },
     body: JSON.stringify(isZhipu ? {
       model: cfg.model || 'glm-4-flash',
-      messages: [{ role: 'system', content: buildAiContext() }, { role: 'user', content: text }]
+      messages: [{ role: 'system', content: buildAiContext() + buildAiMemory() }].concat(aiMessages.slice(0, -1).slice(-8).map(function(m){return { role: m.role === 'bot' ? 'assistant' : 'user', content: String(m.text).slice(0, 500) };}), [{ role: 'user', content: text }])
     } : {
       bot_id: cfg.botId,
       user_id: user_id,
-      query: buildAiContext() ? '【我的工作台数据】\n' + buildAiContext() + '\n\n【我的问题】' + text : text,
+      query: (function(){var q='';var mem=buildAiMemory();if(mem)q+='【长期记忆】\n'+mem+'\n\n';var hist=aiMessages.slice(0,-1).slice(-6).map(function(m){return (m.role==='user'?'我':'助手')+': '+String(m.text).slice(0,150);}).join('\n');if(hist)q+='【近期对话】\n'+hist+'\n\n';if(buildAiContext())q+='【我的工作台数据】\n'+buildAiContext()+'\n\n';return q?q+'【我的问题】'+text:text;})(),
       stream: false,
       auto_save: true
     })
@@ -2698,6 +2736,7 @@ function sendAiMessage(){
       if(!reply) reply = data.answer || data.response || '';
       if(reply){
         addAiMessage('bot', reply);
+        extractMemory(text, reply);
       } else {
         addAiMessage('bot', '没有收到回复，请重试');
       }
@@ -2776,6 +2815,7 @@ function aiPolishReview(){
     <label>Token</label>
     <input id="aiToken" type="password" placeholder="个人访问令牌或 OAuth Token" />
     <div class="hint">扣子个人访问令牌，或智谱 API Key（bigmodel.cn 控制台获取）</div>
+    <div style="margin-top:12px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;color:var(--white-dim)">AI 长期记忆：<span id="aiMemCount">0 条</span>（自动记住对话要点）</span><button type="button" onclick="clearAiMemory()" style="padding:4px 10px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;font-size:11px;cursor:pointer">清除</button></div>
     <div class="actions">
       <button style="background:#f5f5f7;color:var(--white-mid)" onclick="closeAiConfig()">取消</button>
       <button style="background:var(--purple);color:#fff" onclick="saveAiConfig()">保存</button>
