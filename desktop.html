@@ -1974,6 +1974,19 @@ async function fetchRemoteTodos(){
     listEl.innerHTML='';
   }
 }
+function remoteDoneKey(t){return 'R::'+(t.text||'')+'|'+(t.due||'');}
+function getRemoteDone(){try{return JSON.parse(localStorage.getItem('shiyi_remote_done')||'[]');}catch(e){return [];}}
+function toggleRemoteTodoIdx(i){
+  if(!remoteTodosData||!remoteTodosData.items||!remoteTodosData.items[i])return;
+  var t=remoteTodosData.items[i];
+  var key=remoteDoneKey(t);
+  var arr=getRemoteDone();
+  var at=arr.indexOf(key);
+  if(at>-1){arr.splice(at,1);showToast('已恢复为未完成');}
+  else{arr.push(key);showToast('推送待办已完成');}
+  localStorage.setItem('shiyi_remote_done',JSON.stringify(arr));
+  renderRemoteTodos();
+}
 function renderRemoteTodos(){
   const statusEl=document.getElementById('remoteTodoStatus');
   const listEl=document.getElementById('remoteTodoList');
@@ -1981,8 +1994,9 @@ function renderRemoteTodos(){
     statusEl.textContent='已同步';statusEl.style.color='var(--green)';
     listEl.innerHTML='';return;
   }
-  const items=remoteTodosData.items.filter(t=>!t.done);
-  const doneCount=remoteTodosData.items.filter(t=>t.done).length;
+  const rdone=getRemoteDone();
+  const items=remoteTodosData.items.map(function(t,i){return Object.assign({__i:i},t);}).filter(function(t){return !t.done&&rdone.indexOf(remoteDoneKey(t))<0;});
+  const doneCount=remoteTodosData.items.filter(function(t){return t.done||rdone.indexOf(remoteDoneKey(t))>-1;}).length;
   statusEl.textContent='JUN 推送 '+items.length+'项'+(doneCount?' · '+doneCount+'项已完成':'');
   statusEl.style.color='var(--purple)';
   const prioColor={high:'red',mid:'amber',low:'green'};
@@ -1990,7 +2004,7 @@ function renderRemoteTodos(){
   const catColor={工作:'purple',投资:'green',生活:'amber',学习:'cyan'};
   listEl.innerHTML=items.map(t=>{
     const isOverdue=t.due&&t.due<TODAY_STR;
-    return '<div class="todo-item glass-sm" style="border-left:2px solid var(--purple)"><div class="todo-check" style="border-color:var(--purple);cursor:default;background:rgba(124,58,237,0.08)"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><div style="flex:1"><div class="todo-text">'+t.text+'</div><div class="todo-meta"><span class="priority p-'+t.priority+'"></span><span class="tag tag-'+(prioColor[t.priority]||'dim')+'">'+(prioLabel[t.priority]||'')+'</span><span class="tag tag-'+(catColor[t.cat]||'dim')+'">'+(t.cat||'')+'</span>'+(t.due?'<span class="todo-due'+(isOverdue?' overdue':'')+'">'+(isOverdue?'逾期 ':'')+t.due.slice(5)+'</span>':'')+'</div></div></div>';
+    return '<div class="todo-item glass-sm" style="border-left:2px solid var(--purple);cursor:pointer" title="点击标记完成" onclick="toggleRemoteTodoIdx('+t.__i+')"><div class="todo-check" style="border-color:var(--purple);background:rgba(124,58,237,0.08)"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><div style="flex:1"><div class="todo-text">'+t.text+'</div><div class="todo-meta"><span class="priority p-'+t.priority+'"></span><span class="tag tag-'+(prioColor[t.priority]||'dim')+'">'+(prioLabel[t.priority]||'')+'</span><span class="tag tag-'+(catColor[t.cat]||'dim')+'">'+(t.cat||'')+'</span>'+(t.due?'<span class="todo-due'+(isOverdue?' overdue':'')+'">'+(isOverdue?'逾期 ':'')+t.due.slice(5)+'</span>':'')+'</div></div></div>';
   }).join('');
 }
 
