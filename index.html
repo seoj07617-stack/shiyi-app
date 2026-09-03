@@ -2232,7 +2232,7 @@ function renderTodayNotice(){
   const el=document.getElementById('todayNotice');
   if(!el)return;
   const now=new Date();
-  const soon=(data.countdowns||[]).map(c=>({c,diff:Math.ceil((new Date(c.date+'T00:00:00')-now)/864e5)})).filter(x=>x.diff<=7).sort((a,b)=>a.diff-b.diff)[0];
+  const soon=(data.countdowns||[]).map(c=>({c,diff:Math.ceil((new Date(c.date+'T00:00:00')-now)/864e5)})).filter(x=>x.diff>=0&&x.diff<=7).sort((a,b)=>a.diff-b.diff)[0];
   if(!soon){el.innerHTML='';return;}
   const txt=soon.diff<0?soon.c.name+' 已到期':(soon.diff===0?soon.c.name+' · 就是今天':soon.c.name+' · 还有 '+soon.diff+' 天');
   el.innerHTML='<div class="card glass" style="margin-bottom:12px;border-left:3px solid var(--amber);padding:11px 14px;font-size:13px;color:var(--white-mid);display:flex;align-items:center;gap:8px"><span>⏰</span><span>'+txt+'</span></div>';
@@ -2509,7 +2509,7 @@ function buildAiContext(){
     if(data.reviews&&data.reviews.length){var r=data.reviews[data.reviews.length-1];out.push('最近复盘('+r.date+'): 评分'+(r.score||'-')+'，反思'+(r.reflection||'').slice(0,50));}
     if(data.investPlan&&data.investPlan.goal)out.push('投资计划: 目标'+data.investPlan.goal);
     if(data.investDiscipline)out.push('投资纪律验证期: '+data.investDiscipline.start+'~'+data.investDiscipline.end);
-    if(data.countdowns&&data.countdowns.length){var cds=data.countdowns.map(function(c){return (c.name||c.title||c.text||'')+(c.date?'('+c.date+')':'');}).slice(0,4);if(cds.join(''))out.push('倒计时: '+cds.join('，'));}
+    if(data.countdowns&&data.countdowns.length){var cds=data.countdowns.filter(function(c){return c.date&&c.date>=today;}).map(function(c){return (c.name||c.title||c.text||'')+(c.date?'('+c.date+')':'');}).slice(0,4);if(cds.join(''))out.push('倒计时: '+cds.join('，'));}
     if(data.todayIntention)out.push('今日一句话计划: '+data.todayIntention);
     if(data.userProfile)out.push('用户资料: 身高'+(data.userProfile.height||'-')+'cm，年龄'+(data.userProfile.age||'-'));
     if(!out.length)return '';
