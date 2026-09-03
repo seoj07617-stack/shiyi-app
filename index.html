@@ -2356,7 +2356,10 @@ async function autoCloudPush(){
   try{
     var payload={description:'JUN workspace backup',files:{'jun_backup.json':{content:JSON.stringify({savedAt:new Date().toISOString(),data:data})}}};
     var resp=await fetch('https://api.github.com/gists/'+cfg.gistId,{method:'PATCH',headers:{'Authorization':'Bearer '+cfg.token,'Content-Type':'application/json','Accept':'application/vnd.github+json'},body:JSON.stringify(payload)});
-    if(resp.ok){var si=document.getElementById('saveIndicator');if(si)si.textContent=new Date().toTimeString().slice(0,5)+' 已同步云端';}
+    if(resp.ok){
+      var si=document.getElementById('saveIndicator');if(si)si.textContent=new Date().toTimeString().slice(0,5)+' 已同步云端';
+      try{data.lastBackupAt=TODAY_STR;localStorage.setItem(STORE_KEY,JSON.stringify(data));updateBackupDot();}catch(e){}
+    }
   }catch(e){}
   cloudSyncing=false;
 }
