@@ -479,7 +479,7 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('journal');closeMobileMenu();return false;">阅读</a>
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('tools');closeMobileMenu();return false;">工具箱</a>
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('week');closeMobileMenu();return false;">周复盘</a>
-      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('news');closeMobileMenu();return false;">新闻</a>
+      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('news');closeMobileMenu();return false;">AI学习</a>
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('investment');closeMobileMenu();return false;">投资计划</a>
       <div style="display:flex;gap:8px;padding:10px 16px 14px;border-top:1px solid #eff3f4;margin-top:6px">
         <button class="btn btn-ghost btn-sm" style="flex:1" onclick="exportData();closeMobileMenu()">导出</button>
@@ -540,10 +540,10 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
       <svg viewBox="0 0 24 24"><path d="M4 4.5V20h16.2"/><path d="M8.6 16.2v-3.6M12.4 16.2V9.4M16.2 16.2V6.6"/></svg>
       <span>周复盘</span>
     </div>
-    <div class="nav-section-label">资讯</div>
+    <div class="nav-section-label">AI</div>
     <div class="nav-item" data-tab="news">
-      <svg viewBox="0 0 24 24"><path d="M4.5 5.6A1.6 1.6 0 016.1 4h8.2l4.7 4.7V19a1.6 1.6 0 01-1.6 1.6H6.1A1.6 1.6 0 014.5 19z"/><path d="M14.2 4v4.8H19"/><path d="M8.2 12.4h7M8.2 15.8h4.4"/></svg>
-      <span>新闻</span>
+      <svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.9 10.6c.6.5.9 1.4.9 2.4h6c0-1 .3-1.9.9-2.4A6 6 0 0012 3z"/></svg>
+      <span>AI学习</span>
     </div>
     <div class="nav-section-label">投资</div>
     <div class="nav-item" data-tab="investment">
@@ -849,10 +849,10 @@ input::placeholder,textarea::placeholder{color:#adb5bd}
         </div>
         <div class="card glass">
           <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l5 5v9a2 2 0 01-2 2z"/><path d="M14 2v6h6"/></svg>今日新闻</div>
+          <div class="card-title"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l5 5v9a2 2 0 01-2 2z"/><path d="M14 2v6h6"/></svg>今日AI灵感</div>
           <div id="remoteNewsStatus" style="font-size:11px;color:var(--white-dim);margin-bottom:8px">加载中...</div>
           <div id="remoteNewsList" style="margin-bottom:12px"></div>
-          <button class="btn btn-sm" style="width:100%;font-size:11px;padding:6px;margin-top:8px" onclick="fetchRemoteNews()"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="margin-right:4px"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>刷新新闻</button>
+          <button class="btn btn-sm" style="width:100%;font-size:11px;padding:6px;margin-top:8px" onclick="fetchRemoteNews()"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="margin-right:4px"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>刷新灵感</button>
         </div>
         <div id="newsList"></div>
               </div>
@@ -1069,7 +1069,7 @@ function switchTab(tab){
     diary:['日记','记录 · 回顾'],
     todo:['待办','管理 · 追踪'],
     journal:['阅读','笔记 · 进度'],
-    news:['新闻','关注 · 动态'],
+    news:['AI学习','灵感 · 怎么用'],
     review:['每日复盘','交易 · 反思']
     ,investment:['投资计划','条件 · 仓位 · 风险线']
   };
@@ -1189,7 +1189,7 @@ const pageTitles={
   diary:{title:'日记',subtitle:'记录每一天'},
   todo:{title:'待办',subtitle:'任务管理'},
   journal:{title:'阅读',subtitle:'进度 · 读书笔记'},
-  news:{title:'新闻',subtitle:'关注 · 简报'},
+  news:{title:'AI学习',subtitle:'灵感 · 怎么用'},
   review:{title:'每日复盘',subtitle:'交易日志 · 反思'}
   ,investment:{title:'投资计划',subtitle:'条件 · 仓位 · 风险线'}
 };
@@ -1203,7 +1203,7 @@ const navIcons={
   journal:'<path d="M12 6.5C10.6 5 8.5 4.5 4 4.5v13.5c4.5 0 6.6.6 8 2 1.4-1.4 3.5-2 8-2V4.5c-4.5 0-6.6.5-8 2z"/><path d="M12 6.5v13.5"/>',
   tools:'<path d="M4.5 7h15M4.5 12h15M4.5 17h15"/><circle cx="10" cy="7" r="1.9"/><circle cx="14.8" cy="12" r="1.9"/><circle cx="8.2" cy="17" r="1.9"/>',
   week:'<path d="M4 4.5V20h16.2"/><path d="M8.6 16.2v-3.6M12.4 16.2V9.4M16.2 16.2V6.6"/>',
-  news:'<path d="M4.5 5.6A1.6 1.6 0 016.1 4h8.2l4.7 4.7V19a1.6 1.6 0 01-1.6 1.6H6.1A1.6 1.6 0 014.5 19z"/><path d="M14.2 4v4.8H19"/><path d="M8.2 12.4h7M8.2 15.8h4.4"/>',
+  news:'<path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.9 10.6c.6.5.9 1.4.9 2.4h6c0-1 .3-1.9.9-2.4A6 6 0 0012 3z"/>',
   investment:'<rect x="3.8" y="3.8" width="16.4" height="16.4" rx="3.4"/><path d="M7.6 14.6l3-3 2.2 2 3.8-4.4"/><path d="M13.9 9.2h2.7v2.7"/>'
 };
 document.querySelectorAll('.nav-item').forEach(item=>{
@@ -1771,7 +1771,7 @@ function updateProgress(){
 function updateCharCount(){document.getElementById('charCount').textContent=document.getElementById('journalText').value.length+' 字';}
 
 /* ===== NEWS ===== */
-const newsCats=['全部','金融','国际','国内','深圳教育','政策'];
+const newsCats=['全部','今日灵感','工具玩法','Agent进阶','AI热点'];
 function renderNewsChips(){document.getElementById('newsChips').innerHTML=newsCats.map(c=>`<div class="chip${newsFilter===c?' active':''}" onclick="setNewsFilter('${c}')">${c}</div>`).join('');}
 function setNewsFilter(c){newsFilter=c;renderNewsChips();renderRemoteNews();renderNews();}
 /* ===== REMOTE NEWS / 远程新闻自动加载 ===== */
@@ -1791,7 +1791,7 @@ async function fetchRemoteNews(){
   statusEl.textContent='加载中...';
   statusEl.style.color='#536471';
   try{
-    const resp=await fetch('news.json?t='+Date.now());
+    const resp=await fetch('ai_learn.json?t='+Date.now());
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     remoteNewsData=await resp.json();
     renderRemoteNews();
@@ -1806,8 +1806,8 @@ function renderRemoteNews(){
   const statusEl=document.getElementById('remoteNewsStatus');
   const listEl=document.getElementById('remoteNewsList');
   if(!remoteNewsData||!remoteNewsData.items||!remoteNewsData.items.length){
-    statusEl.textContent='暂无新闻';
-    listEl.innerHTML='<div style="text-align:center;color:var(--white-dim);padding:12px;font-size:12px">今天还没有推送新闻</div>';
+    statusEl.textContent='暂无灵感';
+    listEl.innerHTML='<div style="text-align:center;color:var(--white-dim);padding:12px;font-size:12px">今天还没有AI灵感</div>';
     return;
   }
   const dateStr=remoteNewsData.date||'';
@@ -1816,9 +1816,8 @@ function renderRemoteNews(){
   const filteredCount=newsFilter==='全部'?total:items.filter(n=>n.cat===newsFilter).length;
   statusEl.textContent=(dateStr===TODAY_STR?'今日 '+dateStr.slice(5):dateStr.slice(5))+' · '+(newsFilter==='全部'?total+'条':filteredCount+'/'+total+'条');
   statusEl.style.color='var(--purple)';
-  const impactColor={bull:'green',bear:'red',neutral:'dim'};
-  const impactLabel={bull:'利多',bear:'利空',neutral:'中性'};
-  const catColor={金融:'green',国际:'purple',国内:'dim',深圳教育:'purple',政策:'red'};
+  const tagColor={实用:'green',新奇:'purple',进阶:'cyan',热点:'amber'};
+  const catColor={'今日灵感':'green','工具玩法':'purple','Agent进阶':'cyan','AI热点':'amber'};
   let filteredItems=items;
   if(newsFilter!=='全部')filteredItems=items.filter(n=>n.cat===newsFilter);
   listEl.innerHTML=filteredItems.map((n,i)=>{
@@ -1826,21 +1825,21 @@ function renderRemoteNews(){
     const contentId='rn-content-'+i;
     const contentHtml=hasContent?'<div id="'+contentId+'" style="display:none;font-size:12px;color:var(--white-mid);line-height:1.7;margin-top:6px;padding:8px 10px;border-radius:8px;background:#f9f9f9;border:1px solid #f0f0f0">'+n.content.replace(/\n/g,'<br>')+'</div>':'';
     const expandIcon=hasContent?'<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="margin-left:auto;flex-shrink:0;opacity:0.4"><path d="M6 9l6 6 6-6"/></svg>':'';
-    const impactTag=n.impact?'<span class="tag tag-'+(impactColor[n.impact]||'dim')+'">'+(impactLabel[n.impact]||'')+'</span>':'';
+    const impactTag=n.tag?'<span class="tag tag-'+(tagColor[n.tag]||'dim')+'">'+n.tag+'</span>':'';
     const catTag=n.cat?'<span class="tag tag-'+(catColor[n.cat]||'dim')+'">'+n.cat+'</span>':'';
     const clickHandler=hasContent?' onclick="toggleNewsContent(\''+contentId+'\')" style="cursor:pointer"':'';
-    return '<div style="padding:10px 12px;margin-bottom:6px;border-radius:10px;background:#f9f9f9;border:1px solid #f0f0f0"><div'+clickHandler+' style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--white)"><span>'+n.headline+'</span>'+expandIcon+'</div>'+contentHtml+'<div style="display:flex;gap:5px;margin-top:6px;align-items:center">'+catTag+impactTag+(n.relevance==='high'?'<span style="font-size:10px;color:var(--amber);font-weight:600">高相关</span>':'')+'</div></div>';
+    return '<div style="padding:10px 12px;margin-bottom:6px;border-radius:10px;background:#f9f9f9;border:1px solid #f0f0f0"><div'+clickHandler+' style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--white)"><span>'+n.title+'</span>'+expandIcon+'</div>'+contentHtml+'<div style="display:flex;gap:5px;margin-top:6px;align-items:center">'+catTag+impactTag+(n.focus==='high'?'<span style="font-size:10px;color:var(--amber);font-weight:600">为你定制</span>':'')+'</div></div>';
   }).join('');
-  if(!filteredItems.length && items.length) listEl.innerHTML='<div style="text-align:center;color:var(--white-dim);padding:12px;font-size:12px">该分类暂无新闻</div>';
+  if(!filteredItems.length && items.length) listEl.innerHTML='<div style="text-align:center;color:var(--white-dim);padding:12px;font-size:12px">该分类暂无灵感</div>';
 }
 function renderNews(){
   const el=document.getElementById('newsList');
   const newsCatColor={金融:'green',国际:'purple',国内:'dim',深圳教育:'purple',政策:'red'};
   const impactColor={bull:'green',bear:'red',neutral:'dim'};
   const impactLabel={bull:'利多',bear:'利空',neutral:'中性'};
-  let items=data.news.slice().reverse();
+  let items=[];/*新闻板块已下线,原本地手动新闻数据保留在localStorage*/
   if(newsFilter!=='全部')items=items.filter(n=>n.cat===newsFilter);
-  if(!items.length){el.innerHTML=`<div class="news-empty"><svg viewBox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2zM7 9h7M7 13h7M7 17h4"/></svg><div>暂无关注新闻</div></div>`;return;}
+  if(!items.length){el.innerHTML='';return;}
   const groups={};
   items.forEach(n=>{if(!groups[n.date])groups[n.date]=[];groups[n.date].push(n);});
   const sortedDates=Object.keys(groups).sort((a,b)=>b.localeCompare(a));
