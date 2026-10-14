@@ -1,0 +1,150 @@
+{
+  "date": "2026-10-14",
+  "updated": "2026-10-14T11:21:42+08:00",
+  "items": [
+    {
+      "repo": "morluto/rea",
+      "name": "rea",
+      "desc": "Reverse engineer anything with agents, from app behavior down to native binaries.",
+      "desc_cn": "利用AI智能体，实现从应用行为到原生二进制文件的全方位逆向工程。",
+      "cat": "AI",
+      "lang": "TypeScript",
+      "stars": "212k",
+      "today": "+54.7k",
+      "url": "https://github.com/morluto/rea",
+      "tag": "爆火"
+    },
+    {
+      "repo": "storytold/artcraft",
+      "name": "artcraft",
+      "desc": "ArtCraft is an intentional crafting engine for artists, designers, and filmmakers",
+      "desc_cn": "面向艺术家与影视创作者的意图驱动型创意生成引擎，激发无限灵感。",
+      "cat": "工具",
+      "lang": "Rust",
+      "stars": "26k",
+      "today": "+4.1k",
+      "url": "https://github.com/storytold/artcraft",
+      "tag": "爆火"
+    },
+    {
+      "repo": "freeCodeCamp/freeCodeCamp",
+      "name": "freeCodeCamp",
+      "desc": "freeCodeCamp.org's open-source codebase and curriculum. Learn math, programming, and computer science for free.",
+      "desc_cn": "知名开源编程学习平台，提供海量免费互动课程，助你零基础掌握编程与计算机科学。",
+      "cat": "工具",
+      "lang": "TypeScript",
+      "stars": "457k",
+      "today": "+0",
+      "url": "https://github.com/freeCodeCamp/freeCodeCamp",
+      "tag": "爆火"
+    },
+    {
+      "repo": "bilawalsidhu/gods-eye-view",
+      "name": "gods-eye-view",
+      "desc": "A spy satellite simulator in your browser, except the data is real. Live open source spatial intelligence on a photoreal",
+      "desc_cn": "基于真实数据的浏览器间谍卫星模拟器，在逼真3D地球上实时展示空间情报。",
+      "cat": "好玩",
+      "lang": "JavaScript",
+      "stars": "55k",
+      "today": "+2.0k",
+      "url": "https://github.com/bilawalsidhu/gods-eye-view",
+      "tag": "爆火"
+    },
+    {
+      "repo": "cathrynlavery/diagram-design",
+      "name": "diagram-design",
+      "desc": "Editorial diagram design for Claude Code, Codex, GitHub Copilot, Cursor, Factory Droid, and Pi. 44 diagram types. Self-c",
+      "desc_cn": "为AI编程助手提供44种高质量、无冗余的自包含HTML与SVG图表设计模板。",
+      "cat": "工具",
+      "lang": "HTML",
+      "stars": "54k",
+      "today": "+1.8k",
+      "url": "https://github.com/cathrynlavery/diagram-design",
+      "tag": "爆火"
+    },
+    {
+      "repo": "debpalash/VoiceStudio",
+      "name": "VoiceStudio",
+      "desc": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictati",
+      "desc_cn": "开源本地化语音工具，支持声音克隆、视频配音与转录，涵盖646种语言。",
+      "cat": "AI",
+      "lang": "Python",
+      "stars": "63k",
+      "today": "+1.7k",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "tag": "爆火"
+    },
+    {
+      "repo": "openclaw/openclaw",
+      "name": "openclaw",
+      "desc": "The AI that really does things. Any OS. Any Platform. The lobster way. 🦞 ",
+      "desc_cn": "全平台AI智能体，能真正替你执行操作任务，主打跨系统与龙虾之道。",
+      "cat": "AI",
+      "lang": "TypeScript",
+      "stars": "391k",
+      "today": "+0",
+      "url": "https://github.com/openclaw/openclaw",
+      "tag": "爆火"
+    },
+    {
+      "repo": "wheresryan22/anatomy",
+      "name": "anatomy",
+      "desc": "An agent skill for creating detailed, interactive isometric illustrations of real-world machines and complex systems. Ge",
+      "desc_cn": "AI代理技能，可生成带3D效果的交互式等距插图，轻松可视化复杂机械与系统。",
+      "cat": "AI",
+      "lang": "JavaScript",
+      "stars": "8k",
+      "today": "+1.5k",
+      "url": "https://github.com/wheresryan22/anatomy",
+      "tag": "爆火"
+    },
+    {
+      "repo": "NousResearch/hermes-agent",
+      "name": "hermes-agent",
+      "desc": "The agent that grows with you",
+      "desc_cn": "一款能伴随用户共同成长、持续进化的开源AI智能体，极具扩展性。",
+      "cat": "AI",
+      "lang": "Python",
+      "stars": "253k",
+      "today": "+0",
+      "url": "https://github.com/NousResearch/hermes-agent",
+      "tag": "爆火"
+    },
+    {
+      "repo": "torvalds/linux",
+      "name": "linux",
+      "desc": "Linux kernel source tree",
+      "desc_cn": "全球最广泛使用的开源操作系统内核，支撑着现代互联网与各类计算基础设施。",
+      "cat": "工具",
+      "lang": "C",
+      "stars": "251k",
+      "today": "+0",
+      "url": "https://github.com/torvalds/linux",
+      "tag": "爆火"
+    },
+    {
+      "repo": "react/react",
+      "name": "react",
+      "desc": "The library for web and native user interfaces.",
+      "desc_cn": "主流前端库，用于高效构建Web与原生用户界面，组件化开发首选。",
+      "cat": "工具",
+      "lang": "JavaScript",
+      "stars": "251k",
+      "today": "+0",
+      "url": "https://github.com/react/react",
+      "tag": "爆火"
+    },
+    {
+      "repo": "xtool-org/xtool",
+      "name": "xtool",
+      "desc": "Cross-platform Xcode replacement. Build and deploy iOS apps with SwiftPM on Linux, Windows, macOS.",
+      "desc_cn": "跨平台Xcode替代品，打破系统限制，支持在非苹果系统上构建部署iOS应用。",
+      "cat": "工具",
+      "lang": "Swift",
+      "stars": "9k",
+      "today": "+1.2k",
+      "url": "https://github.com/xtool-org/xtool",
+      "tag": "爆火"
+    }
+  ]
+}
