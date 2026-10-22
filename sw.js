@@ -1,5 +1,5 @@
-/* JUN 个人工作台 Service Worker v14.2 — 离线缓存 */
-const SW_VERSION = 'jun-v14.2.0';
+/* JUN 个人工作台 Service Worker v15.0 — 离线缓存 */
+const SW_VERSION = 'jun-v15.0.0';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -7,7 +7,11 @@ const CORE_ASSETS = [
   './manifest.json',
   './workout.json',
   './news.json',
-  './todos.json'
+  './todos.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/icon-512-maskable.png',
+  './icons/apple-touch-icon.png'
 ];
 
 self.addEventListener('install', function (event) {
@@ -43,7 +47,9 @@ self.addEventListener('fetch', function (event) {
         caches.open(SW_VERSION).then(function (c) { c.put(req, copy); });
         return resp;
       }).catch(function () {
-        return caches.match(req, { ignoreSearch: true }).then(function (r) { return r || caches.match('./index.html'); });
+        return caches.match(req, { ignoreSearch: true }).then(function (r) {
+          return r || caches.match('./index.html');
+        });
       })
     );
     return;
