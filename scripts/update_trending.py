@@ -189,15 +189,53 @@ POLLINATIONS_URL = "https://text.pollinations.ai/"
 POLLINATIONS_MODELS = ["openai-fast", "openai"]
 
 
+def _parse_annotations(raw_text, selected, offset):
+    """容错解析一批点评：拆 envelope → 剥围栏 → 逐条抓平对象。返回 {全局i: note}"""
+    raw_text = raw_text.strip()
+    if raw_text.lstrip().startswith("{"):
+        try:
+            obj = json.loads(raw_text)
+            if isinstance(obj, dict):
+                raw_text = str(obj.get("content") or obj.get("message")
+                               or obj.get("text") or raw_text)
+        except Exception:
+            pass
+    raw_text = re.sub(r"```(?:json)?", "", raw_text)
+    got = {}
+    for mm in re.finditer(r"\{[^{}]*\}", raw_text, re.DOTALL):
+        try:
+            e = json.loads(mm.group(0))
+        except Exception:
+            continue
+        if not isinstance(e, dict) or "desc_cn" not in e:
+            continue
+        try:
+            idx = int(e.get("i", e.get("idx", -1)))
+        except Exception:
+            continue
+        if offset <= idx < offset + len(selected) or 0 <= idx < len(selected):
+            if not (offset <= idx < offset + len(selected)):
+                idx += offset
+            got[idx] = {
+                "desc_cn": str(e.get("desc_cn", "")).strip(),
+                "cat": str(e.get("cat", "")).strip(),
+                "tag": str(e.get("tag", "")).strip(),
+            }
+    return got
+
+
 def pollinations_call(selected):
-    """单次批量调用 Pollinations 免费文本 API 生成中文点评。
-    返回 list[{desc_cn,cat,tag}] 或 None。"""
-    listing = "\n".join(
-        f"{i}. {r['repo']} | {r['name']} | lang={r['lang'] or 'NA'} | "
-        f"stars={r['stars']} | today=+{r['today']} | desc: {r['desc'] or 'NA'}"
-        for i, r in enumerate(selected)
-    )
-    prompt = f"""为以下 {len(selected)} 个 GitHub 开源项目各生成一条中文点评。项目列表：
+    """分批调用 Pollinations 免费文本 API 生成中文点评（短 prompt 避免推理模式）。"""
+    chunk = 4
+    out = {}
+    for start in range(0, len(selected), chunk):
+        part = selected[start:start + chunk]
+        listing = "\n".join(
+            f"{start + j}. {r['repo']} | {r['name']} | lang={r['lang'] or 'NA'} | "
+            f"stars={r['stars']} | today=+{r['today']} | desc: {r['desc'] or 'NA'}"
+            for j, r in enumerate(part)
+        )
+        prompt = f"""为以下 {len(part)} 个 GitHub 开源项目各生成一条中文点评。项目列表：
 {listing}
 
 要求：
@@ -206,66 +244,42 @@ def pollinations_call(selected):
 3. tag：只能是 爆火 / 实用 / 新奇 之一（爆火仅限 today>+5000 或 stars>100k 的现象级项目，严格限定）
 4. 严格输出 JSON 数组，不要任何其他文字：[{{"i":0,"desc_cn":"...","cat":"...","tag":"..."}}, ...]"""
 
-    last_err = None
-    for model in POLLINATIONS_MODELS:
-        for attempt in range(2):
-            try:
-                print(f"pollinations attempt: model={model} try={attempt}")
-                payload = {
-                    "messages": [{"role": "user", "content": prompt}],
-                    "model": model,
-                    "referrer": "shiyi-trending",
-                }
-                req = urllib.request.Request(
-                    POLLINATIONS_URL,
-                    data=json.dumps(payload).encode("utf-8"),
-                    headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
-                    method="POST",
-                )
-                with urllib.request.urlopen(req, timeout=150) as resp:
-                    content = resp.read().decode("utf-8", errors="replace").strip()
-                print(f"  resp len={len(content)} head={content[:100]!r}")
-                if not content:
-                    raise ValueError("empty response")
-                raw_text = content
-                if raw_text.lstrip().startswith("{"):
-                    try:
-                        obj = json.loads(raw_text)
-                        if isinstance(obj, dict):
-                            raw_text = str(obj.get("content") or obj.get("message")
-                                           or obj.get("text") or raw_text)
-                    except Exception:
-                        pass
-                raw_text = re.sub(r"```(?:json)?", "", raw_text)
-                # tolerant per-item parse: every flat {...} with desc_cn
-                out = {}
-                for mm in re.finditer(r"\{[^{}]*\}", raw_text, re.DOTALL):
-                    try:
-                        e = json.loads(mm.group(0))
-                    except Exception:
-                        continue
-                    if not isinstance(e, dict) or "desc_cn" not in e:
-                        continue
-                    try:
-                        idx = int(e.get("i", -1))
-                    except Exception:
-                        continue
-                    if 0 <= idx < len(selected):
-                        out[idx] = {
-                            "desc_cn": str(e.get("desc_cn", "")).strip(),
-                            "cat": str(e.get("cat", "")).strip(),
-                            "tag": str(e.get("tag", "")).strip(),
-                        }
-                if len(out) < max(6, len(selected) // 2):
-                    raise ValueError(f"too few parsed: {len(out)}/{len(selected)}")
-                print(f"pollinations OK via {model} ({len(out)} items)")
-                return [out.get(i) for i in range(len(selected))]
-            except Exception as e:
-                last_err = e
-                print(f"[WARN] pollinations {model} try{attempt}: {type(e).__name__}: {e}")
-                time.sleep(5)
-    print(f"[WARN] all pollinations attempts failed: {last_err}")
-    return None
+        need = max(2, (len(part) + 1) // 2)
+        ok = False
+        for model in POLLINATIONS_MODELS:
+            for attempt in range(2):
+                try:
+                    print(f"pollinations batch {start}-{start+len(part)-1}: model={model} try={attempt}")
+                    payload = {
+                        "messages": [{"role": "user", "content": prompt}],
+                        "model": model,
+                        "referrer": "shiyi-trending",
+                    }
+                    req = urllib.request.Request(
+                        POLLINATIONS_URL,
+                        data=json.dumps(payload).encode("utf-8"),
+                        headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
+                        method="POST",
+                    )
+                    with urllib.request.urlopen(req, timeout=120) as resp:
+                        content = resp.read().decode("utf-8", errors="replace")
+                    got = _parse_annotations(content, part, start)
+                    print(f"  batch parsed: {len(got)}/{len(part)}")
+                    if len(got) < need:
+                        raise ValueError(f"too few in batch: {len(got)}/{len(part)}")
+                    out.update(got)
+                    ok = True
+                    break
+                except Exception as e:
+                    print(f"[WARN] pollinations {model} try{attempt}: {type(e).__name__}: {e}")
+                    time.sleep(4)
+            if ok:
+                break
+        time.sleep(2)
+    if len(out) < max(6, len(selected) // 2):
+        raise ValueError(f"too few total: {len(out)}/{len(selected)}")
+    print(f"pollinations OK total ({len(out)}/{len(selected)} items)")
+    return [out.get(i) for i in range(len(selected))]
 
 
 # ── Degraded annotation ────────────────────────────────────
