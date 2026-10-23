@@ -186,7 +186,7 @@ def merge_and_select(trending, search):
 # ── GitHub Models enrichment (single batched call) ─────────
 MODELS_ENDPOINTS = [
     ("https://models.github.ai/inference/chat/completions", "openai/gpt-4o-mini"),
-    ("https://models.inference.ai.azure.com/chat/completions", "gpt-4o-mini"),
+    ("https://models.github.ai/inference/chat/completions", "openai/gpt-4.1-mini"),
 ]
 
 
@@ -209,17 +209,23 @@ def models_call(selected):
     last_err = None
     for endpoint, model in MODELS_ENDPOINTS:
         try:
-            print(f"trying models endpoint: {endpoint}")
-            resp = http_post_json(
-                endpoint,
-                {
-                    "model": model,
-                    "messages": [{"role": "user", "content": prompt}],
-                    "temperature": 0.3,
-                },
-                headers=gh_headers(),
-            )
-            content = resp["choices"][0]["message"]["content"].strip()
+            print(f"trying models endpoint: {endpoint} model={model}")
+            data = json.dumps({
+                "model": model,
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.3,
+            }).encode("utf-8")
+            req = urllib.request.Request(endpoint, data=data, headers=gh_headers(), method="POST")
+            with urllib.request.urlopen(req, timeout=90) as resp:
+                raw = resp.read().decode("utf-8", errors="replace")
+                status = getattr(resp, "status", 0)
+                ctype = resp.headers.get("Content-Type", "")
+            print(f"  models resp: status={status} ctype={ctype} len={len(raw)}")
+            print(f"  body head: {raw[:200]!r}")
+            if "json" not in ctype.lower():
+                raise ValueError(f"non-json response ctype={ctype}")
+            resp_json = json.loads(raw)
+            content = resp_json["choices"][0]["message"]["content"].strip()
             m = re.search(r"\[.*\]", content, re.DOTALL)
             if not m:
                 raise ValueError(f"no JSON array in response: {content[:120]}")
@@ -239,7 +245,7 @@ def models_call(selected):
             return [out.get(i) for i in range(len(selected))]
         except Exception as e:
             last_err = e
-            print(f"[WARN] models endpoint failed: {e}")
+            print(f"[WARN] models endpoint failed: {type(e).__name__}: {e}")
     print(f"[WARN] all models endpoints failed: {last_err}")
     return None
 
