@@ -1,6 +1,6 @@
 {
   "date": "2026-10-23",
-  "updated": "2026-10-23T18:47:05+08:00",
+  "updated": "2026-10-23T18:49:27+08:00",
   "mode": "degraded",
   "items": [
     {
@@ -71,7 +71,7 @@
       "cat": "工具",
       "lang": "Python",
       "stars": "1k",
-      "today": "+764",
+      "today": "+763",
       "url": "https://github.com/ikow/php2shell-poc",
       "tag": "实用"
     },
@@ -119,7 +119,7 @@
       "cat": "工具",
       "lang": "Assembly",
       "stars": "1k",
-      "today": "+454",
+      "today": "+453",
       "url": "https://github.com/tek-sys-hub/Rubix-lang",
       "tag": "实用"
     },
@@ -143,7 +143,7 @@
       "cat": "好玩",
       "lang": "Shell",
       "stars": "926",
-      "today": "+442",
+      "today": "+441",
       "url": "https://github.com/eness/php2shell-CVE-2026-109618-CVE-2026-109619-PoC",
       "tag": "实用"
     }
