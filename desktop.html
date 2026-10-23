@@ -508,8 +508,8 @@ input::placeholder,textarea::placeholder{color:#767d88}
   #sec-week .overview-grid{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:12px!important;}
   /* 工具箱：多列网格 */
   #sec-tools .dashboard-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:14px!important;}
-  /* 日记/阅读/新闻：更宽的内容区 */
-  #sec-diary .card,#sec-journal .card,#sec-news .card,#sec-review .card{max-width:800px;}
+  /* 日记/新闻：更宽的内容区 */
+  #sec-diary .card,#sec-news .card,#sec-review .card{max-width:800px;}
   /* 训练页 */
   #sec-workout{max-width:900px;}
   /* 投资计划 */
@@ -572,7 +572,6 @@ input::placeholder,textarea::placeholder{color:#767d88}
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('health');closeMobileMenu();return false;">健康</a>
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('workout');closeMobileMenu();return false;">训练</a>
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('diary');closeMobileMenu();return false;">日记</a>
-      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('journal');closeMobileMenu();return false;">阅读</a>
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('tools');closeMobileMenu();return false;">工具箱</a>
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('week');closeMobileMenu();return false;">周复盘</a>
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('news');closeMobileMenu();return false;">新闻</a>
@@ -624,10 +623,6 @@ input::placeholder,textarea::placeholder{color:#767d88}
       <span>日记</span>
     </button>
     <div class="nav-section-label">成长</div>
-    <button type="button" class="nav-item" data-tab="journal">
-      <svg viewBox="0 0 24 24"><path d="M12 6.5C10.6 5 8.5 4.5 4 4.5v13.5c4.5 0 6.6.6 8 2 1.4-1.4 3.5-2 8-2V4.5c-4.5 0-6.6.5-8 2z"/><path d="M12 6.5v13.5"/></svg>
-      <span>阅读</span>
-    </button>
     <button type="button" class="nav-item" data-tab="tools">
       <svg viewBox="0 0 24 24"><path d="M4.5 7h15M4.5 12h15M4.5 17h15"/><circle cx="10" cy="7" r="1.9"/><circle cx="14.8" cy="12" r="1.9"/><circle cx="8.2" cy="17" r="1.9"/></svg>
       <span>工具箱</span>
@@ -918,29 +913,6 @@ input::placeholder,textarea::placeholder{color:#767d88}
         </div>
       </div>
 
-      <!-- JOURNAL (阅读) -->
-      <div class="section" id="sec-journal" style="display:none">
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14zM4 19.5A2.5 2.5 0 006.5 22H20"/></svg>阅读进度</div>
-          <div id="bookList"></div>
-          <div style="display:flex;gap:8px;margin-top:12px">
-            <select id="bookSelect" style="flex:2"></select>
-            <input type="number" id="pctInput" placeholder="%" min="0" max="100" style="flex:1">
-            <button class="btn btn-primary btn-sm" onclick="updateProgress()">更新</button>
-          </div>
-          <div id="newBookInput" style="display:none;margin-top:8px"><input id="newBookName" placeholder="输入书名"></div>
-        </div>
-        <div class="card glass-strong">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>读书笔记</div>
-          <textarea id="journalText" placeholder="今天读了什么、有什么感悟……" rows="4" oninput="updateCharCount()"></textarea>
-          <div class="char-count" id="charCount">0 字</div>
-          <button class="btn btn-primary" style="width:100%;margin-top:10px" onclick="saveJournal()">保存笔记</button>
-        </div>
-        <div id="journalHistory"></div>
-      </div>
-
       <!-- NEWS -->
       <div class="section" id="sec-news" style="display:none">
         <div class="chips" id="newsChips" style="margin-bottom:4px">
@@ -1166,7 +1138,6 @@ function switchTab(tab){
     workout:['训练','计划 · 动作 · 记录'],
     diary:['日记','记录 · 回顾'],
     todo:['待办','管理 · 追踪'],
-    journal:['阅读','笔记 · 进度'],
     news:['新闻','关注 · 动态'],
     review:['每日复盘','交易 · 反思']
     ,investment:['投资计划','条件 · 仓位 · 风险线']
@@ -1286,8 +1257,7 @@ const pageTitles={
   workout:{title:'训练',subtitle:'增肌 · 减脂 · PPL六天循环'},
   diary:{title:'日记',subtitle:'记录每一天'},
   todo:{title:'待办',subtitle:'任务管理'},
-  journal:{title:'阅读',subtitle:'进度 · 读书笔记'},
-  news:{title:'新闻',subtitle:'关注 · 简报'},
+    news:{title:'新闻',subtitle:'关注 · 简报'},
   review:{title:'每日复盘',subtitle:'交易日志 · 反思'}
   ,investment:{title:'投资计划',subtitle:'条件 · 仓位 · 风险线'}
 };
@@ -1297,9 +1267,7 @@ const navIcons={
   review:'<circle cx="12" cy="12" r="7.8"/><path d="M12 8.4v3.8l2.4 1.4"/><path d="M4.2 4.6v3h3"/>',
   health:'<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/><path d="M7.8 12.2h2l1.1-2.1 1.9 3.6 1.1-1.8h2.3"/>',
   workout:'<path d="M7 7.2v9.6M4.2 9.3v5.4M17 7.2v9.6M19.8 9.3v5.4M7 12h10"/>',
-  diary:'<path d="M5.5 5.2A1.7 1.7 0 017.2 3.5H18a1 1 0 011 1v13.2"/><path d="M5.5 5.2V18.6a2 2 0 002 2h11.5"/><path d="M9.5 8.5h5.5"/>',
-  journal:'<path d="M12 6.5C10.6 5 8.5 4.5 4 4.5v13.5c4.5 0 6.6.6 8 2 1.4-1.4 3.5-2 8-2V4.5c-4.5 0-6.6.5-8 2z"/><path d="M12 6.5v13.5"/>',
-  tools:'<path d="M4.5 7h15M4.5 12h15M4.5 17h15"/><circle cx="10" cy="7" r="1.9"/><circle cx="14.8" cy="12" r="1.9"/><circle cx="8.2" cy="17" r="1.9"/>',
+  diary:'<path d="M5.5 5.2A1.7 1.7 0 017.2 3.5H18a1 1 0 011 1v13.2"/><path d="M5.5 5.2V18.6a2 2 0 002 2h11.5"/><path d="M9.5 8.5h5.5"/>',  tools:'<path d="M4.5 7h15M4.5 12h15M4.5 17h15"/><circle cx="10" cy="7" r="1.9"/><circle cx="14.8" cy="12" r="1.9"/><circle cx="8.2" cy="17" r="1.9"/>',
   week:'<path d="M4 4.5V20h16.2"/><path d="M8.6 16.2v-3.6M12.4 16.2V9.4M16.2 16.2V6.6"/>',
   news:'<path d="M4.5 5.6A1.6 1.6 0 016.1 4h8.2l4.7 4.7V19a1.6 1.6 0 01-1.6 1.6H6.1A1.6 1.6 0 014.5 19z"/><path d="M14.2 4v4.8H19"/><path d="M8.2 12.4h7M8.2 15.8h4.4"/>',
   investment:'<rect x="3.8" y="3.8" width="16.4" height="16.4" rx="3.4"/><path d="M7.6 14.6l3-3 2.2 2 3.8-4.4"/><path d="M13.9 9.2h2.7v2.7"/>'
@@ -1436,9 +1404,7 @@ function heatmapHide(){_hmTip.style.display='none';}
 const defaultHabits=[
   {id:'foot_grip',name:'足底抓地激活',icon:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>',tip:'O腿矫正根基动作'},
   {id:'no_cross',name:'不跷二郎腿',icon:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2v10M4 22h16M8 14h8"/></svg>',tip:'防止骨盆倾斜加重O腿'},
-  {id:'gait',name:'走路脚尖朝前',icon:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="13" cy="4" r="1"/><path d="M8 21l2-6 3-2 2-5"/><path d="M10 13l-3 4-1 4"/><path d="M15 8l-2 5 2 3 1 5"/></svg>',tip:'步态重编程比训练影响更大'},
-  {id:'reading',name:'今日阅读',icon:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14z"/><path d="M4 19.5A2.5 2.5 0 006.5 22H20"/></svg>',tip:'《周期》→《曾国藩传》→《投资最重要的事》'},
-  {id:'corrective',name:'纠正训练完成',icon:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M16 2L9 12l-3 5 4 3 5-7 2-4 2-7z"/></svg>',tip:'动作质量>数量'}
+  {id:'gait',name:'走路脚尖朝前',icon:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="13" cy="4" r="1"/><path d="M8 21l2-6 3-2 2-5"/><path d="M10 13l-3 4-1 4"/><path d="M15 8l-2 5 2 3 1 5"/></svg>',tip:'步态重编程比训练影响更大'},  {id:'corrective',name:'纠正训练完成',icon:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M16 2L9 12l-3 5 4 3 5-7 2-4 2-7z"/></svg>',tip:'动作质量>数量'}
 ];
 function toggleHabit(hid){
   if(!data.habits)data.habits={};
@@ -1846,30 +1812,6 @@ function saveTodo(){
 function delTodo(id){if(!confirm('删除这条待办？'))return;data.todos=data.todos.filter(x=>x.id!==id);saveData();renderTodos();renderTodayFocus();renderWeekReview();showToast('已删除');}
 function toggleDoneList(){const d=document.getElementById('doneList'),t=document.getElementById('doneToggle');const show=d.style.display==='none';d.style.display=show?'block':'none';t.classList.toggle('expanded',show);}
 
-/* ===== JOURNAL (阅读) ===== */
-function renderJournal(){
-  const b=data.books,list=document.getElementById('bookList'),keys=Object.keys(b);
-  list.innerHTML=keys.length?keys.map(k=>{const v=b[k]||0;return `<div class="book-progress"><div><span class="book-name">${k}</span><span class="book-pct">${v}%</span></div><div class="book-bar"><div class="book-fill" style="width:${v}%"></div></div></div>`;}).join(''):'<div style="font-size:12px;color:var(--white-dim);padding:8px 0">暂无书籍，添加一本开始追踪</div>';
-  const sel=document.getElementById('bookSelect');
-  sel.innerHTML=keys.map(k=>`<option>${k}</option>`).join('')+'<option value="__new__">+ 添加新书</option>';
-  sel.onchange=()=>{document.getElementById('newBookInput').style.display=sel.value==='__new__'?'block':'none';};
-  document.getElementById('journalHistory').innerHTML=data.journals.slice().reverse().slice(0,14).map((j,i)=>`<div class="journal-entry glass"><div class="journal-date">${j.date}</div><div class="journal-text">${j.text.replace(/\n/g,'<br>')}</div><button class="btn-icon journal-del" onclick="delJournal(${data.journals.length-1-i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div>`).join('');
-}
-function saveJournal(){
-  const text=document.getElementById('journalText').value.trim();
-  if(!text){showToast('请输入笔记内容');return;}
-  data.journals.push({date:localDateKey(),text});
-  saveData();renderJournal();document.getElementById('journalText').value='';updateCharCount();showToast('笔记已保存');
-}
-function delJournal(idx){if(!confirm('删除这条笔记？'))return;data.journals.splice(idx,1);saveData();renderJournal();showToast('已删除');}
-function updateProgress(){
-  const sel=document.getElementById('bookSelect');let book=sel.value,pct=+document.getElementById('pctInput').value;
-  if(book==='__new__'){book=document.getElementById('newBookName').value.trim();if(!book){showToast('请输入书名');return;}}
-  if(isNaN(pct)||pct<0||pct>100){showToast('请输入0-100的百分比');return;}
-  data.books[book]=pct;saveData();renderJournal();document.getElementById('pctInput').value='';document.getElementById('newBookName').value='';document.getElementById('newBookInput').style.display='none';showToast('进度已更新');
-}
-function updateCharCount(){document.getElementById('charCount').textContent=document.getElementById('journalText').value.length+' 字';}
-
 /* ===== NEWS ===== */
 const newsCats=['全部','金融','国际','国内','深圳教育','政策'];
 function renderNewsChips(){document.getElementById('newsChips').innerHTML=newsCats.map(c=>`<div class="chip${newsFilter===c?' active':''}" onclick="setNewsFilter('${c}')">${c}</div>`).join('');}
@@ -2119,8 +2061,7 @@ function delReview(idx){if(!confirm('删除这条复盘？'))return;data.reviews
 function exportData(){
   const today=TODAY_STR;
   const todayWorkouts=data.workouts.filter(w=>w.date===today);
-  const todayJournal=data.journals.filter(j=>j.date===today);
-  const todayNews=data.news.filter(n=>n.date===today);
+    const todayNews=data.news.filter(n=>n.date===today);
   const todayReview=data.reviews.find(r=>r.date===today);
   const todayDiary=data.diaries.find(d=>d.date===today);
   const todayHealth=data.health[today]||{};
@@ -2153,10 +2094,6 @@ ${todayDiary?todayDiary.text:'- 今日未记录'}
 ${data.todos.filter(t=>!t.done).map(t=>`- [${prioLabel[t.priority]}] ${t.text}${t.due?' ('+t.due+')':''} [${t.cat}]`).join('\n')||'- 无'}
 ### 已完成
 ${data.todos.filter(t=>t.done).slice(-5).map(t=>`- ${t.text}`).join('\n')||'- 无'}
-
-## 阅读
-${Object.entries(data.books).map(([k,v])=>`- ${k}: ${v}%`).join('\n')}
-${todayJournal.map(j=>'\n**今日笔记**:\n'+j.text).join('')||''}
 
 ## 今日关注
 ${todayNews.map(n=>`- [${n.cat}] ${n.headline} (${impactLabel[n.impact]})${n.relevance==='high'?' 高相关':''}${n.url?' '+n.url:''}${n.content?'\n  '+n.content.replace(/\n/g,'\n  '):''}`).join('\n')||'- 无'}
@@ -2290,7 +2227,7 @@ function saveTodayIntention(){data.todayIntention=document.getElementById('today
 function renderWeekReview(){
   const start=new Date();start.setDate(start.getDate()-6);const days=Array.from({length:7},(_,i)=>localDateKey(new Date(start.getFullYear(),start.getMonth(),start.getDate()+i)));
   const done=(data.todos||[]).filter(t=>t.done).length,total=(data.todos||[]).length,checks=(data.checkins||[]).filter(d=>days.includes(d)).length;
-  const metrics=[['任务完成',total?Math.round(done/total*100)+'%':'—'],['训练打卡',checks+' 次'],['阅读笔记',(data.journals||[]).filter(j=>days.includes(j.date)).length+' 条']];
+  const metrics=[['任务完成',total?Math.round(done/total*100)+'%':'—'],['训练打卡',checks+' 次'],['日记',(data.diaries||[]).filter(x=>days.includes(x.date)).length+' 篇']];
   const el=document.getElementById('weekMetrics');if(el)el.innerHTML=metrics.map(([a,b])=>`<div class="overview-card"><div class="ov-label">${a}</div><div class="ov-value" style="color:var(--purple)">${b}</div></div>`).join('');
   const note=document.getElementById('weekNote');if(note)note.value=data.weekNote||'';
 }
@@ -2299,8 +2236,7 @@ function generateWeekReport(){
   const days=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(localDateKey(d));}
   const checks=days.filter(d=>(data.checkins||[]).includes(d)).length;
   const pomo=days.reduce((s,d)=>s+((data.pomodoros||{})[d]||0),0);
-  const journals=(data.journals||[]).filter(j=>days.includes(j.date)).length;
-  const diaries=(data.diaries||[]).filter(x=>days.includes(x.date)).length;
+    const diaries=(data.diaries||[]).filter(x=>days.includes(x.date)).length;
   const reviews=(data.reviews||[]).filter(r=>days.includes(r.date));
   const waterDays=days.filter(d=>((data.water||{})[d]||0)>=2500).length;
   const ws=(data.weights||[]).filter(w=>days.includes(w.date));
@@ -2311,7 +2247,7 @@ function generateWeekReport(){
   const openNow=(data.todos||[]).filter(t=>!t.done).length;
   const L=['【本周数据 · 自动生成 '+TODAY_STR+'】',
     '训练打卡 '+checks+' 次 · 专注 '+pomo+' 番茄 · 饮水达标 '+waterDays+'/7 天',
-    '阅读笔记 '+journals+' 条 · 日记 '+diaries+' 篇 · 复盘 '+reviews.length+' 次',
+    '日记 '+diaries+' 篇 · 复盘 '+reviews.length+' 次',
     '本周完成任务 '+doneWeek+' 项 · 当前待办 '+openNow+' 项'];
   if(wDelta!==null)L.push('体重变化 '+(wDelta>0?'+':'')+wDelta+'kg');
   if(avgScore)L.push('平均纪律评分 '+avgScore+'/5');
@@ -2503,7 +2439,6 @@ function renderAll(){
   try{renderTodayFocus();renderTodayNotice();renderWeekReview();renderInvestmentPlan();renderDisciplineCard();}catch(e){console.error('[renderAll] dashboard:',e)}
   try{renderDiaryStreak();renderDiaryHistory();loadTodayDiary();}catch(e){console.error('[renderAll] diary:',e)}
   try{renderTodoChips();renderTodos();fetchRemoteTodos();}catch(e){console.error('[renderAll] todo:',e)}
-  try{renderJournal();}catch(e){console.error('[renderAll] journal:',e)}
   try{renderNewsChips();renderNews();fetchRemoteNews();}catch(e){console.error('[renderAll] news:',e)}
   try{renderMoodGrid();renderScoreRow();renderReviewHistory();loadTodayReview();renderFocusSummary();renderReviewTrend();}catch(e){console.error('[renderAll] review:',e)}
   try{fetchWorkoutData();}catch(e){console.error('[renderAll] workout:',e)}
@@ -2671,9 +2606,6 @@ function buildAiContext(){
     var meals=(data.meals||[]).filter(function(m){return m.date===today;});
     if(meals.length)out.push('今日饮食: '+meals.slice(0,6).map(function(m){return (m.display||m.name)+'约'+m.kcal+'千卡';}).join('；'));
     if(data.checkins&&data.checkins.length)out.push('训练打卡: 共'+data.checkins.length+'次'+(data.checkins.indexOf(today)>-1?'，今日已打卡':'，今日未打卡'));
-    var bk=[];
-    for(var k in (data.books||{}))bk.push(k+' '+data.books[k]+'%');
-    if(bk.length)out.push('阅读进度: '+bk.join('，'));
     if(data.diaries&&data.diaries.length){var d=data.diaries[data.diaries.length-1];out.push('最近日记('+d.date+'): '+(d.text||'').slice(0,60));}
     if(data.reviews&&data.reviews.length){var r=data.reviews[data.reviews.length-1];out.push('最近复盘('+r.date+'): 评分'+(r.score||'-')+'，反思'+(r.reflection||'').slice(0,50));}
     if(data.investPlan&&data.investPlan.goal)out.push('投资计划: 目标'+data.investPlan.goal);

@@ -8,9 +8,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#0f172a">
+<meta name="theme-color" content="#4c1d95">
 <meta name="color-scheme" content="light">
-<meta name="description" content="JUN 个人工作台：今日焦点、待办、训练、日记、阅读、工具箱、开源热榜与投资计划。">
+<meta name="description" content="JUN 个人工作台：今日焦点、待办、训练、日记、工具箱、开源热榜与投资计划。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='%233b82f6'/><stop offset='100%' stop-color='%231e3a8a'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><path d='M58 26v34a13 13 0 01-26 0' fill='none' stroke='white' stroke-width='9' stroke-linecap='round'/></svg>">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -69,7 +69,7 @@ html,body{height:100%;touch-action:manipulation;font-family:-apple-system,BlinkM
 .content::-webkit-scrollbar{width:6px;height:6px}
 .content::-webkit-scrollbar-track{background:transparent}
 .content::-webkit-scrollbar-thumb{background:rgba(37,99,235,0.28);border-radius:3px}
-.content-header{padding:28px 32px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#0f172a;z-index:5}
+.content-header{padding:28px 32px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#4c1d95;z-index:5}
 .content-header .page-title{font-size:24px;font-weight:700;letter-spacing:-0.03em;display:flex;align-items:center;gap:10px;color:#ffffff}
 .content-header .page-title svg{width:22px;height:22px;stroke:#ffffff;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .content-header .page-subtitle{font-size:14px;color:rgba(255,255,255,0.75);font-weight:400;margin-left:4px}
@@ -201,7 +201,7 @@ input::placeholder,textarea::placeholder{color:#767d88}
 .set-row .set-name{width:auto;flex:2;text-align:left}
 .workout-history-item{padding:13px 15px;margin-bottom:8px;cursor:pointer;position:relative}
 .workout-history-date{font-size:14px;font-weight:600;color:var(--purple);margin-bottom:5px;font-variant-numeric:tabular-nums}
-.mobile-header{display:none;position:fixed;top:0;left:0;right:0;z-index:101;height:calc(52px + env(safe-area-inset-top,0px));pointer-events:auto;background:#0f172a;border-bottom:none;align-items:center;padding:env(safe-area-inset-top,0px) 12px 0;gap:8px;box-shadow:0 2px 10px -6px rgba(29,78,216,0.45)}
+.mobile-header{display:none;position:fixed;top:0;left:0;right:0;z-index:101;height:calc(52px + env(safe-area-inset-top,0px));pointer-events:auto;background:#4c1d95;border-bottom:none;align-items:center;padding:env(safe-area-inset-top,0px) 12px 0;gap:8px;box-shadow:0 2px 10px -6px rgba(76,29,149,0.5)}
 
 .mobile-header-icon:active{transform:scale(0.9)}
 .mobile-header-title{font-size:16px;font-weight:700;color:#ffffff;flex-shrink:0;letter-spacing:-0.02em;display:flex;align-items:center}
@@ -483,7 +483,6 @@ html{scrollbar-width:thin;scrollbar-color:rgba(37,99,235,0.28) transparent}
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('todo');closeMobileMenu();return false;">待办</a>
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('workout');closeMobileMenu();return false;">训练</a>
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('diary');closeMobileMenu();return false;">日记</a>
-      <a href="javascript:void(0)" class="menu-item" onclick="switchTab('journal');closeMobileMenu();return false;">阅读</a>
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('tools');closeMobileMenu();return false;">工具箱</a>
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('week');closeMobileMenu();return false;">周复盘</a>
       <a href="javascript:void(0)" class="menu-item" onclick="switchTab('news');closeMobileMenu();return false;">开源热榜</a>
@@ -527,10 +526,6 @@ html{scrollbar-width:thin;scrollbar-color:rgba(37,99,235,0.28) transparent}
       <span>日记</span>
     </button>
     <div class="nav-section-label">成长</div>
-    <button type="button" class="nav-item" data-tab="journal">
-      <svg viewBox="0 0 24 24"><path d="M12 6.5C10.6 5 8.5 4.5 4 4.5v13.5c4.5 0 6.6.6 8 2 1.4-1.4 3.5-2 8-2V4.5c-4.5 0-6.6.5-8 2z"/><path d="M12 6.5v13.5"/></svg>
-      <span>阅读</span>
-    </button>
     <button type="button" class="nav-item" data-tab="tools">
       <svg viewBox="0 0 24 24"><path d="M4.5 7h15M4.5 12h15M4.5 17h15"/><circle cx="10" cy="7" r="1.9"/><circle cx="14.8" cy="12" r="1.9"/><circle cx="8.2" cy="17" r="1.9"/></svg>
       <span>工具箱</span>
@@ -705,29 +700,6 @@ html{scrollbar-width:thin;scrollbar-color:rgba(37,99,235,0.28) transparent}
           </button>
           <div id="doneList" style="display:none"></div>
         </div>
-      </div>
-
-      <!-- JOURNAL (阅读) -->
-      <div class="section" id="sec-journal" style="display:none">
-        <div class="card glass">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14zM4 19.5A2.5 2.5 0 006.5 22H20"/></svg>阅读进度</div>
-          <div id="bookList"></div>
-          <div style="display:flex;gap:8px;margin-top:12px">
-            <select id="bookSelect" style="flex:2"></select>
-            <input type="number" id="pctInput" placeholder="%" min="0" max="100" style="flex:1">
-            <button class="btn btn-primary btn-sm" onclick="updateProgress()">更新</button>
-          </div>
-          <div id="newBookInput" style="display:none;margin-top:8px"><input id="newBookName" placeholder="输入书名"></div>
-        </div>
-        <div class="card glass-strong">
-          <div class="card-glow"></div>
-          <div class="card-title"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>读书笔记</div>
-          <textarea id="journalText" placeholder="今天读了什么、有什么感悟……" rows="4" oninput="updateCharCount()"></textarea>
-          <div class="char-count" id="charCount">0 字</div>
-          <button class="btn btn-primary" style="width:100%;margin-top:10px" onclick="saveJournal()">保存笔记</button>
-        </div>
-        <div id="journalHistory"></div>
       </div>
 
       <!-- NEWS / 开源热榜 -->
@@ -912,7 +884,6 @@ function switchTab(tab){
     workout:['训练','计划 · 动作 · 记录'],
     diary:['日记','记录 · 回顾'],
     todo:['待办','管理 · 追踪'],
-    journal:['阅读','笔记 · 进度'],
     news:['开源热榜','GitHub · 每日精选'],
     investment:['投资计划','条件 · 仓位 · 风险线']
   };
@@ -982,17 +953,14 @@ const pageTitles={
   workout:{title:'训练',subtitle:'增肌 · 减脂 · PPL六天循环'},
   diary:{title:'日记',subtitle:'记录每一天'},
   todo:{title:'待办',subtitle:'任务管理'},
-  journal:{title:'阅读',subtitle:'进度 · 读书笔记'},
-  news:{title:'开源热榜',subtitle:'GitHub · 每日精选'},
+    news:{title:'开源热榜',subtitle:'GitHub · 每日精选'},
   investment:{title:'投资计划',subtitle:'条件 · 仓位 · 风险线'}
 };
 const navIcons={
   today:'<circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2"/>',
   todo:'<rect x="4" y="4" width="16" height="16" rx="4.5"/><path d="M8.6 12.3l2.3 2.3 4.7-5"/>',
   workout:'<path d="M7 7.2v9.6M4.2 9.3v5.4M17 7.2v9.6M19.8 9.3v5.4M7 12h10"/>',
-  diary:'<path d="M5.5 5.2A1.7 1.7 0 017.2 3.5H18a1 1 0 011 1v13.2"/><path d="M5.5 5.2V18.6a2 2 0 002 2h11.5"/><path d="M9.5 8.5h5.5"/>',
-  journal:'<path d="M12 6.5C10.6 5 8.5 4.5 4 4.5v13.5c4.5 0 6.6.6 8 2 1.4-1.4 3.5-2 8-2V4.5c-4.5 0-6.6.5-8 2z"/><path d="M12 6.5v13.5"/>',
-  tools:'<path d="M4.5 7h15M4.5 12h15M4.5 17h15"/><circle cx="10" cy="7" r="1.9"/><circle cx="14.8" cy="12" r="1.9"/><circle cx="8.2" cy="17" r="1.9"/>',
+  diary:'<path d="M5.5 5.2A1.7 1.7 0 017.2 3.5H18a1 1 0 011 1v13.2"/><path d="M5.5 5.2V18.6a2 2 0 002 2h11.5"/><path d="M9.5 8.5h5.5"/>',  tools:'<path d="M4.5 7h15M4.5 12h15M4.5 17h15"/><circle cx="10" cy="7" r="1.9"/><circle cx="14.8" cy="12" r="1.9"/><circle cx="8.2" cy="17" r="1.9"/>',
   week:'<path d="M4 4.5V20h16.2"/><path d="M8.6 16.2v-3.6M12.4 16.2V9.4M16.2 16.2V6.6"/>',
   news:'<circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/><circle cx="18" cy="12" r="2.6"/><path d="M6 8.6v6.8M8.5 7.2l7 3.6"/>',
   investment:'<rect x="3.8" y="3.8" width="16.4" height="16.4" rx="3.4"/><path d="M7.6 14.6l3-3 2.2 2 3.8-4.4"/><path d="M13.9 9.2h2.7v2.7"/>'
@@ -1255,30 +1223,6 @@ function saveTodo(){
 function delTodo(id){if(!confirm('删除这条待办？'))return;data.todos=data.todos.filter(x=>x.id!==id);saveData();renderTodos();renderTodayFocus();renderWeekReview();showToast('已删除');}
 function toggleDoneList(){const d=document.getElementById('doneList'),t=document.getElementById('doneToggle');const show=d.style.display==='none';d.style.display=show?'block':'none';t.classList.toggle('expanded',show);t.setAttribute('aria-expanded',show?'true':'false');}
 
-/* ===== JOURNAL (阅读) ===== */
-function renderJournal(){
-  const b=data.books,list=document.getElementById('bookList'),keys=Object.keys(b);
-  list.innerHTML=keys.length?keys.map(k=>{const v=b[k]||0;return `<div class="book-progress"><div><span class="book-name">${k}</span><span class="book-pct">${v}%</span></div><div class="book-bar"><div class="book-fill" style="width:${v}%"></div></div></div>`;}).join(''):'<div style="font-size:14px;color:var(--white-dim);padding:8px 0">暂无书籍，添加一本开始追踪</div>';
-  const sel=document.getElementById('bookSelect');
-  sel.innerHTML=keys.map(k=>`<option>${k}</option>`).join('')+'<option value="__new__">+ 添加新书</option>';
-  sel.onchange=()=>{document.getElementById('newBookInput').style.display=sel.value==='__new__'?'block':'none';};
-  document.getElementById('journalHistory').innerHTML=data.journals.slice().reverse().slice(0,14).map((j,i)=>`<div class="journal-entry glass"><div class="journal-date">${j.date}</div><div class="journal-text">${j.text.replace(/\n/g,'<br>')}</div><button class="btn-icon journal-del" aria-label="删除笔记" onclick="delJournal(${data.journals.length-1-i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div>`).join('');
-}
-function saveJournal(){
-  const text=document.getElementById('journalText').value.trim();
-  if(!text){showToast('请输入笔记内容');return;}
-  data.journals.push({date:localDateKey(),text});
-  saveData();renderJournal();document.getElementById('journalText').value='';updateCharCount();showToast('笔记已保存');
-}
-function delJournal(idx){if(!confirm('删除这条笔记？'))return;data.journals.splice(idx,1);saveData();renderJournal();showToast('已删除');}
-function updateProgress(){
-  const sel=document.getElementById('bookSelect');let book=sel.value,pct=+document.getElementById('pctInput').value;
-  if(book==='__new__'){book=document.getElementById('newBookName').value.trim();if(!book){showToast('请输入书名');return;}}
-  if(isNaN(pct)||pct<0||pct>100){showToast('请输入0-100的百分比');return;}
-  data.books[book]=pct;saveData();renderJournal();document.getElementById('pctInput').value='';document.getElementById('newBookName').value='';document.getElementById('newBookInput').style.display='none';showToast('进度已更新');
-}
-function updateCharCount(){document.getElementById('charCount').textContent=document.getElementById('journalText').value.length+' 字';}
-
 /* ===== GITHUB TRENDING / 开源热榜 ===== */
 const trendingCats=['全部','AI','工具','好玩'];
 let trendingData=null;
@@ -1395,8 +1339,7 @@ function renderRemoteTodos(){
 function exportData(){
   const today=TODAY_STR;
   const todayWorkouts=data.workouts.filter(w=>w.date===today);
-  const todayJournal=data.journals.filter(j=>j.date===today);
-  const todayNews=data.news.filter(n=>n.date===today);
+    const todayNews=data.news.filter(n=>n.date===today);
   const todayDiary=data.diaries.find(d=>d.date===today);
   const prioLabel={high:'高',mid:'中',low:'低'};
   const impactLabel={bull:'利多',bear:'利空',neutral:'中性'};
@@ -1414,10 +1357,6 @@ ${todayDiary?todayDiary.text:'- 今日未记录'}
 ${data.todos.filter(t=>!t.done).map(t=>`- [${prioLabel[t.priority]}] ${t.text}${t.due?' ('+t.due+')':''} [${t.cat}]`).join('\n')||'- 无'}
 ### 已完成
 ${data.todos.filter(t=>t.done).slice(-5).map(t=>`- ${t.text}`).join('\n')||'- 无'}
-
-## 阅读
-${Object.entries(data.books).map(([k,v])=>`- ${k}: ${v}%`).join('\n')}
-${todayJournal.map(j=>'\n**今日笔记**:\n'+j.text).join('')||''}
 
 ## 今日关注
 ${todayNews.map(n=>`- [${n.cat}] ${n.headline} (${impactLabel[n.impact]})${n.relevance==='high'?' 高相关':''}${n.url?' '+n.url:''}${n.content?'\n  '+n.content.replace(/\n/g,'\n  '):''}`).join('\n')||'- 无'}
@@ -1544,7 +1483,7 @@ function saveTodayIntention(){data.todayIntention=document.getElementById('today
 function renderWeekReview(){
   const start=new Date();start.setDate(start.getDate()-6);const days=Array.from({length:7},(_,i)=>localDateKey(new Date(start.getFullYear(),start.getMonth(),start.getDate()+i)));
   const done=(data.todos||[]).filter(t=>t.done).length,total=(data.todos||[]).length,checks=(data.checkins||[]).filter(d=>days.includes(d)).length;
-  const metrics=[['任务完成',total?Math.round(done/total*100)+'%':'—'],['训练打卡',checks+' 次'],['阅读笔记',(data.journals||[]).filter(j=>days.includes(j.date)).length+' 条']];
+  const metrics=[['任务完成',total?Math.round(done/total*100)+'%':'—'],['训练打卡',checks+' 次'],['日记',(data.diaries||[]).filter(x=>days.includes(x.date)).length+' 篇']];
   const el=document.getElementById('weekMetrics');if(el)el.innerHTML=metrics.map(([a,b])=>`<div class="overview-card"><div class="ov-label">${a}</div><div class="ov-value" style="color:var(--purple)">${b}</div></div>`).join('');
   const note=document.getElementById('weekNote');if(note)note.value=data.weekNote||'';
 }
@@ -1553,13 +1492,12 @@ function generateWeekReport(){
   const days=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(localDateKey(d));}
   const checks=days.filter(d=>(data.checkins||[]).includes(d)).length;
   const pomo=days.reduce((s,d)=>s+((data.pomodoros||{})[d]||0),0);
-  const journals=(data.journals||[]).filter(j=>days.includes(j.date)).length;
-  const diaries=(data.diaries||[]).filter(x=>days.includes(x.date)).length;
+    const diaries=(data.diaries||[]).filter(x=>days.includes(x.date)).length;
   const doneWeek=(data.todos||[]).filter(t=>t.done&&t.doneDate&&days.includes(t.doneDate)).length;
   const openNow=(data.todos||[]).filter(t=>!t.done).length;
   const L=['【本周数据 · 自动生成 '+TODAY_STR+'】',
     '训练打卡 '+checks+' 次 · 专注 '+pomo+' 番茄',
-    '阅读笔记 '+journals+' 条 · 日记 '+diaries+' 篇',
+    '日记 '+diaries+' 篇',
     '本周完成任务 '+doneWeek+' 项 · 当前待办 '+openNow+' 项'];
   L.push('','做得好的：','','需要调整的：','','下周唯一重点：');
   document.getElementById('weekNote').value=L.join('\n');
@@ -1716,7 +1654,6 @@ function renderAll(){
   try{renderTodayFocus();renderTodayNotice();renderWeekReview();renderInvestmentPlan();renderDisciplineCard();}catch(e){console.error('[renderAll] dashboard:',e)}
   try{renderDiaryStreak();renderDiaryHistory();loadTodayDiary();}catch(e){console.error('[renderAll] diary:',e)}
   try{renderTodoChips();renderTodos();fetchRemoteTodos();}catch(e){console.error('[renderAll] todo:',e)}
-  try{renderJournal();}catch(e){console.error('[renderAll] journal:',e)}
   try{renderTrendingChips();fetchTrending();}catch(e){console.error('[renderAll] news:',e)}
   try{fetchWorkoutData();}catch(e){console.error('[renderAll] workout:',e)}
 }
@@ -1901,9 +1838,6 @@ function buildAiContext(){
     var pinned=data.todos.filter(function(t){return t.pinned&&!t.done;});
     if(pinned.length)out.push('今日焦点: '+pinned.slice(0,3).map(function(t){return t.text;}).join('；'));
     if(data.checkins&&data.checkins.length)out.push('训练打卡: 共'+data.checkins.length+'次'+(data.checkins.indexOf(today)>-1?'，今日已打卡':'，今日未打卡'));
-    var bk=[];
-    for(var k in (data.books||{}))bk.push(k+' '+data.books[k]+'%');
-    if(bk.length)out.push('阅读进度: '+bk.join('，'));
     if(data.diaries&&data.diaries.length){var d=data.diaries[data.diaries.length-1];out.push('最近日记('+d.date+'): '+(d.text||'').slice(0,60));}
     if(data.investPlan&&data.investPlan.goal)out.push('投资计划: 目标'+data.investPlan.goal);
     if(data.investDiscipline)out.push('投资纪律验证期: '+data.investDiscipline.start+'~'+data.investDiscipline.end);
