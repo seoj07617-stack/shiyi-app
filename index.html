@@ -446,6 +446,29 @@ input::placeholder,textarea::placeholder{color:#767d88}
   .overview-card:hover,.metric-card:hover{box-shadow:0 6px 18px -10px rgba(15,20,25,0.14)}
 }
 
+/* ===== v16: habits / state / week compare ===== */
+.habit-list{display:flex;flex-direction:column;gap:6px}
+.habit-row{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:8px 10px;border-radius:10px;border:1px solid var(--glass-border);background:#fff;font-family:inherit;font-size:14px;color:var(--white);cursor:pointer;text-align:left;transition:background .2s var(--ease),border-color .2s var(--ease)}
+.habit-row:active{transform:scale(.985)}
+.habit-row.done{background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.25);color:var(--purple)}
+.habit-check{width:20px;height:20px;border-radius:6px;border:2px solid #d1d5db;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.habit-row.done .habit-check{background:var(--purple);border-color:var(--purple)}
+.habit-check svg{width:12px;height:12px;stroke:#fff;fill:none;stroke-width:3;opacity:0}
+.habit-row.done .habit-check svg{opacity:1}
+.habit-name{flex:1;line-height:1.4}
+.state-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0 10px;border-bottom:1px solid var(--glass-border)}
+.state-row:last-child{border-bottom:0;padding-bottom:0}
+.state-label{font-size:14px;color:var(--white-mid);flex-shrink:0}
+.state-dots{display:flex;gap:5px}
+.state-dot{width:32px;height:32px;border-radius:50%;border:2px solid #d1d5db;background:#fff;padding:0;cursor:pointer;font-family:inherit;font-size:12px;color:var(--white-dim);font-variant-numeric:tabular-nums;transition:all .15s}
+.state-dot.on{background:var(--purple);border-color:var(--purple);color:#fff;font-weight:600}
+.cmp-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--glass-border);font-size:14px}
+.cmp-row:last-child{border-bottom:0}
+.cmp-label{color:var(--white-mid)}
+.cmp-val{display:flex;align-items:center;gap:10px;font-variant-numeric:tabular-nums}
+.cmp-delta{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+.cmp-delta.up{color:var(--green)}.cmp-delta.down{color:var(--red)}.cmp-delta.flat{color:var(--white-dim)}
+
 /* ===== v15: a11y / motion ===== */
 .mobile-title{font-size:16px;font-weight:700;color:#fff;letter-spacing:-.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
@@ -602,12 +625,18 @@ html{scrollbar-width:thin;scrollbar-color:rgba(37,99,235,0.28) transparent}
           <div class="card glass-strong"><div class="card-title">今天最重要的三件事 <span class="count-badge" id="todayFocusCount"></span></div><div id="todayFocusList" class="focus-list"></div><button class="btn btn-primary btn-sm" style="margin-top:12px;width:100%" onclick="showTodoModal()">添加今日事项</button></div>
           <div class="card glass"><div class="card-title">今日节奏</div><div class="insight-stat"><span style="font-size:12px;color:var(--white-dim)">待完成</span><b id="todayTodoCount">0</b><span style="font-size:12px;color:var(--white-dim)">项任务等待推进</span></div><div class="insight-stat" style="margin-top:8px"><span style="font-size:12px;color:var(--white-dim)">训练状态</span><b id="todayWorkoutState">待训练</b><span style="font-size:12px;color:var(--white-dim)">完成训练后在训练页跟练计划</span></div></div>
         </div>
+        <div class="dashboard-grid" style="margin-top:12px">
+          <div class="card glass-strong"><div class="card-title">每日习惯 <span class="count-badge" id="habitBadge"></span></div><div id="habitList" class="habit-list"></div></div>
+          <div class="card glass"><div class="card-title">今日状态</div><div id="stateList"></div></div>
+        </div>
         <div class="card glass" style="margin-top:12px"><div class="card-title">一句话计划</div><input id="todayIntention" placeholder="今天结束前，我希望完成……" onkeydown="if(event.key==='Enter')saveTodayIntention()"><button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="saveTodayIntention()">保存</button></div>
       </div>
 
       <div class="section" id="sec-week" style="display:none">
         <div class="dashboard-grid"><div class="card glass-strong"><div class="card-title">本周进度</div><div id="weekMetrics" class="overview-grid"></div></div><div class="card glass"><div class="card-title">周复盘提示</div><p style="font-size:14px;color:var(--white-mid);line-height:1.8">先看结果，再找原因。保留有效做法，只调整一个最关键的问题。</p></div></div>
+        <div class="card glass" style="margin-top:12px"><div class="card-title">本周 vs 上周</div><div id="weekCompare"></div></div>
         <div class="card glass" style="margin-top:12px"><div class="card-title">本周复盘</div><textarea id="weekNote" placeholder="本周做得好的事、需要调整的事、下周唯一重点……" rows="6"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-ghost" style="flex:1" onclick="generateWeekReport()">生成本周报告</button><button class="btn btn-primary" style="flex:1" onclick="saveWeekNote()">保存复盘</button></div></div>
+        <div class="card glass" style="margin-top:12px"><div class="card-title">下周最重要的三件事 <span class="count-badge" id="nextWeekBadge"></span></div><div class="form-group"><input id="nextFocus1" placeholder="1. 最重要的一件事"></div><div class="form-group"><input id="nextFocus2" placeholder="2. 其次"></div><div class="form-group"><input id="nextFocus3" placeholder="3. 可选"></div><button class="btn btn-primary" style="width:100%" onclick="saveNextWeekFocus()">保存，下周一自动加入今日焦点</button></div>
       </div>
 
       <!-- TOOLS -->
@@ -786,13 +815,21 @@ window.addEventListener('storage',function(e){
   if(e.key===STORE_KEY&&e.newValue){onSyncReceived({data:{type:'data_updated',source:'storage',timestamp:Date.now()}});}
 });
 
-const DATA_VERSION=10;
+const DATA_VERSION=11;
 const defaultInvestDiscipline={start:'2026-07-23',end:'2026-10-23',targets:[['浮动层加仓','0.65'],['浮动层补仓','0.60'],['浮动层止盈','0.75'],['底仓止损','0.30']],rules:['验证期内只操作ETF','买跌不买涨，不追涨','不做T，拿住底仓']};
 const defaultCountdowns=[
   {name:'纪律验证期结束',date:'2026-10-23',color:'var(--purple)',desc:'期间只操作ETF'},
   {name:'一级教师评审',date:'2026-12-31',color:'var(--green)',desc:'2026年内'},
   {name:'159655二笔定投评估',date:'2026-09-01',color:'var(--cyan)',desc:'美联储议息后评估'}
 ];
+const HABITS=[
+  {id:'early_sleep',name:'23:30 前睡觉'},
+  {id:'train20',name:'训练 / 活动 20 分钟'},
+  {id:'focus2h',name:'专注 2 小时'},
+  {id:'no_phone',name:'睡前 1 小时不刷手机'},
+  {id:'review',name:'睡前复盘 1 分钟'}
+];
+const STATE_KEYS=[['energy','精力'],['mood','情绪'],['focus','专注']];
 let data=loadData();
 let todoFilter='全部',trendingFilter='全部',editingTodoId=null,selectedCalDate=null;
 
@@ -815,6 +852,8 @@ function migrateData(d){
   d.health=d.health||{};
   d.checkins=d.checkins||[];
   d.habits=d.habits||{};
+  d.daily=d.daily||{};
+  d.weekPlan=d.weekPlan||null;
   d.pomodoros=d.pomodoros||{};
   d.todayIntention=d.todayIntention||'';
   d.weekNote=d.weekNote||'';
@@ -901,6 +940,7 @@ function switchTab(tab){
   // Scroll to top
   var content=document.querySelector('.content');
   if(content)content.scrollTop=0;
+  if(tab==='week'){try{renderWeekCompare();renderNextWeekFocus();}catch(e){}}
 }
 function localDateKey(date=new Date()){
   const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,'0'),d=String(date.getDate()).padStart(2,'0');
@@ -922,6 +962,7 @@ function defaultData(){
     health:{},
     meals:[],
     water:{},
+    daily:{},weekPlan:null,
     todayIntention:'',weekNote:'',investPlan:{goal:'',entry:'',risk:''},
     userProfile:{height:175,age:24},
     nextId:1
@@ -1482,12 +1523,130 @@ function renderTodayFocus(){
 function saveTodayIntention(){data.todayIntention=document.getElementById('todayIntention').value.trim();saveData();showToast('今日计划已保存');}
 function renderWeekReview(){
   const start=new Date();start.setDate(start.getDate()-6);const days=Array.from({length:7},(_,i)=>localDateKey(new Date(start.getFullYear(),start.getMonth(),start.getDate()+i)));
-  const done=(data.todos||[]).filter(t=>t.done).length,total=(data.todos||[]).length,checks=(data.checkins||[]).filter(d=>days.includes(d)).length;
-  const metrics=[['任务完成',total?Math.round(done/total*100)+'%':'—'],['训练打卡',checks+' 次'],['日记',(data.diaries||[]).filter(x=>days.includes(x.date)).length+' 篇']];
+  const st=weekStats(0);
+  const metrics=[['完成任务',st.doneTasks+' 项'],['训练打卡',st.trainings+' 次'],['日记',st.diaryDays+' 篇']];
   const el=document.getElementById('weekMetrics');if(el)el.innerHTML=metrics.map(([a,b])=>`<div class="overview-card"><div class="ov-label">${a}</div><div class="ov-value" style="color:var(--purple)">${b}</div></div>`).join('');
   const note=document.getElementById('weekNote');if(note)note.value=data.weekNote||'';
+  renderWeekCompare();
+  renderNextWeekFocus();
 }
 function saveWeekNote(){data.weekNote=document.getElementById('weekNote').value.trim();saveData();showToast('周复盘已保存');}
+
+/* ===== HABITS / 每日习惯 ===== */
+function habitHasDay(key){
+  var h=data.habits&&data.habits[key];
+  if(!h)return 0;
+  return Object.keys(h).filter(function(k){return h[k];}).length;
+}
+function habitStreak(){
+  var streak=0,d=new Date();
+  if(habitHasDay(localDateKey(d))===0)d.setDate(d.getDate()-1);
+  for(var i=0;i<365;i++){
+    var key=localDateKey(d);
+    if(habitHasDay(key)>0){streak++;d.setDate(d.getDate()-1);}else break;
+  }
+  return streak;
+}
+function renderHabitsCard(){
+  var list=document.getElementById('habitList');if(!list)return;
+  var todayH=(data.habits&&data.habits[TODAY_STR])||{};
+  var done=0;
+  list.innerHTML=HABITS.map(function(h){
+    var on=!!todayH[h.id];if(on)done++;
+    return '<button type="button" class="habit-row'+(on?' done':'')+'" aria-pressed="'+(on?'true':'false')+'" onclick="toggleHabit(\'' + h.id + '\')"><span class="habit-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-9"/></svg></span><span class="habit-name">'+h.name+'</span></button>';
+  }).join('');
+  var badge=document.getElementById('habitBadge');
+  if(badge){var s=habitStreak();badge.textContent=done+'/'+HABITS.length+(s>=2?' · 连续 '+s+' 天':'');}
+}
+function toggleHabit(id){
+  if(!data.habits)data.habits={};
+  var d=data.habits[TODAY_STR];if(!d){d={};data.habits[TODAY_STR]=d;}
+  if(d[id])delete d[id];else d[id]=true;
+  saveData();renderHabitsCard();
+  try{renderWeekCompare();}catch(e){}
+  try{renderHeatmap();}catch(e){}
+}
+
+/* ===== DAILY STATE / 今日状态 ===== */
+function renderStateCard(){
+  var el=document.getElementById('stateList');if(!el)return;
+  var day=(data.daily&&data.daily[TODAY_STR])||{};
+  el.innerHTML=STATE_KEYS.map(function(pair){
+    var key=pair[0],label=pair[1],val=+day[key]||0,dots='';
+    for(var i=1;i<=5;i++){dots+='<button type="button" class="state-dot'+(val===i?' on':'')+'" aria-label="'+label+' '+i+' 分" onclick="setStateScore(\'' + key + '\',' + i + ')">'+i+'</button>';}
+    return '<div class="state-row"><span class="state-label">'+label+'</span><span class="state-dots">'+dots+'</span></div>';
+  }).join('');
+}
+function setStateScore(key,val){
+  if(!data.daily)data.daily={};
+  var day=data.daily[TODAY_STR]||(data.daily[TODAY_STR]={});
+  day[key]=(+day[key]===val)?0:val;
+  saveData();renderStateCard();
+  try{renderWeekCompare();}catch(e){}
+}
+
+/* ===== WEEK COMPARE / 本周 vs 上周 ===== */
+function weekStats(offset){
+  var end=new Date();end.setDate(end.getDate()-7*offset);
+  var days=[];for(var i=6;i>=0;i--){var d=new Date(end);d.setDate(d.getDate()-i);days.push(localDateKey(d));}
+  var doneTasks=(data.todos||[]).filter(function(t){return t.done&&t.doneDate&&days.includes(t.doneDate);}).length;
+  var trainings=(data.checkins||[]).filter(function(d){return days.includes(d);}).length;
+  var pomo=days.reduce(function(s,d){return s+((data.pomodoros||{})[d]||0);},0);
+  var diaryDays=(data.diaries||[]).filter(function(x){return days.includes(x.date);}).length;
+  var habitHits=days.reduce(function(s,d){return s+habitHasDay(d);},0);
+  var scoreSum=0,scoreN=0;
+  days.forEach(function(d){var v=data.daily&&data.daily[d];if(v){['energy','mood','focus'].forEach(function(k){if(+v[k]>0){scoreSum+=+v[k];scoreN++;}});}});
+  return {doneTasks:doneTasks,trainings:trainings,pomo:pomo,diaryDays:diaryDays,habitHits:habitHits,stateAvg:scoreN?scoreSum/scoreN:0};
+}
+function renderWeekCompare(){
+  var el=document.getElementById('weekCompare');if(!el)return;
+  var a=weekStats(0),b=weekStats(1);
+  var rows=[
+    ['完成任务',a.doneTasks+' 项',a.doneTasks-b.doneTasks+' 项'],
+    ['训练打卡',a.trainings+' 次',a.trainings-b.trainings+' 次'],
+    ['专注番茄',a.pomo+' 个',a.pomo-b.pomo+' 个'],
+    ['写日记',a.diaryDays+' 天',a.diaryDays-b.diaryDays+' 天'],
+    ['习惯打卡',a.habitHits+' 次',a.habitHits-b.habitHits+' 次'],
+    ['平均状态',a.stateAvg?a.stateAvg.toFixed(1)+' / 5':'—',b.stateAvg?(a.stateAvg-b.stateAvg).toFixed(1):'—']
+  ];
+  el.innerHTML=rows.map(function(r){
+    var delta;
+    if(r[1]==='—'){delta='<span class="cmp-delta flat">—</span>';}
+    else if(r[2]==='—'){delta='<span class="cmp-delta flat">首周</span>';}
+    else{var n=parseFloat(r[2]);delta=n===0?'<span class="cmp-delta flat">持平</span>':'<span class="cmp-delta '+(n>0?'up':'down')+'">'+(n>0?'+':'')+r[2]+'</span>';}
+    return '<div class="cmp-row"><span class="cmp-label">'+r[0]+'</span><span class="cmp-val"><b>'+r[1]+'</b>'+delta+'</span></div>';
+  }).join('');
+}
+
+/* ===== NEXT WEEK PLAN / 下周计划 ===== */
+function nextMondayStr(){
+  var d=new Date();var add=(8-d.getDay())%7;if(!add)add=7;d.setDate(d.getDate()+add);
+  return localDateKey(d);
+}
+function renderNextWeekFocus(){
+  var p=data.weekPlan;
+  var badge=document.getElementById('nextWeekBadge');
+  if(badge){badge.textContent=p?(p.applied?'已加入今日焦点':'开始 '+p.weekStart.slice(5)):'下周一自动生效';}
+  ['1','2','3'].forEach(function(i){
+    var el=document.getElementById('nextFocus'+i);if(!el)return;
+    el.value=(p&&p.items&&p.items[+i-1])?p.items[+i-1]:'';
+  });
+}
+function saveNextWeekFocus(){
+  var items=[];['1','2','3'].forEach(function(i){var el=document.getElementById('nextFocus'+i);if(el&&el.value.trim())items.push(el.value.trim());});
+  if(!items.length){showToast('至少写一件事');return;}
+  data.weekPlan={weekStart:nextMondayStr(),items:items,applied:false};
+  saveData();renderNextWeekFocus();showToast('已保存，下周一自动加入今日焦点');
+}
+function applyWeekPlanIfDue(){
+  var p=data.weekPlan;if(!p||p.applied)return;
+  if(TODAY_STR<p.weekStart)return;
+  (p.items||[]).forEach(function(text){
+    data.todos.push({id:data.nextId++,text:text,priority:'mid',cat:'工作',due:TODAY_STR,pinned:true,done:false,doneDate:null,createdAt:TODAY_STR});
+  });
+  p.applied=true;saveData();renderTodos();renderTodayFocus();renderWeekReview();
+  showToast('计划里的三件事已加入今日焦点');
+}
 function generateWeekReport(){
   const days=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(localDateKey(d));}
   const checks=days.filter(d=>(data.checkins||[]).includes(d)).length;
@@ -1651,7 +1810,7 @@ function renderAll(){
   try{renderCountdowns();}catch(e){console.error('[renderAll] renderCountdowns:',e)}
   try{if(data.pomodoros&&data.pomodoros[TODAY_STR]){document.getElementById('pomCount').textContent=data.pomodoros[TODAY_STR];}}catch(e){console.error('[renderAll] pomCount:',e)}
   try{updateBackupDot();}catch(e){console.error('[renderAll] backup:',e)}
-  try{renderTodayFocus();renderTodayNotice();renderWeekReview();renderInvestmentPlan();renderDisciplineCard();}catch(e){console.error('[renderAll] dashboard:',e)}
+  try{renderTodayFocus();renderTodayNotice();renderWeekReview();renderHabitsCard();renderStateCard();renderInvestmentPlan();renderDisciplineCard();}catch(e){console.error('[renderAll] dashboard:',e)}
   try{renderDiaryStreak();renderDiaryHistory();loadTodayDiary();}catch(e){console.error('[renderAll] diary:',e)}
   try{renderTodoChips();renderTodos();fetchRemoteTodos();}catch(e){console.error('[renderAll] todo:',e)}
   try{renderTrendingChips();fetchTrending();}catch(e){console.error('[renderAll] news:',e)}
@@ -1735,6 +1894,7 @@ document.addEventListener('DOMContentLoaded',function(){
     var label=btn.querySelector('.footer-text');
     if(label&&!btn.getAttribute('aria-label')){btn.setAttribute('aria-label',label.textContent.trim());btn.title=label.textContent.trim();}
   });
+  try{applyWeekPlanIfDue();}catch(e){console.error('weekPlan:',e)}
   try{
     updateBackupDot();
     const last=data.lastBackupAt;
