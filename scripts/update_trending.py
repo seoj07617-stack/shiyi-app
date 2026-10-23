@@ -232,24 +232,32 @@ def pollinations_call(selected):
                     try:
                         obj = json.loads(raw_text)
                         if isinstance(obj, dict):
-                            raw_text = str(obj.get("content") or obj.get("message") or raw_text)
+                            raw_text = str(obj.get("content") or obj.get("message")
+                                           or obj.get("text") or raw_text)
                     except Exception:
                         pass
-                m = re.search(r"\[.*\]", raw_text, re.DOTALL)
-                if not m:
-                    raise ValueError(f"no JSON array in: {content[:120]}")
-                arr = json.loads(m.group(0))
+                raw_text = re.sub(r"```(?:json)?", "", raw_text)
+                # tolerant per-item parse: every flat {...} with desc_cn
                 out = {}
-                for e in arr:
-                    idx = int(e.get("i", -1))
+                for mm in re.finditer(r"\{[^{}]*\}", raw_text, re.DOTALL):
+                    try:
+                        e = json.loads(mm.group(0))
+                    except Exception:
+                        continue
+                    if not isinstance(e, dict) or "desc_cn" not in e:
+                        continue
+                    try:
+                        idx = int(e.get("i", -1))
+                    except Exception:
+                        continue
                     if 0 <= idx < len(selected):
                         out[idx] = {
                             "desc_cn": str(e.get("desc_cn", "")).strip(),
                             "cat": str(e.get("cat", "")).strip(),
                             "tag": str(e.get("tag", "")).strip(),
                         }
-                if len(out) < len(selected) // 2:
-                    raise ValueError(f"too few annotations: {len(out)}/{len(selected)}")
+                if len(out) < max(6, len(selected) // 2):
+                    raise ValueError(f"too few parsed: {len(out)}/{len(selected)}")
                 print(f"pollinations OK via {model} ({len(out)} items)")
                 return [out.get(i) for i in range(len(selected))]
             except Exception as e:
