@@ -1,6 +1,6 @@
 {
   "date": "2026-10-23",
-  "updated": "2026-10-23T18:39:56+08:00",
+  "updated": "2026-10-23T18:44:47+08:00",
   "mode": "degraded",
   "items": [
     {
@@ -25,30 +25,6 @@
       "stars": "40k",
       "today": "+3.0k",
       "url": "https://github.com/cloudflare/security-audit-skill",
-      "tag": "实用"
-    },
-    {
-      "repo": "DietrichGebert/ponytail",
-      "name": "ponytail",
-      "desc": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
-      "desc_cn": "Makes your AI agent think like the laziest senior dev in the",
-      "cat": "AI",
-      "lang": "JavaScript",
-      "stars": "174k",
-      "today": "+1.9k",
-      "url": "https://github.com/DietrichGebert/ponytail",
-      "tag": "实用"
-    },
-    {
-      "repo": "Graphify-Labs/graphify",
-      "name": "graphify",
-      "desc": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill fo",
-      "desc_cn": "Turn any codebase, with its docs, SQL schemas, configs, and ",
-      "cat": "工具",
-      "lang": "Python",
-      "stars": "133k",
-      "today": "+1.4k",
-      "url": "https://github.com/Graphify-Labs/graphify",
       "tag": "实用"
     },
     {
@@ -88,18 +64,6 @@
       "tag": "实用"
     },
     {
-      "repo": "supabase/supabase",
-      "name": "supabase",
-      "desc": "The Postgres development platform. Supabase gives you a dedicated Postgres database to build your web, mobile, and AI ap",
-      "desc_cn": "The Postgres development platform. Supabase gives you a dedi",
-      "cat": "AI",
-      "lang": "TypeScript",
-      "stars": "113k",
-      "today": "+693",
-      "url": "https://github.com/supabase/supabase",
-      "tag": "实用"
-    },
-    {
       "repo": "ikow/php2shell-poc",
       "name": "php2shell-poc",
       "desc": "CVE-2026-109618/109619 — 5 RCE chains + detection rules (Suricata, Sigma, ModSecurity). PHP session.upload_progress pre-",
@@ -107,8 +71,20 @@
       "cat": "工具",
       "lang": "Python",
       "stars": "1k",
-      "today": "+766",
+      "today": "+764",
       "url": "https://github.com/ikow/php2shell-poc",
+      "tag": "实用"
+    },
+    {
+      "repo": "Renhuai123/ziwei-doushu",
+      "name": "ziwei-doushu",
+      "desc": "紫微斗数开源排盘引擎 — 基于倪海厦《天纪》体系，含完整排盘算法、四化系统、格局知识库、古籍原文数据",
+      "desc_cn": "紫微斗数开源排盘引擎 — 基于倪海厦《天纪》体系，含完整排盘算法、四化系统、格局知识库、古籍原文数据",
+      "cat": "工具",
+      "lang": "TypeScript",
+      "stars": "6k",
+      "today": "+547",
+      "url": "https://github.com/Renhuai123/ziwei-doushu",
       "tag": "实用"
     },
     {
@@ -119,7 +95,7 @@
       "cat": "工具",
       "lang": "Python",
       "stars": "1k",
-      "today": "+518",
+      "today": "+517",
       "url": "https://github.com/9bie/php2shell-bypass-aslr-exp",
       "tag": "实用"
     },
@@ -131,7 +107,7 @@
       "cat": "工具",
       "lang": "Python",
       "stars": "2k",
-      "today": "+510",
+      "today": "+509",
       "url": "https://github.com/xiaoyang111222/cn-math-taxonomy",
       "tag": "实用"
     },
@@ -145,6 +121,30 @@
       "stars": "1k",
       "today": "+454",
       "url": "https://github.com/tek-sys-hub/Rubix-lang",
+      "tag": "实用"
+    },
+    {
+      "repo": "JoasASantos/REA-Prompts",
+      "name": "REA-Prompts",
+      "desc": "REAP - Prompts for you to use REA (Reverse Engineer Anything), get the most out of it, and clone or break down any progr",
+      "desc_cn": "REAP - Prompts for you to use REA (Reverse Engineer Anything",
+      "cat": "工具",
+      "lang": "",
+      "stars": "1k",
+      "today": "+441",
+      "url": "https://github.com/JoasASantos/REA-Prompts",
+      "tag": "实用"
+    },
+    {
+      "repo": "eness/php2shell-CVE-2026-109618-CVE-2026-109619-PoC",
+      "name": "php2shell-CVE-2026-109618-CVE-2026-109619-PoC",
+      "desc": "Proof-of-Concept (PoC) exploit for php2shell (CVE-2026-109618 / CVE-2026-109619), demonstrating remote code execution in",
+      "desc_cn": "Proof-of-Concept (PoC) exploit for php2shell (CVE-2026-10961",
+      "cat": "好玩",
+      "lang": "Shell",
+      "stars": "926",
+      "today": "+442",
+      "url": "https://github.com/eness/php2shell-CVE-2026-109618-CVE-2026-109619-PoC",
       "tag": "实用"
     }
   ]
