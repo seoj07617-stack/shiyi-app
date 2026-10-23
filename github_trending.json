@@ -1,6 +1,6 @@
 {
   "date": "2026-10-23",
-  "updated": "2026-10-23T18:36:35+08:00",
+  "updated": "2026-10-23T18:39:56+08:00",
   "mode": "degraded",
   "items": [
     {
@@ -83,7 +83,7 @@
       "cat": "工具",
       "lang": "C",
       "stars": "4k",
-      "today": "+838",
+      "today": "+837",
       "url": "https://github.com/ly05010419/MacNativeGames",
       "tag": "实用"
     },
@@ -107,7 +107,7 @@
       "cat": "工具",
       "lang": "Python",
       "stars": "1k",
-      "today": "+767",
+      "today": "+766",
       "url": "https://github.com/ikow/php2shell-poc",
       "tag": "实用"
     },
@@ -119,7 +119,7 @@
       "cat": "工具",
       "lang": "Python",
       "stars": "1k",
-      "today": "+519",
+      "today": "+518",
       "url": "https://github.com/9bie/php2shell-bypass-aslr-exp",
       "tag": "实用"
     },
