@@ -225,8 +225,8 @@ def _parse_annotations(raw_text, selected, offset):
 
 
 def pollinations_call(selected):
-    """分批调用 Pollinations 免费文本 API 生成中文点评（短 prompt 避免推理模式）。"""
-    chunk = 4
+    """保守调用 Pollinations（免费额度有限）：2 批 × 每批 1 次，失败即降级。"""
+    chunk = 6
     out = {}
     for start in range(0, len(selected), chunk):
         part = selected[start:start + chunk]
@@ -245,39 +245,31 @@ def pollinations_call(selected):
 4. 严格输出 JSON 数组，不要任何其他文字：[{{"i":0,"desc_cn":"...","cat":"...","tag":"..."}}, ...]"""
 
         need = max(2, (len(part) + 1) // 2)
-        ok = False
-        for model in POLLINATIONS_MODELS:
-            for attempt in range(2):
-                try:
-                    print(f"pollinations batch {start}-{start+len(part)-1}: model={model} try={attempt}")
-                    payload = {
-                        "messages": [{"role": "user", "content": prompt}],
-                        "model": model,
-                        "referrer": "shiyi-trending",
-                    }
-                    req = urllib.request.Request(
-                        POLLINATIONS_URL,
-                        data=json.dumps(payload).encode("utf-8"),
-                        headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
-                        method="POST",
-                    )
-                    with urllib.request.urlopen(req, timeout=120) as resp:
-                        content = resp.read().decode("utf-8", errors="replace")
-                    got = _parse_annotations(content, part, start)
-                    print(f"  batch parsed: {len(got)}/{len(part)}")
-                    if len(got) < need:
-                        raise ValueError(f"too few in batch: {len(got)}/{len(part)}")
-                    out.update(got)
-                    ok = True
-                    break
-                except Exception as e:
-                    print(f"[WARN] pollinations {model} try{attempt}: {type(e).__name__}: {e}")
-                    time.sleep(4)
-            if ok:
-                break
-        time.sleep(2)
+        try:
+            print(f"pollinations batch {start}-{start+len(part)-1}: single attempt")
+            payload = {
+                "messages": [{"role": "user", "content": prompt}],
+                "model": POLLINATIONS_MODELS[0],
+                "referrer": "shiyi-trending",
+            }
+            req = urllib.request.Request(
+                POLLINATIONS_URL,
+                data=json.dumps(payload).encode("utf-8"),
+                headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
+                method="POST",
+            )
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                content = resp.read().decode("utf-8", errors="replace")
+            got = _parse_annotations(content, part, start)
+            print(f"  batch parsed: {len(got)}/{len(part)}")
+            if len(got) >= need:
+                out.update(got)
+        except Exception as e:
+            print(f"[WARN] pollinations batch {start}: {type(e).__name__}: {e}")
+        time.sleep(8)
     if len(out) < max(6, len(selected) // 2):
-        raise ValueError(f"too few total: {len(out)}/{len(selected)}")
+        print(f"[WARN] pollinations total too few: {len(out)}/{len(selected)}")
+        return None
     print(f"pollinations OK total ({len(out)}/{len(selected)} items)")
     return [out.get(i) for i in range(len(selected))]
 
