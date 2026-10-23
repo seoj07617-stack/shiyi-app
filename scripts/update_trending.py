@@ -15,6 +15,7 @@ import json
 import math
 import os
 import re
+import time
 import urllib.request
 import urllib.error
 from datetime import datetime, timezone, timedelta
@@ -183,15 +184,14 @@ def merge_and_select(trending, search):
     return merged[:12]
 
 
-# ── GitHub Models enrichment (single batched call) ─────────
-MODELS_ENDPOINTS = [
-    ("https://models.github.ai/inference/chat/completions", "openai/gpt-4o-mini"),
-    ("https://models.github.ai/inference/chat/completions", "openai/gpt-4.1-mini"),
-]
+# ── LLM enrichment via Pollinations (keyless, single batched call) ──
+POLLINATIONS_URL = "https://text.pollinations.ai/"
+POLLINATIONS_MODELS = ["openai-fast", "openai"]
 
 
-def models_call(selected):
-    """单次批量调用 GitHub Models 生成中文点评。返回 list[{desc_cn,cat,tag}] 或 None。"""
+def pollinations_call(selected):
+    """单次批量调用 Pollinations 免费文本 API 生成中文点评。
+    返回 list[{desc_cn,cat,tag}] 或 None。"""
     listing = "\n".join(
         f"{i}. {r['repo']} | {r['name']} | lang={r['lang'] or 'NA'} | "
         f"stars={r['stars']} | today=+{r['today']} | desc: {r['desc'] or 'NA'}"
@@ -207,46 +207,48 @@ def models_call(selected):
 4. 严格输出 JSON 数组，不要任何其他文字：[{{"i":0,"desc_cn":"...","cat":"...","tag":"..."}}, ...]"""
 
     last_err = None
-    for endpoint, model in MODELS_ENDPOINTS:
-        try:
-            print(f"trying models endpoint: {endpoint} model={model}")
-            data = json.dumps({
-                "model": model,
-                "messages": [{"role": "user", "content": prompt}],
-                "temperature": 0.3,
-            }).encode("utf-8")
-            req = urllib.request.Request(endpoint, data=data, headers=gh_headers(), method="POST")
-            with urllib.request.urlopen(req, timeout=90) as resp:
-                raw = resp.read().decode("utf-8", errors="replace")
-                status = getattr(resp, "status", 0)
-                ctype = resp.headers.get("Content-Type", "")
-            print(f"  models resp: status={status} ctype={ctype} len={len(raw)}")
-            print(f"  body head: {raw[:200]!r}")
-            if "json" not in ctype.lower():
-                raise ValueError(f"non-json response ctype={ctype}")
-            resp_json = json.loads(raw)
-            content = resp_json["choices"][0]["message"]["content"].strip()
-            m = re.search(r"\[.*\]", content, re.DOTALL)
-            if not m:
-                raise ValueError(f"no JSON array in response: {content[:120]}")
-            arr = json.loads(m.group(0))
-            out = {}
-            for e in arr:
-                idx = int(e.get("i", -1))
-                if 0 <= idx < len(selected):
-                    out[idx] = {
-                        "desc_cn": str(e.get("desc_cn", "")).strip(),
-                        "cat": str(e.get("cat", "")).strip(),
-                        "tag": str(e.get("tag", "")).strip(),
-                    }
-            if len(out) < len(selected) // 2:
-                raise ValueError(f"too few annotations: {len(out)}/{len(selected)}")
-            print(f"models call OK via {endpoint} ({len(out)} items)")
-            return [out.get(i) for i in range(len(selected))]
-        except Exception as e:
-            last_err = e
-            print(f"[WARN] models endpoint failed: {type(e).__name__}: {e}")
-    print(f"[WARN] all models endpoints failed: {last_err}")
+    for model in POLLINATIONS_MODELS:
+        for attempt in range(2):
+            try:
+                print(f"pollinations attempt: model={model} try={attempt}")
+                payload = {
+                    "messages": [{"role": "user", "content": prompt}],
+                    "model": model,
+                    "referrer": "shiyi-trending",
+                }
+                req = urllib.request.Request(
+                    POLLINATIONS_URL,
+                    data=json.dumps(payload).encode("utf-8"),
+                    headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
+                    method="POST",
+                )
+                with urllib.request.urlopen(req, timeout=150) as resp:
+                    content = resp.read().decode("utf-8", errors="replace").strip()
+                print(f"  resp len={len(content)} head={content[:100]!r}")
+                if not content:
+                    raise ValueError("empty response")
+                m = re.search(r"\[.*\]", content, re.DOTALL)
+                if not m:
+                    raise ValueError(f"no JSON array in: {content[:120]}")
+                arr = json.loads(m.group(0))
+                out = {}
+                for e in arr:
+                    idx = int(e.get("i", -1))
+                    if 0 <= idx < len(selected):
+                        out[idx] = {
+                            "desc_cn": str(e.get("desc_cn", "")).strip(),
+                            "cat": str(e.get("cat", "")).strip(),
+                            "tag": str(e.get("tag", "")).strip(),
+                        }
+                if len(out) < len(selected) // 2:
+                    raise ValueError(f"too few annotations: {len(out)}/{len(selected)}")
+                print(f"pollinations OK via {model} ({len(out)} items)")
+                return [out.get(i) for i in range(len(selected))]
+            except Exception as e:
+                last_err = e
+                print(f"[WARN] pollinations {model} try{attempt}: {type(e).__name__}: {e}")
+                time.sleep(5)
+    print(f"[WARN] all pollinations attempts failed: {last_err}")
     return None
 
 
@@ -318,7 +320,7 @@ def main():
     selected = merge_and_select(trending, search)
     print(f"[3/4] selected {len(selected)} repos")
 
-    notes = models_call(selected)
+    notes = pollinations_call(selected)
     mode = "llm" if notes else "degraded"
     if not notes:
         print("  [DEGRADED] models unavailable, using keyword fallback")
