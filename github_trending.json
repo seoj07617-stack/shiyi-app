@@ -1,27 +1,28 @@
 {
   "date": "2026-10-23",
-  "updated": "2026-10-23T10:41:33+08:00",
+  "updated": "2026-10-23T18:36:35+08:00",
+  "mode": "degraded",
   "items": [
     {
       "repo": "Gathin23/cleanyourtv",
       "name": "cleanyourtv",
       "desc": "Debloat any Android or Google TV over Wi-Fi and get an Apple TV-style home.",
-      "desc_cn": "通过Wi-Fi精简安卓电视，打造苹果TV风格的极简主页。",
+      "desc_cn": "Debloat any Android or Google TV over Wi-Fi and get an Apple",
       "cat": "工具",
       "lang": "Java",
-      "stars": "24k",
-      "today": "+4.2k",
+      "stars": "26k",
+      "today": "+4.3k",
       "url": "https://github.com/Gathin23/cleanyourtv",
-      "tag": "新奇"
+      "tag": "实用"
     },
     {
       "repo": "cloudflare/security-audit-skill",
       "name": "security-audit-skill",
       "desc": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings",
-      "desc_cn": "用于多阶段安全审计的AI编程代理技能，提供独立验证且机器可读的安全发现。",
+      "desc_cn": "A coding-agent skill for multi-phase security audits with in",
       "cat": "AI",
       "lang": "JavaScript",
-      "stars": "39k",
+      "stars": "40k",
       "today": "+3.0k",
       "url": "https://github.com/cloudflare/security-audit-skill",
       "tag": "实用"
@@ -30,121 +31,121 @@
       "repo": "DietrichGebert/ponytail",
       "name": "ponytail",
       "desc": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
-      "desc_cn": "让AI像最懒的资深开发者思考，用最少的代码解决问题",
+      "desc_cn": "Makes your AI agent think like the laziest senior dev in the",
       "cat": "AI",
       "lang": "JavaScript",
-      "stars": "173k",
+      "stars": "174k",
       "today": "+1.9k",
       "url": "https://github.com/DietrichGebert/ponytail",
-      "tag": "爆火"
+      "tag": "实用"
     },
     {
       "repo": "Graphify-Labs/graphify",
       "name": "graphify",
       "desc": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill fo",
-      "desc_cn": "将代码库与文档转化为可查询知识图谱，无缝集成多款AI编程助手以理解上下文。",
+      "desc_cn": "Turn any codebase, with its docs, SQL schemas, configs, and ",
       "cat": "工具",
       "lang": "Python",
       "stars": "133k",
       "today": "+1.4k",
       "url": "https://github.com/Graphify-Labs/graphify",
-      "tag": "爆火"
+      "tag": "实用"
     },
     {
       "repo": "pengchujin/aerial-tv",
       "name": "aerial-tv",
       "desc": "给国产电视的一块干净桌面：参照 tvOS 设计的开源 Android TV 桌面，没有广告，开机自动接管。A tvOS-style launcher for Xiaomi, TCL and other China-market TVs.",
-      "desc_cn": "无广告的tvOS风格电视桌面，让国产电视告别臃肿，清爽好用。",
+      "desc_cn": "给国产电视的一块干净桌面：参照 tvOS 设计的开源 Android TV 桌面，没有广告，开机自动接管。A tvOS-",
       "cat": "工具",
       "lang": "Kotlin",
       "stars": "3k",
       "today": "+1.2k",
       "url": "https://github.com/pengchujin/aerial-tv",
-      "tag": "新奇"
+      "tag": "实用"
     },
     {
       "repo": "simbasjungles/free-my-tv",
       "name": "free-my-tv",
       "desc": "A fast, ad-free home screen for Google TV. Open source, built with Claude Code. One button to undo.",
-      "desc_cn": "无广告的谷歌电视开源桌面，由Claude Code构建，支持一键还原。",
+      "desc_cn": "A fast, ad-free home screen for Google TV. Open source, buil",
       "cat": "工具",
       "lang": "Java",
       "stars": "3k",
-      "today": "+1.1k",
+      "today": "+1.0k",
       "url": "https://github.com/simbasjungles/free-my-tv",
+      "tag": "实用"
+    },
+    {
+      "repo": "ly05010419/MacNativeGames",
+      "name": "MacNativeGames",
+      "desc": "",
+      "desc_cn": "MacNativeGames",
+      "cat": "工具",
+      "lang": "C",
+      "stars": "4k",
+      "today": "+838",
+      "url": "https://github.com/ly05010419/MacNativeGames",
+      "tag": "实用"
+    },
+    {
+      "repo": "supabase/supabase",
+      "name": "supabase",
+      "desc": "The Postgres development platform. Supabase gives you a dedicated Postgres database to build your web, mobile, and AI ap",
+      "desc_cn": "The Postgres development platform. Supabase gives you a dedi",
+      "cat": "AI",
+      "lang": "TypeScript",
+      "stars": "113k",
+      "today": "+693",
+      "url": "https://github.com/supabase/supabase",
       "tag": "实用"
     },
     {
       "repo": "ikow/php2shell-poc",
       "name": "php2shell-poc",
       "desc": "CVE-2026-109618/109619 — 5 RCE chains + detection rules (Suricata, Sigma, ModSecurity). PHP session.upload_progress pre-",
-      "desc_cn": "PHP RCE漏洞利用链及安全检测规则研究，含5种远程代码执行攻击路径",
+      "desc_cn": "CVE-2026-109618/109619 — 5 RCE chains + detection rules (Sur",
       "cat": "工具",
       "lang": "Python",
       "stars": "1k",
-      "today": "+866",
+      "today": "+767",
       "url": "https://github.com/ikow/php2shell-poc",
-      "tag": "新奇"
-    },
-    {
-      "repo": "ly05010419/MacNativeGames",
-      "name": "MacNativeGames",
-      "desc": "",
-      "desc_cn": "使用C语言开发的Mac原生游戏，无需额外依赖即可流畅体验经典游戏的乐趣。",
-      "cat": "好玩",
-      "lang": "C",
-      "stars": "4k",
-      "today": "+854",
-      "url": "https://github.com/ly05010419/MacNativeGames",
-      "tag": "新奇"
-    },
-    {
-      "repo": "supabase/supabase",
-      "name": "supabase",
-      "desc": "The Postgres development platform. Supabase gives you a dedicated Postgres database to build your web, mobile, and AI ap",
-      "desc_cn": "开源的后端开发平台，提供数据库与认证等一站式服务，助力快速构建全栈应用。",
-      "cat": "工具",
-      "lang": "TypeScript",
-      "stars": "113k",
-      "today": "+693",
-      "url": "https://github.com/supabase/supabase",
-      "tag": "爆火"
+      "tag": "实用"
     },
     {
       "repo": "9bie/php2shell-bypass-aslr-exp",
       "name": "php2shell-bypass-aslr-exp",
       "desc": "A php2shell exploit that requires no modifications to the official version, and does not require display_errors or limit",
-      "desc_cn": "无需修改官方版本和特定配置，即可绕过内存随机化保护的PHP漏洞利用工具。",
+      "desc_cn": "A php2shell exploit that requires no modifications to the of",
       "cat": "工具",
       "lang": "Python",
-      "stars": "967",
-      "today": "+587",
+      "stars": "1k",
+      "today": "+519",
       "url": "https://github.com/9bie/php2shell-bypass-aslr-exp",
-      "tag": "新奇"
+      "tag": "实用"
     },
     {
-      "repo": "eness/php2shell-CVE-2026-109618-CVE-2026-109619-PoC",
-      "name": "php2shell-CVE-2026-109618-CVE-2026-109619-PoC",
-      "desc": "Proof-of-Concept (PoC) exploit for php2shell (CVE-2026-109618 / CVE-2026-109619), demonstrating remote code execution in",
-      "desc_cn": "php2shell远程代码执行漏洞PoC脚本，用于安全研究与教育演示。",
+      "repo": "xiaoyang111222/cn-math-taxonomy",
+      "name": "cn-math-taxonomy",
+      "desc": "数学（小学到高中）、英语（三年级到高中）、初中物理的知识图谱：1644 个知识点、2403 条先修边、6723 道题，对齐课标，附自适应前置诊断。",
+      "desc_cn": "数学（小学到高中）、英语（三年级到高中）、初中物理的知识图谱：1644 个知识点、2403 条先修边、6723 道题，对",
       "cat": "工具",
-      "lang": "Shell",
-      "stars": "895",
-      "today": "+509",
-      "url": "https://github.com/eness/php2shell-CVE-2026-109618-CVE-2026-109619-PoC",
+      "lang": "Python",
+      "stars": "2k",
+      "today": "+510",
+      "url": "https://github.com/xiaoyang111222/cn-math-taxonomy",
       "tag": "实用"
     },
     {
       "repo": "tek-sys-hub/Rubix-lang",
       "name": "Rubix-lang",
       "desc": "The 100% Pure x86-64 Assembly Systems Language",
-      "desc_cn": "一款纯x86-64汇编编写的系统级编程语言，极致硬核的底层开发利器。",
+      "desc_cn": "The 100% Pure x86-64 Assembly Systems Language",
       "cat": "工具",
       "lang": "Assembly",
       "stars": "1k",
-      "today": "+490",
+      "today": "+454",
       "url": "https://github.com/tek-sys-hub/Rubix-lang",
-      "tag": "新奇"
+      "tag": "实用"
     }
   ]
 }
