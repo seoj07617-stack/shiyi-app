@@ -258,7 +258,7 @@ def pollinations_call(selected):
                 headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
                 method="POST",
             )
-            with urllib.request.urlopen(req, timeout=120) as resp:
+            with urllib.request.urlopen(req, timeout=180) as resp:
                 content = resp.read().decode("utf-8", errors="replace")
             got = _parse_annotations(content, part, start)
             print(f"  batch parsed: {len(got)}/{len(part)}")
@@ -293,8 +293,11 @@ def degrade(selected):
 
 # ── Build & validate ───────────────────────────────────────
 def build_items(selected, notes):
+    fallback = degrade(selected)
     items = []
-    for r, n in zip(selected, notes):
+    for k, (r, n) in enumerate(zip(selected, notes)):
+        if not n:
+            n = fallback[k]
         desc_cn = (n["desc_cn"] or "").strip()
         cat = n["cat"] if n["cat"] in VALID_CATS else "工具"
         tag = n["tag"] if n["tag"] in VALID_TAGS else "实用"
