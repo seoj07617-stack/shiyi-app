@@ -1,5 +1,5 @@
-/* JUN 个人工作台 Service Worker v15.3 — 离线缓存 */
-const SW_VERSION = 'jun-v15.3.0';
+/* JUN 个人工作台 Service Worker v15.4 — 离线缓存 */
+const SW_VERSION = 'jun-v15.4.0';
 const CORE_ASSETS = [
   './',
   './index.html',

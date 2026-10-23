@@ -489,6 +489,169 @@ input::placeholder,textarea::placeholder{color:#767d88}
 html{scrollbar-width:thin;scrollbar-color:rgba(37,99,235,0.28) transparent}
 ::selection{background:rgba(37,99,235,0.88);color:#fff}
 
+/* ===== v17: Apple frosted glass ===== */
+:root{
+  --glass-bg:rgba(255,255,255,.68);
+  --glass-bg-strong:rgba(255,255,255,.80);
+  --glass-bg-soft:rgba(255,255,255,.46);
+  --glass-stroke:rgba(255,255,255,.72);
+  --glass-blur:18px;
+  --glass-shadow:0 1px 2px rgba(15,23,42,.04), 0 12px 32px -16px rgba(15,23,42,.16);
+  --radius:18px;--radius-sm:14px;--radius-xs:10px;
+}
+/* 让磨砂有内容可折射 */
+html{background:#f3f4f8}
+body{background:transparent}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(1200px 800px at 92% -12%, rgba(124,58,237,.20), transparent 60%),
+    radial-gradient(900px 700px at -12% 28%, rgba(59,130,246,.15), transparent 58%),
+    radial-gradient(900px 700px at 70% 118%, rgba(236,72,153,.09), transparent 60%),
+    #f3f4f8;
+}
+.app{z-index:1}
+
+/* 顶栏：半透明紫 + 模糊 */
+.mobile-header,.content-header{
+  background:linear-gradient(180deg, rgba(76,29,149,.92), rgba(76,29,149,.78));
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(180%);
+  backdrop-filter:blur(var(--glass-blur)) saturate(180%);
+  border-bottom:1px solid rgba(255,255,255,.14);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+/* 侧栏 */
+.sidebar{
+  background:rgba(255,255,255,.55);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  backdrop-filter:blur(24px) saturate(180%);
+  border-right:1px solid rgba(255,255,255,.7);
+}
+
+/* 卡片 */
+.card,.glass,.glass-strong,.glass-sm{
+  background:var(--glass-bg);
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(170%);
+  backdrop-filter:blur(var(--glass-blur)) saturate(170%);
+  border:1px solid var(--glass-stroke);
+  box-shadow:var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,.85);
+}
+.glass-strong{background:var(--glass-bg-strong)}
+.glass-sm{background:var(--glass-bg)}
+
+/* 内嵌面板：半透明即可，避免叠加 blur 掉帧 */
+.overview-card,.insight-stat,.metric-card,.focus-item{
+  background:var(--glass-bg-soft);
+  border:1px solid rgba(255,255,255,.62);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6);
+}
+
+/* 输入 */
+input,textarea,select{
+  background:rgba(255,255,255,.55);
+  border:1px solid rgba(15,23,42,.10);
+  box-shadow:inset 0 1px 2px rgba(15,23,42,.03);
+}
+input:focus,textarea:focus,select:focus{
+  background:rgba(255,255,255,.9);
+  border-color:rgba(37,99,235,.55);
+  box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+
+/* 按钮 / 选项 */
+.btn-ghost{background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.7);box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+.btn-ghost:hover{background:rgba(255,255,255,.72)}
+.btn-primary{background:linear-gradient(180deg,#3b82f6,#2563eb);box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 6px 16px -6px rgba(37,99,235,.55)}
+.btn-primary:hover{background:linear-gradient(180deg,#2563eb,#1d4ed8)}
+.btn-icon:active{background:rgba(255,255,255,.55)}
+.chip{background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.7)}
+.chip.active,.chip.active:hover{background:linear-gradient(180deg,#3b82f6,#2563eb);border-color:transparent;box-shadow:0 4px 12px -4px rgba(37,99,235,.5)}
+.habit-row{background:rgba(255,255,255,.5);border-color:rgba(255,255,255,.7)}
+.habit-row.done{background:rgba(37,99,235,.10);border-color:rgba(37,99,235,.28)}
+.state-dot{background:rgba(255,255,255,.6);border-color:rgba(15,23,42,.12)}
+.todo-check{background:rgba(255,255,255,.55)}
+
+/* 浮层：菜单 / 弹窗 / 提示 */
+.mobile-menu{background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.7);box-shadow:0 24px 48px -24px rgba(15,23,42,.28)}
+.menu-item:active{background:rgba(37,99,235,.10)}
+.modal-overlay{background:rgba(15,23,42,.25);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.modal{background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);border:1px solid rgba(255,255,255,.8);border-bottom:0;box-shadow:0 -12px 48px rgba(15,23,42,.22), inset 0 1px 0 rgba(255,255,255,.9)}
+.ai-config-modal .modal-box{background:rgba(255,255,255,.86);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);border:1px solid rgba(255,255,255,.8)}
+.ai-chat-panel{background:rgba(255,255,255,.78);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);border:1px solid rgba(255,255,255,.75)}
+.ai-chat-header,.ai-chat-input-row{border-color:rgba(15,23,42,.06)}
+.ai-chat-msg.bot{background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7)}
+.ai-chat-input-row input{background:rgba(255,255,255,.7)}
+.toast{background:rgba(24,24,32,.82);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);border:1px solid rgba(255,255,255,.14)}
+.heatmap-tip{background:rgba(255,255,255,.8);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.8)}
+.install-banner{background:rgba(238,242,255,.62);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);border:1px solid rgba(255,255,255,.75)}
+
+/* 细节：层次、动效、滚动条 */
+.card{transition:transform .2s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease)}
+@media(hover:hover){
+  .card:hover{transform:translateY(-1px);box-shadow:0 2px 6px rgba(15,23,42,.05), 0 22px 46px -22px rgba(15,23,42,.22), inset 0 1px 0 rgba(255,255,255,.9)}
+  .habit-row:hover{background:rgba(255,255,255,.68)}
+  .chip:hover{background:rgba(255,255,255,.72)}
+}
+::-webkit-scrollbar-thumb{background:rgba(76,29,149,.25)}
+::selection{background:rgba(76,29,149,.85);color:#fff}
+
+/* 低端/不支持回退 */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))){
+  .card,.glass,.glass-strong,.glass-sm,.sidebar,.mobile-menu,.modal,.ai-chat-panel,.install-banner{background:rgba(255,255,255,.96)}
+  .mobile-header,.content-header{background:#4c1d95}
+}
+@media (prefers-reduced-transparency: reduce){
+  .card,.glass,.glass-strong,.glass-sm,.sidebar,.mobile-menu,.modal,.ai-chat-panel,.install-banner{background:#fff}
+  .mobile-header,.content-header{background:#4c1d95}
+}
+@media(max-width:767px){:root{--glass-blur:14px}}
+
+/* ===== v17.1: glass refinement ===== */
+:root{
+  --glass-bg:rgba(255,255,255,.72);
+  --glass-bg-strong:rgba(255,255,255,.84);
+  --glass-bg-soft:rgba(255,255,255,.55);
+}
+body::before{background:
+  radial-gradient(1200px 800px at 92% -12%, rgba(124,58,237,.15), transparent 60%),
+  radial-gradient(900px 700px at -12% 28%, rgba(59,130,246,.11), transparent 58%),
+  radial-gradient(900px 700px at 70% 118%, rgba(236,72,153,.06), transparent 60%),
+  #f3f4f8;
+}
+.card,.glass,.glass-strong,.glass-sm{
+  box-shadow:var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 0 1px rgba(15,23,42,.025);
+}
+.overview-card,.insight-stat,.metric-card,.focus-item{
+  border:1px solid rgba(15,23,42,.055);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+}
+.habit-row{background:rgba(255,255,255,.55);border:1px solid rgba(15,23,42,.06)}
+.habit-row.done{background:rgba(37,99,235,.12);border-color:rgba(37,99,235,.32)}
+.state-dot{background:rgba(255,255,255,.7);border-color:rgba(15,23,42,.14)}
+.todo-check{background:rgba(255,255,255,.7)}
+.btn-ghost{background:rgba(255,255,255,.58)}
+.mobile-menu{
+  background:rgba(250,250,253,.86);
+  box-shadow:0 24px 48px -20px rgba(15,23,42,.35), inset 0 1px 0 rgba(255,255,255,.9);
+  border-bottom:1px solid rgba(255,255,255,.85);
+}
+.modal{background:rgba(252,252,255,.86);border-radius:22px 22px 0 0}
+.ai-chat-panel{background:rgba(252,252,255,.86)}
+.ai-config-modal .modal-box{background:rgba(252,252,255,.9)}
+.install-banner{background:rgba(238,242,255,.7)}
+/* ===== v17.2: final glass polish ===== */
+.mobile-header,.content-header{box-shadow:inset 0 1px 0 rgba(255,255,255,.10), 0 8px 24px -18px rgba(15,23,42,.35)}
+.mobile-menu{background:rgba(252,252,254,.9);box-shadow:0 28px 56px -24px rgba(15,23,42,.4), inset 0 1px 0 rgba(255,255,255,.95);border-top:1px solid rgba(255,255,255,.6)}
+.modal{background:rgba(253,253,255,.9)}
+.ai-chat-panel{background:rgba(253,253,255,.9)}
+.ai-config-modal .modal-box{background:rgba(253,253,255,.94)}
+.install-banner{background:rgba(238,242,255,.75)}
+.ai-chat-btn{background:linear-gradient(160deg,#3b82f6,#1d4ed8);border:1px solid rgba(255,255,255,.25);box-shadow:0 10px 24px -8px rgba(37,99,235,.65), inset 0 1px 0 rgba(255,255,255,.35)}
+.sidebar{box-shadow:inset -1px 0 0 rgba(255,255,255,.55)}
+/* ===== v17.3: readability ===== */
+.mobile-menu{background:rgba(250,250,253,.94)}
+.modal{background:rgba(253,253,255,.92)}
+.ai-chat-panel{background:rgba(253,253,255,.92)}
+.ai-config-modal .modal-box{background:rgba(253,253,255,.95)}
 </style>
 <body>
 <div class="app">
