@@ -1,0 +1,44 @@
+name: Daily GitHub Trending
+
+on:
+  schedule:
+    - cron: '30 1 * * *'   # UTC 01:30 = 北京时间 09:30
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  models: read
+
+concurrency:
+  group: daily-trending
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Update trending data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/update_trending.py
+
+      - name: Commit & Push
+        run: |
+          git config user.name "shiyi-bot"
+          git config user.email "shiyi-bot@users.noreply.github.com"
+          git add github_trending.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update github_trending.json $(TZ=Asia/Shanghai date +%F)"
+            git push
+          fi
