@@ -227,7 +227,15 @@ def pollinations_call(selected):
                 print(f"  resp len={len(content)} head={content[:100]!r}")
                 if not content:
                     raise ValueError("empty response")
-                m = re.search(r"\[.*\]", content, re.DOTALL)
+                raw_text = content
+                if raw_text.lstrip().startswith("{"):
+                    try:
+                        obj = json.loads(raw_text)
+                        if isinstance(obj, dict):
+                            raw_text = str(obj.get("content") or obj.get("message") or raw_text)
+                    except Exception:
+                        pass
+                m = re.search(r"\[.*\]", raw_text, re.DOTALL)
                 if not m:
                     raise ValueError(f"no JSON array in: {content[:120]}")
                 arr = json.loads(m.group(0))
