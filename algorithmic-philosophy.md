@@ -1,24 +1,27 @@
-# 拾壹紫韵 · 数据流 (Shiyi Data Flow)
+# 拾壹紫韵 · 暗玻璃 (Shiyi Dark Glass)
 
 ## Algorithmic Philosophy
 
-**Name**: Data Flow
+**Name**: 暗玻璃
 
-**Philosophy**: Data is not static — it flows, accumulates, and forms patterns over time. Like water finding its path through a landscape, information traces invisible rivers through the digital space. This philosophy captures the essence of personal data: the daily weight, the workout streaks, the habit chains — each data point is a droplet in a larger stream.
+**Philosophy**: 界面是叠起来的几层光，不是一堆会动的粒子。最底是固定的深紫画布，上面三团模糊的色光，再上面才是毛玻璃。数据从 JSON 流进来，落在这些玻璃上；玻璃本身不负责排课、不改处方、不替人下单。
 
-**Algorithmic Expression**: 
-- Thousands of particles emerge from the bottom of the canvas, each carrying a data-point's worth of energy.
-- Particles follow vector fields constructed from layered Perlin noise — creating organic, river-like flow patterns.
-- Each particle leaves a fading trail, accumulating into density maps that resemble data visualizations.
-- Color evolves from deep purple (#5b21b6) through bright purple (#a78bfa) to warm amber (#f59e0b) — representing data maturing from raw input to actionable insight.
-- Velocity varies: some particles rush ahead (breaking news, high-priority items), others drift slowly (background habits, long-term trends).
-- The algorithm runs continuously, never repeating — like a stream of consciousness rendered as data.
+**Algorithmic Expression**:
 
-**Craftsmanship**: Every parameter — particle count, noise scale, velocity range, color gradient, trail length, fade rate — meticulously tuned through countless iterations. The result should feel like a master data artist spent years refining this single visualization. The flow is hypnotic but never chaotic, ordered but never rigid. Each frame is a unique composition that could stand alone as a gallery print.
+- 画布色固定为 `#0b0614`。三团光的位置、半径和透明度是常量，不随数据跳动。
+- 玻璃的填充是自上而下的白透明度渐变（约 0.12 到 0.045），模糊半径 22px，饱和 1.6。不支持模糊时，用 `#1c1030` 附近的实色顶上，避免字掉进背景里。
+- 每张卡片顶部一条 1px 高光，用横向渐变从透明到约 0.72 的白再回到透明，左右各让出 16px，以免顶到圆角。
+- 内高光 `inset 0 1px 0 rgba(255,255,255,0.32)` 与一条很宽、很淡的投影成对出现。不叠加第二层投影。
+- 强调色在 `#5b21b6` → `#7c3aed` → `#a78bfa` / `#c4b5fd` 之间取值：按钮是短渐变，进度条从深到亮，眉题用最亮的一档。
+- 状态不另起一套色相。完成用 `#6ee7b7`，等待和足球用 `#fbbf24`，退回和过了零点用 `#fb7185`。
+- 动效时长锁在 180–220ms。切页只做 6px 的透明度上移。`prefers-reduced-motion` 时时长归零。
+- 数字层与文字层分开：凡是会变的计数（倒计时、克数、公斤、星标）都走 tabular nums，每秒只改文字节点，不重绘整页。
+
+**Craftsmanship**: 参数就这些，并且写在 `assets/command.css` 的变量和玻璃规则里。改一处，手机版和宽屏版一起变。不要为了某个模块再加一种阴影或另一种紫。
 
 **Technical Notes**:
-- Seeded randomness for reproducibility
-- Multi-octave Perlin noise for rich flow patterns
-- Adaptive particle count based on canvas size
-- Color interpolation along the purple-to-amber spectrum
-- Trail rendering with additive blending for luminous effect
+
+- 手机壳 `body[data-shell="mobile"]` 限宽 480px，底部坞固定。
+- 宽屏壳 `body[data-shell="desktop"]` 左栏 248px，主区网格最多约 1120px。
+- 玻璃卡片内部不再套第二层 `backdrop-filter`，内行用实色条，避免模糊叠模糊。
+- 真实数据的入口写在各 JSON 的 `_plug` 字段和 `assets/command.js` 顶部注释里。

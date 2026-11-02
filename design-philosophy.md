@@ -1,18 +1,21 @@
-# 数据流 (Data Flow)
+# 暗玻璃指挥台 (Dark Glass Command)
 
 ## Design Philosophy
 
-**Name**: Data Flow
+**Name**: 暗玻璃
 
-**Philosophy**: Information moves in patterns — invisible currents that connect data points into meaning. This philosophy visualizes the hidden streams of personal data: the daily weights, workout streaks, habit chains, and todo completions that accumulate into a life's rhythm. Each data point is a droplet; together they form rivers.
+**Philosophy**: 君的一天被几个机器人分成清晰的交接，而不是一张摊开的表格。工作台是夜间也能看的指挥面：底色沉下去，信息浮在玻璃上，紫色只在你正看着的地方亮一下。每个模块都是完整的一块，没有「以后再补」的空面板。
 
-**Visual Expression**: 
-- Flowing sine-wave curves layered across a soft background, suggesting multiple data streams running in parallel.
-- Purple gradient from deep (#5b21b6) through mid (#7c3aed) to bright (#a78bfa), representing data maturing from raw input to actionable insight.
-- Subtle data point clusters floating across the composition — like scattered observations waiting to be connected.
-- Grid dots forming an invisible reference system, suggesting measurement and tracking.
-- Deliberate negative space: the composition breathes, letting the curves tell their story without crowding.
+**Visual Expression**:
 
-**Craftsmanship**: Every curve tension, every opacity value, every spacing ratio — refined through painstaking iteration. The result should feel like a data visualization artist spent years perfecting this single piece. It whispers "data" without shouting, invites contemplation without demanding attention.
+- 画布是 `#0b0614`，抬起的一层是 `#150a24`。旧的亮底 `#f4f4f8` 不再使用。
+- 三团很淡的紫光留在画面边缘，让毛玻璃有景深，而不是一块纯色贴纸。
+- 卡片用背景模糊、饱和、半透明白边，以及顶部一条左右淡出的高光。阴影轻，而且只落向暗处。
+- 紫色沿用 `#7c3aed`、`#a78bfa`、`#5b21b6`，但改成暗底上的信号色：当前导航、主按钮、眉题、数字。大面积仍是暗玻璃。
+- 文字是 `#f7f3ff` / `#d9d0ea` / `#b7adc9`。玻璃上的字先保证能读，再谈通透。
+- 数字用等宽数字。00:00、倒计时、晨重、蛋白、星标都按列对齐。
+- 间距宽。手机是一条纵列加底部坞；宽屏把同一内容排成更密的网格，而不是把手机页拉宽。
 
-**Text**: Minimal. Only essential labels — "data flow" as a quiet anchor, "JUN" as a subtle signature. The visual carries the meaning; words merely ground it.
+**Craftsmanship**: 高光只有一条，模糊只有一层，过渡只有不到四分之一秒。体育内容默认折起，投资退出主导航，健康与学习、飞书并列。看起来像一块可以每天打开的玻璃，而不是一份功能清单。
+
+**Text**: 中文，短句。模块自己说话：入睡线、今天三件事、谁交了什么。不在玻璃上放长文。

@@ -1,39 +1,49 @@
-# 拾壹紫韵 (Shiyi Purple Essence)
+# 拾壹紫韵 · 暗玻璃 (Shiyi Dark Glass)
 
-A refined purple-centric theme designed for a personal data dashboard. Balances the warmth of deep purple with clean grays for readability and focus.
+指挥台用的紫色主题。亮底 `#f4f4f8` 已退出。紫色仍是信号，不是大面积铺色：它标出正在看的模块、主按钮和关键数字，其余交给暗底和毛玻璃。
 
 ## Color Palette
 
-- **Primary Purple**: `#7c3aed` - Brand identity, primary actions, active states
-- **Purple Bright**: `#a78bfa` - Hover states, highlights, accent elements
-- **Purple Deep**: `#5b21b6` - Active pressed states, strong emphasis
-- **Purple Glow**: `rgba(124,58,237,0.08)` - Subtle background glow for cards
-- **Purple Glow Strong**: `rgba(124,58,237,0.15)` - Stronger glow for elevated states
-- **Background**: `#f4f4f8` - Page background, soft and warm
-- **Surface**: `#ffffff` - Card backgrounds, elevated surfaces
-- **Border**: `#e8e8ef` - Subtle borders and dividers
-- **Text Primary**: `#1a1a2e` - Main body text, deep and rich
-- **Text Secondary**: `#6b7280` - Secondary information, labels
-- **Text Tertiary**: `#9ca3af` - Disabled text, hints
-- **Success Green**: `#10b981` - Positive indicators, completed states
-- **Warning Amber**: `#f59e0b` - Caution states, medium priority
-- **Error Red**: `#ef4444` - Error states, high priority signals
-- **Info Cyan**: `#06b6d4` - Informational indicators
+- **Canvas**: `#0b0614` — 页面底色
+- **Canvas Raised**: `#150a24` — 需要更实的一层时使用
+- **Ink**: `#f7f3ff` — 正文
+- **Ink Secondary**: `#d9d0ea` — 说明、次级信息
+- **Ink Tertiary**: `#b7adc9` — 注脚、时间。这是小字在暗底上仍能读清的下限
+- **Accent**: `#a78bfa` — 高亮、星标、眉题
+- **Accent Bright**: `#c4b5fd` — 眉题、链接、倒计时旁的强调
+- **Action**: `#7c3aed` — 主按钮、当前模块、完成标记
+- **Deep**: `#5b21b6` — 按钮下沿、进度条起点
+- **Glass Line**: `rgba(255,255,255,0.16)` — 玻璃边
+- **Specular**: `rgba(255,255,255,0.72)` — 卡片顶上的一条高光，左右淡出
+- **Success**: `#6ee7b7` — 完成、晨重下降、落在蛋白区间
+- **Warning**: `#fbbf24` — 足球晚训、快到零点、还差蛋白
+- **Danger**: `#fb7185` — 退回、要紧、已过零点的边
+- **Info**: `#67e8f9` — 备用的信息色，主界面少用
+
+玻璃填充是 `linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.045))`，背后 `backdrop-filter: blur(22px) saturate(1.6)`。不支持模糊时退回 `rgba(28,16,48,0.72)`，字色不变。
+
+阴影只留一层：`0 22px 48px -30px rgba(0,0,0,0.85)`，再加内高光 `inset 0 1px 0 rgba(255,255,255,0.32)`。不要再叠第二层重阴影。
 
 ## Typography
 
-- **Display**: SF Pro Display / PingFang SC - Bold, clean for headings
-- **Body**: SF Pro Text / PingFang SC - Readable for content text
-- **Data/Mono**: SF Mono / JetBrains Mono - Tabular numbers for metrics
+- **界面**: SF Pro Display / SF Pro Text / PingFang SC。没有这两套时用 Inter 排拉丁和数字，中文落到系统黑体。
+- **数字**: `font-variant-numeric: tabular-nums`。倒计时、晨重、蛋白、星标都按格对齐。
+- **大标题**: 30px（宽屏 36px），字重 700，字距约 `-0.035em`。
+- **卡片标题**: 20px，字重 700。
+- **正文**: 16px，说明 14.5px，注脚 12px。
+- **间距**: 4px 网格。卡片内边距 18px，卡片间距 14px，圆角 22px。
 
-## Design Principles
+## Surfaces
 
-1. **Purposeful purple**: Purple is not decoration but a signaling system — active nav items, primary buttons, key metrics. Everything else stays in quiet grays.
-2. **Breathing space**: Consistent 4px spacing grid, generous padding around content blocks.
-3. **Elevation through subtlety**: Cards use border + minimal shadow, not heavy box-shadows.
-4. **Data-first typography**: Numbers in tabular figures, aligned for quick scanning.
-5. **Motion with restraint**: Micro-interactions only where they serve feedback (tap states, hover transitions), never for decoration.
+1. **画布**先铺 `#0b0614`，再加三团压暗的紫光（左上、右侧、底部），给毛玻璃一点东西可模糊。
+2. **玻璃卡片**有半透明填充、1px 亮边、顶部高光线。卡片不再套卡片；里面的行用 `rgba(255,255,255,0.04)` 的实色条。
+3. **导航**同一套玻璃。手机是底部可横滑的坞，宽屏是左侧一列。当前项用更亮的填充和内高光，不用另一套颜色。
+4. **主按钮**从 `#8b5cf6` 收到 `#6d28d9`，顶上仍有一条白高光。次按钮是暗玻璃小胶囊。
 
-## Best Used For
+## Motion
 
-Personal dashboards, data tracking tools, productivity applications, health/fitness logs.
+过渡 180ms，曲线 `cubic-bezier(.2,.7,.2,1)`。只用于按压、悬停和切页时 6px 的上移。切页动画 220ms。系统要求减少动效时，这些全部关掉。
+
+## Use
+
+个人指挥台：今日、学习、新闻、开源、飞书、健康、拍板、机器人地图。投资纪律不进主导航，单独放在「纪律备忘」。健康是一级模块，不是侧栏里的附属卡片。

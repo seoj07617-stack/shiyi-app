@@ -1,0 +1,109 @@
+{
+  "_plug": "飞书工具人写入摘要。把 jun.feishu.cn/sample-* 换成真实云盘、会话、aily 任务链接。界面只显示标题、时间和状态；深潜一律打开飞书。不要写入处方细目、持仓细账或敏感名单正文。",
+  "updated": "2026-11-02T08:06:00+08:00",
+  "agents": [
+    {
+      "id": "teacher",
+      "name": "教学助理",
+      "role": "学习与生态",
+      "status": "早报已送达",
+      "tone": "ok",
+      "chat": "https://jun.feishu.cn/messenger/sample-teacher"
+    },
+    {
+      "id": "shiyi",
+      "name": "拾壹",
+      "role": "拍板与杂活",
+      "status": "有事项等你",
+      "tone": "wait",
+      "chat": "https://jun.feishu.cn/messenger/sample-shiyi"
+    },
+    {
+      "id": "suwen",
+      "name": "素问",
+      "role": "健康教练",
+      "status": "周计划在线",
+      "tone": "ok",
+      "chat": "https://jun.feishu.cn/messenger/sample-suwen"
+    }
+  ],
+  "deliveries": [
+    {
+      "title": "本周小产品方向",
+      "time": "2026-11-02T08:01:00+08:00",
+      "type": "文档",
+      "url": "https://jun.feishu.cn/docx/sample-teacher-morning-1102"
+    },
+    {
+      "title": "昨晚验收：按钮文案退回",
+      "time": "2026-11-01T20:31:00+08:00",
+      "type": "文档",
+      "url": "https://jun.feishu.cn/docx/sample-teacher-evening-1101"
+    },
+    {
+      "title": "素问 · 1102-1108 周训练",
+      "time": "2026-11-02T07:40:00+08:00",
+      "type": "PDF",
+      "url": "https://jun.feishu.cn/file/sample-suwen-week-1102"
+    }
+  ],
+  "teaching": [
+    {
+      "name": "同事能打开的小页面",
+      "status": "进行中",
+      "task": "https://jun.feishu.cn/task/sample-page",
+      "file": "https://jun.feishu.cn/docx/sample-page-brief"
+    },
+    {
+      "name": "按钮改成人话",
+      "status": "已退回",
+      "task": "https://jun.feishu.cn/task/sample-copy",
+      "file": "https://jun.feishu.cn/docx/sample-teacher-evening-1101"
+    },
+    {
+      "name": "可转发的说明卡",
+      "status": "未开始",
+      "task": "https://jun.feishu.cn/task/sample-card",
+      "file": "https://jun.feishu.cn/docx/sample-card-blank"
+    }
+  ],
+  "healthFile": {
+    "title": "11/02–11/08 周训练",
+    "time": "2026-11-02T07:40:00+08:00",
+    "url": "https://jun.feishu.cn/file/sample-suwen-week-1102",
+    "note": "只读文件。动作和组数不在飞书卡片里展开。"
+  },
+  "followups": [
+    {
+      "topic": "民间借贷材料这周交不交",
+      "summary": "材料已经齐。选择留在拍板页，会话里只放来龙去脉。",
+      "chat": "https://jun.feishu.cn/messenger/sample-shiyi",
+      "export": "https://jun.feishu.cn/docx/sample-lawsuit-export"
+    },
+    {
+      "topic": "今晚只做说明卡，还是先改按钮",
+      "summary": "时间只够一件事。教学助理把两种收尾都写在晚间预告里。",
+      "chat": "https://jun.feishu.cn/messenger/sample-teacher",
+      "export": "https://jun.feishu.cn/docx/sample-teacher-morning-1102"
+    }
+  ],
+  "tasks": {
+    "label": "打开飞书任务",
+    "url": "https://jun.feishu.cn/aily/sample-tasks",
+    "note": "清单放在飞书。这里只留入口。"
+  },
+  "reminders": [
+    {
+      "due": "2026-11-02",
+      "title": "周训练 PDF 看一眼再开练",
+      "agent": "素问",
+      "chat": "https://jun.feishu.cn/messenger/sample-suwen"
+    },
+    {
+      "due": "2026-11-03",
+      "title": "晚间验收说明卡",
+      "agent": "教学助理",
+      "chat": "https://jun.feishu.cn/messenger/sample-teacher"
+    }
+  ]
+}
