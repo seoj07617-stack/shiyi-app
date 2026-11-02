@@ -1,13 +1,23 @@
-/* JUN 个人工作台 Service Worker v15.5 — 离线缓存 */
-const SW_VERSION = 'jun-v15.5.0';
+/* 拾壹工作台 Service Worker v16.4 — 离线缓存 */
+const SW_VERSION = 'shiyi-v16.4.0';
 const CORE_ASSETS = [
   './',
   './index.html',
   './desktop.html',
   './manifest.json',
-  './workout.json',
+  './assets/command.css',
+  './assets/command.js',
+  './learning.json',
+  './health.json',
+  './feishu.json',
+  './bots.json',
   './news.json',
+  './github_trending.json',
+  './ai-insights.json',
+  './workout.json',
   './todos.json',
+  './progress.json',
+  './stock-data.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/icon-512-maskable.png',
@@ -39,7 +49,7 @@ self.addEventListener('fetch', function (event) {
   if (url.origin !== location.origin) return;
 
   // 页面导航与 JSON 数据：网络优先，离线时回退缓存
-  const isFresh = req.mode === 'navigate' || url.pathname.endsWith('.json');
+  const isFresh = req.mode === 'navigate' || url.pathname.endsWith('.json') || url.pathname.endsWith('.js') || url.pathname.endsWith('.css');
   if (isFresh) {
     event.respondWith(
       fetch(req).then(function (resp) {

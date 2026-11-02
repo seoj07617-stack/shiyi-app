@@ -1,3 +1,5 @@
+# Refreshes github_trending.json only. Learning, health, Feishu, bots, and news
+# are data files the command center reads; this job does not rewrite them.
 name: Daily GitHub Trending
 
 on:

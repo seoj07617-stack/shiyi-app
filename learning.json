@@ -1,0 +1,15 @@
+{
+  "_plug": "教学助理写入。早报约 08:00 更新 week_theme / week_check / today_*，晚间约 20:30 更新 tonight_* 与 last_note。页面只展示这些字段，不排课，不放新闻、开源或教案。",
+  "updated_at": "2026-11-02T08:01:00+08:00",
+  "source_morning": "08:00",
+  "source_evening": "20:30",
+  "week_theme": "做出一个同事打开就能用的小页面",
+  "week_check": "周末前有链接，对方不用提问就能做完一件事。",
+  "today_what": "把一句真实需求交给工具，让它直接给出可打开的页面",
+  "today_how": ["贴三个真实会用的例子", "只收可打开的预览", "不收原理解释"],
+  "today_minutes": 40,
+  "today_done": false,
+  "tonight_theme": "把页面收成一张可转发的说明卡",
+  "tonight_artifact": "一张写清谁用、点哪、得到什么的卡片",
+  "last_note": "昨晚验收退回：页面能开，按钮还写着「点击这里」。"
+}

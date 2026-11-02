@@ -1,24 +1,9 @@
-# 拾壹紫韵 · 数据流 (Shiyi Data Flow)
+# 拾壹紫韵 · 浅色玻璃
 
-## Algorithmic Philosophy
+画布色 `#F7F5FC`。三层径向光的位置和透明度是常量：紫在左上、品红在右上、靛蓝在底部。纸纹透明度 0.045，混合模式 soft-light。
 
-**Name**: Data Flow
+玻璃填充 72% 白，模糊 24px，饱和 1.6。内高光 `inset 0 1px 0 rgba(255,255,255,.8)`，墨线 `rgba(15,23,42,.06)`，投影 `0 8px 28px rgba(30,27,46,.06)`。
 
-**Philosophy**: Data is not static — it flows, accumulates, and forms patterns over time. Like water finding its path through a landscape, information traces invisible rivers through the digital space. This philosophy captures the essence of personal data: the daily weight, the workout streaks, the habit chains — each data point is a droplet in a larger stream.
+标志 40px，圆角 11px。填充是白到透明的斜向罩层，叠在 `#A78BFA / #7C3AED / #5B21B6` 上。投影带 `#5B21B6`。内圈 `inset: 1px` 的 22% 白边。
 
-**Algorithmic Expression**: 
-- Thousands of particles emerge from the bottom of the canvas, each carrying a data-point's worth of energy.
-- Particles follow vector fields constructed from layered Perlin noise — creating organic, river-like flow patterns.
-- Each particle leaves a fading trail, accumulating into density maps that resemble data visualizations.
-- Color evolves from deep purple (#5b21b6) through bright purple (#a78bfa) to warm amber (#f59e0b) — representing data maturing from raw input to actionable insight.
-- Velocity varies: some particles rush ahead (breaking news, high-priority items), others drift slowly (background habits, long-term trends).
-- The algorithm runs continuously, never repeating — like a stream of consciousness rendered as data.
-
-**Craftsmanship**: Every parameter — particle count, noise scale, velocity range, color gradient, trail length, fade rate — meticulously tuned through countless iterations. The result should feel like a master data artist spent years refining this single visualization. The flow is hypnotic but never chaotic, ordered but never rigid. Each frame is a unique composition that could stand alone as a gallery print.
-
-**Technical Notes**:
-- Seeded randomness for reproducibility
-- Multi-octave Perlin noise for rich flow patterns
-- Adaptive particle count based on canvas size
-- Color interpolation along the purple-to-amber spectrum
-- Trail rendering with additive blending for luminous effect
+字体栈写在 `--font-sans`。过渡曲线 `cubic-bezier(0.2, 0.8, 0.2, 1)`，时长约 160ms。这些参数都在 `assets/command.css`。

@@ -1,1 +1,76 @@
-{"date":"2026-07-27","updated":"2026-07-27T17:42:00+08:00","items":[{"id":1,"text":"完成民间借贷起诉材料打印签名上传","priority":"high","cat":"生活","due":"2026-07-30","done":false,"source":"shiyi"},{"id":2,"text":"继续读《周期》—风险定义/螺旋式上涨章节","priority":"mid","cat":"学习","due":"","done":false,"source":"shiyi"},{"id":3,"text":"确认159655标普500ETF首笔定投1500元已下单","priority":"mid","cat":"投资","due":"","done":false,"source":"shiyi"},{"id":4,"text":"减脂目标：体重降到65kg","priority":"mid","cat":"生活","due":"2026-10-23","done":false,"source":"shiyi"}]}
+{
+  "_plug": "拾壹写入。kind=decision 进拍板，kind=todo 进待办。cat=投资 不进主清单，只出现在纪律备忘。完成态可由页面记在本地，源文件仍是默认值。",
+  "date": "2026-11-02",
+  "updated": "2026-11-02T08:05:00+08:00",
+  "top3": [
+    { "id": "a", "text": "交出小页面", "done": false },
+    { "id": "b", "text": "完成推日训练", "done": false },
+    { "id": "c", "text": "记下晚训不适", "done": false }
+  ],
+  "items": [
+    {
+      "id": 1,
+      "text": "民间借贷材料：这周交出去，还是再等一次回复",
+      "priority": "high",
+      "cat": "生活",
+      "due": "2026-11-06",
+      "done": false,
+      "source": "shiyi",
+      "kind": "decision",
+      "ask": "这周把借贷材料交出去吗？",
+      "options": ["这周交", "再等等"]
+    },
+    {
+      "id": 2,
+      "text": "今晚只做说明卡，按钮文案留到明天",
+      "priority": "high",
+      "cat": "学习",
+      "due": "2026-11-02",
+      "done": false,
+      "source": "teacher",
+      "kind": "decision",
+      "ask": "今晚只做哪一件？",
+      "options": ["做说明卡", "改按钮"]
+    },
+    {
+      "id": 3,
+      "text": "把三个真实例子贴进教学助理的早报对话",
+      "priority": "mid",
+      "cat": "学习",
+      "due": "2026-11-02",
+      "done": false,
+      "source": "teacher",
+      "kind": "todo"
+    },
+    {
+      "id": 4,
+      "text": "足球晚训后记一笔不适",
+      "priority": "mid",
+      "cat": "健康",
+      "due": "2026-11-02",
+      "done": false,
+      "source": "suwen",
+      "kind": "todo"
+    },
+    {
+      "id": 5,
+      "text": "159655 仍按溢价低于 5% 才买",
+      "priority": "low",
+      "cat": "投资",
+      "due": "",
+      "done": false,
+      "source": "shiyi",
+      "kind": "todo"
+    },
+    {
+      "id": 6,
+      "text": "晨重目标仍是 65kg",
+      "priority": "low",
+      "cat": "健康",
+      "due": "2026-12-31",
+      "done": false,
+      "source": "suwen",
+      "kind": "todo"
+    }
+  ]
+}

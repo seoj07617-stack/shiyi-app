@@ -1,0 +1,64 @@
+{
+  "_plug": "素问与自报写入。week.pdf 用飞书文件链接；today.exercises 用来自 Hevy 的当日记录；weight / protein / sleep / supplements 用来自晨间自报。不要在页面里编辑处方。",
+  "updated": "2026-11-02T07:40:00+08:00",
+  "week": {
+    "title": "十一月第二周 · 推拉腿，穿插两次足球",
+    "start": "2026-11-02",
+    "end": "2026-11-08",
+    "pdf": "https://jun.feishu.cn/file/sample-suwen-week-1102",
+    "pdfLabel": "打开周训练 PDF",
+    "days": [
+      { "date": "2026-11-02", "label": "一", "name": "推", "football": true, "train": true },
+      { "date": "2026-11-03", "label": "二", "name": "拉", "football": false, "train": true },
+      { "date": "2026-11-04", "label": "三", "name": "休", "football": false, "train": false },
+      { "date": "2026-11-05", "label": "四", "name": "腿", "football": false, "train": true },
+      { "date": "2026-11-06", "label": "五", "name": "推", "football": false, "train": true },
+      { "date": "2026-11-07", "label": "六", "name": "足球", "football": true, "train": true },
+      { "date": "2026-11-08", "label": "日", "name": "休", "football": false, "train": false }
+    ]
+  },
+  "today": {
+    "date": "2026-11-02",
+    "hasTraining": true,
+    "footballEvening": true,
+    "title": "推日 · 胸肩三头",
+    "done": false,
+    "parts": ["胸", "肩", "三头"],
+    "discomfort": "无",
+    "exercises": [
+      { "name": "杠铃卧推", "sets": 4, "reps": "6", "weight": 60, "rir": 2 },
+      { "name": "上斜哑铃卧推", "sets": 3, "reps": "8", "weight": 22, "rir": 2 },
+      { "name": "坐姿哑铃推举", "sets": 3, "reps": "8", "weight": 16, "rir": 2 },
+      { "name": "哑铃侧平举", "sets": 3, "reps": "12", "weight": 8, "rir": 1 },
+      { "name": "绳索下压", "sets": 3, "reps": "12", "weight": 25, "rir": 1 }
+    ]
+  },
+  "weight": {
+    "unit": "kg",
+    "goal": 65,
+    "points": [
+      { "date": "2026-10-27", "kg": 71.6 },
+      { "date": "2026-10-28", "kg": 71.4 },
+      { "date": "2026-10-29", "kg": 71.5 },
+      { "date": "2026-10-30", "kg": 71.2 },
+      { "date": "2026-10-31", "kg": 71.0 },
+      { "date": "2026-11-01", "kg": 70.8 },
+      { "date": "2026-11-02", "kg": 70.6 }
+    ]
+  },
+  "protein": { "grams": 86, "low": 113, "high": 156 },
+  "sleep": {
+    "date": "2026-11-01",
+    "hours": 7.4,
+    "asleep": "23:36",
+    "target": "00:00",
+    "quality": "稳"
+  },
+  "review": "推日两次都留了余力，足球后的次日晨重没有反弹。蛋白有两天贴着区间下沿。",
+  "supplements": [
+    { "id": "d3", "name": "维生素 D3", "done": true },
+    { "id": "creatine", "name": "肌酸", "done": true },
+    { "id": "protein", "name": "蛋白粉", "done": false },
+    { "id": "magnesium", "name": "镁", "done": false }
+  ]
+}

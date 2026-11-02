@@ -1,0 +1,36 @@
+{
+  "_plug": "每个机器人写自己的心跳：status、state（online / attention / off）、cadence、飞书会话。今日页的状态条读这里；拾壹的待拍板件数由待办实时覆盖。",
+  "updated": "2026-11-02T08:05:00+08:00",
+  "bots": [
+    {
+      "id": "teacher",
+      "name": "教学助理",
+      "duty": "把工具用法收成小产品。早报给方向，晚间给验收。",
+      "cadence": "每天 08:00 · 20:30",
+      "status": "早报已送达",
+      "state": "online",
+      "outputs": ["本周方向", "今日任务", "生态简报"],
+      "feishu": "https://jun.feishu.cn/messenger/sample-teacher"
+    },
+    {
+      "id": "shiyi",
+      "name": "拾壹",
+      "duty": "收口拍板、杂活，和这份工作台。",
+      "cadence": "有待拍板就出现",
+      "status": "有事项等你",
+      "state": "attention",
+      "outputs": ["待拍板", "杂活跟进", "纪律备忘"],
+      "feishu": "https://jun.feishu.cn/messenger/sample-shiyi"
+    },
+    {
+      "id": "suwen",
+      "name": "素问",
+      "duty": "周训练、签到和恢复。只给结论，不在这里改处方。",
+      "cadence": "每周一份 PDF，训练日对照",
+      "status": "周计划在线",
+      "state": "online",
+      "outputs": ["周训练 PDF", "今日签到", "晨重复盘"],
+      "feishu": "https://jun.feishu.cn/messenger/sample-suwen"
+    }
+  ]
+}
