@@ -1,7 +1,9 @@
 # 拾壹紫韵 · 浅色玻璃
 
-画布固定 `#f5f5f7`。玻璃填充约 72% 白，模糊 18px。不支持模糊时仍用白底和细边，字色不变。
+画布色 `#F7F5FC`。三层径向光的位置和透明度是常量：紫在左上、品红在右上、靛蓝在底部。纸纹透明度 0.045，混合模式 soft-light。
 
-主数字 `#1c1c1e`，正文 `#1f2937`，次要 `#6b7280`。强调字用 `#5b21b6`，实心按钮用 `#7c3aed`。进度轨道 `#e5e7eb`，填充只用 `#047857`。
+玻璃填充 72% 白，模糊 24px，饱和 1.6。内高光 `inset 0 1px 0 rgba(255,255,255,.8)`，墨线 `rgba(15,23,42,.06)`，投影 `0 8px 28px rgba(30,27,46,.06)`。
 
-字体栈：`-apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Noto Sans SC", "Segoe UI", sans-serif`。标题 600，正文 400，计数 tabular-nums。参数都在 `assets/command.css`。
+标志 40px，圆角 11px。填充是白到透明的斜向罩层，叠在 `#A78BFA / #7C3AED / #5B21B6` 上。投影带 `#5B21B6`。内圈 `inset: 1px` 的 22% 白边。
+
+字体栈写在 `--font-sans`。过渡曲线 `cubic-bezier(0.2, 0.8, 0.2, 1)`，时长约 160ms。这些参数都在 `assets/command.css`。

@@ -36,7 +36,17 @@ def render(size, maskable):
     tw, th = box[2] - box[0], box[3] - box[1]
     x = (size - tw) / 2 - box[0]
     y = (size - th) / 2 - box[1]
-    draw.text((x, y), text, font=font, fill=(255, 255, 255, 255))
+    draw.text((x, y + size * 0.01), text, font=font, fill=(255, 255, 255, 255))
+    shine = Image.new('RGBA', (size, size), (0, 0, 0, 0))
+    sd = ImageDraw.Draw(shine)
+    sd.ellipse((-size * 0.2, -size * 0.55, size * 1.2, size * 0.55), fill=(255, 255, 255, 70))
+    tile = Image.alpha_composite(tile, shine)
+    ring = ImageDraw.Draw(tile)
+    pad = max(2, size // 48)
+    if maskable:
+        ring.rounded_rectangle((pad, pad, size - 1 - pad, size - 1 - pad), radius=int(size * 0.08), outline=(255, 255, 255, 56), width=max(1, size // 128))
+    else:
+        ring.rounded_rectangle((pad, pad, size - 1 - pad, size - 1 - pad), radius=int(size * 0.22), outline=(255, 255, 255, 56), width=max(1, size // 128))
     return tile
 
 
