@@ -346,7 +346,10 @@
       (lede ? '<p class="lede">' + esc(lede) + '</p>' : '') + '</header>';
   }
   function empty(title, copy) {
-    return '<section class="glass empty"><h2>' + esc(title) + '</h2><p class="card-copy">' + esc(copy) + '</p></section>';
+    return '<section class="glass empty"><p class="card-kicker">这一栏还空</p><h2>' + esc(title) + '</h2><p class="card-copy">' + esc(copy) + '</p><p class="footnote">数据写进对应的 JSON 后，这里会自己补上，不用刷新成另一套页面。</p></section>';
+  }
+  function emptyInline(title, copy) {
+    return '<div class="empty-inline"><p class="card-kicker">' + esc(title) + '</p><p class="card-copy">' + esc(copy) + '</p></div>';
   }
 
   function renderToday() {
@@ -354,26 +357,88 @@
     const sleep = data.health && data.health.sleep;
     const label = leverLabel(p, sleep);
     const dot = label === '已达成' ? 'done' : label === '已踩线' ? 'line' : 'wait';
-    const night = sleep && sleep.asleep ? '<p class="lever-half">昨夜 ' + esc(sleep.asleep) + ' 入睡 · ' + esc(sleep.hours) + ' 小时</p>' : '';
+    const night = sleep && sleep.asleep ? '<p class="lever-half">昨夜 ' + esc(sleep.asleep) + ' 入睡 · ' + esc(sleep.hours) + ' 小时' +
+      (sleep.quality ? ' · ' + esc(sleep.quality) : '') + '</p>' : '';
     const items = arr(data.todos && data.todos.top3).slice(0, 3);
-    const lines = items.length ? items.map(function (item) {
+    const doneN = items.filter(isTop3Done).length;
+    const lines = items.length ? items.map(function (item, i) {
       const on = isTop3Done(item);
       return '<button type="button" class="top3-line' + (on ? ' done' : '') + '" data-act="top3" data-id="' + esc(item.id) + '" aria-pressed="' + (on ? 'true' : 'false') + '">' +
-        '<span class="box"></span><strong>' + esc(short12(item.text)) + '</strong></button>';
-    }).join('') : '<p class="card-copy">今天还没定 Top3</p>';
+        '<span class="ord">' + (i + 1) + '</span><span class="box"></span><strong>' + esc(short12(item.text)) + '</strong></button>';
+    }).join('') : emptyInline('还没定', '今天的三件事还空着。定好以后，每条不超过十二个字，勾完就沉下去。');
+    const L = data.learning || {};
+    const what = L.today_what || (L.today && L.today.learn) || '';
+    const minutes = L.today_minutes != null ? L.today_minutes : (L.today && L.today.minutes);
+    const learnOn = !!(what || minutes);
+    const session = data.health && data.health.today;
+    const w = weightStats();
+    const prot = data.health && data.health.protein;
+    const grams = data.health ? proteinGrams() : null;
+    const nDec = openDecisions().length;
+    const nTodo = openTodos().length;
+    const openLeft = items.filter(function (item) { return !isTop3Done(item); }).length;
+    const stats = [
+      {
+        go: 'learn',
+        k: '学习',
+        v: !learnOn ? '早报未到' : (isLearnDone() ? '今日已完成' : (minutes ? minutes + ' 分钟' : '进行中')),
+        s: what || '教学助理会把今天要做的一件事写在这里。'
+      },
+      {
+        go: 'health',
+        k: '训练',
+        v: session && session.hasTraining ? (session.title || '训练日') : '今天休',
+        s: session && session.hasTraining
+          ? arr(session.parts).join(' · ') + (session.footballEvening ? ' · 足球晚' : '') + (arr(session.exercises).length ? ' · ' + arr(session.exercises).length + ' 个动作' : '')
+          : '没有优先动作，维持体态备注就够。'
+      },
+      {
+        go: 'health',
+        k: '晨重',
+        v: w ? w.last.toFixed(1) + ' kg' : '—',
+        s: w ? ('较昨 ' + signed(w.day, 1) + (prot ? ' · 蛋白 ' + grams + ' / ' + prot.low + ' g' : '')) : '晨间自报写进来之后，这里才有数。'
+      },
+      {
+        go: 'decide',
+        k: '拍板',
+        v: nDec ? nDec + ' 件待点头' : '已清空',
+        s: nTodo ? nTodo + ' 件待办还开着' : '待办也空了。投资条目不在这张清单。'
+      }
+    ];
+    function heroFigure(v) {
+      const s = String(v == null ? '' : v);
+      const m = s.match(/^(\d+(?:\.\d+)?)\s+(\S.*)$/);
+      if (!m) return '<span class="v is-phrase">' + esc(s) + '</span>';
+      return '<span class="v"><b>' + esc(m[1]) + '</b><span class="unit">' + esc(m[2]) + '</span></span>';
+    }
+    const statHtml = '<div class="stat-row">' + stats.map(function (st) {
+      return '<button type="button" class="stat" data-go="' + st.go + '"><span class="k">' + esc(st.k) + '</span>' + heroFigure(st.v) + '<span class="s">' + esc(st.s) + '</span></button>';
+    }).join('') + '</div>';
     const decs = openDecisions().slice(0, 2);
-    const decide = decs.length ? '<section class="glass"><p class="card-kicker">待拍板</p><div class="stack">' + decs.map(function (t) {
+    const decide = '<section class="glass"><p class="card-kicker">待拍板</p><div class="stack">' + (decs.length ? decs.map(function (t) {
       const opts = arr(t.options).slice(0, 2);
       const buttons = (opts.length ? opts : ['就这样', '以后再说']).map(function (opt, i) {
         return '<button type="button" class="btn' + (i === 0 ? ' btn-primary' : '') + '" data-act="decision" data-id="' + esc(t.id) + '" data-res="' + esc(opt) + '">' + esc(opt) + '</button>';
       }).join('');
-      return '<div><p class="card-copy">' + esc(t.ask || t.text) + '</p><div class="actions">' + buttons + '</div></div>';
+      const due = dueLabel(t.due);
+      return '<div class="inset decide-mini"><p class="micro">' + esc((WHO[t.source] || t.source || '待定') + (due ? ' · ' + due : '')) + '</p><p class="card-copy">' + esc(t.ask || t.text) + '</p><div class="actions">' + buttons + '</div></div>';
+    }).join('') : emptyInline('没有等你点头的事', '拍板清空之后，这一格就保持安静。投资类不进这里。')) + '</div></section>';
+    const bots = arr(data.bots && data.bots.bots);
+    const botRow = bots.length ? '<section class="glass wide"><p class="card-kicker">三个机器人</p><div class="mini-bots">' + bots.map(function (bot) {
+      const live = botLive(bot);
+      return '<button type="button" class="mini-bot" data-go="bots"><i class="dot ' + dotClass(live.state) + '"></i><span class="mini-copy"><strong>' +
+        esc(bot.name) + '</strong><em>' + esc(bot.cadence) + '</em></span><span class="mini-status">' + esc(live.status) + '</span></button>';
     }).join('') + '</div></section>' : '';
-    return '<div class="today">' +
+    const hello = '<section class="glass wide hero-card"><p class="card-kicker">今日</p><p class="today-line"><strong>' + esc(greet(p.hour)) + '</strong><span>' +
+      (openLeft ? '还有 ' + openLeft + ' 件今日事项没勾。' : (items.length ? '今日三件已经勾完。' : '先看下面四格，再决定今天动哪一件。')) +
+      '</span></p></section>';
+    const topMeta = items.length ? '<span class="pill' + (doneN === items.length ? ' ok' : ' dim') + '">' + doneN + ' / ' + items.length + '</span>' : '';
+    return '<div class="today">' + hello +
       '<section class="lever glass wide" id="leverBar"><i class="dot ' + dot + '" id="leverDot"></i><div><p class="lever-copy">今晚杠杆：00:00 前睡着 · 22:30 关屏</p>' +
       '<p class="lever-half" id="leverState">' + esc(label) + '</p>' + night + '</div></section>' +
-      '<section class="glass"><p class="card-kicker">今日 Top3</p>' + lines + '</section>' +
-      decide + '</div>';
+      '<div class="wide">' + statHtml + '</div>' +
+      '<section class="glass"><div class="bar"><p class="card-kicker">今日 Top3</p>' + topMeta + '</div>' + lines + '</section>' +
+      decide + botRow + '</div>';
   }
 
   function renderLearn() {
@@ -401,16 +466,16 @@
       : '';
     return '<section class="glass learn-card"><div class="bar"><strong>学习</strong><span class="pill ' + (done ? 'ok' : 'wait') + '">' +
       (done ? '今日已完成' : '今日未完成') + '</span></div>' +
+      '<div class="pills"><span class="pill dim">预计 ' + esc(minutes) + ' 分钟</span><span class="pill dim">早报 ' + esc(hm(morning)) + '</span><span class="pill dim">晚间 ' + esc(hm(evening)) + '</span></div>' +
       '<p class="micro">本周方向</p><h2 class="week-theme">' + esc(theme) + '</h2>' +
       (check ? '<p class="check-gray">' + esc(check) + '</p>' : '') +
       '<p class="card-kicker">今日</p><p class="card-copy">' + esc(what) + '</p>' +
       (steps.length ? '<ol class="how">' + steps.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ol>' : '') +
-      '<p class="footnote">预计 ' + esc(minutes) + ' 分钟</p>' +
       '<button type="button" class="done-row" data-act="learn-done" aria-pressed="' + (done ? 'true' : 'false') + '"><span class="box"></span><span>完成</span></button>' +
       '<p class="card-kicker" style="margin-top:16px">今晚</p><p class="card-copy">' + esc(themeNight) + '</p>' +
       '<p class="artifact"><span>要留下的小产物</span>' + esc(artifact) + '</p>' +
       noteRow +
-      '<p class="footnote">早报 ' + esc(hm(morning)) + ' · 晚间 ' + esc(hm(evening)) + '</p></section>';
+      '<p class="footnote">只展示早报和晚间交来的字段，页面不另外排课。</p></section>';
   }
 
   function newsItem(it) {
@@ -428,7 +493,7 @@
     ].map(function (col) {
       const items = arr(groups[col[0]]);
       return '<section class="glass"><p class="card-kicker">' + col[1] + '</p>' +
-        (items.length ? items.map(newsItem).join('') : '<p class="card-copy">这一栏还空着。</p>') + '</section>';
+        (items.length ? items.map(newsItem).join('') : emptyInline('这一栏还空着', '简报到了会按标签排进来。没有条目时不拿别的栏目来填。')) + '</section>';
     }).join('');
     const sports = arr(groups.sports);
     return head('新闻', '工具与用法', '产品、提示、值得跟的开源。体育相关收在最下面。') +
@@ -461,19 +526,19 @@
     const mode = pack.mode === 'degraded' ? '中文点评暂时降级，先看仓库本身。' : '中文点评已附上。';
     return head('开源', 'GitHub 今日', mode) +
       '<div class="chips" role="tablist">' + chips + '</div>' +
-      '<div class="repo-grid" style="margin-top:14px">' + (cards || '<p class="card-copy">这个分类今天没有。</p>') + '</div>' +
+      '<div class="repo-grid" style="margin-top:14px">' + (cards || emptyInline('这个分类今天没有', '热榜还在，只是这一类今天没有仓库。换到「全部」能看到当天完整的一页。')) + '</div>' +
       '<p class="footnote">更新于 ' + esc(whenLabel(pack.updated)) + '。点进仓库再看细节。</p>';
   }
 
   function renderFeishu() {
     const F = data.feishu;
-    if (!F) return '<p class="card-copy">暂无交付</p>';
+    if (!F) return empty('飞书还没接上', '会话、云盘和教学产出会从 feishu.json 排进来。链接换成真实云盘之后才能点开。');
     const agents = arr(F.agents);
     const files = arr(F.deliveries);
     const teaching = arr(F.teaching);
     const entry = F.entry || (agents[0] && agents[0].chat) || '#';
     if (!files.length && !teaching.length) {
-      return '<section class="glass"><p class="card-copy">暂无交付</p><div class="actions">' + linkBtn(entry, '打开飞书', 'btn btn-primary') + '</div></section>';
+      return '<section class="glass empty"><p class="card-kicker">暂无交付</p><h2>云盘和教学产出都还空</h2><p class="card-copy">机器人交了文件之后，最近六条会出现在云盘，教学卡单独一列。现在只能先打开飞书会话。</p><div class="actions">' + linkBtn(entry, '打开飞书', 'btn btn-primary') + '</div></section>';
     }
     const route = '<div class="route-bar glass">' + agents.map(function (a) {
       const tone = a.tone === 'wait' ? 'wait' : a.tone === 'off' ? 'off' : 'ok';
@@ -510,8 +575,8 @@
           (it.tone === 'wait' ? 'wait' : 'ok') + '"></i><strong>' + esc(it.name) + '</strong><span class="open">打开</span></a>';
       }).join('') + '</div>' : '') + '</section>' : '';
     return '<div class="feishu">' + route +
-      '<div class="split"><section class="glass"><p class="card-kicker">最近云盘</p>' + (rows || '<p class="card-copy">暂无交付</p>') + more + '</section>' +
-      '<section class="glass"><p class="card-kicker">教学产出</p><div class="teach-grid">' + (wall || '<p class="card-copy">暂无交付</p>') + '</div></section></div>' +
+      '<div class="split"><section class="glass"><p class="card-kicker">最近云盘</p>' + (rows || emptyInline('云盘是空的', '最近交付会按时间和机器人排成行。')) + more + '</section>' +
+      '<section class="glass"><p class="card-kicker">教学产出</p><div class="teach-grid">' + (wall || emptyInline('还没有教学产出', '说明卡、教案和验收会以卡片出现在这里。')) + '</div></section></div>' +
       pdf + followBlock + taskBlock + '</div>';
   }
 
@@ -529,8 +594,8 @@
     const area = line + ' L' + xy[xy.length - 1][0].toFixed(1) + ' ' + h + ' L' + xy[0][0].toFixed(1) + ' ' + h + ' Z';
     const last = xy[xy.length - 1];
     return '<svg class="spark" viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="近七日晨重"><defs><linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">' +
-      '<stop offset="0%" stop-color="#047857" stop-opacity="0.35"/><stop offset="100%" stop-color="#047857" stop-opacity="0"/></linearGradient></defs>' +
-      '<path d="' + area + '" fill="url(#sparkFill)"/><path d="' + line + '" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<stop offset="0%" stop-color="#1C1C1E" stop-opacity="0.35"/><stop offset="100%" stop-color="#1C1C1E" stop-opacity="0"/></linearGradient></defs>' +
+      '<path d="' + area + '" fill="url(#sparkFill)"/><path d="' + line + '" fill="none" stroke="#1C1C1E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
       '<circle cx="' + last[0].toFixed(1) + '" cy="' + last[1].toFixed(1) + '" r="3.5" fill="#1c1c1e"/></svg>';
   }
   function postureHtml() {
@@ -562,7 +627,8 @@
     const allSets = arr(session.exercises);
     const visible = setsOpen ? allSets : allSets.slice(0, 3);
     const setHtml = visible.map(function (ex) {
-      return '<div class="set-line"><strong>' + esc(ex.name) + '</strong><span>' + esc(ex.sets) + '×' + esc(ex.reps) + ' · RIR ' + esc(ex.rir) + '</span></div>';
+      const load = ex.weight != null && ex.weight !== '' ? ' · ' + esc(ex.weight) + 'kg' : '';
+      return '<div class="set-line"><strong>' + esc(ex.name) + '</strong><span>' + esc(ex.sets) + '×' + esc(ex.reps) + load + ' · RIR ' + esc(ex.rir) + '</span></div>';
     }).join('');
     const moreSets = allSets.length > 3 ? '<button type="button" class="btn fold-btn" data-act="sets">' + (setsOpen ? '收起' : '展开其余') + '</button>' : '';
     const w = weightStats();
@@ -580,19 +646,33 @@
       return '<button type="button" class="supp" data-act="supp" data-key="' + esc(s.id) + '" aria-pressed="' + (on ? 'true' : 'false') + '"><span>' +
         esc(shortName[s.id] || s.name) + '</span><span class="switch' + (on ? ' on' : '') + '" aria-hidden="true"><i></i></span></button>';
     }).join('');
+    const todayIso = isoOf(p);
+    const dayStrip = arr(week.days).map(function (d) {
+      const on = d.date === todayIso;
+      return '<div class="day' + (on ? ' is-today' : '') + (d.train ? '' : ' is-off') + '"><span>周' + esc(d.label) + '</span><strong>' +
+        esc(d.name) + '</strong><i>' + (d.football ? '球' : '') + '</i></div>';
+    }).join('');
+    const protNote = grams < protein.low ? '距下沿 ' + (protein.low - grams) + ' g' : (grams > protein.high ? '高出区间' : '落在区间里');
+    const spark = w ? '<section class="glass"><div class="bar"><p class="card-kicker">近七日晨重</p><span class="pill dim">目标 ' + esc(w.goal) + ' kg</span></div>' +
+      sparkSvg(w.pts) + '<p class="footnote">较七日首日 ' + signed(w.week, 1) + ' kg · 昨日 ' + esc(w.pts[w.pts.length - 2].date.slice(5)) + ' ' + w.pts[w.pts.length - 2].kg.toFixed(1) + '</p></section>' : '';
     return '<div class="health">' +
-      '<section class="glass plan-bar"><h2>' + esc(week.title || '本周计划') + '</h2>' +
-      linkBtn(week.pdf, '打开 PDF', 'btn btn-primary') + '</section>' +
-      '<section class="glass"><div class="pills">' + badges.join('') + '</div>' +
-      (setHtml || '<p class="card-copy">今天没有优先动作。</p>') + moreSets + '</section>' +
+      '<section class="glass"><div class="plan-bar"><h2>' + esc(week.title || '本周计划') + '</h2>' +
+      linkBtn(week.pdf, '打开 PDF', 'btn btn-primary') + '</div>' +
+      (dayStrip ? '<div class="days">' + dayStrip + '</div>' : '') +
+      (H.review ? '<p class="footnote">' + esc(H.review) + '</p>' : '') + '</section>' +
+      '<section class="glass"><div class="bar"><div><p class="card-kicker">今日训练</p><h2 class="card-title">' + esc(session.title || (session.hasTraining ? '训练日' : '休息')) + '</h2></div><div class="pills">' + badges.join('') + '</div></div>' +
+      (arr(session.parts).length ? '<p class="check-gray">' + esc(arr(session.parts).join(' · ')) + (session.footballEvening ? ' · 足球晚训' : '') + '</p>' : '') +
+      (setHtml || emptyInline('今天没有优先动作', '休息日不排组数。体态维持仍以每日备注为准，不在这里改处方。')) + moreSets + '</section>' +
       '<div class="metric-row">' +
-      '<section class="glass metric-cell"><p class="card-kicker">晨重</p><b class="num">' + (w ? w.last.toFixed(1) : '—') + '</b><span class="unit">kg · 较昨 <span class="delta ' +
-      (w ? deltaClass(w.day) : 'flat') + '">' + (w ? signed(w.day, 1) : '—') + '</span></span></section>' +
-      '<section class="glass metric-cell"><p class="card-kicker">蛋白</p><b class="num">' + grams + '</b><span class="unit">' + esc(protein.low) + '–' + esc(protein.high) + ' g</span>' +
-      '<div class="track" aria-hidden="true"><i class="band" style="left:' + bandL.toFixed(1) + '%;width:' + bandW.toFixed(1) + '%"></i><i class="fill" style="width:' + fill.toFixed(1) + '%"></i></div></section>' +
-      '<section class="glass metric-cell"><p class="card-kicker">睡眠</p><b class="num">' + esc(sleep.hours) + '</b><span class="unit">小时</span>' +
-      (late ? '<span class="fine">偏晚</span>' : '') + '</section></div>' +
-      '<section class="glass"><p class="card-kicker">补剂</p><div class="supp-bar">' + supps + '</div></section></div>';
+      '<section class="glass metric-cell"><p class="metric-figure"><b class="num">' + (w ? w.last.toFixed(1) : '—') + '</b><span class="unit">kg</span></p><p class="card-kicker">晨重</p>' +
+      '<span class="delta ' + (w ? deltaClass(w.day) : 'flat') + '">较昨 ' + (w ? signed(w.day, 1) : '—') + '</span>' +
+      (w ? '<span class="fine">七日 ' + signed(w.week, 1) + '</span>' : '') + '</section>' +
+      '<section class="glass metric-cell"><p class="metric-figure"><b class="num">' + grams + '</b><span class="unit">g</span></p><p class="card-kicker">蛋白</p>' +
+      '<div class="track" aria-hidden="true"><i class="band" style="left:' + bandL.toFixed(1) + '%;width:' + bandW.toFixed(1) + '%"></i><i class="fill" style="width:' + fill.toFixed(1) + '%"></i></div>' +
+      '<span class="fine">' + esc(protein.low) + '–' + esc(protein.high) + ' · ' + protNote + '</span></section>' +
+      '<section class="glass metric-cell"><p class="metric-figure"><b class="num">' + esc(sleep.hours) + '</b><span class="unit">小时</span></p><p class="card-kicker">睡眠</p>' +
+      '<span class="fine">' + (sleep.asleep ? esc(sleep.asleep) + ' · ' : '') + (late ? '偏晚' : (sleep.quality ? esc(sleep.quality) : '在零点前')) + '</span></section></div>' + spark +
+      '<section class="glass"><p class="card-kicker">补剂</p><div class="supp-bar">' + supps + '</div></section>' + postureHtml() + '</div>';
   }
 
   function decisionCard(t) {
@@ -617,17 +697,17 @@
       return '<button type="button" class="check" data-act="todo" data-id="' + esc(t.id) + '" aria-pressed="false"><span class="box"></span><span><strong>' +
         esc(t.text) + '</strong><small>' + esc(t.cat) + ' · ' + esc(WHO[t.source] || t.source || '') +
         (t.due ? ' · ' + esc(dueLabel(t.due)) : '') + '</small></span></button>';
-    }).join('') : '<p class="card-copy">待办是空的。</p>';
+    }).join('') : emptyInline('待办是空的', '勾掉的会沉到下面「已经处理」。没有新的杂活时，这一列保持空白。');
     const doneHtml = done.length ? '<section class="glass" style="margin-top:14px"><p class="card-kicker">已经处理</p><div class="stack">' +
       done.map(function (t) {
         const res = decisionRes(t);
         const label = res === 'no' ? '这次不做' : res === 'yes' ? '已拍板' : res === 'later' ? '以后再说' : (res || '已完成');
-        return '<article class="check" style="cursor:default"><span class="box" style="background:#7c3aed;border-color:transparent"></span><span class="grow"><strong>' +
+        return '<article class="check" style="cursor:default"><span class="box" style="background:#8B75B8;border-color:transparent"></span><span class="grow"><strong>' +
           esc(t.text) + '</strong><small>' + label + '</small></span><button type="button" class="btn" data-act="undo" data-id="' + esc(t.id) + '">撤回</button></article>';
       }).join('') + '</div></section>' : '';
     return head('拍板', '要你点头的事', '先拍板，再勾掉今天的待办。投资条目不在这张主清单里。') +
       '<div class="decide"><section class="glass"><p class="card-kicker">待拍板</p><div class="stack">' +
-      (open.length ? open.map(decisionCard).join('') : '<p class="card-copy">没有等你点头的事。</p>') + laterHtml +
+      (open.length ? open.map(decisionCard).join('') : emptyInline('没有等你点头的事', '需要你选的条目会出现在这里，两个按钮就够。投资待办留在纪律备忘。')) + laterHtml +
       '</div></section><section class="glass"><p class="card-kicker">待办</p><div class="stack">' + todoHtml + '</div></section></div>' + doneHtml;
   }
 
@@ -715,7 +795,7 @@
       '<div class="rail-label">模块</div>' + rail +
       '<div class="rail-foot"><button type="button" data-memo><span class="js-memo-label">纪律备忘</span><small>投资已降权</small></button></div></aside>' +
       '<main class="stage" id="stage"><header class="topbar">' + mark +
-      '<div class="top-meta">' + dateBit + '<time id="topClock"></time>' + shellLink + memoTop +
+      '<div class="top-meta">' + dateBit + shellLink + memoTop +
       '<button type="button" class="quiet-link" id="installBtn" data-act="install" hidden>安装</button></div></header>' +
       '<div id="view"></div></main></div>' +
       '<nav class="dock" aria-label="模块">' + dock + '</nav>';
@@ -735,6 +815,11 @@
     document.querySelectorAll('[data-memo]').forEach(function (btn) {
       btn.classList.toggle('active', tab === 'memo');
     });
+    const dock = document.querySelector('.dock');
+    const dockOn = dock && dock.querySelector('.dock-item.active');
+    if (dock && dockOn && dock.scrollWidth > dock.clientWidth + 4) {
+      dock.scrollLeft = Math.max(0, dockOn.offsetLeft - (dock.clientWidth - dockOn.offsetWidth) / 2);
+    }
     document.querySelectorAll('.js-memo-label').forEach(function (el) {
       el.textContent = tab === 'memo' ? (el.dataset.short ? '返回' : '返回今日') : (el.dataset.short || '纪律备忘');
     });
@@ -766,8 +851,6 @@
   }
   function tick() {
     const p = shanghaiParts(new Date());
-    const clock = document.getElementById('topClock');
-    if (clock) clock.textContent = clockLabel(p);
     document.querySelectorAll('.js-date').forEach(function (el) { el.textContent = dateLabel(p, el.dataset.compact === '1'); });
     const lever = document.getElementById('leverState');
     const dot = document.getElementById('leverDot');
@@ -895,7 +978,7 @@
       tab = readTab();
       if (location.hash !== '#' + tab) history.replaceState(null, '', '#' + tab);
       paint(true);
-      setInterval(tick, 1000);
+      setInterval(tick, 60000);
       if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(function () {});
     });
   }
