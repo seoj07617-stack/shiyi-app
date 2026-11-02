@@ -701,9 +701,8 @@
   function renderShell() {
     const rail = NAV.map(function (n) { return navButton('rail', n[0], n[1], n[2]); }).join('');
     const dock = NAV.map(function (n) { return navButton('dock', n[0], n[1], n[2]); }).join('');
-    const left = shell === 'mobile'
-      ? '<div class="brand"><span class="mark" aria-hidden="true">拾</span><span class="brand-text"><strong>拾壹</strong><small class="js-date" data-compact="1"></small></span></div>'
-      : '<div class="top-date js-date"></div>';
+    const mark = '<span class="mark" role="img" aria-label="拾壹"><span class="mark-glyph" aria-hidden="true">壹</span></span>';
+    const dateBit = '<span class="top-date js-date"' + (shell === 'mobile' ? ' data-compact="1"' : '') + '></span>';
     const shellLink = shell === 'desktop'
       ? '<a class="quiet-link" id="shellLink" href="index.html">手机版</a>'
       : '<a class="quiet-link" id="shellLink" href="desktop.html">宽屏</a>';
@@ -712,11 +711,11 @@
       : '';
     document.getElementById('app').innerHTML =
       '<div class="ambient" aria-hidden="true"><i class="orb a"></i><i class="orb b"></i><i class="orb c"></i></div>' +
-      '<div class="shell"><aside class="rail"><div class="brand"><span class="mark" aria-hidden="true">拾</span><span class="brand-text"><strong>拾壹</strong><small>指挥台</small></span></div>' +
+      '<div class="shell"><aside class="rail">' +
       '<div class="rail-label">模块</div>' + rail +
       '<div class="rail-foot"><button type="button" data-memo><span class="js-memo-label">纪律备忘</span><small>投资已降权</small></button></div></aside>' +
-      '<main class="stage" id="stage"><header class="topbar">' + left +
-      '<div class="top-meta"><time id="topClock"></time>' + shellLink + memoTop +
+      '<main class="stage" id="stage"><header class="topbar">' + mark +
+      '<div class="top-meta">' + dateBit + '<time id="topClock"></time>' + shellLink + memoTop +
       '<button type="button" class="quiet-link" id="installBtn" data-act="install" hidden>安装</button></div></header>' +
       '<div id="view"></div></main></div>' +
       '<nav class="dock" aria-label="模块">' + dock + '</nav>';

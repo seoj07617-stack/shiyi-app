@@ -76,7 +76,7 @@ body[data-shell="desktop"] .shell {
   -webkit-backdrop-filter: blur(22px) saturate(1.4);
 }
 body[data-shell="desktop"] .rail { display: flex; flex-direction: column; min-height: 0; overflow: auto; }
-.rail-label { margin: 18px 12px 8px; color: var(--ink-2); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; }
+.rail-label { margin: 4px 12px 8px; color: var(--ink-2); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; }
 .rail-item, .dock-item {
   position: relative;
   display: flex;
@@ -140,18 +140,22 @@ body[data-shell="desktop"] #view { max-width: 1120px; }
   -webkit-backdrop-filter: blur(16px) saturate(1.3);
 }
 body[data-shell="mobile"] .topbar { margin: 0 -16px; padding-left: 16px; padding-right: 16px; }
-.brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .mark {
-  width: 40px; height: 40px; border-radius: 13px;
+  width: 32px; height: 32px; border-radius: 10px; flex: none;
   display: grid; place-items: center;
-  font-weight: 600;
-  color: #fff;
-  background: linear-gradient(180deg, #8b5cf6, #6d28d9);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 8px 18px -12px rgba(109, 40, 217, 0.7);
+  background: linear-gradient(145deg, #8b5cf6 0%, #5b21b6 100%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 8px 16px -10px rgba(91, 33, 182, 0.65);
 }
-.brand strong { display: block; font-size: 16px; font-weight: 600; letter-spacing: 0.01em; color: var(--ink); }
-.brand small, .top-date { display: block; color: var(--ink-2); font-size: 12px; font-weight: 400; margin-top: 1px; }
+.mark-glyph {
+  color: #fff;
+  font-family: "PingFang SC", "Noto Sans SC", sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1;
+  letter-spacing: 0;
+}
+.top-date { color: var(--ink-2); font-size: 13px; font-weight: 400; }
 .top-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 #topClock { color: var(--body); font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
 #installBtn[hidden] { display: none !important; }
