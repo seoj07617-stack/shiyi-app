@@ -30,11 +30,11 @@
   };
   const NAV = [
     ['today', '今日', 'sun'],
+    ['health', '健康', 'heart'],
     ['learn', '学习', 'book'],
     ['news', '新闻', 'spark'],
     ['oss', '开源', 'git'],
     ['feishu', '飞书', 'send'],
-    ['health', '健康', 'heart'],
     ['decide', '拍板', 'check'],
     ['bots', '地图', 'nodes']
   ];

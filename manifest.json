@@ -1,7 +1,7 @@
 {
   "name": "拾壹工作台",
   "short_name": "拾壹",
-  "description": "君的机器人与飞书指挥台：今日、学习、新闻、开源、飞书、健康、拍板、Bot 地图。",
+  "description": "君的机器人与飞书指挥台：今日、健康、学习、新闻、开源、飞书、拍板、Bot 地图。",
   "lang": "zh-CN",
   "start_url": "./index.html",
   "scope": "./",
