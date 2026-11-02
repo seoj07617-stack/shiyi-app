@@ -391,21 +391,26 @@
     const morning = L.source_morning || (L.source && L.source.morning) || '08:00';
     const evening = L.source_evening || (L.source && L.source.evening) || '20:30';
     const done = isLearnDone();
+    function hm(v) {
+      const parts = String(v || '').split(':');
+      return String(Number(parts[0] || 0)) + ':' + (parts[1] || '00');
+    }
+    const noteRow = note
+      ? '<button type="button" class="note-line' + (noteOpen ? ' open' : '') + '" data-act="note" aria-expanded="' + (noteOpen ? 'true' : 'false') + '">' +
+        '<span class="note-sum">' + esc(note) + '</span><i class="note-arrow" aria-hidden="true">' + (noteOpen ? '▾' : '›') + '</i></button>'
+      : '';
     return '<section class="glass learn-card"><div class="bar"><strong>学习</strong><span class="pill ' + (done ? 'ok' : 'wait') + '">' +
       (done ? '今日已完成' : '今日未完成') + '</span></div>' +
-      '<h2 class="week-theme">' + esc(theme) + '</h2>' +
+      '<p class="micro">本周方向</p><h2 class="week-theme">' + esc(theme) + '</h2>' +
       (check ? '<p class="check-gray">' + esc(check) + '</p>' : '') +
       '<p class="card-kicker">今日</p><p class="card-copy">' + esc(what) + '</p>' +
       (steps.length ? '<ol class="how">' + steps.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ol>' : '') +
       '<p class="footnote">预计 ' + esc(minutes) + ' 分钟</p>' +
-      '<button type="button" class="top3-line" data-act="learn-done" aria-pressed="' + (done ? 'true' : 'false') + '"><span class="box"></span><strong>' +
-      (done ? '已完成' : '勾选完成') + '</strong></button>' +
+      '<button type="button" class="done-row" data-act="learn-done" aria-pressed="' + (done ? 'true' : 'false') + '"><span class="box"></span><span>完成</span></button>' +
       '<p class="card-kicker" style="margin-top:16px">今晚</p><p class="card-copy">' + esc(themeNight) + '</p>' +
       '<p class="artifact"><span>要留下的小产物</span>' + esc(artifact) + '</p>' +
-      (note ? '<button type="button" class="btn fold-btn" data-act="note" aria-expanded="' + (noteOpen ? 'true' : 'false') + '" style="margin-top:12px">' +
-        (noteOpen ? '收起最近验收' : '最近验收') + '</button>' + (noteOpen ? '<p class="card-copy" style="margin-top:8px">' + esc(note) + '</p>' : '') : '') +
-      '<p class="footnote">早报' + esc(String(Number(String(morning).split(':')[0]))) + ':' + esc(String(morning).split(':')[1] || '00') +
-      '·晚间' + esc(evening) + '</p></section>';
+      noteRow +
+      '<p class="footnote">早报 ' + esc(hm(morning)) + ' · 晚间 ' + esc(hm(evening)) + '</p></section>';
   }
 
   function newsItem(it) {

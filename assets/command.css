@@ -281,7 +281,8 @@ a.repo:hover, button.glass:hover { border-color: var(--line-strong); }
 
 .card-title { margin: 6px 0 8px; font-size: 20px; line-height: 1.35; font-weight: 600; letter-spacing: 0.01em; color: var(--ink); }
 .subhead { margin: 14px 0 6px; font-size: 13px; color: var(--ink-2); font-weight: 600; }
-.week-theme { margin: 8px 0 4px; font-size: 26px; line-height: 1.35; font-weight: 600; letter-spacing: 0.012em; color: var(--ink); }
+.micro { margin: 12px 0 0; font-size: 11px; font-weight: 400; line-height: 1.4; letter-spacing: 0.04em; color: #6b7280; }
+.week-theme { margin: 2px 0 4px; font-size: 26px; line-height: 1.35; font-weight: 600; letter-spacing: 0.012em; color: var(--ink); }
 body[data-shell="desktop"] .week-theme { font-size: 30px; }
 .check-gray { margin: 0 0 8px; color: var(--ink-2); font-size: 14px; font-weight: 400; line-height: 1.6; }
 .bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
@@ -292,11 +293,42 @@ body[data-shell="desktop"] .week-theme { font-size: 30px; }
   padding: 12px 14px;
   border-radius: 14px;
   background: rgba(124, 58, 237, 0.08);
-  border: 1px solid rgba(124, 58, 237, 0.16);
+  border: 1px solid rgba(124, 58, 237, 0.14);
+  color: #1f2937;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.artifact span { display: block; font-size: 12px; font-weight: 600; color: var(--violet-ink); margin-bottom: 4px; }
+.done-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 4px;
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
   color: var(--ink);
   font-weight: 600;
 }
-.artifact span { display: block; font-size: 12px; font-weight: 600; color: var(--violet-ink); margin-bottom: 4px; }
+.note-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 10px;
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 400;
+  text-align: left;
+  line-height: 1.5;
+}
+.note-sum { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.note-line.open .note-sum { white-space: normal; color: #1f2937; }
+.note-arrow { flex: none; font-style: normal; color: #6b7280; }
 
 .lever { display: flex; align-items: center; gap: 10px; padding: 10px 14px; }
 .lever-copy { margin: 0; font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.45; }
@@ -328,7 +360,7 @@ body[data-shell="desktop"] .week-theme { font-size: 30px; }
   border: 1.5px solid rgba(28, 28, 30, 0.45);
   background: #fff;
 }
-.top3-line[aria-pressed="true"] .box, .check[aria-pressed="true"] .box {
+.top3-line[aria-pressed="true"] .box, .check[aria-pressed="true"] .box, .done-row[aria-pressed="true"] .box {
   background: var(--action);
   border-color: transparent;
   box-shadow: inset 0 0 0 2px #fff;
