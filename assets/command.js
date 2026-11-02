@@ -61,6 +61,11 @@
   let built = false;
   let sportsOpen = false;
   let ossCat = '全部';
+  let setsOpen = false;
+  let cloudMore = false;
+  let noteOpen = false;
+  let foldFollow = false;
+  let foldTasks = false;
   let deferredPrompt = null;
 
   function esc(s) {
@@ -175,7 +180,7 @@
 
   function loadState() {
     const base = {
-      todoDone: {}, decision: {}, learnDone: null, sessionDone: null,
+      todoDone: {}, decision: {}, top3Done: {}, learnDone: null, sessionDone: null,
       discomfort: null, proteinAdd: 0, weight: null, supplements: {}
     };
     try {
@@ -183,6 +188,7 @@
       return {
         todoDone: Object.assign({}, raw.todoDone || {}),
         decision: Object.assign({}, raw.decision || {}),
+        top3Done: Object.assign({}, raw.top3Done || {}),
         learnDone: raw.learnDone == null ? null : !!raw.learnDone,
         sessionDone: raw.sessionDone == null ? null : !!raw.sessionDone,
         discomfort: raw.discomfort || null,
@@ -230,8 +236,41 @@
     return allTodos().filter(function (t) { return t.cat === '投资'; });
   }
   function isLearnDone() {
-    if (state.learnDone == null) return !!(data.learning && data.learning.today && data.learning.today.done);
-    return !!state.learnDone;
+    if (state.learnDone != null) return !!state.learnDone;
+    const L = data.learning || {};
+    if (L.today_done != null) return !!L.today_done;
+    return !!(L.today && L.today.done);
+  }
+  function isTop3Done(t) {
+    if (state.top3Done && state.top3Done[t.id] != null) return !!state.top3Done[t.id];
+    return !!t.done;
+  }
+  function short12(s) {
+    const t = String(s || '').replace(/\s+/g, '');
+    return t.length > 12 ? t.slice(0, 12) : t;
+  }
+  function asleepLate(hhmm) {
+    const h = Number(String(hhmm || '12:00').split(':')[0]);
+    return h < 5;
+  }
+  function leverLabel(p, sleep) {
+    if (p.hour >= 5 && p.hour < 12 && sleep && sleep.asleep && !asleepLate(sleep.asleep)) return '已达成';
+    if (p.hour * 60 + p.minute < 22 * 60 + 30) return '未到点';
+    return '已踩线';
+  }
+  function relTime(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return String(iso);
+    const p = shanghaiParts(d);
+    const now = shanghaiParts(new Date());
+    const hm = clockLabel(p);
+    if (isoOf(p) === isoOf(now)) return '今天 ' + hm;
+    const y = new Date(Date.now() - 86400000);
+    if (isoOf(p) === isoOf(shanghaiParts(y))) return '昨天 ' + hm;
+    const days = Math.round((Date.now() - d.getTime()) / 86400000);
+    if (days > 1 && days < 21) return days + ' 天前';
+    return p.month + '月' + p.day + '日';
   }
   function isSessionDone() {
     if (state.sessionDone == null) return !!(data.health && data.health.today && data.health.today.done);
@@ -312,75 +351,61 @@
 
   function renderToday() {
     const p = shanghaiParts(new Date());
-    const bed = bedtime(p);
-    const items = top3();
-    const focus = items.length ? items.map(function (item, i) {
-      return '<button type="button" class="focus' + (item.done ? ' done' : '') + '" data-go="' + item.tab + '">' +
-        '<span class="idx">' + (i + 1) + '</span><span class="grow"><small>' + esc(item.kicker) + '</small>' +
-        '<strong>' + esc(item.title) + '</strong><em>' + esc(item.meta) + '</em></span>' +
-        (item.done ? '<span class="tick">完成</span>' : '') + '</button>';
-    }).join('') : '<p class="card-copy">今天还没有排进三件事。</p>';
-    const allDone = items.length > 0 && items.every(function (i) { return i.done; });
-    const bots = arr(data.bots && data.bots.bots);
-    const chips = bots.length ? bots.map(function (bot) {
-      const live = botLive(bot);
-      return '<button type="button" class="chip-bot" data-go="bots"><i class="dot ' + dotClass(live.state) + '"></i><strong>' +
-        esc(bot.name) + '</strong><span>' + esc(live.status) + '</span></button>';
-    }).join('') : '<p class="card-copy">机器人状态还没到。</p>';
-    const grams = proteinGrams();
-    const protein = data.health && data.health.protein;
-    const w = weightStats();
-    const latest = arr(data.feishu && data.feishu.deliveries)[0];
-    const glances = [
-      ['learn', '学习', (data.learning && data.learning.today && data.learning.today.learn) || '今日任务未到',
-        data.learning ? ((isLearnDone() ? '已完成 · ' : '') + (data.learning.today.minutes || 0) + ' 分钟') : '等待早报'],
-      ['health', '健康', (data.health && data.health.today && data.health.today.title) || '今日训练未到',
-        protein ? ('蛋白 ' + grams + ' / ' + protein.low + '–' + protein.high + (w ? ' · 晨重 ' + signed(w.day, 1) : '')) : '等待素问'],
-      ['feishu', '飞书', latest ? latest.title : '还没有新交付', latest ? whenLabel(latest.time) : '打开飞书看正文'],
-      ['decide', '拍板', openDecisions().length ? openDecisions().length + ' 件等你点头' : '没有待拍板',
-        openDecisions()[0] ? openDecisions()[0].ask : '主清单是空的']
-    ].map(function (g) {
-      return '<button type="button" class="glance glass" data-go="' + g[0] + '"><small>' + esc(g[1]) + '</small><strong>' +
-        esc(g[2]) + '</strong><span>' + esc(g[3]) + '</span></button>';
-    }).join('');
-    return head('今日', greet(p.hour) + '，君', '零点前入睡。下面三件事，和三个机器人的状态。') +
-      '<div class="today">' +
-      '<section class="hero glass" id="bedHero" data-tone="' + bed.tone + '">' +
-      '<div class="hero-main"><p class="eyebrow">入睡提醒</p><div class="hero-target">00:00</div>' +
-      '<p class="hero-copy" id="bedCopy">' + esc(bed.copy) + '</p></div>' +
-      '<div class="hero-side"><div class="hero-count" id="bedClock">' + esc(bed.clock) + '</div>' +
-      '<div class="hero-label" id="bedLabel">' + esc(bed.label) + '</div></div></section>' +
-      '<section class="glass"><p class="card-kicker">今天的三件事</p><div class="focus-list">' + focus + '</div>' +
-      (allDone ? '<p class="footnote">这三件都有着落。</p>' : '') + '</section>' +
-      '<section class="glass"><p class="card-kicker">机器人</p><div class="bot-row">' + chips + '</div></section>' +
-      '<div class="glances">' + glances + '</div></div>';
+    const sleep = data.health && data.health.sleep;
+    const label = leverLabel(p, sleep);
+    const dot = label === '已达成' ? 'done' : label === '已踩线' ? 'line' : 'wait';
+    const night = sleep && sleep.asleep ? '<p class="lever-half">昨夜 ' + esc(sleep.asleep) + ' 入睡 · ' + esc(sleep.hours) + ' 小时</p>' : '';
+    const items = arr(data.todos && data.todos.top3).slice(0, 3);
+    const lines = items.length ? items.map(function (item) {
+      const on = isTop3Done(item);
+      return '<button type="button" class="top3-line' + (on ? ' done' : '') + '" data-act="top3" data-id="' + esc(item.id) + '" aria-pressed="' + (on ? 'true' : 'false') + '">' +
+        '<span class="box"></span><strong>' + esc(short12(item.text)) + '</strong></button>';
+    }).join('') : '<p class="card-copy">今天还没定 Top3</p>';
+    const decs = openDecisions().slice(0, 2);
+    const decide = decs.length ? '<section class="glass"><p class="card-kicker">待拍板</p><div class="stack">' + decs.map(function (t) {
+      const opts = arr(t.options).slice(0, 2);
+      const buttons = (opts.length ? opts : ['就这样', '以后再说']).map(function (opt, i) {
+        return '<button type="button" class="btn' + (i === 0 ? ' btn-primary' : '') + '" data-act="decision" data-id="' + esc(t.id) + '" data-res="' + esc(opt) + '">' + esc(opt) + '</button>';
+      }).join('');
+      return '<div><p class="card-copy">' + esc(t.ask || t.text) + '</p><div class="actions">' + buttons + '</div></div>';
+    }).join('') + '</div></section>' : '';
+    return '<div class="today">' +
+      '<section class="lever glass wide" id="leverBar"><i class="dot ' + dot + '" id="leverDot"></i><div><p class="lever-copy">今晚杠杆：00:00 前睡着 · 22:30 关屏</p>' +
+      '<p class="lever-half" id="leverState">' + esc(label) + '</p>' + night + '</div></section>' +
+      '<section class="glass"><p class="card-kicker">今日 Top3</p>' + lines + '</section>' +
+      decide + '</div>';
   }
 
   function renderLearn() {
     const L = data.learning;
-    if (!L) return head('学习', '学习', '') + empty('早报还没到', '教学助理会把本周方向和今天的任务写进来。');
-    const bits = String(L.week && L.week.criteria || '').split(/[；;]/).map(function (s) { return s.trim().replace(/。$/, ''); }).filter(Boolean);
+    if (!L) return empty('早报还没到', '教学助理会把本周方向和今天的任务写进来。');
+    const theme = L.week_theme || (L.week && L.week.title) || '';
+    const check = L.week_check || (L.week && L.week.criteria) || '';
+    const what = L.today_what || (L.today && L.today.learn) || '';
+    const howRaw = L.today_how || (L.today && L.today.how) || [];
+    const steps = (Array.isArray(howRaw) ? howRaw : String(howRaw).split(/[。；;]/)).map(function (s) { return String(s).trim(); }).filter(Boolean).slice(0, 3);
+    const minutes = L.today_minutes != null ? L.today_minutes : (L.today && L.today.minutes);
+    const themeNight = L.tonight_theme || (L.tonight && L.tonight.theme) || '';
+    const artifact = L.tonight_artifact || (L.tonight && L.tonight.artifact) || '';
+    const note = L.last_note || (L.progress && L.progress.note) || '';
+    const morning = L.source_morning || (L.source && L.source.morning) || '08:00';
+    const evening = L.source_evening || (L.source && L.source.evening) || '20:30';
     const done = isLearnDone();
-    const target = Number(L.progress && L.progress.target) || 0;
-    return head('学习', (L.week && L.week.title) || '本周方向', L.line || '') +
-      '<div class="learn">' +
-      '<section class="glass wide"><p class="card-kicker">本周大方向</p><h2 class="card-title">' + esc(L.week && L.week.title) + '</h2>' +
-      '<p class="subhead">检查标准</p><ul class="crit">' + bits.map(function (b) {
-        return '<li class="inset">' + esc(b) + '</li>';
-      }).join('') + '</ul></section>' +
-      '<section class="glass"><p class="card-kicker">今日任务 · ' + esc(L.today && L.today.minutes) + ' 分钟</p>' +
-      '<h2 class="card-title">' + esc(L.today && L.today.learn) + '</h2>' +
-      '<p class="subhead">怎么做</p><p class="card-copy">' + esc(L.today && L.today.how) + '</p>' +
-      '<button type="button" class="btn btn-block ' + (done ? '' : 'btn-primary') + '" data-act="learn-done">' +
-      (done ? '今天已完成，撤回' : '标记今天完成') + '</button></section>' +
-      '<section class="glass"><p class="card-kicker">今晚学习块</p><h2 class="card-title">' + esc(L.tonight && L.tonight.theme) + '</h2>' +
-      '<div class="inset" style="padding:12px"><p class="card-kicker">小产物</p><p class="card-copy">' + esc(L.tonight && L.tonight.artifact) + '</p></div>' +
-      '<p class="footnote">晚间 ' + esc(L.source && L.source.evening) + ' 由' + esc(L.source && L.source.name) + '带到。</p></section>' +
-      '<section class="glass wide"><p class="card-kicker">进度</p><div class="metric"><b>' + weekDoneCount() + '</b>' +
-      '<span> / ' + esc(target) + ' 次 · 本周完成</span></div>' +
-      '<p class="subhead">最近一次验收</p><p class="card-copy">' + esc(L.progress && L.progress.note) + '</p></section>' +
-      '</div><p class="footnote">来源 · ' + esc(L.source && L.source.name) + '早报 ' + esc(L.source && L.source.morning) +
-      '、晚间 ' + esc(L.source && L.source.evening) + '。这里只展示，不排课。更新于 ' + esc(whenLabel(L.updated)) + '。</p>';
+    return '<section class="glass learn-card"><div class="bar"><strong>学习</strong><span class="pill ' + (done ? 'ok' : 'wait') + '">' +
+      (done ? '今日已完成' : '今日未完成') + '</span></div>' +
+      '<h2 class="week-theme">' + esc(theme) + '</h2>' +
+      (check ? '<p class="check-gray">' + esc(check) + '</p>' : '') +
+      '<p class="card-kicker">今日</p><p class="card-copy">' + esc(what) + '</p>' +
+      (steps.length ? '<ol class="how">' + steps.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ol>' : '') +
+      '<p class="footnote">预计 ' + esc(minutes) + ' 分钟</p>' +
+      '<button type="button" class="top3-line" data-act="learn-done" aria-pressed="' + (done ? 'true' : 'false') + '"><span class="box"></span><strong>' +
+      (done ? '已完成' : '勾选完成') + '</strong></button>' +
+      '<p class="card-kicker" style="margin-top:16px">今晚</p><p class="card-copy">' + esc(themeNight) + '</p>' +
+      '<p class="artifact"><span>要留下的小产物</span>' + esc(artifact) + '</p>' +
+      (note ? '<button type="button" class="btn fold-btn" data-act="note" aria-expanded="' + (noteOpen ? 'true' : 'false') + '" style="margin-top:12px">' +
+        (noteOpen ? '收起最近验收' : '最近验收') + '</button>' + (noteOpen ? '<p class="card-copy" style="margin-top:8px">' + esc(note) + '</p>' : '') : '') +
+      '<p class="footnote">早报' + esc(String(Number(String(morning).split(':')[0]))) + ':' + esc(String(morning).split(':')[1] || '00') +
+      '·晚间' + esc(evening) + '</p></section>';
   }
 
   function newsItem(it) {
@@ -437,49 +462,52 @@
 
   function renderFeishu() {
     const F = data.feishu;
-    if (!F) return head('飞书', '交付', '') + empty('飞书摘要还没到', '会话、云盘和任务入口会列在这里。正文仍去飞书看。');
-    const agents = arr(F.agents).map(function (a) {
-      return '<article class="glass agent"><div class="agent-top"><i class="dot ' + (a.tone === 'wait' ? 'wait' : a.tone === 'off' ? 'off' : '') + '"></i>' +
-        '<span class="pill dim">' + esc(a.role) + '</span></div><h3>' + esc(a.name) + '</h3><p>' + esc(a.status) + '</p>' +
-        '<div class="actions">' + linkBtn(a.chat, '打开会话', 'btn btn-primary') + '</div></article>';
+    if (!F) return '<p class="card-copy">暂无交付</p>';
+    const agents = arr(F.agents);
+    const files = arr(F.deliveries);
+    const teaching = arr(F.teaching);
+    const entry = F.entry || (agents[0] && agents[0].chat) || '#';
+    if (!files.length && !teaching.length) {
+      return '<section class="glass"><p class="card-copy">暂无交付</p><div class="actions">' + linkBtn(entry, '打开飞书', 'btn btn-primary') + '</div></section>';
+    }
+    const route = '<div class="route-bar glass">' + agents.map(function (a) {
+      const tone = a.tone === 'wait' ? 'wait' : a.tone === 'off' ? 'off' : 'ok';
+      return '<a class="route-chip" href="' + safeUrl(a.chat) + '" target="_blank" rel="noopener noreferrer"><i class="dot ' + tone + '"></i><strong>' +
+        esc(a.name) + '</strong><span>' + esc(a.duty || a.role || '') + '</span><em>进入</em></a>';
+    }).join('') + '</div>';
+    const shown = cloudMore ? files : files.slice(0, 6);
+    const rows = shown.map(function (d) {
+      return '<a class="cloud-row" href="' + safeUrl(d.url) + '" target="_blank" rel="noopener noreferrer"><strong>' + esc(d.title) +
+        '</strong><span class="pill dim">' + esc(d.type) + '</span><span class="who">' + esc(d.agent || '') + '</span><time>' +
+        esc(relTime(d.time)) + '</time><span class="open">打开</span></a>';
     }).join('');
-    const deliveries = arr(F.deliveries).map(function (d) {
-      return '<article class="delivery"><div class="grow"><span class="pill dim">' + esc(d.type) + '</span><strong>' + esc(d.title) +
-        '</strong><span>' + esc(whenLabel(d.time)) + '</span></div>' + linkBtn(d.url, '打开文件', 'btn btn-primary') + '</article>';
-    }).join('');
-    const wall = arr(F.teaching).map(function (it) {
-      return '<article class="wall-item"><div class="grow"><span class="pill ' + toneClass(it.status) + '">' + esc(it.status) +
-        '</span><strong>' + esc(it.name) + '</strong></div>' +
-        linkBtn(it.task, '任务', 'btn') + linkBtn(it.file, '文件', 'btn') + '</article>';
+    const more = files.length > 6 ? '<button type="button" class="btn fold-btn" data-act="cloud">' + (cloudMore ? '收起' : '更多') + '</button>' : '';
+    const wall = teaching.map(function (it) {
+      const tags = arr(it.tags);
+      return '<a class="teach-card glass" href="' + safeUrl(it.file || it.url) + '" target="_blank" rel="noopener noreferrer"><span class="type-bar">' +
+        esc(it.type || '文件') + '</span><h3>' + esc(it.name) + '</h3><div class="pills">' +
+        tags.map(function (tag) { return '<span class="pill ' + toneClass(tag) + '">' + esc(tag) + '</span>'; }).join('') +
+        '</div><footer>' + esc(it.status || '') + ' · ' + esc(it.source || '') + ' · ' + esc(relTime(it.time)) + '</footer></a>';
     }).join('');
     const health = F.healthFile || {};
-    const follows = arr(F.followups).map(function (it) {
-      return '<article class="wall-item" style="align-items:flex-start"><div class="grow"><strong>' + esc(it.topic) +
-        '</strong><span>' + esc(it.summary) + '</span></div>' +
-        linkBtn(it.chat, '会话', 'btn') + linkBtn(it.export, '导出', 'btn') + '</article>';
-    }).join('');
-    const reminders = arr(F.reminders).map(function (it) {
-      return '<article class="remind"><div class="grow"><strong>' + esc(it.title) + '</strong><span>' +
-        esc(dueLabel(it.due) || it.due) + ' · ' + esc(it.agent) + '</span></div>' +
-        linkBtn(it.chat, '回到会话', 'btn') + '</article>';
-    }).join('');
-    const tasks = F.tasks || {};
-    return head('飞书', '交付', '摘要和状态留在这里。要看正文，打开飞书。') +
-      '<div class="feishu"><div class="agents">' + agents + '</div>' +
-      '<div class="split"><section class="glass"><p class="card-kicker">最近交付</p><div class="stack">' +
-      (deliveries || '<p class="card-copy">云盘里还没有新文件。</p>') + '</div></section>' +
-      '<section class="glass"><p class="card-kicker">教学产出</p><div class="stack">' +
-      (wall || '<p class="card-copy">产出墙是空的。</p>') + '</div></section></div>' +
-      '<div class="split"><section class="glass"><p class="card-kicker">健康交付 · 只读</p><h2 class="card-title">' + esc(health.title || '周训练 PDF') + '</h2>' +
-      '<p class="card-copy">' + esc(health.note || '只给文件，不展示处方。') + '</p><div class="actions">' +
-      linkBtn(health.url, '打开 PDF', 'btn btn-primary') + '</div></section>' +
-      '<section class="glass"><p class="card-kicker">决策与杂活</p><div class="stack">' +
-      (follows || '<p class="card-copy">没有要跟的话题。</p>') + '</div></section></div>' +
-      '<div class="split"><section class="glass"><p class="card-kicker">飞书任务</p><p class="card-copy">' + esc(tasks.note || '') + '</p>' +
-      '<div class="actions">' + linkBtn(tasks.url, tasks.label || '打开飞书任务', 'btn btn-primary') + '</div></section>' +
-      '<section class="glass"><p class="card-kicker">提醒</p><div class="stack">' +
-      (reminders || '<p class="card-copy">没有临近的提醒。</p>') + '</div></section></div></div>' +
-      '<p class="footnote">更新于 ' + esc(whenLabel(F.updated)) + '。正文、任务和文件都在飞书里打开。</p>';
+    const pdf = health.url ? '<a class="pdf-strip" href="' + safeUrl(health.url) + '" target="_blank" rel="noopener noreferrer"><span class="pill">只读·健康</span><span>' +
+      esc(health.title || '周训练 PDF') + '</span><span class="open">打开 PDF</span></a>' : '';
+    const follows = arr(F.followups);
+    const followBlock = follows.length ? '<section class="glass"><button type="button" class="btn fold-btn" data-act="fold" data-key="follow">' +
+      (foldFollow ? '收起拾壹跟进' : '拾壹跟进') + '</button>' + (foldFollow ? '<div class="stack" style="margin-top:8px">' + follows.map(function (it) {
+        return '<a class="cloud-row" href="' + safeUrl(it.url || it.chat) + '" target="_blank" rel="noopener noreferrer"><i class="dot ' +
+          (it.tone === 'wait' ? 'wait' : 'ok') + '"></i><strong>' + esc(it.name || it.topic) + '</strong><span class="open">打开</span></a>';
+      }).join('') + '</div>' : '') + '</section>' : '';
+    const taskList = arr(F.tasks);
+    const taskBlock = taskList.length ? '<section class="glass"><button type="button" class="btn fold-btn" data-act="fold" data-key="tasks">' +
+      (foldTasks ? '收起任务' : '任务') + '</button>' + (foldTasks ? '<div class="stack" style="margin-top:8px">' + taskList.map(function (it) {
+        return '<a class="cloud-row" href="' + safeUrl(it.url) + '" target="_blank" rel="noopener noreferrer"><i class="dot ' +
+          (it.tone === 'wait' ? 'wait' : 'ok') + '"></i><strong>' + esc(it.name) + '</strong><span class="open">打开</span></a>';
+      }).join('') + '</div>' : '') + '</section>' : '';
+    return '<div class="feishu">' + route +
+      '<div class="split"><section class="glass"><p class="card-kicker">最近云盘</p>' + (rows || '<p class="card-copy">暂无交付</p>') + more + '</section>' +
+      '<section class="glass"><p class="card-kicker">教学产出</p><div class="teach-grid">' + (wall || '<p class="card-copy">暂无交付</p>') + '</div></section></div>' +
+      pdf + followBlock + taskBlock + '</div>';
   }
 
   function sparkSvg(points) {
@@ -496,9 +524,9 @@
     const area = line + ' L' + xy[xy.length - 1][0].toFixed(1) + ' ' + h + ' L' + xy[0][0].toFixed(1) + ' ' + h + ' Z';
     const last = xy[xy.length - 1];
     return '<svg class="spark" viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="近七日晨重"><defs><linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">' +
-      '<stop offset="0%" stop-color="#a78bfa" stop-opacity="0.45"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/></linearGradient></defs>' +
-      '<path d="' + area + '" fill="url(#sparkFill)"/><path d="' + line + '" fill="none" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
-      '<circle cx="' + last[0].toFixed(1) + '" cy="' + last[1].toFixed(1) + '" r="3.5" fill="#f7f3ff"/></svg>';
+      '<stop offset="0%" stop-color="#047857" stop-opacity="0.35"/><stop offset="100%" stop-color="#047857" stop-opacity="0"/></linearGradient></defs>' +
+      '<path d="' + area + '" fill="url(#sparkFill)"/><path d="' + line + '" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<circle cx="' + last[0].toFixed(1) + '" cy="' + last[1].toFixed(1) + '" r="3.5" fill="#1c1c1e"/></svg>';
   }
   function postureHtml() {
     const w = data.workout;
@@ -517,84 +545,49 @@
   }
   function renderHealth() {
     const H = data.health;
-    if (!H) return head('健康', '这周的身体', '') + empty('健康数据还没到', '周计划、今日签到、晨重和蛋白会排在这里。');
+    if (!H) return empty('健康数据还没到', '周计划、今日训练、晨重、蛋白和睡眠会排在这里。');
     const week = H.week || {};
-    const todayIso = isoOf(shanghaiParts(new Date()));
-    const days = arr(week.days).map(function (d) {
-      const cls = (d.date === todayIso ? ' is-today' : '') + (d.train ? '' : ' is-off');
-      return '<div class="day' + cls + '"><span>' + esc(d.label) + '</span><strong>' + esc(d.name) + '</strong><i>' +
-        (d.football ? '足球' : '') + '</i></div>';
-    }).join('');
     const session = H.today || {};
-    const sessionDone = isSessionDone();
-    const sets = arr(session.exercises).map(function (ex) {
-      return '<div class="set inset"><strong>' + esc(ex.name) + '</strong><span class="nums">' + esc(ex.sets) + ' 组 · ' +
-        esc(ex.reps) + ' 次 · ' + esc(ex.weight) + ' kg · RIR ' + esc(ex.rir) + '</span></div>';
+    const p = shanghaiParts(new Date());
+    const done = isSessionDone();
+    const badges = [];
+    if (done) badges.push('<span class="pill ok">完成</span>');
+    else if (session.hasTraining && p.hour >= 21) badges.push('<span class="pill bad">漏练</span>');
+    if (session.footballEvening) badges.push('<span class="pill wait">足球晚</span>');
+    const allSets = arr(session.exercises);
+    const visible = setsOpen ? allSets : allSets.slice(0, 3);
+    const setHtml = visible.map(function (ex) {
+      return '<div class="set-line"><strong>' + esc(ex.name) + '</strong><span>' + esc(ex.sets) + '×' + esc(ex.reps) + ' · RIR ' + esc(ex.rir) + '</span></div>';
     }).join('');
-    const feel = discomfort();
-    const seg = ['无', '轻微', '需留意'].map(function (v) {
-      return '<button type="button" class="' + (feel === v ? 'active' : '') + '" data-act="discomfort" data-value="' + esc(v) + '">' + esc(v) + '</button>';
-    }).join('');
-    const feelNote = feel === '需留意' ? '已记下。具体哪里不舒服交给素问，这里不判断原因。' :
-      (feel === '轻微' ? '轻微不适已记下。组数仍按今天的记录，不在这里改。' : '今天没有不适。');
-    const badges = (session.hasTraining ? '<span class="pill ok">今日有练</span>' : '<span class="pill dim">今日休息</span>') +
-      (session.footballEvening ? '<span class="pill wait">足球晚训</span>' : '');
+    const moreSets = allSets.length > 3 ? '<button type="button" class="btn fold-btn" data-act="sets">' + (setsOpen ? '收起' : '展开其余') + '</button>' : '';
     const w = weightStats();
-    const weightBlock = w ? '<section class="glass"><p class="card-kicker">晨重 · 七日</p><div class="metric"><b>' + w.last.toFixed(1) +
-      '</b><span>kg · 目标 ' + esc(w.goal) + '</span></div><p class="card-copy">较昨日 <span class="delta ' + deltaClass(w.day) + '">' +
-      signed(w.day, 1) + '</span> · 这七日 <span class="delta ' + deltaClass(w.week) + '">' + signed(w.week, 1) + '</span></p>' +
-      sparkSvg(w.pts) + '<div class="head-row"><span class="meta">' + esc(String(w.pts[0].date).slice(5)) + '</span><span class="meta">' +
-      esc(String(w.pts[w.pts.length - 1].date).slice(5)) + '</span></div>' +
-      '<form class="weight-form" data-weight><input inputmode="decimal" autocomplete="off" aria-label="记下晨重" placeholder="记下晨重"><button class="btn" type="submit">保存</button></form></section>' :
-      empty('晨重还没到', '七天的晨重会画成一条线。');
     const protein = H.protein || { grams: 0, low: 113, high: 156 };
     const grams = proteinGrams();
     const max = Math.max(180, grams, protein.high);
     const bandL = (protein.low / max) * 100;
     const bandW = ((protein.high - protein.low) / max) * 100;
     const fill = Math.min(100, (Math.max(grams, 0) / max) * 100);
-    const zone = grams < protein.low ? 'low' : grams > protein.high ? 'high' : '';
-    const zoneText = grams < protein.low ? '还差 ' + (protein.low - grams) + ' 克到下沿' :
-      grams > protein.high ? '高出上沿 ' + (grams - protein.high) + ' 克' : '落在区间里';
-    const adds = [{ n: 12, l: '鸡蛋 +12' }, { n: 25, l: '蛋白粉 +25' }, { n: 35, l: '正餐 +35' }].map(function (a) {
-      return '<button type="button" class="btn" data-act="protein" data-add="' + a.n + '">' + a.l + '</button>';
-    }).join('');
     const sleep = H.sleep || {};
-    const late = String(sleep.asleep || '').split(':').map(Number)[0] < 5;
+    const late = asleepLate(sleep.asleep);
+    const shortName = { d3: 'D3', creatine: '肌酸', protein: '蛋白粉', magnesium: '镁' };
     const supps = arr(H.supplements).map(function (s) {
       const on = suppOn(s);
       return '<button type="button" class="supp" data-act="supp" data-key="' + esc(s.id) + '" aria-pressed="' + (on ? 'true' : 'false') + '"><span>' +
-        esc(s.name) + '</span><span class="switch' + (on ? ' on' : '') + '" aria-hidden="true"><i></i></span></button>';
+        esc(shortName[s.id] || s.name) + '</span><span class="switch' + (on ? ' on' : '') + '" aria-hidden="true"><i></i></span></button>';
     }).join('');
-    return head('健康', '这周的身体', '计划、今天这场、晨重和蛋白。处方不在这里改。') +
-      '<div class="health">' +
-      '<section class="glass"><div class="head-row"><p class="card-kicker">本周训练</p></div><h2 class="card-title">' + esc(week.title) + '</h2>' +
-      '<p class="card-copy">' + esc(String(week.start || '').slice(5)) + ' – ' + esc(String(week.end || '').slice(5)) + '</p>' +
-      '<div class="pills">' + badges + '</div><div class="days">' + days + '</div><div class="actions">' +
-      linkBtn(week.pdf, week.pdfLabel || '打开周训练 PDF', 'btn btn-primary') + '</div></section>' +
-      '<section class="glass"><p class="card-kicker">今日签到 · ' + esc(String(session.date || '').slice(5)) + '</p>' +
-      '<h2 class="card-title">' + esc(session.title || '今天没有安排') + '</h2>' +
-      '<div class="pills">' + arr(session.parts).map(function (part) { return '<span class="pill dim">' + esc(part) + '</span>'; }).join('') + '</div>' +
-      '<div class="sets">' + (sets || '<p class="card-copy">没有组数记录。</p>') + '</div>' +
-      '<p class="subhead">不适</p><div class="seg" role="group" aria-label="不适">' + seg + '</div>' +
-      '<p class="footnote">' + esc(feelNote) + ' RIR 是这组还能再做几次，只展示。</p>' +
-      '<button type="button" class="btn btn-block ' + (sessionDone ? '' : 'btn-primary') + '" data-act="session-done">' +
-      (sessionDone ? '这场已完成，撤回' : '标记这场完成') + '</button></section>' +
-      weightBlock +
-      '<section class="glass"><p class="card-kicker">蛋白</p><div class="metric"><b>' + grams + '</b><span>克 · 区间 ' +
-      esc(protein.low) + '–' + esc(protein.high) + '</span></div>' +
-      '<div class="track ' + zone + '" aria-hidden="true"><i class="band" style="left:' + bandL.toFixed(1) + '%;width:' + bandW.toFixed(1) +
-      '%"></i><i class="fill" style="width:' + fill.toFixed(1) + '%"></i></div><p class="card-copy">' + esc(zoneText) + '</p>' +
-      '<div class="actions">' + adds + (state.proteinAdd ? '<button type="button" class="btn" data-act="protein-reset">恢复记录</button>' : '') +
-      '</div></section>' +
-      '<section class="glass"><p class="card-kicker">睡眠</p><div class="metric"><b>' + esc(sleep.hours) + '</b><span>小时 · ' +
-      esc(sleep.quality || '') + '</span></div><div class="pills"><span class="pill ' + (late ? 'wait' : 'ok') + '">' +
-      (late ? '晚于零点' : '早于零点') + '</span><span class="pill dim">入睡 ' + esc(sleep.asleep) + '</span></div>' +
-      '<p class="card-copy">入睡线仍是 ' + esc(sleep.target || '00:00') + '。这里只看昨晚，不排今晚的课。</p></section>' +
-      '<section class="glass"><p class="card-kicker">补剂</p><div class="supps">' + supps + '</div></section>' +
-      '<section class="glass wide quote"><p class="card-kicker">本周复盘</p><p class="card-copy">' + esc(H.review || '') + '</p></section>' +
-      postureHtml() +
-      '</div><p class="footnote">数据来自素问周 PDF、Hevy 当日记录，以及晨重、蛋白、睡眠和补剂自报。更新于 ' + esc(whenLabel(H.updated)) + '。</p>';
+    return '<div class="health">' +
+      '<section class="glass plan-bar"><h2>' + esc(week.title || '本周计划') + '</h2>' +
+      linkBtn(week.pdf, '打开 PDF', 'btn btn-primary') + '</section>' +
+      '<section class="glass"><div class="pills">' + badges.join('') + '</div>' +
+      (setHtml || '<p class="card-copy">今天没有优先动作。</p>') + moreSets + '</section>' +
+      '<div class="metric-row">' +
+      '<section class="glass metric-cell"><p class="card-kicker">晨重</p><b class="num">' + (w ? w.last.toFixed(1) : '—') + '</b><span class="unit">kg · 较昨 <span class="delta ' +
+      (w ? deltaClass(w.day) : 'flat') + '">' + (w ? signed(w.day, 1) : '—') + '</span></span></section>' +
+      '<section class="glass metric-cell"><p class="card-kicker">蛋白</p><b class="num">' + grams + '</b><span class="unit">' + esc(protein.low) + '–' + esc(protein.high) + ' g</span>' +
+      '<div class="track" aria-hidden="true"><i class="band" style="left:' + bandL.toFixed(1) + '%;width:' + bandW.toFixed(1) + '%"></i><i class="fill" style="width:' + fill.toFixed(1) + '%"></i></div></section>' +
+      '<section class="glass metric-cell"><p class="card-kicker">睡眠</p><b class="num">' + esc(sleep.hours) + '</b><span class="unit">小时</span>' +
+      (late ? '<span class="fine">偏晚</span>' : '') + '</section></div>' +
+      '<section class="glass"><p class="card-kicker">补剂</p><div class="supp-bar">' + supps + '</div></section></div>';
   }
 
   function decisionCard(t) {
@@ -602,9 +595,9 @@
       (t.priority === 'high' ? '<span class="pill bad">要紧</span>' : '') +
       '<span class="pill dim">' + esc(dueLabel(t.due) || WHO[t.source] || t.source || '') + '</span></div>' +
       '<h2 class="card-title" style="font-size:17px">' + esc(t.text) + '</h2><p class="card-copy">' + esc(t.ask || '') + '</p>' +
-      '<div class="actions"><button type="button" class="btn btn-primary" data-act="decision" data-id="' + esc(t.id) + '" data-res="yes">就这样</button>' +
-      '<button type="button" class="btn" data-act="decision" data-id="' + esc(t.id) + '" data-res="later">以后再说</button>' +
-      '<button type="button" class="btn" data-act="decision" data-id="' + esc(t.id) + '" data-res="no">这次不做</button></div></article>';
+      '<div class="actions">' + (arr(t.options).length ? arr(t.options).slice(0, 2) : ['就这样', '以后再说']).map(function (opt, i) {
+        return '<button type="button" class="btn' + (i === 0 ? ' btn-primary' : '') + '" data-act="decision" data-id="' + esc(t.id) + '" data-res="' + esc(opt === '以后再说' ? 'later' : opt) + '">' + esc(opt) + '</button>';
+      }).join('') + '</div></article>';
   }
   function renderDecide() {
     const open = openDecisions();
@@ -623,7 +616,7 @@
     const doneHtml = done.length ? '<section class="glass" style="margin-top:14px"><p class="card-kicker">已经处理</p><div class="stack">' +
       done.map(function (t) {
         const res = decisionRes(t);
-        const label = res === 'no' ? '这次不做' : res === 'yes' ? '已拍板' : '已完成';
+        const label = res === 'no' ? '这次不做' : res === 'yes' ? '已拍板' : res === 'later' ? '以后再说' : (res || '已完成');
         return '<article class="check" style="cursor:default"><span class="box" style="background:#7c3aed;border-color:transparent"></span><span class="grow"><strong>' +
           esc(t.text) + '</strong><small>' + label + '</small></span><button type="button" class="btn" data-act="undo" data-id="' + esc(t.id) + '">撤回</button></article>';
       }).join('') + '</div></section>' : '';
@@ -772,16 +765,13 @@
     const clock = document.getElementById('topClock');
     if (clock) clock.textContent = clockLabel(p);
     document.querySelectorAll('.js-date').forEach(function (el) { el.textContent = dateLabel(p, el.dataset.compact === '1'); });
-    const hero = document.getElementById('bedHero');
-    if (!hero) return;
-    const bed = bedtime(p);
-    hero.dataset.tone = bed.tone;
-    const c = document.getElementById('bedClock');
-    const l = document.getElementById('bedLabel');
-    const copy = document.getElementById('bedCopy');
-    if (c) c.textContent = bed.clock;
-    if (l) l.textContent = bed.label;
-    if (copy) copy.textContent = bed.copy;
+    const lever = document.getElementById('leverState');
+    const dot = document.getElementById('leverDot');
+    if (lever && data.health) {
+      const label = leverLabel(p, data.health.sleep);
+      lever.textContent = label;
+      if (dot) dot.className = 'dot ' + (label === '已达成' ? 'done' : label === '已踩线' ? 'line' : 'wait');
+    }
   }
   function readTab() {
     const id = (location.hash || '').replace('#', '');
@@ -800,6 +790,19 @@
       const id = act.dataset.id;
       const name = act.dataset.act;
       if (name === 'learn-done') state.learnDone = !isLearnDone();
+      else if (name === 'top3') {
+        const item = arr(data.todos && data.todos.top3).filter(function (x) { return String(x.id) === String(id); })[0];
+        if (item) state.top3Done[id] = !isTop3Done(item);
+      }
+      else if (name === 'note') { noteOpen = !noteOpen; paint(false); return; }
+      else if (name === 'sets') { setsOpen = !setsOpen; paint(false); return; }
+      else if (name === 'cloud') { cloudMore = !cloudMore; paint(false); return; }
+      else if (name === 'fold') {
+        if (act.dataset.key === 'follow') foldFollow = !foldFollow;
+        if (act.dataset.key === 'tasks') foldTasks = !foldTasks;
+        paint(false);
+        return;
+      }
       else if (name === 'session-done') state.sessionDone = !isSessionDone();
       else if (name === 'discomfort') state.discomfort = act.dataset.value;
       else if (name === 'protein') state.proteinAdd = (Number(state.proteinAdd) || 0) + Number(act.dataset.add || 0);

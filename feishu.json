@@ -1,28 +1,26 @@
 {
-  "_plug": "飞书工具人写入摘要。把 jun.feishu.cn/sample-* 换成真实云盘、会话、aily 任务链接。界面只显示标题、时间和状态；深潜一律打开飞书。不要写入处方细目、持仓细账或敏感名单正文。",
-  "updated": "2026-11-02T08:06:00+08:00",
+  "_plug": "飞书工具人写入。agents 只放职责一句和会话链接；deliveries 是云盘文件（5–8 条）；teaching 是产出墙，点 file 打开飞书；healthFile 只留 PDF。不要写处方、聊天全文、豆包或 ZCode。",
+  "updated_at": "2026-11-02T08:06:00+08:00",
+  "entry": "https://jun.feishu.cn/messenger/sample-shiyi",
   "agents": [
     {
       "id": "teacher",
       "name": "教学助理",
-      "role": "学习与生态",
-      "status": "早报已送达",
+      "duty": "早报给方向，晚间给验收",
       "tone": "ok",
       "chat": "https://jun.feishu.cn/messenger/sample-teacher"
     },
     {
       "id": "shiyi",
       "name": "拾壹",
-      "role": "拍板与杂活",
-      "status": "有事项等你",
+      "duty": "收口拍板和杂活",
       "tone": "wait",
       "chat": "https://jun.feishu.cn/messenger/sample-shiyi"
     },
     {
       "id": "suwen",
       "name": "素问",
-      "role": "健康教练",
-      "status": "周计划在线",
+      "duty": "周训练 PDF 与恢复",
       "tone": "ok",
       "chat": "https://jun.feishu.cn/messenger/sample-suwen"
     }
@@ -30,80 +28,118 @@
   "deliveries": [
     {
       "title": "本周小产品方向",
-      "time": "2026-11-02T08:01:00+08:00",
       "type": "文档",
+      "agent": "教学助理",
+      "time": "2026-11-02T08:01:00+08:00",
       "url": "https://jun.feishu.cn/docx/sample-teacher-morning-1102"
     },
     {
-      "title": "昨晚验收：按钮文案退回",
-      "time": "2026-11-01T20:31:00+08:00",
+      "title": "昨晚验收：按钮文案",
       "type": "文档",
+      "agent": "教学助理",
+      "time": "2026-11-01T20:31:00+08:00",
       "url": "https://jun.feishu.cn/docx/sample-teacher-evening-1101"
     },
     {
-      "title": "素问 · 1102-1108 周训练",
-      "time": "2026-11-02T07:40:00+08:00",
-      "type": "PDF",
-      "url": "https://jun.feishu.cn/file/sample-suwen-week-1102"
+      "title": "说明卡空白稿",
+      "type": "文档",
+      "agent": "教学助理",
+      "time": "2026-11-01T20:40:00+08:00",
+      "url": "https://jun.feishu.cn/docx/sample-card-blank"
+    },
+    {
+      "title": "三个例子备忘",
+      "type": "表格",
+      "agent": "教学助理",
+      "time": "2026-10-31T21:05:00+08:00",
+      "url": "https://jun.feishu.cn/sheets/sample-examples"
+    },
+    {
+      "title": "拍板导出：借贷材料",
+      "type": "文档",
+      "agent": "拾壹",
+      "time": "2026-10-30T18:12:00+08:00",
+      "url": "https://jun.feishu.cn/docx/sample-lawsuit-export"
+    },
+    {
+      "title": "本周小页面提纲",
+      "type": "文档",
+      "agent": "教学助理",
+      "time": "2026-10-29T08:10:00+08:00",
+      "url": "https://jun.feishu.cn/docx/sample-page-brief"
+    },
+    {
+      "title": "十月验收存档",
+      "type": "文档",
+      "agent": "拾壹",
+      "time": "2026-10-27T19:20:00+08:00",
+      "url": "https://jun.feishu.cn/docx/sample-oct-archive"
     }
   ],
   "teaching": [
     {
       "name": "同事能打开的小页面",
+      "type": "页面",
+      "tags": ["本周"],
       "status": "进行中",
-      "task": "https://jun.feishu.cn/task/sample-page",
+      "source": "教学助理",
+      "time": "2026-11-02T08:01:00+08:00",
       "file": "https://jun.feishu.cn/docx/sample-page-brief"
     },
     {
       "name": "按钮改成人话",
+      "type": "文案",
+      "tags": ["验收"],
       "status": "已退回",
-      "task": "https://jun.feishu.cn/task/sample-copy",
+      "source": "教学助理",
+      "time": "2026-11-01T20:31:00+08:00",
       "file": "https://jun.feishu.cn/docx/sample-teacher-evening-1101"
     },
     {
       "name": "可转发的说明卡",
+      "type": "卡片",
+      "tags": ["今晚"],
       "status": "未开始",
-      "task": "https://jun.feishu.cn/task/sample-card",
+      "source": "教学助理",
+      "time": "2026-11-01T20:40:00+08:00",
       "file": "https://jun.feishu.cn/docx/sample-card-blank"
+    },
+    {
+      "name": "三个真实例子",
+      "type": "素材",
+      "tags": ["今日"],
+      "status": "进行中",
+      "source": "教学助理",
+      "time": "2026-10-31T21:05:00+08:00",
+      "file": "https://jun.feishu.cn/sheets/sample-examples"
     }
   ],
   "healthFile": {
     "title": "11/02–11/08 周训练",
-    "time": "2026-11-02T07:40:00+08:00",
-    "url": "https://jun.feishu.cn/file/sample-suwen-week-1102",
-    "note": "只读文件。动作和组数不在飞书卡片里展开。"
+    "url": "https://jun.feishu.cn/file/sample-suwen-week-1102"
   },
   "followups": [
     {
-      "topic": "民间借贷材料这周交不交",
-      "summary": "材料已经齐。选择留在拍板页，会话里只放来龙去脉。",
-      "chat": "https://jun.feishu.cn/messenger/sample-shiyi",
-      "export": "https://jun.feishu.cn/docx/sample-lawsuit-export"
+      "name": "民间借贷材料这周交不交",
+      "tone": "wait",
+      "url": "https://jun.feishu.cn/messenger/sample-shiyi"
     },
     {
-      "topic": "今晚只做说明卡，还是先改按钮",
-      "summary": "时间只够一件事。教学助理把两种收尾都写在晚间预告里。",
-      "chat": "https://jun.feishu.cn/messenger/sample-teacher",
-      "export": "https://jun.feishu.cn/docx/sample-teacher-morning-1102"
+      "name": "今晚做说明卡还是改按钮",
+      "tone": "wait",
+      "url": "https://jun.feishu.cn/messenger/sample-teacher"
     }
   ],
-  "tasks": {
-    "label": "打开飞书任务",
-    "url": "https://jun.feishu.cn/aily/sample-tasks",
-    "note": "清单放在飞书。这里只留入口。"
-  },
-  "reminders": [
+  "tasks": [
     {
-      "due": "2026-11-02",
-      "title": "周训练 PDF 看一眼再开练",
-      "agent": "素问",
-      "chat": "https://jun.feishu.cn/messenger/sample-suwen"
+      "name": "飞书任务",
+      "tone": "ok",
+      "url": "https://jun.feishu.cn/aily/sample-tasks"
     },
     {
-      "due": "2026-11-03",
-      "title": "晚间验收说明卡",
-      "agent": "教学助理",
-      "chat": "https://jun.feishu.cn/messenger/sample-teacher"
+      "name": "说明卡验收",
+      "tone": "wait",
+      "url": "https://jun.feishu.cn/task/sample-card"
     }
   ]
 }
