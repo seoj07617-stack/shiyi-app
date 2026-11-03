@@ -62,6 +62,8 @@
   let sportsOpen = false;
   let ossCat = '全部';
   let setsOpen = false;
+  let healthDay = null;
+  let gifZoom = null;
   let noteOpen = false;
   let summaryOpen = {};
   let deferredPrompt = null;
@@ -80,6 +82,18 @@
   }
   function linkBtn(url, label, cls) {
     return '<a class="' + cls + '" href="' + safeUrl(url) + '" target="_blank" rel="noopener noreferrer">' + esc(label) + '</a>';
+  }
+  function gifSrc(p) {
+    const s = String(p || '').trim();
+    if (!s) return '';
+    if (/^https:\/\//i.test(s)) return esc(s);
+    const clean = s.replace(/^\.?\//, '');
+    return /^assets\/gifs\/[A-Za-z0-9._-]+\.gif$/i.test(clean) ? esc(clean) : '';
+  }
+  function gifThumb(src, name, meta) {
+    return '<button type="button" class="gif-thumb" data-act="gif" data-src="' + src + '" data-name="' + esc(name) + '" data-meta="' + meta + '" aria-label="放大看' + esc(name) + '演示图">' +
+      '<img src="' + src + '" alt="' + esc(name) + '动作演示" loading="lazy" decoding="async">' +
+      '<span class="gif-pop" aria-hidden="true"><img src="' + src + '" alt=""></span></button>';
   }
   function signed(n, digits) {
     const v = Number(n);
@@ -630,18 +644,45 @@
     const H = data.health;
     if (!H) return empty('健康数据还没到', '周计划、今日训练、晨重、蛋白和睡眠会排在这里。');
     const week = H.week || {};
-    const session = H.today || {};
     const p = shanghaiParts(new Date());
     const done = isSessionDone();
+    const days = arr(week.days);
+    const todayIso = isoOf(p);
+    const selDate = healthDay && days.some(function (d) { return d.date === healthDay; }) ? healthDay : todayIso;
+    const selRow = days.filter(function (d) { return d.date === selDate; })[0] || null;
+    const fromWeek = !!(selRow && selDate !== todayIso);
+    let session;
+    if (fromWeek) {
+      session = {
+        title: '周' + selRow.label + ' · ' + selRow.name,
+        hasTraining: !!selRow.train,
+        footballEvening: !!selRow.football,
+        parts: [],
+        fromWeek: true,
+        exercises: arr(selRow.exercises)
+      };
+    } else {
+      session = H.today || {};
+    }
     const badges = [];
-    if (done) badges.push('<span class="pill ok">完成</span>');
-    else if (session.hasTraining && p.hour >= 21) badges.push('<span class="pill bad">漏练</span>');
-    if (session.footballEvening) badges.push('<span class="pill wait">足球晚</span>');
+    if (session.fromWeek) {
+      badges.push('<span class="pill dim">' + (session.hasTraining ? '训练日' : '休息日') + '</span>');
+      if (session.footballEvening) badges.push('<span class="pill wait">足球日</span>');
+    } else {
+      if (done) badges.push('<span class="pill ok">完成</span>');
+      else if (session.hasTraining && p.hour >= 21) badges.push('<span class="pill bad">漏练</span>');
+      if (session.footballEvening) badges.push('<span class="pill wait">足球晚</span>');
+    }
     const allSets = arr(session.exercises);
     const visible = setsOpen ? allSets : allSets.slice(0, 3);
     const setHtml = visible.map(function (ex) {
       const load = ex.weight != null && ex.weight !== '' ? ' · ' + esc(ex.weight) + 'kg' : '';
-      return '<div class="set-line"><strong>' + esc(ex.name) + '</strong><span>' + esc(ex.sets) + '×' + esc(ex.reps) + load + ' · RIR ' + esc(ex.rir) + '</span></div>';
+      const rir = ex.rir != null && ex.rir !== '' ? ' · RIR ' + esc(ex.rir) : '';
+      const meta = esc(ex.sets) + '×' + esc(ex.reps) + load + rir;
+      const src = gifSrc(ex.gif);
+      return '<div class="set-line' + (src ? ' has-gif' : '') + '">' +
+        (src ? gifThumb(src, ex.name, meta) : '') +
+        '<div class="set-body"><strong>' + esc(ex.name) + '</strong><span>' + meta + '</span></div></div>';
     }).join('');
     const moreSets = allSets.length > 3 ? '<button type="button" class="btn fold-btn" data-act="sets">' + (setsOpen ? '收起' : '展开其余') + '</button>' : '';
     const w = weightStats();
@@ -659,23 +700,34 @@
       return '<button type="button" class="supp" data-act="supp" data-key="' + esc(s.id) + '" aria-pressed="' + (on ? 'true' : 'false') + '"><span>' +
         esc(shortName[s.id] || s.name) + '</span><span class="switch' + (on ? ' on' : '') + '" aria-hidden="true"><i></i></span></button>';
     }).join('');
-    const todayIso = isoOf(p);
-    const dayStrip = arr(week.days).map(function (d) {
+    const dayStrip = days.map(function (d) {
       const on = d.date === todayIso;
-      return '<div class="day' + (on ? ' is-today' : '') + (d.train ? '' : ' is-off') + '"><span>周' + esc(d.label) + '</span><strong>' +
-        esc(d.name) + '</strong><i>' + (d.football ? '球' : '') + '</i></div>';
+      const sel = d.date === selDate;
+      return '<button type="button" class="day' + (on ? ' is-today' : '') + (sel ? ' is-sel' : '') + (d.train ? '' : ' is-off') +
+        '" data-act="health-day" data-date="' + esc(d.date) + '" aria-pressed="' + (sel ? 'true' : 'false') + '" aria-label="查看周' + esc(d.label) + esc(d.name) + '的动作">' +
+        '<span>周' + esc(d.label) + '</span><strong>' + esc(d.name) + '</strong><i>' + (d.football ? '球' : '') + '</i></button>';
     }).join('');
     const protNote = grams < protein.low ? '距下沿 ' + (protein.low - grams) + ' g' : (grams > protein.high ? '高出区间' : '落在区间里');
     const spark = w ? '<section class="glass"><div class="bar"><p class="card-kicker">近七日晨重</p><span class="pill dim">目标 ' + esc(w.goal) + ' kg</span></div>' +
       sparkSvg(w.pts) + '<p class="footnote">较七日首日 ' + signed(w.week, 1) + ' kg · 昨日 ' + esc(w.pts[w.pts.length - 2].date.slice(5)) + ' ' + w.pts[w.pts.length - 2].kg.toFixed(1) + '</p></section>' : '';
+    const lightbox = gifZoom && gifZoom.src ? (
+      '<div class="gif-zoom" role="dialog" aria-modal="true" aria-label="动作演示">' +
+        '<button type="button" class="gif-zoom-backdrop" data-act="gif-close" aria-label="关闭演示图"></button>' +
+        '<div class="gif-zoom-card glass">' +
+          '<img src="' + esc(gifZoom.src) + '" alt="' + esc(gifZoom.name || '') + '动作演示">' +
+          '<div class="gif-zoom-meta"><strong>' + esc(gifZoom.name || '') + '</strong><span>' + esc(gifZoom.meta || '') + '</span></div>' +
+          '<button type="button" class="btn" data-act="gif-close">关闭</button>' +
+        '</div></div>'
+    ) : '';
     return '<div class="health">' +
       '<section class="glass"><div class="plan-bar"><h2>' + esc(week.title || '本周计划') + '</h2>' +
       linkBtn(week.pdf, '打开 PDF', 'btn btn-primary') + '</div>' +
       (dayStrip ? '<div class="days">' + dayStrip + '</div>' : '') +
+      (days.some(function (d) { return arr(d.exercises).length; }) ? '<p class="footnote">点某一天切换当日动作与演示 GIF。</p>' : '') +
       (H.review ? '<p class="footnote">' + esc(H.review) + '</p>' : '') + '</section>' +
-      '<section class="glass"><div class="bar"><div><p class="card-kicker">今日训练</p><h2 class="card-title">' + esc(session.title || (session.hasTraining ? '训练日' : '休息')) + '</h2></div><div class="pills">' + badges.join('') + '</div></div>' +
+      '<section class="glass"><div class="bar"><div><p class="card-kicker">' + (fromWeek ? '周' + esc(selRow.label) + '计划' : '今日训练') + '</p><h2 class="card-title">' + esc(session.title || (session.hasTraining ? '训练日' : '休息')) + '</h2></div><div class="pills">' + badges.join('') + '</div></div>' +
       (arr(session.parts).length ? '<p class="check-gray">' + esc(arr(session.parts).join(' · ')) + (session.footballEvening ? ' · 足球晚训' : '') + '</p>' : '') +
-      (setHtml || emptyInline('今天没有优先动作', '休息日不排组数。体态维持仍以每日备注为准，不在这里改处方。')) + moreSets + '</section>' +
+      (setHtml || emptyInline(session.hasTraining ? '今天没有优先动作' : '休息日不排组数', '动作以周 PDF 为准，演示 GIF 点小图可放大。不在这里改处方。')) + moreSets + '</section>' +
       '<div class="metric-row">' +
       '<section class="glass metric-cell"><p class="metric-figure"><b class="num">' + (w ? w.last.toFixed(1) : '—') + '</b><span class="unit">kg</span></p><p class="card-kicker">晨重</p>' +
       '<span class="delta ' + (w ? deltaClass(w.day) : 'flat') + '">较昨 ' + (w ? signed(w.day, 1) : '—') + '</span>' +
@@ -685,7 +737,7 @@
       '<span class="fine">' + esc(protein.low) + '–' + esc(protein.high) + ' · ' + protNote + '</span></section>' +
       '<section class="glass metric-cell"><p class="metric-figure"><b class="num">' + esc(sleep.hours) + '</b><span class="unit">小时</span></p><p class="card-kicker">睡眠</p>' +
       '<span class="fine">' + (sleep.asleep ? esc(sleep.asleep) + ' · ' : '') + (late ? '偏晚' : (sleep.quality ? esc(sleep.quality) : '在零点前')) + '</span></section></div>' + spark +
-      '<section class="glass"><p class="card-kicker">补剂</p><div class="supp-bar">' + supps + '</div></section>' + postureHtml() + '</div>';
+      '<section class="glass"><p class="card-kicker">补剂</p><div class="supp-bar">' + supps + '</div></section>' + postureHtml() + lightbox + '</div>';
   }
 
   function decisionCard(t) {
@@ -843,6 +895,7 @@
   }
   function paint(reset) {
     try {
+      if (reset) gifZoom = null;
       if (!built) { renderShell(); built = true; }
       syncChrome();
       const view = document.getElementById('view');
@@ -896,6 +949,19 @@
       }
       else if (name === 'note') { noteOpen = !noteOpen; paint(false); return; }
       else if (name === 'sets') { setsOpen = !setsOpen; paint(false); return; }
+      else if (name === 'gif') {
+        gifZoom = { src: act.dataset.src, name: act.dataset.name, meta: act.dataset.meta };
+        paint(false);
+        return;
+      }
+      else if (name === 'gif-close') { gifZoom = null; paint(false); return; }
+      else if (name === 'health-day') {
+        healthDay = act.dataset.date || null;
+        setsOpen = false;
+        gifZoom = null;
+        paint(false);
+        return;
+      }
       else if (name === 'summary') {
         const key = act.dataset.key;
         summaryOpen[key] = !summaryOpen[key];
@@ -966,6 +1032,9 @@
 
   document.addEventListener('click', onClick);
   document.addEventListener('submit', onSubmit);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && gifZoom) { gifZoom = null; paint(false); }
+  });
   window.addEventListener('hashchange', function () {
     const next = readTab();
     if (next !== tab) { tab = next; paint(true); }
