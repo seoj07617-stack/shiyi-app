@@ -1,11 +1,10 @@
 {
-  "_plug": "素问/健康教练供稿周计划；飞书工具人写入 health.json 与 assets/gifs。week.days[].exercises 与 today.exercises 含可选 gif（assets/gifs/<slug>.gif 或 https）。周日约10:00 Asia/Shanghai 由健康教练更新计划+动图，经飞书工具人落仓。weight/protein/sleep/supplements 仍晨间自报。不要在页面里编辑处方。飞书工作台④健康交付卡仍只读 PDF。",
+  "_plug": "健康教练供稿周计划（week_health_payload）；飞书工具人写入 health.json 与 assets/gifs。week.days[].exercises 与 today.exercises 含可选 gif（assets/gifs/<slug>.gif）。周日约10:00 Asia/Shanghai 由健康教练更新计划+动图，经飞书工具人落仓。weight/protein/sleep/supplements 仍晨间自报。不要在页面里编辑处方。飞书工作台④健康交付卡仍只读 PDF。",
   "updated": "2026-11-03T22:05:00+08:00",
   "week": {
-    "title": "2026-11-02至11-08｜髋力量+灵活 · 肩饱满 · 腰腹有型",
+    "title": "十一月第二周 · 髋力量+灵活 / 肩+核心 · 周一周二晚足球短激活",
     "start": "2026-11-02",
     "end": "2026-11-08",
-    "pdf": "https://jun.feishu.cn/file/sample-suwen-week-1102",
     "pdfLabel": "打开周训练 PDF",
     "days": [
       {
@@ -68,6 +67,7 @@
             "name": "死虫",
             "sets": 2,
             "reps": "8/侧",
+            "rir": 2,
             "gif": "assets/gifs/dead-bug.gif"
           }
         ]
@@ -80,7 +80,7 @@
         "train": true,
         "exercises": [
           {
-            "name": "肩推（坐姿哑铃）",
+            "name": "肩推",
             "sets": 4,
             "reps": "6-10",
             "rir": 2,
@@ -94,23 +94,24 @@
             "gif": "assets/gifs/dumbbell-lateral-raise.gif"
           },
           {
-            "name": "反向飞鸟",
+            "name": "反向飞鸟/面拉",
             "sets": 3,
             "reps": "12-15",
             "rir": 1,
             "gif": "assets/gifs/cable-reverse-fly.gif"
           },
           {
-            "name": "轻推胸（上斜哑铃）",
+            "name": "轻推胸",
             "sets": 3,
             "reps": "10-12",
             "rir": 2,
-            "gif": "assets/gifs/incline-dumbbell-press.gif"
+            "gif": "assets/gifs/barbell-bench-press.gif"
           },
           {
-            "name": "悬垂举腿",
+            "name": "悬垂举腿或卷腹",
             "sets": 3,
             "reps": "10-15",
+            "rir": 2,
             "gif": "assets/gifs/hanging-leg-raise.gif"
           },
           {
@@ -129,7 +130,7 @@
         "train": true,
         "exercises": [
           {
-            "name": "哑铃RDL",
+            "name": "RDL",
             "sets": 4,
             "reps": "6-10",
             "rir": 2,
@@ -157,7 +158,7 @@
             "gif": "assets/gifs/single-leg-bridge.gif"
           },
           {
-            "name": "鸽子式",
+            "name": "鸽子式或90/90",
             "sets": 2,
             "reps": "40秒/侧",
             "gif": "assets/gifs/pigeon-proxy.gif"
@@ -179,7 +180,7 @@
             "gif": "assets/gifs/lat-pulldown.gif"
           },
           {
-            "name": "杠铃划船",
+            "name": "划船",
             "sets": 3,
             "reps": "8-12",
             "rir": 2,
@@ -203,12 +204,14 @@
             "name": "农夫行走",
             "sets": 3,
             "reps": "30-40秒",
+            "rir": 2,
             "gif": "assets/gifs/farmers-walk.gif"
           },
           {
             "name": "死虫",
             "sets": 3,
             "reps": "20-30秒",
+            "rir": 2,
             "gif": "assets/gifs/dead-bug.gif"
           }
         ]
@@ -235,9 +238,10 @@
             "gif": "assets/gifs/side-hip-abduction.gif"
           },
           {
-            "name": "哥萨克深蹲",
+            "name": "哥萨克蹲",
             "sets": 2,
             "reps": "8/侧",
+            "rir": 2,
             "gif": "assets/gifs/cossack-squat.gif"
           },
           {
@@ -263,13 +267,14 @@
         "train": false,
         "exercises": []
       }
-    ]
+    ],
+    "pdf": "https://jun.feishu.cn/file/sample-suwen-week-1102"
   },
   "today": {
     "date": "2026-11-03",
     "hasTraining": true,
     "footballEvening": true,
-    "title": "短肩 · 晚踢球",
+    "title": "短肩 · 晚足球",
     "done": false,
     "parts": [
       "肩",
@@ -295,6 +300,7 @@
         "name": "死虫",
         "sets": 2,
         "reps": "8/侧",
+        "rir": 2,
         "gif": "assets/gifs/dead-bug.gif"
       }
     ]
