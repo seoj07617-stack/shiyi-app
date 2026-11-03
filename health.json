@@ -1,52 +1,343 @@
 {
-  "_plug": "素问与自报写入。week.pdf 用飞书文件链接；today.exercises 用来自 Hevy 的当日记录；weight / protein / sleep / supplements 用来自晨间自报。不要在页面里编辑处方。",
-  "updated": "2026-11-02T07:40:00+08:00",
+  "_plug": "素问/健康教练供稿周计划；飞书工具人写入 health.json 与 assets/gifs。week.days[].exercises 与 today.exercises 含可选 gif（assets/gifs/<slug>.gif 或 https）。周日约10:00 Asia/Shanghai 由健康教练更新计划+动图，经飞书工具人落仓。weight/protein/sleep/supplements 仍晨间自报。不要在页面里编辑处方。飞书工作台④健康交付卡仍只读 PDF。",
+  "updated": "2026-11-03T22:05:00+08:00",
   "week": {
-    "title": "十一月第二周 · 推拉腿，穿插两次足球",
+    "title": "2026-11-02至11-08｜髋力量+灵活 · 肩饱满 · 腰腹有型",
     "start": "2026-11-02",
     "end": "2026-11-08",
     "pdf": "https://jun.feishu.cn/file/sample-suwen-week-1102",
     "pdfLabel": "打开周训练 PDF",
     "days": [
-      { "date": "2026-11-02", "label": "一", "name": "推", "football": true, "train": true },
-      { "date": "2026-11-03", "label": "二", "name": "拉", "football": false, "train": true },
-      { "date": "2026-11-04", "label": "三", "name": "休", "football": false, "train": false },
-      { "date": "2026-11-05", "label": "四", "name": "腿", "football": false, "train": true },
-      { "date": "2026-11-06", "label": "五", "name": "推", "football": false, "train": true },
-      { "date": "2026-11-07", "label": "六", "name": "足球", "football": true, "train": true },
-      { "date": "2026-11-08", "label": "日", "name": "休", "football": false, "train": false }
+      {
+        "date": "2026-11-02",
+        "label": "一",
+        "name": "短髋激活",
+        "football": true,
+        "train": true,
+        "exercises": [
+          {
+            "name": "臀桥",
+            "sets": 2,
+            "reps": "12",
+            "rir": 2,
+            "gif": "assets/gifs/glute-bridge.gif"
+          },
+          {
+            "name": "侧卧蚌式",
+            "sets": 2,
+            "reps": "12/侧",
+            "rir": 2,
+            "gif": "assets/gifs/band-hip-internal-rotation.gif"
+          },
+          {
+            "name": "90/90髋切换",
+            "sets": 2,
+            "reps": "5/侧",
+            "gif": "assets/gifs/hip-90-90-proxy.gif"
+          },
+          {
+            "name": "世界第一拉伸",
+            "sets": 2,
+            "reps": "30秒/侧",
+            "gif": "assets/gifs/world-greatest-stretch.gif"
+          }
+        ]
+      },
+      {
+        "date": "2026-11-03",
+        "label": "二",
+        "name": "短肩",
+        "football": true,
+        "train": true,
+        "exercises": [
+          {
+            "name": "哑铃侧平举",
+            "sets": 3,
+            "reps": "12-15",
+            "rir": 1,
+            "gif": "assets/gifs/dumbbell-lateral-raise.gif"
+          },
+          {
+            "name": "面拉",
+            "sets": 3,
+            "reps": "12-15",
+            "rir": 1,
+            "gif": "assets/gifs/cable-rear-delt-row-rope.gif"
+          },
+          {
+            "name": "死虫",
+            "sets": 2,
+            "reps": "8/侧",
+            "gif": "assets/gifs/dead-bug.gif"
+          }
+        ]
+      },
+      {
+        "date": "2026-11-04",
+        "label": "三",
+        "name": "肩+核心",
+        "football": false,
+        "train": true,
+        "exercises": [
+          {
+            "name": "肩推（坐姿哑铃）",
+            "sets": 4,
+            "reps": "6-10",
+            "rir": 2,
+            "gif": "assets/gifs/dumbbell-seated-shoulder-press.gif"
+          },
+          {
+            "name": "侧平举",
+            "sets": 4,
+            "reps": "12-15",
+            "rir": 1,
+            "gif": "assets/gifs/dumbbell-lateral-raise.gif"
+          },
+          {
+            "name": "反向飞鸟",
+            "sets": 3,
+            "reps": "12-15",
+            "rir": 1,
+            "gif": "assets/gifs/cable-reverse-fly.gif"
+          },
+          {
+            "name": "轻推胸（上斜哑铃）",
+            "sets": 3,
+            "reps": "10-12",
+            "rir": 2,
+            "gif": "assets/gifs/incline-dumbbell-press.gif"
+          },
+          {
+            "name": "悬垂举腿",
+            "sets": 3,
+            "reps": "10-15",
+            "gif": "assets/gifs/hanging-leg-raise.gif"
+          },
+          {
+            "name": "侧平板",
+            "sets": 3,
+            "reps": "20-30秒/侧",
+            "gif": "assets/gifs/side-plank.gif"
+          }
+        ]
+      },
+      {
+        "date": "2026-11-05",
+        "label": "四",
+        "name": "髋/臀",
+        "football": false,
+        "train": true,
+        "exercises": [
+          {
+            "name": "哑铃RDL",
+            "sets": 4,
+            "reps": "6-10",
+            "rir": 2,
+            "gif": "assets/gifs/dumbbell-rdl.gif"
+          },
+          {
+            "name": "反向弓步",
+            "sets": 3,
+            "reps": "8-10/腿",
+            "rir": 2,
+            "gif": "assets/gifs/dumbbell-rear-lunge.gif"
+          },
+          {
+            "name": "髋外展",
+            "sets": 3,
+            "reps": "12-15/侧",
+            "rir": 1,
+            "gif": "assets/gifs/side-hip-abduction.gif"
+          },
+          {
+            "name": "单腿臀桥",
+            "sets": 3,
+            "reps": "10-12/腿",
+            "rir": 2,
+            "gif": "assets/gifs/single-leg-bridge.gif"
+          },
+          {
+            "name": "鸽子式",
+            "sets": 2,
+            "reps": "40秒/侧",
+            "gif": "assets/gifs/pigeon-proxy.gif"
+          }
+        ]
+      },
+      {
+        "date": "2026-11-06",
+        "label": "五",
+        "name": "肩+背+核心",
+        "football": false,
+        "train": true,
+        "exercises": [
+          {
+            "name": "高位下拉",
+            "sets": 4,
+            "reps": "6-10",
+            "rir": 2,
+            "gif": "assets/gifs/lat-pulldown.gif"
+          },
+          {
+            "name": "杠铃划船",
+            "sets": 3,
+            "reps": "8-12",
+            "rir": 2,
+            "gif": "assets/gifs/barbell-bent-over-row.gif"
+          },
+          {
+            "name": "侧平举",
+            "sets": 3,
+            "reps": "12-15",
+            "rir": 1,
+            "gif": "assets/gifs/dumbbell-lateral-raise.gif"
+          },
+          {
+            "name": "哑铃推举",
+            "sets": 3,
+            "reps": "8-12",
+            "rir": 2,
+            "gif": "assets/gifs/dumbbell-shoulder-press.gif"
+          },
+          {
+            "name": "农夫行走",
+            "sets": 3,
+            "reps": "30-40秒",
+            "gif": "assets/gifs/farmers-walk.gif"
+          },
+          {
+            "name": "死虫",
+            "sets": 3,
+            "reps": "20-30秒",
+            "gif": "assets/gifs/dead-bug.gif"
+          }
+        ]
+      },
+      {
+        "date": "2026-11-07",
+        "label": "六",
+        "name": "髋灵活+轻肩",
+        "football": false,
+        "train": true,
+        "exercises": [
+          {
+            "name": "杯式深蹲",
+            "sets": 3,
+            "reps": "8-12",
+            "rir": 2,
+            "gif": "assets/gifs/goblet-squat.gif"
+          },
+          {
+            "name": "髋外展",
+            "sets": 3,
+            "reps": "15",
+            "rir": 1,
+            "gif": "assets/gifs/side-hip-abduction.gif"
+          },
+          {
+            "name": "哥萨克深蹲",
+            "sets": 2,
+            "reps": "8/侧",
+            "gif": "assets/gifs/cossack-squat.gif"
+          },
+          {
+            "name": "面拉",
+            "sets": 3,
+            "reps": "15",
+            "rir": 1,
+            "gif": "assets/gifs/cable-rear-delt-row-rope.gif"
+          },
+          {
+            "name": "平板支撑",
+            "sets": 3,
+            "reps": "30-45秒",
+            "gif": "assets/gifs/front-plank-twist.gif"
+          }
+        ]
+      },
+      {
+        "date": "2026-11-08",
+        "label": "日",
+        "name": "休",
+        "football": false,
+        "train": false,
+        "exercises": []
+      }
     ]
   },
   "today": {
-    "date": "2026-11-02",
+    "date": "2026-11-03",
     "hasTraining": true,
     "footballEvening": true,
-    "title": "推日 · 胸肩三头",
+    "title": "短肩 · 晚踢球",
     "done": false,
-    "parts": ["胸", "肩", "三头"],
+    "parts": [
+      "肩",
+      "核心"
+    ],
     "discomfort": "无",
     "exercises": [
-      { "name": "杠铃卧推", "sets": 4, "reps": "6", "weight": 60, "rir": 2 },
-      { "name": "上斜哑铃卧推", "sets": 3, "reps": "8", "weight": 22, "rir": 2 },
-      { "name": "坐姿哑铃推举", "sets": 3, "reps": "8", "weight": 16, "rir": 2 },
-      { "name": "哑铃侧平举", "sets": 3, "reps": "12", "weight": 8, "rir": 1 },
-      { "name": "绳索下压", "sets": 3, "reps": "12", "weight": 25, "rir": 1 }
+      {
+        "name": "哑铃侧平举",
+        "sets": 3,
+        "reps": "12-15",
+        "rir": 1,
+        "gif": "assets/gifs/dumbbell-lateral-raise.gif"
+      },
+      {
+        "name": "面拉",
+        "sets": 3,
+        "reps": "12-15",
+        "rir": 1,
+        "gif": "assets/gifs/cable-rear-delt-row-rope.gif"
+      },
+      {
+        "name": "死虫",
+        "sets": 2,
+        "reps": "8/侧",
+        "gif": "assets/gifs/dead-bug.gif"
+      }
     ]
   },
   "weight": {
     "unit": "kg",
     "goal": 65,
     "points": [
-      { "date": "2026-10-27", "kg": 71.6 },
-      { "date": "2026-10-28", "kg": 71.4 },
-      { "date": "2026-10-29", "kg": 71.5 },
-      { "date": "2026-10-30", "kg": 71.2 },
-      { "date": "2026-10-31", "kg": 71.0 },
-      { "date": "2026-11-01", "kg": 70.8 },
-      { "date": "2026-11-02", "kg": 70.6 }
+      {
+        "date": "2026-10-27",
+        "kg": 71.6
+      },
+      {
+        "date": "2026-10-28",
+        "kg": 71.4
+      },
+      {
+        "date": "2026-10-29",
+        "kg": 71.5
+      },
+      {
+        "date": "2026-10-30",
+        "kg": 71.2
+      },
+      {
+        "date": "2026-10-31",
+        "kg": 71.0
+      },
+      {
+        "date": "2026-11-01",
+        "kg": 70.8
+      },
+      {
+        "date": "2026-11-02",
+        "kg": 70.6
+      }
     ]
   },
-  "protein": { "grams": 86, "low": 113, "high": 156 },
+  "protein": {
+    "grams": 86,
+    "low": 113,
+    "high": 156
+  },
   "sleep": {
     "date": "2026-11-01",
     "hours": 7.4,
@@ -56,9 +347,25 @@
   },
   "review": "推日两次都留了余力，足球后的次日晨重没有反弹。蛋白有两天贴着区间下沿。",
   "supplements": [
-    { "id": "d3", "name": "维生素 D3", "done": true },
-    { "id": "creatine", "name": "肌酸", "done": true },
-    { "id": "protein", "name": "蛋白粉", "done": false },
-    { "id": "magnesium", "name": "镁", "done": false }
+    {
+      "id": "d3",
+      "name": "维生素 D3",
+      "done": true
+    },
+    {
+      "id": "creatine",
+      "name": "肌酸",
+      "done": true
+    },
+    {
+      "id": "protein",
+      "name": "蛋白粉",
+      "done": false
+    },
+    {
+      "id": "magnesium",
+      "name": "镁",
+      "done": false
+    }
   ]
 }
