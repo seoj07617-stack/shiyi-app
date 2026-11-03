@@ -580,20 +580,64 @@ body[data-shell="desktop"] .metric-cell .num { font-size: 32px; }
 .teach-card {
   display: flex; flex-direction: column; gap: 8px;
   padding: 0 0 12px; overflow: hidden; min-width: 0;
-  text-decoration: none; color: inherit;
+  color: inherit;
 }
 .type-bar { display: block; padding: 6px 12px; font-size: 12px; font-weight: 600; color: var(--violet-ink); background: rgba(139, 117, 184, 0.08); }
 .teach-card h3 { margin: 0 12px; font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.4; }
 .teach-card .pills { margin: 0 12px; }
-.teach-card footer { margin-top: auto; padding: 0 12px; color: var(--ink-2); font-size: 12px; font-weight: 400; }
-.pdf-strip {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 12px; border-radius: 16px;
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(17, 24, 39, 0.06);
-  text-decoration: none; color: var(--body); font-weight: 500;
+.teach-card footer { display: flex; align-items: center; gap: 6px; margin: 0; padding: 0 12px; color: var(--ink-2); font-size: 12px; font-weight: 400; }
+.teach-card footer .src { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.teach-sum-btn {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  margin: 2px 12px 0; padding: 6px 10px;
+  border: 0; border-radius: 12px;
+  background: rgba(17, 24, 39, 0.04); color: var(--ink-2);
+  font-size: 12px; font-weight: 500; text-align: left;
 }
-.pdf-strip .open { margin-left: auto; color: var(--violet-ink); font-weight: 600; }
+.teach-sum-btn i { font-style: normal; color: var(--ink-3); white-space: nowrap; }
+.teach-summary { margin: 0 12px; color: var(--ink-2); font-size: 13px; line-height: 1.65; }
+.teach-actions { display: flex; margin: auto 12px 0; padding-top: 8px; }
+.teach-open {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: 1; padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(139, 117, 184, 0.1);
+  color: var(--violet-ink);
+  font-size: 13px; font-weight: 600;
+  text-decoration: none;
+}
+.teach-open:hover { background: rgba(139, 117, 184, 0.16); }
+.cloud-list { display: block; }
+.health-narrow { max-width: 560px; }
+.health-narrow .card-title { margin-bottom: 6px; }
+.ro-badge {
+  position: absolute; top: 16px; right: 18px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(139, 117, 184, 0.1);
+  color: var(--violet-ink);
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.follow-list, .task-list { display: grid; gap: 8px; }
+.follow-row, .task-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: #F6F6F7;
+  font-size: 14px;
+}
+.follow-row strong, .task-row strong { flex: 1; min-width: 0; font-weight: 600; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.follow-row .dot, .task-row .dot { margin: 0 2px; }
+.follow-row .pill, .task-row .pill { flex: none; }
+.open-link {
+  flex: none;
+  color: var(--violet-ink);
+  font-size: 13px; font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.open-link:hover { text-decoration: underline; }
 .fold-btn { width: 100%; text-align: left; }
 
 .news-grid, .agents, .repo-grid, .bot-grid { display: grid; gap: 14px; }
@@ -790,7 +834,7 @@ body[data-shell="desktop"] .bots { gap: 28px; }
   -webkit-backdrop-filter: none;
   padding: 26px 28px;
 }
-.inset, .focus, .chip-bot, .check, .route-chip, .pdf-strip, .mini-bot, .supp {
+.inset, .focus, .chip-bot, .check, .route-chip, .mini-bot, .supp {
   border-radius: 24px;
   border-color: transparent;
   background: #F6F6F7;
@@ -1015,6 +1059,29 @@ body[data-shell="desktop"] .week-theme { font-size: 42px; }
 .type-bar { background: transparent; color: #B4B4B8; font-weight: 400; letter-spacing: 0.08em; padding-left: 0; }
 .mini-status { color: #A1A1A6; font-weight: 400; }
 .empty .card-kicker { color: #B4B4B8; }
-.stars, .cloud-row .open, .pdf-strip .open, .route-chip em { color: #7A66A6; }
+.stars, .cloud-row .open, .open-link, .teach-open, .route-chip em { color: #7A66A6; }
 .supp[aria-pressed="true"] { background: #F6F6F7; border-color: transparent; }
 .mark { border-radius: 10px; }
+
+/* 飞书一期模块壳：路由条与卡片内容对齐；教学小卡收紧内边距（.glass 浅色段会覆盖回大内边距）。 */
+.route-bar { padding: 2px 0 0; }
+.teach-card { padding: 0 0 14px; }
+.teach-card > .type-bar { padding: 14px 16px 0; }
+.teach-card h3, .teach-card .pills, .teach-card footer { margin-left: 16px; margin-right: 16px; }
+.teach-card .pills { margin-top: 0; margin-bottom: 0; }
+.teach-sum-btn { margin: 4px 16px 0; }
+.teach-summary { margin: 0 16px; }
+.teach-actions { margin: auto 16px 0; padding-top: 10px; }
+.teach-open { background: rgba(139, 117, 184, 0.12); }
+.health-narrow { position: relative; }
+.health-narrow .ro-badge { top: 24px; right: 26px; }
+.follow-row, .task-row { background: #F6F6F7; border: 0; box-shadow: none; }
+
+/* 手机窄屏：路由 chip 允许收缩（flex-basis 固定会把文档撑出横向滚动），云盘行折成两行。 */
+@media (max-width: 860px) {
+  .route-chip { flex: 1 1 160px; min-width: 0; }
+  .route-chip strong { white-space: nowrap; }
+  .cloud-row { flex-wrap: wrap; row-gap: 4px; }
+  .cloud-row strong { flex: 1 1 100%; }
+  .cloud-row .open { margin-left: auto; }
+}

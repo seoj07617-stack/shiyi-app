@@ -1,0 +1,10 @@
+{
+  "name": "shiyi-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "拾壹工作台：飞书工作台一期模块壳。纯静态页，无依赖。",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  }
+}
