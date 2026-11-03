@@ -62,10 +62,8 @@
   let sportsOpen = false;
   let ossCat = '全部';
   let setsOpen = false;
-  let cloudMore = false;
   let noteOpen = false;
-  let foldFollow = false;
-  let foldTasks = false;
+  let summaryOpen = {};
   let deferredPrompt = null;
 
   function esc(s) {
@@ -160,6 +158,12 @@
     const hm = clockLabel(p);
     if (isoOf(p) === isoOf(now)) return '今天 ' + hm;
     return p.month + '月' + p.day + '日 ' + hm;
+  }
+  function dayLabel(iso) {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return String(iso || '');
+    const p = shanghaiParts(d);
+    return p.month + '月' + p.day + '日';
   }
   function dueLabel(due) {
     if (!due) return '';
@@ -536,48 +540,57 @@
     const agents = arr(F.agents);
     const files = arr(F.deliveries);
     const teaching = arr(F.teaching);
+    const health = F.healthFile || {};
     const entry = F.entry || (agents[0] && agents[0].chat) || '#';
-    if (!files.length && !teaching.length) {
-      return '<section class="glass empty"><p class="card-kicker">暂无交付</p><h2>云盘和教学产出都还空</h2><p class="card-copy">机器人交了文件之后，最近六条会出现在云盘，教学卡单独一列。现在只能先打开飞书会话。</p><div class="actions">' + linkBtn(entry, '打开飞书', 'btn btn-primary') + '</div></section>';
+    if (!agents.length || (!files.length && !teaching.length && !health.url)) {
+      return '<section class="glass empty"><p class="card-kicker">一期模块还没到</p><h2>飞书摘要还空着</h2><p class="card-copy">Agent 路由、云盘交付、教学产出、健康 PDF、跟进和任务都会从 feishu.json 排进来。现在只能先打开飞书会话。</p><div class="actions">' + linkBtn(entry, '打开', 'btn btn-primary') + '</div></section>';
     }
-    const route = '<div class="route-bar glass">' + agents.map(function (a) {
+    const route = '<section class="glass wide"><p class="card-kicker">① Agent 路由条</p><div class="route-bar">' + agents.map(function (a) {
       const tone = a.tone === 'wait' ? 'wait' : a.tone === 'off' ? 'off' : 'ok';
       return '<a class="route-chip" href="' + safeUrl(a.chat) + '" target="_blank" rel="noopener noreferrer"><i class="dot ' + tone + '"></i><strong>' +
-        esc(a.name) + '</strong><span>' + esc(a.duty || a.role || '') + '</span><em>进入</em></a>';
-    }).join('') + '</div>';
-    const shown = cloudMore ? files : files.slice(0, 6);
-    const rows = shown.map(function (d) {
+        esc(a.name) + '</strong><span>' + esc(a.duty || a.role || '') + '</span><em>打开</em></a>';
+    }).join('') + '</div></section>';
+    const cloud = '<section class="glass"><p class="card-kicker">② 最近云盘交付</p><div class="cloud-list">' + (files.length ? files.map(function (d) {
       return '<a class="cloud-row" href="' + safeUrl(d.url) + '" target="_blank" rel="noopener noreferrer"><strong>' + esc(d.title) +
         '</strong><span class="pill dim">' + esc(d.type) + '</span><span class="who">' + esc(d.agent || '') + '</span><time>' +
         esc(relTime(d.time)) + '</time><span class="open">打开</span></a>';
-    }).join('');
-    const more = files.length > 6 ? '<button type="button" class="btn fold-btn" data-act="cloud">' + (cloudMore ? '收起' : '更多') + '</button>' : '';
-    const wall = teaching.map(function (it) {
+    }).join('') : emptyInline('云盘是空的', '最近交付会按时间和机器人排成行。')) + '</div></section>';
+    const wall = teaching.map(function (it, i) {
+      const open = !!summaryOpen[i];
       const tags = arr(it.tags);
-      return '<a class="teach-card glass" href="' + safeUrl(it.file || it.url) + '" target="_blank" rel="noopener noreferrer"><span class="type-bar">' +
-        esc(it.type || '文件') + '</span><h3>' + esc(it.name) + '</h3><div class="pills">' +
-        tags.map(function (tag) { return '<span class="pill ' + toneClass(tag) + '">' + esc(tag) + '</span>'; }).join('') +
-        '</div><footer>' + esc(it.status || '') + ' · ' + esc(it.source || '') + ' · ' + esc(relTime(it.time)) + '</footer></a>';
+      return '<article class="teach-card glass"><span class="type-bar">' + esc(it.type || '文件') + '</span>' +
+        '<h3>' + esc(it.name) + '</h3>' +
+        '<div class="pills">' + tags.map(function (tag) { return '<span class="pill dim">' + esc(tag) + '</span>'; }).join('') + '</div>' +
+        '<footer><span class="pill ' + toneClass(it.status) + '">' + esc(it.status || '—') + '</span><span class="src">' + esc(it.source || '') + '</span></footer>' +
+        (it.summary ? '<button type="button" class="teach-sum-btn" data-act="summary" data-key="' + esc(i) + '" aria-expanded="' + (open ? 'true' : 'false') + '">摘要<i>' + (open ? '收起 ▴' : '展开 ▾') + '</i></button>' : '') +
+        (open && it.summary ? '<p class="teach-summary">' + esc(it.summary) + '</p>' : '') +
+        '<div class="teach-actions">' + linkBtn(it.file || it.url, '打开', 'teach-open') + '</div></article>';
     }).join('');
-    const health = F.healthFile || {};
-    const pdf = health.url ? '<a class="pdf-strip" href="' + safeUrl(health.url) + '" target="_blank" rel="noopener noreferrer"><span class="pill">只读·健康</span><span>' +
-      esc(health.title || '周训练 PDF') + '</span><span class="open">打开 PDF</span></a>' : '';
+    const teachWall = '<section class="glass"><p class="card-kicker">③ 教学产出墙</p><div class="teach-grid">' +
+      (wall || emptyInline('还没有教学产出', '说明卡、教案和验收会以卡片出现在这里。')) + '</div></section>';
+    const healthCard = health.url ? '<section class="glass wide health-narrow"><span class="ro-badge">只读·健康</span>' +
+      '<p class="card-kicker">④ 健康交付</p><h2 class="card-title">' + esc(health.title || '周训练 PDF') + '</h2>' +
+      '<div class="pills"><span class="pill">PDF</span>' + (health.delivered ? '<span class="pill dim">交付 ' + esc(dayLabel(health.delivered)) + '</span>' : '') + '</div>' +
+      '<div class="actions">' + linkBtn(health.url, '打开', 'btn btn-primary') + '</div>' +
+      '<p class="footnote">只读展示。处方、组数和重量留在素问的 PDF 里，不在这里展开。</p></section>' : '';
     const follows = arr(F.followups);
-    const followBlock = follows.length ? '<section class="glass"><button type="button" class="btn fold-btn" data-act="fold" data-key="follow">' +
-      (foldFollow ? '收起拾壹跟进' : '拾壹跟进') + '</button>' + (foldFollow ? '<div class="stack" style="margin-top:8px">' + follows.map(function (it) {
-        return '<a class="cloud-row" href="' + safeUrl(it.url || it.chat) + '" target="_blank" rel="noopener noreferrer"><i class="dot ' +
-          (it.tone === 'wait' ? 'wait' : 'ok') + '"></i><strong>' + esc(it.name || it.topic) + '</strong><span class="open">打开</span></a>';
-      }).join('') + '</div>' : '') + '</section>' : '';
+    const followBlock = '<section class="glass"><p class="card-kicker">⑤ 决策 / 杂活跟进 · 拾壹</p><div class="follow-list">' +
+      (follows.length ? follows.map(function (it) {
+        return '<div class="follow-row"><i class="dot ' + (it.tone === 'wait' ? 'wait' : it.tone === 'off' ? 'off' : 'ok') + '"></i><strong>' +
+          esc(it.name || it.topic || '') + '</strong><span class="pill dim">' + esc(it.via || '会话') + '</span>' +
+          linkBtn(it.url || it.chat, '打开', 'open-link') + '</div>';
+      }).join('') : emptyInline('跟进是空的', '拾壹收口的决策和杂活会排在这里。')) + '</div></section>';
     const taskList = arr(F.tasks);
-    const taskBlock = taskList.length ? '<section class="glass"><button type="button" class="btn fold-btn" data-act="fold" data-key="tasks">' +
-      (foldTasks ? '收起任务' : '任务') + '</button>' + (foldTasks ? '<div class="stack" style="margin-top:8px">' + taskList.map(function (it) {
-        return '<a class="cloud-row" href="' + safeUrl(it.url) + '" target="_blank" rel="noopener noreferrer"><i class="dot ' +
-          (it.tone === 'wait' ? 'wait' : 'ok') + '"></i><strong>' + esc(it.name) + '</strong><span class="open">打开</span></a>';
-      }).join('') + '</div>' : '') + '</section>' : '';
+    const taskBlock = '<section class="glass"><p class="card-kicker">⑥ 飞书任务面板</p><div class="task-list">' +
+      (taskList.length ? taskList.map(function (it) {
+        return '<div class="task-row"><i class="dot ' + (it.tone === 'wait' ? 'wait' : it.tone === 'off' ? 'off' : 'ok') + '"></i><strong>' +
+          esc(it.name || '') + '</strong><span class="pill dim">' + esc(it.agent || '') + '</span>' +
+          linkBtn(it.url, '打开', 'open-link') + '</div>';
+      }).join('') : emptyInline('没有任务', '飞书任务会排在这里，只看和打开，不做拖拽。')) + '</div></section>';
     return '<div class="feishu">' + route +
-      '<div class="split"><section class="glass"><p class="card-kicker">最近云盘</p>' + (rows || emptyInline('云盘是空的', '最近交付会按时间和机器人排成行。')) + more + '</section>' +
-      '<section class="glass"><p class="card-kicker">教学产出</p><div class="teach-grid">' + (wall || emptyInline('还没有教学产出', '说明卡、教案和验收会以卡片出现在这里。')) + '</div></section></div>' +
-      pdf + followBlock + taskBlock + '</div>';
+      '<div class="split">' + cloud + teachWall + '</div>' +
+      healthCard +
+      '<div class="split">' + followBlock + taskBlock + '</div></div>';
   }
 
   function sparkSvg(points) {
@@ -883,10 +896,9 @@
       }
       else if (name === 'note') { noteOpen = !noteOpen; paint(false); return; }
       else if (name === 'sets') { setsOpen = !setsOpen; paint(false); return; }
-      else if (name === 'cloud') { cloudMore = !cloudMore; paint(false); return; }
-      else if (name === 'fold') {
-        if (act.dataset.key === 'follow') foldFollow = !foldFollow;
-        if (act.dataset.key === 'tasks') foldTasks = !foldTasks;
+      else if (name === 'summary') {
+        const key = act.dataset.key;
+        summaryOpen[key] = !summaryOpen[key];
         paint(false);
         return;
       }

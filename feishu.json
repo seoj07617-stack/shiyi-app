@@ -1,5 +1,5 @@
 {
-  "_plug": "飞书工具人写入。agents 只放职责一句和会话链接；deliveries 是云盘文件（5–8 条）；teaching 是产出墙，点 file 打开飞书；healthFile 只留 PDF。不要写处方、聊天全文、豆包或 ZCode。",
+  "_plug": "飞书工具人写入。agents：名、职责一句、状态、会话链接；deliveries：云盘文件 5–8 条；teaching：产出墙卡片，file 是打开链接，summary 是摘要（页面默认收起）；healthFile：周次标题、PDF 链接、交付日，不写处方；followups：拾壹跟进，via 填「会话」或「任务链」；tasks：任务名、所属 agent、任务页链接。不写聊天全文、豆包或 ZCode。",
   "updated_at": "2026-11-02T08:06:00+08:00",
   "entry": "https://jun.feishu.cn/messenger/sample-shiyi",
   "agents": [
@@ -80,64 +80,69 @@
     {
       "name": "同事能打开的小页面",
       "type": "页面",
-      "tags": ["本周"],
+      "tags": ["三年级", "说明文"],
       "status": "进行中",
       "source": "教学助理",
-      "time": "2026-11-02T08:01:00+08:00",
+      "summary": "先做一页能在手机上打开的说明页，字号、按钮和转发卡片都按同事的使用场景来。",
       "file": "https://jun.feishu.cn/docx/sample-page-brief"
     },
     {
       "name": "按钮改成人话",
       "type": "文案",
-      "tags": ["验收"],
+      "tags": ["四年级", "验收"],
       "status": "已退回",
       "source": "教学助理",
-      "time": "2026-11-01T20:31:00+08:00",
+      "summary": "把「提交」改成「发给老师」，昨晚验收退回了一次，原因是副标题还是术语。",
       "file": "https://jun.feishu.cn/docx/sample-teacher-evening-1101"
     },
     {
       "name": "可转发的说明卡",
       "type": "卡片",
-      "tags": ["今晚"],
+      "tags": ["家长会", "转发"],
       "status": "未开始",
       "source": "教学助理",
-      "time": "2026-11-01T20:40:00+08:00",
+      "summary": "空白稿已经放进云盘，今晚照着三个真实例子填一版，先给两位家长试读。",
       "file": "https://jun.feishu.cn/docx/sample-card-blank"
     },
     {
       "name": "三个真实例子",
       "type": "素材",
-      "tags": ["今日"],
+      "tags": ["例题", "素材"],
       "status": "进行中",
       "source": "教学助理",
-      "time": "2026-10-31T21:05:00+08:00",
+      "summary": "表格里收了三条例子，都是从上周作业里挑出来的，直接抄进说明卡就能用。",
       "file": "https://jun.feishu.cn/sheets/sample-examples"
     }
   ],
   "healthFile": {
     "title": "11/02–11/08 周训练",
+    "delivered": "2026-11-02T07:30:00+08:00",
     "url": "https://jun.feishu.cn/file/sample-suwen-week-1102"
   },
   "followups": [
     {
       "name": "民间借贷材料这周交不交",
       "tone": "wait",
+      "via": "会话",
       "url": "https://jun.feishu.cn/messenger/sample-shiyi"
     },
     {
       "name": "今晚做说明卡还是改按钮",
       "tone": "wait",
-      "url": "https://jun.feishu.cn/messenger/sample-teacher"
+      "via": "任务链",
+      "url": "https://jun.feishu.cn/task/sample-card"
     }
   ],
   "tasks": [
     {
       "name": "飞书任务",
+      "agent": "拾壹",
       "tone": "ok",
       "url": "https://jun.feishu.cn/aily/sample-tasks"
     },
     {
       "name": "说明卡验收",
+      "agent": "教学助理",
       "tone": "wait",
       "url": "https://jun.feishu.cn/task/sample-card"
     }
