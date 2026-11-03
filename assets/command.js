@@ -90,10 +90,60 @@
     const clean = s.replace(/^\.?\//, '');
     return /^assets\/gifs\/[A-Za-z0-9._-]+\.gif$/i.test(clean) ? esc(clean) : '';
   }
+  let gifIo = null;
+  function disconnectGifIo() {
+    if (gifIo) { gifIo.disconnect(); gifIo = null; }
+  }
   function gifThumb(src, name, meta) {
+    /* data-src only: hydrate when in view so we never decode every day's GIFs at once */
     return '<button type="button" class="gif-thumb" data-act="gif" data-src="' + src + '" data-name="' + esc(name) + '" data-meta="' + meta + '" aria-label="放大看' + esc(name) + '演示图">' +
-      '<img src="' + src + '" alt="' + esc(name) + '动作演示" loading="lazy" decoding="async">' +
-      '<span class="gif-pop" aria-hidden="true"><img src="' + src + '" alt=""></span></button>';
+      '<span class="gif-ph" aria-hidden="true"></span>' +
+      '<img data-src="' + src + '" alt="' + esc(name) + '动作演示" decoding="async" width="56" height="56"></button>';
+  }
+  function hydrateLazyGifs(root) {
+    disconnectGifIo();
+    const scope = root || document;
+    const imgs = scope.querySelectorAll('img[data-src]');
+    if (!imgs.length) return;
+    function arm(img) {
+      const src = img.getAttribute('data-src');
+      if (!src) return;
+      img.src = src;
+      img.removeAttribute('data-src');
+      const thumb = img.closest('.gif-thumb');
+      if (thumb) thumb.classList.add('is-loaded');
+    }
+    if (!('IntersectionObserver' in window)) {
+      imgs.forEach(arm);
+      return;
+    }
+    gifIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        arm(entry.target);
+        gifIo.unobserve(entry.target);
+      });
+    }, { root: null, rootMargin: '96px 0px', threshold: 0.01 });
+    imgs.forEach(function (img) { gifIo.observe(img); });
+  }
+  function lightboxHtml(z) {
+    if (!z || !z.src) return '';
+    return '<div class="gif-zoom" role="dialog" aria-modal="true" aria-label="动作演示">' +
+      '<button type="button" class="gif-zoom-backdrop" data-act="gif-close" aria-label="关闭演示图"></button>' +
+      '<div class="gif-zoom-card glass">' +
+      '<img src="' + esc(z.src) + '" alt="' + esc(z.name || '') + '动作演示" decoding="async">' +
+      '<div class="gif-zoom-meta"><strong>' + esc(z.name || '') + '</strong><span>' + esc(z.meta || '') + '</span></div>' +
+      '<button type="button" class="btn" data-act="gif-close">关闭</button>' +
+      '</div></div>';
+  }
+  function mountLightbox() {
+    let root = document.getElementById('gifZoomRoot');
+    if (!root) {
+      root = document.createElement('div');
+      root.id = 'gifZoomRoot';
+      document.body.appendChild(root);
+    }
+    root.innerHTML = lightboxHtml(gifZoom);
   }
   function signed(n, digits) {
     const v = Number(n);
@@ -710,15 +760,6 @@
     const protNote = grams < protein.low ? '距下沿 ' + (protein.low - grams) + ' g' : (grams > protein.high ? '高出区间' : '落在区间里');
     const spark = w ? '<section class="glass"><div class="bar"><p class="card-kicker">近七日晨重</p><span class="pill dim">目标 ' + esc(w.goal) + ' kg</span></div>' +
       sparkSvg(w.pts) + '<p class="footnote">较七日首日 ' + signed(w.week, 1) + ' kg · 昨日 ' + esc(w.pts[w.pts.length - 2].date.slice(5)) + ' ' + w.pts[w.pts.length - 2].kg.toFixed(1) + '</p></section>' : '';
-    const lightbox = gifZoom && gifZoom.src ? (
-      '<div class="gif-zoom" role="dialog" aria-modal="true" aria-label="动作演示">' +
-        '<button type="button" class="gif-zoom-backdrop" data-act="gif-close" aria-label="关闭演示图"></button>' +
-        '<div class="gif-zoom-card glass">' +
-          '<img src="' + esc(gifZoom.src) + '" alt="' + esc(gifZoom.name || '') + '动作演示">' +
-          '<div class="gif-zoom-meta"><strong>' + esc(gifZoom.name || '') + '</strong><span>' + esc(gifZoom.meta || '') + '</span></div>' +
-          '<button type="button" class="btn" data-act="gif-close">关闭</button>' +
-        '</div></div>'
-    ) : '';
     return '<div class="health">' +
       '<section class="glass"><div class="plan-bar"><h2>' + esc(week.title || '本周计划') + '</h2>' +
       linkBtn(week.pdf, '打开 PDF', 'btn btn-primary') + '</div>' +
@@ -737,7 +778,7 @@
       '<span class="fine">' + esc(protein.low) + '–' + esc(protein.high) + ' · ' + protNote + '</span></section>' +
       '<section class="glass metric-cell"><p class="metric-figure"><b class="num">' + esc(sleep.hours) + '</b><span class="unit">小时</span></p><p class="card-kicker">睡眠</p>' +
       '<span class="fine">' + (sleep.asleep ? esc(sleep.asleep) + ' · ' : '') + (late ? '偏晚' : (sleep.quality ? esc(sleep.quality) : '在零点前')) + '</span></section></div>' + spark +
-      '<section class="glass"><p class="card-kicker">补剂</p><div class="supp-bar">' + supps + '</div></section>' + postureHtml() + lightbox + '</div>';
+      '<section class="glass"><p class="card-kicker">补剂</p><div class="supp-bar">' + supps + '</div></section>' + postureHtml() + '</div>';
   }
 
   function decisionCard(t) {
@@ -893,13 +934,28 @@
     const install = document.getElementById('installBtn');
     if (install) install.hidden = !deferredPrompt;
   }
+  let paintQueued = false;
+  let paintReset = false;
   function paint(reset) {
+    if (reset) paintReset = true;
+    if (paintQueued) return;
+    paintQueued = true;
+    requestAnimationFrame(function () {
+      paintQueued = false;
+      const doReset = paintReset;
+      paintReset = false;
+      paintNow(doReset);
+    });
+  }
+  function paintNow(reset) {
     try {
-      if (reset) gifZoom = null;
+      if (reset) { gifZoom = null; mountLightbox(); }
       if (!built) { renderShell(); built = true; }
       syncChrome();
       const view = document.getElementById('view');
+      disconnectGifIo();
       view.innerHTML = renderTab();
+      hydrateLazyGifs(view);
       document.title = (TITLES[tab] || '拾壹') + ' · 拾壹工作台';
       if (reset) {
         const stage = document.getElementById('stage');
@@ -951,14 +1007,14 @@
       else if (name === 'sets') { setsOpen = !setsOpen; paint(false); return; }
       else if (name === 'gif') {
         gifZoom = { src: act.dataset.src, name: act.dataset.name, meta: act.dataset.meta };
-        paint(false);
+        mountLightbox();
         return;
       }
-      else if (name === 'gif-close') { gifZoom = null; paint(false); return; }
+      else if (name === 'gif-close') { gifZoom = null; mountLightbox(); return; }
       else if (name === 'health-day') {
         healthDay = act.dataset.date || null;
         setsOpen = false;
-        gifZoom = null;
+        if (gifZoom) { gifZoom = null; mountLightbox(); }
         paint(false);
         return;
       }
@@ -1033,7 +1089,7 @@
   document.addEventListener('click', onClick);
   document.addEventListener('submit', onSubmit);
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && gifZoom) { gifZoom = null; paint(false); }
+    if (e.key === 'Escape' && gifZoom) { gifZoom = null; mountLightbox(); }
   });
   window.addEventListener('hashchange', function () {
     const next = readTab();
