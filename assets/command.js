@@ -711,7 +711,19 @@
         fromWeek: true,
         exercises: arr(selRow.exercises)
       };
+    } else if (selRow && selDate === todayIso) {
+      // Calendar today is inside this week: prefer week.days over a stale H.today snapshot.
+      const snap = H.today || {};
+      session = {
+        title: selRow.name + (selRow.football ? ' · 晚足球' : ''),
+        hasTraining: !!selRow.train,
+        footballEvening: !!selRow.football,
+        parts: snap.parts || [],
+        discomfort: snap.discomfort || '无',
+        exercises: arr(selRow.exercises)
+      };
     } else {
+      // Before week.start (or outside week): keep payload / snapshot today.
       session = H.today || {};
     }
     const badges = [];

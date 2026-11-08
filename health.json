@@ -1,56 +1,70 @@
 {
   "_plug": "健康教练供稿周计划（week_health_payload）；飞书工具人写入 health.json 与 assets/gifs。week.days[].exercises 与 today.exercises 含可选 gif（assets/gifs/<slug>.gif）。周日约10:00 Asia/Shanghai 由健康教练更新计划+动图，经飞书工具人落仓。weight/protein/sleep/supplements 仍晨间自报。不要在页面里编辑处方。飞书工作台④健康交付卡仍只读 PDF。",
-  "updated": "2026-11-03T22:05:00+08:00",
+  "updated": "2026-11-08T10:25:00+08:00",
   "week": {
-    "title": "十一月第二周 · 髋力量+灵活 / 肩+核心 · 周一周二晚足球短激活",
-    "start": "2026-11-02",
-    "end": "2026-11-08",
+    "title": "十一月第三周 · 髋力量+灵活 / 肩+核心 · 本周一周二不踢球（中等课时）",
+    "start": "2026-11-09",
+    "end": "2026-11-15",
     "pdfLabel": "打开周训练 PDF",
     "days": [
       {
-        "date": "2026-11-02",
+        "date": "2026-11-09",
         "label": "一",
-        "name": "短髋激活",
-        "football": true,
+        "name": "髋（中等）",
+        "football": false,
         "train": true,
         "exercises": [
           {
-            "name": "臀桥",
+            "name": "世界第一拉伸",
             "sets": 2,
+            "reps": "30秒/侧",
+            "gif": "assets/gifs/world-greatest-stretch.gif"
+          },
+          {
+            "name": "臀桥",
+            "sets": 3,
             "reps": "12",
             "rir": 2,
             "gif": "assets/gifs/glute-bridge.gif"
           },
           {
-            "name": "侧卧蚌式",
-            "sets": 2,
-            "reps": "12/侧",
+            "name": "髋外展",
+            "sets": 3,
+            "reps": "12-15/侧",
+            "rir": 1,
+            "gif": "assets/gifs/side-hip-abduction.gif"
+          },
+          {
+            "name": "单腿臀桥",
+            "sets": 3,
+            "reps": "10-12/腿",
             "rir": 2,
-            "gif": "assets/gifs/band-hip-internal-rotation.gif"
+            "gif": "assets/gifs/single-leg-bridge.gif"
           },
           {
             "name": "90/90髋切换",
             "sets": 2,
             "reps": "5/侧",
             "gif": "assets/gifs/hip-90-90-proxy.gif"
-          },
-          {
-            "name": "世界第一拉伸",
-            "sets": 2,
-            "reps": "30秒/侧",
-            "gif": "assets/gifs/world-greatest-stretch.gif"
           }
         ]
       },
       {
-        "date": "2026-11-03",
+        "date": "2026-11-10",
         "label": "二",
-        "name": "短肩",
-        "football": true,
+        "name": "肩（中等）",
+        "football": false,
         "train": true,
         "exercises": [
           {
-            "name": "哑铃侧平举",
+            "name": "肩推",
+            "sets": 3,
+            "reps": "8-12",
+            "rir": 2,
+            "gif": "assets/gifs/dumbbell-seated-shoulder-press.gif"
+          },
+          {
+            "name": "侧平举",
             "sets": 3,
             "reps": "12-15",
             "rir": 1,
@@ -73,12 +87,18 @@
         ]
       },
       {
-        "date": "2026-11-04",
+        "date": "2026-11-11",
         "label": "三",
         "name": "肩+核心",
         "football": false,
         "train": true,
         "exercises": [
+          {
+            "name": "世界第一拉伸",
+            "sets": 2,
+            "reps": "30秒/侧",
+            "gif": "assets/gifs/world-greatest-stretch.gif"
+          },
           {
             "name": "肩推",
             "sets": 4,
@@ -123,12 +143,18 @@
         ]
       },
       {
-        "date": "2026-11-05",
+        "date": "2026-11-12",
         "label": "四",
         "name": "髋/臀",
         "football": false,
         "train": true,
         "exercises": [
+          {
+            "name": "世界第一拉伸",
+            "sets": 2,
+            "reps": "30秒/侧",
+            "gif": "assets/gifs/world-greatest-stretch.gif"
+          },
           {
             "name": "RDL",
             "sets": 4,
@@ -166,12 +192,18 @@
         ]
       },
       {
-        "date": "2026-11-06",
+        "date": "2026-11-13",
         "label": "五",
         "name": "肩+背+核心",
         "football": false,
         "train": true,
         "exercises": [
+          {
+            "name": "世界第一拉伸",
+            "sets": 2,
+            "reps": "30秒/侧",
+            "gif": "assets/gifs/world-greatest-stretch.gif"
+          },
           {
             "name": "高位下拉",
             "sets": 4,
@@ -217,12 +249,18 @@
         ]
       },
       {
-        "date": "2026-11-07",
+        "date": "2026-11-14",
         "label": "六",
         "name": "髋灵活+轻肩",
         "football": false,
         "train": true,
         "exercises": [
+          {
+            "name": "世界第一拉伸",
+            "sets": 2,
+            "reps": "30秒/侧",
+            "gif": "assets/gifs/world-greatest-stretch.gif"
+          },
           {
             "name": "杯式深蹲",
             "sets": 3,
@@ -260,50 +298,24 @@
         ]
       },
       {
-        "date": "2026-11-08",
+        "date": "2026-11-15",
         "label": "日",
         "name": "休",
         "football": false,
         "train": false,
         "exercises": []
       }
-    ],
-    "pdf": "https://jun.feishu.cn/file/sample-suwen-week-1102"
+    ]
   },
   "today": {
-    "date": "2026-11-03",
-    "hasTraining": true,
-    "footballEvening": true,
-    "title": "短肩 · 晚足球",
+    "date": "2026-11-08",
+    "hasTraining": false,
+    "footballEvening": false,
+    "title": "休",
     "done": false,
-    "parts": [
-      "肩",
-      "核心"
-    ],
+    "parts": [],
     "discomfort": "无",
-    "exercises": [
-      {
-        "name": "哑铃侧平举",
-        "sets": 3,
-        "reps": "12-15",
-        "rir": 1,
-        "gif": "assets/gifs/dumbbell-lateral-raise.gif"
-      },
-      {
-        "name": "面拉",
-        "sets": 3,
-        "reps": "12-15",
-        "rir": 1,
-        "gif": "assets/gifs/cable-rear-delt-row-rope.gif"
-      },
-      {
-        "name": "死虫",
-        "sets": 2,
-        "reps": "8/侧",
-        "rir": 2,
-        "gif": "assets/gifs/dead-bug.gif"
-      }
-    ]
+    "exercises": []
   },
   "weight": {
     "unit": "kg",
@@ -348,10 +360,10 @@
     "date": "2026-11-01",
     "hours": 7.4,
     "asleep": "23:36",
-    "target": "00:00",
+    "target": "00:30",
     "quality": "稳"
   },
-  "review": "推日两次都留了余力，足球后的次日晨重没有反弹。蛋白有两天贴着区间下沿。",
+  "review": "君于 11-08 确认本周一（11-09）、周二（11-10）晚上不踢球，这两天已从短激活改为中等时长髋课/肩课，周三至周六不变。上周（11-02至11-08）无训练签到或 Hevy 记录，完成组数未知，故本周维持原动作与容量，用双倍进阶（次数打满再加一点重量），不加组。体重最新为 11-02 体脂秤约 70.8kg（健康页序列止于 11-02 的 70.6kg）；11-08 米家秤离线未取到新值。蛋白快照 86g 低于 113–156g 目标，睡眠快照停在 11-01。O 型腿仍只做髋臀功能训练，不承诺改骨形。",
   "supplements": [
     {
       "id": "d3",
