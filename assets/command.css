@@ -676,6 +676,44 @@ body[data-shell="desktop"] .split { grid-template-columns: 1fr 1fr; align-items:
 .repo-top, .agent-top { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
 .stars { margin-left: auto; color: var(--violet-ink); }
 .repo footer { display: flex; justify-content: space-between; margin-top: 12px; color: var(--ink-2); font-size: 12px; }
+
+/* 开源 · 精选：手动收进来的项目，放在每日热榜上方 */
+.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 2px 10px; }
+.sec-title { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; color: var(--ink-2); }
+.sec-meta { margin: 0; font-size: 12px; color: var(--ink-3); white-space: nowrap; }
+.picks { margin-bottom: 22px; }
+.pick-grid { display: grid; gap: 14px; }
+body[data-shell="desktop"] .pick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
+.pick { display: flex; flex-direction: column; height: 100%; min-width: 0; }
+.pick-top { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.pick-when { margin-left: auto; font-size: 12px; color: var(--ink-3); }
+.pick-name { margin: 0; font-size: 18px; color: var(--ink); }
+.pick-line { margin: 8px 0 0; font-size: 14px; line-height: 1.7; color: var(--ink-2); }
+.pick-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.pick-btn {
+  display: inline-flex; align-items: center;
+  padding: 7px 12px; border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  background: #fff; color: var(--body);
+  font-size: 13px; font-weight: 600; text-decoration: none;
+  transition: border-color .16s var(--ease), background .16s var(--ease);
+}
+.pick-btn.primary { border-color: var(--line-strong); background: var(--accent-soft); color: var(--violet-ink); }
+.pick-btn:hover { border-color: rgba(139, 117, 184, 0.34); background: rgba(139, 117, 184, 0.10); }
+.pick-note { margin: 10px 0 0; font-size: 12px; line-height: 1.55; color: var(--ink-3); }
+.pick-more { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0; font-size: 12px; color: var(--ink-3); }
+.pick-more a { color: var(--ink-2); text-decoration: none; }
+.pick-more a:hover { color: var(--violet-ink); text-decoration: underline; }
+.pick-more .dot { color: var(--ink-3); }
+.pick-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  margin-top: auto; padding-top: 14px;
+  font-size: 12px; color: var(--ink-3);
+}
+.pick-foot span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pick-foot a { color: var(--ink-3); text-decoration: none; }
+.pick-foot a:hover { color: var(--violet-ink); text-decoration: underline; }
+
 .chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
 .chip {
   border-radius: 999px; border: 1px solid rgba(15, 23, 42, 0.08);

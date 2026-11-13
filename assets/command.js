@@ -3,6 +3,7 @@
    learning.json         教学助理 08:00 / 20:30。只展示，不排课。
    news.json             生态简报 A/B/C，体育 D 默认折叠。market 只给纪律备忘。
    github_trending.json  scripts/update_trending.py 每天覆盖，字段不要改。
+   github_picks.json     开源页精选。手动追加，不被每日脚本覆盖。
    feishu.json           飞书摘要。链接换成真实云盘 / 会话 / aily。
    health.json           素问周 PDF、Hevy 当日、晨重蛋白睡眠补剂自报。
    workout.json          体态备注只读，不在这里改处方。
@@ -18,6 +19,7 @@
   const FILES = {
     news: 'news.json',
     trending: 'github_trending.json',
+    picks: 'github_picks.json',
     insights: 'ai-insights.json',
     workout: 'workout.json',
     todos: 'todos.json',
@@ -573,29 +575,63 @@
       '</section><p class="footnote">更新于 ' + esc(whenLabel(data.news.updated)) + '。长文不在这里展开。</p>';
   }
 
+  function pickCard(it) {
+    const demo = /^https:\/\//i.test(String(it.demo || '')) ? it.demo : '';
+    const repo = /^https:\/\//i.test(String(it.url || '')) ? it.url : '';
+    const source = /^https:\/\//i.test(String(it.source_url || '')) ? it.source_url : '';
+    const more = arr(it.more).filter(function (m) { return m && /^https:\/\//i.test(String(m.url || '')); });
+    const actions = [];
+    if (demo) actions.push('<a class="pick-btn primary" href="' + safeUrl(demo) + '" target="_blank" rel="noopener noreferrer">' + esc(it.demo_label || '试用') + '</a>');
+    if (repo) actions.push('<a class="pick-btn" href="' + safeUrl(repo) + '" target="_blank" rel="noopener noreferrer">' + esc(it.repo_label || '仓库') + '</a>');
+    return '<article class="pick glass">' +
+      '<div class="pick-top"><span class="pill">' + esc(it.cat || '好玩') + '</span>' +
+      (it.added ? '<span class="pick-when">' + esc(dayLabel(it.added)) + '</span>' : '') + '</div>' +
+      '<h3 class="pick-name">' + esc(it.name || it.repo || '') + '</h3>' +
+      '<p class="pick-line">' + esc(it.line || '') + '</p>' +
+      (actions.length ? '<div class="pick-actions">' + actions.join('') + '</div>' : '') +
+      (it.demo_note ? '<p class="pick-note">' + esc(it.demo_note) + '</p>' : '') +
+      (more.length ? '<p class="pick-more">' + more.map(function (m) {
+        return '<a href="' + safeUrl(m.url) + '" target="_blank" rel="noopener noreferrer">' + esc(m.label || '打开') + '</a>';
+      }).join('<span class="dot">·</span>') + '</p>' : '') +
+      '<footer class="pick-foot"><span>' + (source ? '来自 <a href="' + safeUrl(source) + '" target="_blank" rel="noopener noreferrer">X</a>' : '') + '</span>' +
+      '<span>' + esc(it.repo || '') + '</span></footer></article>';
+  }
+
   function renderOss() {
     const pack = data.trending;
     const items = arr(pack && pack.items);
-    if (!items.length) return head('开源', 'GitHub 今日', '') + empty('热榜还没到', '每日脚本会写回 github_trending.json。');
-    const cats = ['全部', 'AI', '工具', '好玩'];
-    const chips = cats.map(function (cat) {
-      const n = cat === '全部' ? items.length : items.filter(function (it) { return it.cat === cat; }).length;
-      return '<button type="button" class="chip' + (ossCat === cat ? ' active' : '') + '" data-act="oss" data-cat="' + esc(cat) + '">' +
-        esc(cat) + ' ' + n + '</button>';
-    }).join('');
-    const shown = ossCat === '全部' ? items : items.filter(function (it) { return it.cat === ossCat; });
-    const cards = shown.map(function (it) {
-      const blurb = (it.desc_cn || it.desc || '').trim();
-      return '<a class="repo glass" href="' + safeUrl(it.url) + '" target="_blank" rel="noopener noreferrer">' +
-        '<div class="repo-top"><span class="pill">' + esc(it.cat) + '</span><span class="pill dim">' + esc(it.tag) + '</span>' +
-        '<span class="stars">' + esc(it.today) + '</span></div><h3>' + esc(it.name) + '</h3><p>' + esc(blurb) + '</p>' +
-        '<footer><span>' + esc(it.lang || it.repo) + '</span><span>' + esc(it.stars) + ' 星</span></footer></a>';
-    }).join('');
-    const mode = pack.mode === 'degraded' ? '中文点评暂时降级，先看仓库本身。' : '中文点评已附上。';
-    return head('开源', 'GitHub 今日', mode) +
-      '<div class="chips" role="tablist">' + chips + '</div>' +
-      '<div class="repo-grid" style="margin-top:14px">' + (cards || emptyInline('这个分类今天没有', '热榜还在，只是这一类今天没有仓库。换到「全部」能看到当天完整的一页。')) + '</div>' +
-      '<p class="footnote">更新于 ' + esc(whenLabel(pack.updated)) + '。点进仓库再看细节。</p>';
+    const picks = arr(data.picks && data.picks.items);
+    if (!items.length && !picks.length) return head('开源', '可跟的项目', '') + empty('热榜还没到', '每日脚本会写回 github_trending.json。');
+    const picksBlock = picks.length ? '<section class="picks"><div class="sec-head"><p class="sec-title">精选 · 看见就收进来的</p>' +
+      '<p class="sec-meta">' + picks.length + ' 个</p></div>' +
+      '<div class="pick-grid">' + picks.map(pickCard).join('') + '</div></section>' : '';
+    let board;
+    if (!items.length) {
+      board = '<section class="trending"><div class="sec-head"><p class="sec-title">每日热榜 · GitHub Trending</p></div>' +
+        emptyInline('热榜还没到', '每日脚本会写回 github_trending.json，精选不受影响。') + '</section>';
+    } else {
+      const cats = ['全部', 'AI', '工具', '好玩'];
+      const chips = cats.map(function (cat) {
+        const n = cat === '全部' ? items.length : items.filter(function (it) { return it.cat === cat; }).length;
+        return '<button type="button" class="chip' + (ossCat === cat ? ' active' : '') + '" data-act="oss" data-cat="' + esc(cat) + '">' +
+          esc(cat) + ' ' + n + '</button>';
+      }).join('');
+      const shown = ossCat === '全部' ? items : items.filter(function (it) { return it.cat === ossCat; });
+      const cards = shown.map(function (it) {
+        const blurb = (it.desc_cn || it.desc || '').trim();
+        return '<a class="repo glass" href="' + safeUrl(it.url) + '" target="_blank" rel="noopener noreferrer">' +
+          '<div class="repo-top"><span class="pill">' + esc(it.cat) + '</span><span class="pill dim">' + esc(it.tag) + '</span>' +
+          '<span class="stars">' + esc(it.today) + '</span></div><h3>' + esc(it.name) + '</h3><p>' + esc(blurb) + '</p>' +
+          '<footer><span>' + esc(it.lang || it.repo) + '</span><span>' + esc(it.stars) + ' 星</span></footer></a>';
+      }).join('');
+      const mode = pack.mode === 'degraded' ? '中文点评暂时降级，先看仓库本身。' : '中文点评已附上。';
+      board = '<section class="trending"><div class="sec-head"><p class="sec-title">每日热榜 · GitHub Trending</p>' +
+        '<p class="sec-meta">' + esc(whenLabel(pack.updated)) + '</p></div>' +
+        '<div class="chips" role="tablist">' + chips + '</div>' +
+        '<div class="repo-grid" style="margin-top:14px">' + (cards || emptyInline('这个分类今天没有', '热榜还在，只是这一类今天没有仓库。换到「全部」能看到当天完整的一页。')) + '</div>' +
+        '<p class="footnote">' + mode + '点进仓库再看细节。</p></section>';
+    }
+    return head('开源', '可跟的项目', picks.length ? '看见就收进来的先放上面，下面仍是每日 GitHub 热榜。' : '每日 GitHub 热榜，点进仓库再看细节。') + picksBlock + board;
   }
 
   function renderFeishu() {

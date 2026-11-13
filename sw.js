@@ -1,5 +1,5 @@
 /* 拾壹工作台 Service Worker v16.4 — 离线缓存 */
-const SW_VERSION = 'shiyi-v16.5.0';
+const SW_VERSION = 'shiyi-v16.5.1';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -13,6 +13,7 @@ const CORE_ASSETS = [
   './bots.json',
   './news.json',
   './github_trending.json',
+  './github_picks.json',
   './ai-insights.json',
   './workout.json',
   './todos.json',

@@ -1,0 +1,74 @@
+{
+  "updated": "2026-11-13T10:23:45+08:00",
+  "items": [
+    {
+      "id": "caffeine-day",
+      "repo": "charles-postiaux/caffeine-day",
+      "name": "Caffeine Day",
+      "line": "把今天喝过的咖啡拖到时间轴上，能看到睡前身体里还剩多少因。",
+      "cat": "好玩",
+      "demo": "https://baobun.studio/demo/caffeine",
+      "demo_label": "试用",
+      "demo_note": "",
+      "url": "https://github.com/charles-postiaux/caffeine-day",
+      "repo_label": "仓库",
+      "repo_note": "",
+      "more": [],
+      "source_url": "https://x.com/PostiauxCharles/status/2120127532951584906",
+      "added": "2026-11-13"
+    },
+    {
+      "id": "swarm",
+      "repo": "DhvanilPatel/swarm-cursors",
+      "name": "Swarm",
+      "line": "打开网页，一群光标会把页面当场搭起来；不用装插件。",
+      "cat": "好玩",
+      "demo": "https://califa.github.io/swarm-site/",
+      "demo_label": "试用 · 原作",
+      "demo_note": "",
+      "url": "https://github.com/DhvanilPatel/swarm-cursors",
+      "repo_label": "仓库 · 开源插件版",
+      "repo_note": "",
+      "more": [
+        { "label": "原作仓库", "url": "https://github.com/califa/swarm-site" }
+      ],
+      "source_url": "https://x.com/liyue_ai/status/2119375780421779749",
+      "added": "2026-11-13"
+    },
+    {
+      "id": "livliv-player",
+      "repo": "livliv-dev/player",
+      "name": "LivLiv Player",
+      "line": "打开网页，角色会跟着你的脸和声音动；播放器本身不调 AI，面捕在本地。",
+      "cat": "工具",
+      "demo": "https://livliv-dev.github.io/player/example/demo.html",
+      "demo_label": "试用 · 单角色",
+      "demo_note": "试用要摄像头或麦克风权限。",
+      "url": "https://github.com/livliv-dev/player",
+      "repo_label": "仓库",
+      "repo_note": "",
+      "more": [
+        { "label": "角色目录", "url": "https://livliv-dev.github.io/player/" },
+        { "label": "精选角色", "url": "https://livliv-dev.github.io/player/example/gallery.html" }
+      ],
+      "source_url": "https://x.com/yeko_L/status/2118290984924856713",
+      "added": "2026-11-13"
+    },
+    {
+      "id": "decimen-optical-transfer",
+      "repo": "bashalarmistalt/decimen-optical-transfer",
+      "name": "Decimen Optical Transfer",
+      "line": "不用网、不用线，一块屏幕对着另一台设备的摄像头，用连续闪动的二维码把文件传过去。",
+      "cat": "工具",
+      "demo": "https://decimen.app/",
+      "demo_label": "试用 · 需两台设备",
+      "demo_note": "传输不加密，屏幕上的内容任何摄像头都能看到。",
+      "url": "https://github.com/bashalarmistalt/decimen-optical-transfer",
+      "repo_label": "仓库",
+      "repo_note": "",
+      "more": [],
+      "source_url": "https://x.com/BrianRoemmele/status/2084479949000601734",
+      "added": "2026-11-13"
+    }
+  ]
+}
