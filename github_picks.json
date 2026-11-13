@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-13T12:18:55+08:00",
+  "updated": "2026-11-13T14:24:29+08:00",
   "items": [
+    {
+      "id": "portals",
+      "name": "Portals",
+      "repo": "emollick/ai-portals",
+      "url": "https://github.com/emollick/ai-portals",
+      "line": "打开网页就会自己飞，穿过一扇门进入下一个世界；471 个世界都是代码在浏览器里当场画出来的。",
+      "cat": "好玩",
+      "demo": "https://portals-endless-worlds.netlify.app/",
+      "demo_label": "试用",
+      "demo_note": "比较吃显卡，手机或旧电脑会降画质。按 S 开声音。",
+      "source_url": "https://github.com/emollick/ai-portals",
+      "added": "2026-11-13"
+    },
     {
       "id": "jiangshan-map",
       "name": "江山时序",
