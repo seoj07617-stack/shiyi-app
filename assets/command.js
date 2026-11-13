@@ -952,7 +952,7 @@
       '<div class="top-meta">' + dateBit + shellLink + memoTop +
       '<button type="button" class="quiet-link" id="installBtn" data-act="install" hidden>安装</button></div></header>' +
       '<div id="view"></div>' +
-      '<footer class="attrib"><span>视觉语言借鉴 Caffeine Day（MIT）· Charles Postiaux / Baobun Studio</span>' +
+      '<footer class="attrib"><span>视觉语言借鉴 Caffeine Day（MIT）· Charles Postiaux / Baobun Studio · 工作台现为浅色玻璃适配</span>' +
       '<a href="https://github.com/charles-postiaux/caffeine-day" target="_blank" rel="noopener noreferrer">caffeine-day</a></footer></main></div>' +
       '<nav class="dock" aria-label="模块">' + dock + '</nav>';
   }
