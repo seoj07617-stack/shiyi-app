@@ -1,5 +1,5 @@
-/* 拾壹工作台 Service Worker v17.0 — 离线缓存（Caffeine 视觉） */
-const SW_VERSION = 'shiyi-v17.0.0';
+/* 拾壹工作台 Service Worker v18.0 — 离线缓存（浅色毛玻璃视觉） */
+const SW_VERSION = 'shiyi-v18.0.0';
 const CORE_ASSETS = [
   './',
   './index.html',

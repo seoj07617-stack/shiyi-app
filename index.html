@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#070707">
-<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#F4F2EE">
+<meta name="color-scheme" content="light">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="description" content="拾壹工作台：君的机器人与飞书指挥台。今日、健康、学习、新闻、开源、飞书、拍板、Bot 地图。">
 <title>拾壹工作台</title>
 <link rel="manifest" href="manifest.json">
@@ -15,14 +15,15 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="stylesheet" href="assets/command.css">
 <style>
-/* 视觉以 assets/command.css 为准：近黑画布 #070707、等宽小字、发丝内描边、胶囊控件，强调色只用 #3B82F6。
-   不再引入 Google Fonts（Inter / Newsreader / Noto Serif），字体走系统等宽与苹方 / Noto Sans SC 回退。 */
-html, body { background: #070707; }
+/* 视觉以 assets/command.css 为准：浅暖灰画布 #F4F2EE、卡片内里近 #FFFEFB 的半透明毛玻璃、
+   等宽小字、发丝描边、胶囊控件，强调色只用 #3B82F6。近黑底已纠正。
+   不引入 Google Fonts（Inter / Newsreader / Noto Serif 都不加），字体走系统等宽与苹方 / Noto Sans SC 回退。 */
+html, body { background: #F4F2EE; color-scheme: light; }
 </style>
 </head>
 <body data-shell="mobile">
 <div id="app"><div class="boot">正在打开工作台…</div></div>
-<noscript><p style="padding:24px;color:#D4D4D4">需要打开 JavaScript 才能使用拾壹工作台。</p></noscript>
+<noscript><p style="padding:24px;color:#1A1A1A">需要打开 JavaScript 才能使用拾壹工作台。</p></noscript>
 <script src="assets/command.js"></script>
 </body>
 </html>
