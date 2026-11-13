@@ -705,11 +705,9 @@
     });
     const line = xy.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ');
     const area = line + ' L' + xy[xy.length - 1][0].toFixed(1) + ' ' + h + ' L' + xy[0][0].toFixed(1) + ' ' + h + ' Z';
-    const last = xy[xy.length - 1];
-    return '<svg class="spark" viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="近七日晨重"><defs><linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">' +
-      '<stop offset="0%" stop-color="#1C1C1E" stop-opacity="0.35"/><stop offset="100%" stop-color="#1C1C1E" stop-opacity="0"/></linearGradient></defs>' +
-      '<path d="' + area + '" fill="url(#sparkFill)"/><path d="' + line + '" fill="none" stroke="#1C1C1E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
-      '<circle cx="' + last[0].toFixed(1) + '" cy="' + last[1].toFixed(1) + '" r="3.5" fill="#1c1c1e"/></svg>';
+    return '<svg class="spark" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" role="img" aria-label="近七日晨重"><defs><linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="#3B82F6" stop-opacity="0.35"/><stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/></linearGradient></defs>' +
+      '<path d="' + area + '" fill="url(#sparkFill)"/><path d="' + line + '" fill="none" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   }
   function postureHtml() {
     const w = data.workout;
@@ -856,7 +854,7 @@
       done.map(function (t) {
         const res = decisionRes(t);
         const label = res === 'no' ? '这次不做' : res === 'yes' ? '已拍板' : res === 'later' ? '以后再说' : (res || '已完成');
-        return '<article class="check" style="cursor:default"><span class="box" style="background:#8B75B8;border-color:transparent"></span><span class="grow"><strong>' +
+        return '<article class="check" style="cursor:default"><span class="box is-checked"></span><span class="grow"><strong>' +
           esc(t.text) + '</strong><small>' + label + '</small></span><button type="button" class="btn" data-act="undo" data-id="' + esc(t.id) + '">撤回</button></article>';
       }).join('') + '</div></section>' : '';
     return head('拍板', '要你点头的事', '先拍板，再勾掉今天的待办。投资条目不在这张主清单里。') +
@@ -936,6 +934,8 @@
     const rail = NAV.map(function (n) { return navButton('rail', n[0], n[1], n[2]); }).join('');
     const dock = NAV.map(function (n) { return navButton('dock', n[0], n[1], n[2]); }).join('');
     const mark = '<span class="mark" role="img" aria-label="拾壹"><span class="mark-glyph" aria-hidden="true">壹</span></span>';
+    /* 顶栏左侧：标志 + 站名，像 Caffeine 左上角的标题与状态行 */
+    const brand = '<div class="brand">' + mark + '<span class="brand-copy"><strong>拾壹工作台</strong><em>SHIYI · WORKBENCH</em></span></div>';
     const dateBit = '<span class="top-date js-date"' + (shell === 'mobile' ? ' data-compact="1"' : '') + '></span>';
     const shellLink = shell === 'desktop'
       ? '<a class="quiet-link" id="shellLink" href="index.html">手机版</a>'
@@ -948,10 +948,12 @@
       '<div class="shell"><aside class="rail">' +
       '<div class="rail-label">模块</div>' + rail +
       '<div class="rail-foot"><button type="button" data-memo><span class="js-memo-label">纪律备忘</span><small>投资已降权</small></button></div></aside>' +
-      '<main class="stage" id="stage"><header class="topbar">' + mark +
+      '<main class="stage" id="stage"><header class="topbar">' + brand +
       '<div class="top-meta">' + dateBit + shellLink + memoTop +
       '<button type="button" class="quiet-link" id="installBtn" data-act="install" hidden>安装</button></div></header>' +
-      '<div id="view"></div></main></div>' +
+      '<div id="view"></div>' +
+      '<footer class="attrib"><span>视觉语言借鉴 Caffeine Day（MIT）· Charles Postiaux / Baobun Studio</span>' +
+      '<a href="https://github.com/charles-postiaux/caffeine-day" target="_blank" rel="noopener noreferrer">caffeine-day</a></footer></main></div>' +
       '<nav class="dock" aria-label="模块">' + dock + '</nav>';
   }
   function syncChrome() {

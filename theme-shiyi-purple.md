@@ -15,3 +15,5 @@
 
 - 标签与正文：`Inter`, `PingFang SC`, `Noto Sans SC`。标签 11px、字重 400、字距拉开。
 - 大数字与标题：`Newsreader`, `Noto Serif SC`。今日数字约 52–60px，健康数字约 64–76px。
+
+> 2026-11-13 起视觉改以 Caffeine Day 语言为准（近黑 #070707、等宽小字、发丝内描边、100px 胶囊，唯一强调色 #3B82F6）。本文的浅色与紫色令牌已停用，仅作历史记录。实际令牌以 assets/command.css 的 :root 为准。
