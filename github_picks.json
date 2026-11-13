@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-13T10:23:45+08:00",
+  "updated": "2026-11-13T12:18:55+08:00",
   "items": [
+    {
+      "id": "jiangshan-map",
+      "name": "江山时序",
+      "repo": "DeanChensj/jiangshan-map",
+      "url": "https://github.com/DeanChensj/jiangshan-map",
+      "line": "拖动时间轴，从战国看到今天的疆域怎么变；点一座城，能看它两千多年换过哪些名字。",
+      "cat": "好玩",
+      "demo": "https://deanchen.me/jiangshan-map/",
+      "demo_label": "试用",
+      "demo_note": "",
+      "source_url": "https://github.com/DeanChensj/jiangshan-map",
+      "added": "2026-11-13"
+    },
     {
       "id": "caffeine-day",
       "repo": "charles-postiaux/caffeine-day",
