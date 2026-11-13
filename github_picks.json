@@ -1,6 +1,23 @@
 {
-  "updated": "2026-11-13T16:19:00+08:00",
+  "updated": "2026-11-13T18:20:00+08:00",
   "items": [
+    {
+      "id": "qingming-riverside",
+      "name": "清明上河",
+      "repo": "xianxie6/qingming-riverside",
+      "url": "https://github.com/xianxie6/qingming-riverside",
+      "line": "打开网页就能走进一条宋代沿河街市：走路、饮茶、乘船，还能看夜景和下时雨，到虹桥帮漕船过桥。",
+      "cat": "好玩",
+      "demo": "https://xianxie6.github.io/qingming-riverside/",
+      "demo_label": "试用",
+      "demo_note": "不用登录，电脑和手机都能开。插画是再创作，不是原画扫描。",
+      "source_url": "https://github.com/xianxie6/qingming-riverside",
+      "more": [
+        { "label": "镜像 · Vercel", "url": "https://qingming-riverside-nine.vercel.app/" },
+        { "label": "镜像 · Cloudflare", "url": "https://qingming-riverside.zhangxianxie6.workers.dev/" }
+      ],
+      "added": "2026-11-13"
+    },
     {
       "id": "sticker-forge",
       "name": "Sticker Forge",
