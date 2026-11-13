@@ -1,6 +1,32 @@
 {
-  "updated": "2026-11-13T18:20:00+08:00",
+  "updated": "2026-11-13T18:28:07+08:00",
   "items": [
+    {
+      "id": "awesome-grokbot-playbooks",
+      "name": "中文配方库",
+      "repo": "sit-in/awesome-grokbot-playbooks",
+      "url": "https://github.com/sit-in/awesome-grokbot-playbooks",
+      "line": "中文 Grok Bot 实操配方合集，先查这里再找开源技能和工作流。",
+      "cat": "资料",
+      "demo": "https://github.com/sit-in/awesome-grokbot-playbooks",
+      "demo_label": "打开仓库",
+      "demo_note": "没有单独试用页。十条示例配方尚未逐条真机跑通。MIT。",
+      "source_url": "https://github.com/sit-in/awesome-grokbot-playbooks",
+      "added": "2026-11-13"
+    },
+    {
+      "id": "grok-bot-orange-book",
+      "name": "橙皮书",
+      "repo": "KinGao294/grok-bot-orange-book",
+      "url": "https://github.com/KinGao294/grok-bot-orange-book",
+      "line": "讲怎么把一支 AI 团队用起来的中文手册，可作固定先查来源。",
+      "cat": "资料",
+      "demo": "https://github.com/KinGao294/grok-bot-orange-book",
+      "demo_label": "打开仓库",
+      "demo_note": "没有单独试用页。内容停在 2026-08-24，不是最新官方文档。许可以仓库说明为准。",
+      "source_url": "https://github.com/KinGao294/grok-bot-orange-book",
+      "added": "2026-11-13"
+    },
     {
       "id": "qingming-riverside",
       "name": "清明上河",
