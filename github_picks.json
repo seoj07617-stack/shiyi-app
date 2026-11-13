@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-13T14:24:29+08:00",
+  "updated": "2026-11-13T16:19:00+08:00",
   "items": [
+    {
+      "id": "sticker-forge",
+      "name": "Sticker Forge",
+      "repo": "CatsJuice/sticker-forge",
+      "url": "https://github.com/CatsJuice/sticker-forge",
+      "line": "打开网页，用几个字或一张图做成贴纸，用手把边缘撕起来，卷边、背面和阴影都会跟着动。",
+      "cat": "好玩",
+      "demo": "https://sticker.oooo.so/",
+      "demo_label": "试用",
+      "demo_note": "撕开时有声音，可在页面里关。图片只在浏览器本地处理。",
+      "source_url": "https://github.com/CatsJuice/sticker-forge",
+      "added": "2026-11-13"
+    },
     {
       "id": "portals",
       "name": "Portals",
