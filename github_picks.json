@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-13T18:28:07+08:00",
+  "updated": "2026-11-14T18:24:00+08:00",
   "items": [
+    {
+      "id": "afterglyph",
+      "name": "Afterglyph",
+      "repo": "winchxyz/afterglyph",
+      "url": "https://github.com/winchxyz/afterglyph",
+      "line": "打开网页就能把字、照片或短视频变成会发光的字符画，还能转成 3D 转着看；自带水母、行星等模板，不用先上传。",
+      "cat": "好玩",
+      "demo": "https://winchxyz.github.io/afterglyph/",
+      "demo_label": "试用",
+      "demo_note": "不用登录。文件只在浏览器本地处理。可选的深度模型约 27 MB，首次才会下载。",
+      "source_url": "https://github.com/winchxyz/afterglyph",
+      "added": "2026-11-14"
+    },
     {
       "id": "awesome-grokbot-playbooks",
       "name": "中文配方库",
