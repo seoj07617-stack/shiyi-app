@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-15T18:24:02+08:00",
+  "updated": "2026-11-16T00:25:00+08:00",
   "items": [
+    {
+      "id": "openmaic",
+      "name": "OpenMAIC",
+      "repo": "THU-MAIC/OpenMAIC",
+      "url": "https://github.com/THU-MAIC/OpenMAIC",
+      "line": "清华大学团队做的开源多智能体互动课堂：输入一个主题，就能生成课件、测验、模拟和项目式学习，还有 AI 老师和同学；可导出 PPTX，或一份能离线播放的 HTML。",
+      "cat": "工具",
+      "demo": "https://open.maic.chat/",
+      "demo_label": "试用",
+      "demo_note": "试用页可打开。生成、收藏和讨论可能要登录或自备模型密钥；不要上传可识别的学生信息。仓库为 MIT，部分子包另有许可证（mathml2omml 为 LGPL-3.0-or-later）。",
+      "source_url": "https://github.com/THU-MAIC/OpenMAIC",
+      "added": "2026-11-16"
+    },
     {
       "id": "chimera",
       "name": "CHIMERA",
