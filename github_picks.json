@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-15T14:36:50+08:00",
+  "updated": "2026-11-15T18:24:02+08:00",
   "items": [
+    {
+      "id": "chimera",
+      "name": "CHIMERA",
+      "repo": "jamesondh/chimera-vocal-synth",
+      "url": "https://github.com/jamesondh/chimera-vocal-synth",
+      "line": "打开网页就能用的物理建模人声合成器：声音来自模拟的气道（肺、声带、声道），不是采样也不是神经网络；可拖舌头和嘴唇发声，还能说话、唱歌、beatbox。",
+      "cat": "好玩",
+      "demo": "https://www.chimera.audio/",
+      "demo_label": "试用",
+      "demo_note": "不用登录。仓库为 MIT，内嵌的 CMU Pronouncing Dictionary 与字体另有各自许可证。",
+      "source_url": "https://github.com/jamesondh/chimera-vocal-synth",
+      "added": "2026-11-15"
+    },
     {
       "id": "crimson-loong",
       "name": "赤龍",
