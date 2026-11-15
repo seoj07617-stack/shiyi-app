@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-14T18:24:00+08:00",
+  "updated": "2026-11-15T14:36:50+08:00",
   "items": [
+    {
+      "id": "crimson-loong",
+      "name": "赤龍",
+      "repo": "ChetasLua/crimson-loong",
+      "url": "https://github.com/ChetasLua/crimson-loong",
+      "line": "打开网页就能看一段约 90 秒的双龙短片：红龙盘在枫谷石峰上，白龙破云而来，空中交手后再潜入湖底夺珠，然后循环。整部片子在一份 HTML 里用 three.js 现场生成，没有模型、贴图或音效文件。",
+      "cat": "好玩",
+      "demo": "https://chetaslua.github.io/crimson-loong/",
+      "demo_label": "试用",
+      "demo_note": "不用登录。点一下开声音，空格暂停，鼠标可微调镜头；需 WebGL 2。仓库未声明项目许可证（仅内嵌的 three.js 为 MIT），可打开观看，但不等于可以再分发源码。",
+      "source_url": "https://github.com/ChetasLua/crimson-loong",
+      "added": "2026-11-15"
+    },
     {
       "id": "afterglyph",
       "name": "Afterglyph",
