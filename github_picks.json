@@ -1,6 +1,32 @@
 {
-  "updated": "2026-11-16T10:29:07+08:00",
+  "updated": "2026-11-16T18:40:39+08:00",
   "items": [
+    {
+      "id": "sedona-sunset",
+      "name": "Sedona Sunset",
+      "repo": "StarKnightt/sedona-sunset",
+      "url": "https://github.com/StarKnightt/sedona-sunset",
+      "line": "打开网页就能步行走进塞多纳黄金时刻的程序化干河谷：红岩崖壁与干河床全由代码生成，没有外部模型或贴图。",
+      "cat": "好玩",
+      "demo": "https://starknightt.github.io/sedona-sunset/",
+      "demo_label": "试用",
+      "demo_note": "不用登录。需要 WebGL；打开后约一分钟黑屏生成，会从 jsDelivr 加载 Three.js。仓库为 MIT。",
+      "source_url": "https://github.com/StarKnightt/sedona-sunset",
+      "added": "2026-11-16"
+    },
+    {
+      "id": "galaxy-explorer",
+      "name": "Galaxy Explorer",
+      "repo": "zjoooooo/galaxy-explorer",
+      "url": "https://github.com/zjoooooo/galaxy-explorer",
+      "line": "打开网页就能飞进一片程序化银河，还能进入太阳系逛一圈；WebGL / three.js，无后端、无构建步骤。",
+      "cat": "好玩",
+      "demo": "https://zjoooooo.github.io/galaxy-explorer/",
+      "demo_label": "试用",
+      "demo_note": "不用登录。需要 WebGL。仓库为 MIT。",
+      "source_url": "https://github.com/zjoooooo/galaxy-explorer",
+      "added": "2026-11-16"
+    },
     {
       "id": "abyssal-garden",
       "name": "Abyssal Garden",
