@@ -16,6 +16,8 @@ import math
 import os
 import re
 import time
+import urllib.parse
+from pathlib import Path
 import urllib.request
 import urllib.error
 from datetime import datetime, timezone, timedelta
@@ -32,13 +34,26 @@ REQUIRED_FIELDS = {"repo", "name", "desc", "desc_cn", "cat", "lang",
 
 
 # ── HTTP helpers (stdlib only) ─────────────────────────────
+# 出网只允许 https + 域名白名单（脚本的全部出网点），防 SSRF
+ALLOWED_HOSTS = {"github.com", "api.github.com", "text.pollinations.ai"}
+
+
+def assert_safe_url(url: str) -> str:
+    p = urllib.parse.urlparse(url)
+    if p.scheme != "https" or p.hostname not in ALLOWED_HOSTS:
+        raise ValueError(f"URL not allowlisted: {url}")
+    return url
+
+
 def http_get(url, headers=None, timeout=25):
+    assert_safe_url(url)
     req = urllib.request.Request(url, headers=headers or {})
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         return resp.read().decode("utf-8", errors="replace")
 
 
 def http_post_json(url, payload, headers=None, timeout=90):
+    assert_safe_url(url)
     data = json.dumps(payload).encode("utf-8")
     h = {"Content-Type": "application/json"}
     h.update(headers or {})
@@ -247,6 +262,7 @@ def pollinations_call(selected):
         need = max(2, (len(part) + 1) // 2)
         try:
             print(f"pollinations batch {start}-{start+len(part)-1}: single attempt")
+            assert_safe_url(POLLINATIONS_URL)
             payload = {
                 "messages": [{"role": "user", "content": prompt}],
                 "model": POLLINATIONS_MODELS[0],
@@ -355,8 +371,8 @@ def main():
     validate(items, today)
 
     out = {"date": today, "updated": now_iso, "mode": mode, "items": items}
-    with open("github_trending.json", "w", encoding="utf-8") as f:
-        json.dump(out, f, ensure_ascii=False, indent=2)
+    Path("github_trending.json").write_text(
+        json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"[4/4] written github_trending.json (mode={mode}, {len(items)} items)")
 
 
