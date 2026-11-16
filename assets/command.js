@@ -831,7 +831,7 @@
     return '<article class="inset" style="padding:14px"><div class="pills"><span class="pill wait">待拍板</span>' +
       (t.priority === 'high' ? '<span class="pill bad">要紧</span>' : '') +
       '<span class="pill dim">' + esc(dueLabel(t.due) || WHO[t.source] || t.source || '') + '</span></div>' +
-      '<h2 class="card-title" style="font-size:17px">' + esc(t.text) + '</h2><p class="card-copy">' + esc(t.ask || '') + '</p>' +
+      '<h2 class="card-title">' + esc(t.text) + '</h2><p class="card-copy">' + esc(t.ask || '') + '</p>' +
       '<div class="actions">' + (arr(t.options).length ? arr(t.options).slice(0, 2) : ['就这样', '以后再说']).map(function (opt, i) {
         return '<button type="button" class="btn' + (i === 0 ? ' btn-primary' : '') + '" data-act="decision" data-id="' + esc(t.id) + '" data-res="' + esc(opt === '以后再说' ? 'later' : opt) + '">' + esc(opt) + '</button>';
       }).join('') + '</div></article>';
