@@ -1431,23 +1431,6 @@ body[data-shell="desktop"] .health { grid-template-columns: 1fr; align-items: st
   *, .rise, .gif-thumb > img, .gif-thumb .gif-ph { animation: none !important; transition: none !important; }
 }
 
-/* ——— 图表插槽与工具类（2026-11-16 三库懒加载）———
-   图表配色只走 #3B82F6 与灰阶；槽位高度固定，图表不撑卡片。 */
-.chart-slot { position: relative; width: 100%; }
-.chart-slot--spark { height: 64px; margin-top: 12px; }
-.chart-slot--week { height: 120px; margin-top: 12px; }
-.chart-slot--protein { height: 8px; margin-top: 12px; }
-.chart-slot--mini { display: block; height: 26px; margin-top: 8px; }
-.chart-slot--feishu { height: 84px; margin-top: 12px; }
-.chart-slot--oss { height: 108px; margin-top: 12px; }
-.chart-slot--decide { width: 44px; height: 44px; flex: none; }
-.chart-fallback { display: block; margin: 10px 0 0; font-size: var(--text-meta); line-height: 1.6; color: var(--mid); }
-.uplot-mini, .uplot-spark { display: block; }
-
-.decide-ring-card { padding: 16px 16px 14px; }
-.decide-ring-wrap { display: flex; align-items: center; gap: 14px; min-width: 0; }
-.decide-ring-wrap .fine { margin-top: 2px; }
-
 .glass-mt { margin-top: 14px; }
 .inset-pad { padding: 14px; }
 .inset-pad-sm { padding: 12px; }

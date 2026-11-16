@@ -1,5 +1,5 @@
-/* 拾壹工作台 Service Worker v18.2 — 离线缓存（三库图表按页懒加载，字号全量收编 token） */
-const SW_VERSION = 'shiyi-v18.2.0';
+/* 拾壹工作台 Service Worker v18.3 — 离线缓存（去掉装饰图表库，排版与数字卡片不变） */
+const SW_VERSION = 'shiyi-v18.3.0';
 const CORE_ASSETS = [
   './',
   './index.html',
