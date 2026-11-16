@@ -303,15 +303,22 @@
   }
   function chartNote(key, msg) {
     const slot = document.getElementById(key);
-    if (slot && msg) slot.innerHTML = '<span class="chart-fallback">' + esc(msg) + '</span>';
+    if (!slot || !msg) return;
+    slot.textContent = '';
+    const note = document.createElement('span');
+    note.className = 'chart-fallback';
+    note.textContent = msg;
+    slot.appendChild(note);
   }
   function mountCanvasIn(key, height) {
     const slot = document.getElementById(key);
     if (!slot) return null;
     let cv = slot.querySelector('canvas');
     if (!cv) {
-      slot.innerHTML = '<canvas role="img"></canvas>';
-      cv = slot.querySelector('canvas');
+      slot.textContent = '';
+      cv = document.createElement('canvas');
+      cv.setAttribute('role', 'img');
+      slot.appendChild(cv);
     }
     cv.width = Math.max(40, slot.clientWidth || 0);
     cv.height = height;
@@ -1127,7 +1134,7 @@
           data: days.map(function (d) { return '周' + d.label; }),
           axisLine: { lineStyle: { color: 'rgba(23,23,23,0.12)' } },
           axisTick: { show: false },
-          axisLabel: { color: '#5E5E5E', fontSize: 10, interval: 0, fontFamily: 'ui-monospace, "SF Mono", Menlo, monospace' }
+          axisLabel: { color: '#5E5E5E', fontSize: 11, interval: 0, fontFamily: 'ui-monospace, "SF Mono", Menlo, monospace' }
         },
         yAxis: { type: 'value', show: false, max: 1.6 },
         series: [{
@@ -1231,6 +1238,18 @@
       });
       parkChart(key, chart);
     }).catch(function () { /* 进度已用文字说明 */ });
+  }
+
+  /* 按当前 tab 分发：只挂本页该画的图，非本页的槽位不碰，切页由 destroyCharts 收尾 */
+  function mountCharts() {
+    if (tab === 'today') mountTodayWeight();
+    else if (tab === 'health') {
+      mountHealthWeight();
+      mountHealthProtein();
+      mountHealthWeek();
+    } else if (tab === 'learn') mountLearnChart();
+    else if (tab === 'oss') mountOssChart();
+    else if (tab === 'decide') mountDecideChart();
   }
 
   function renderTab() {
