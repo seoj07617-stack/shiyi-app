@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-16T00:25:00+08:00",
+  "updated": "2026-11-16T10:29:07+08:00",
   "items": [
+    {
+      "id": "abyssal-garden",
+      "name": "Abyssal Garden",
+      "repo": "Noniv/abyssal-garden",
+      "url": "https://github.com/Noniv/abyssal-garden",
+      "line": "打开网页就能游进一片全由代码生成的海底世界：海带林随流摇摆，阳光从水面漏下来，还有沉船、石鲸尾、蝠鲼和鱼群；没有模型、贴图或音效文件，整座世界装在一份约 97 KB 的 HTML 里。",
+      "cat": "好玩",
+      "demo": "https://noniv.github.io/abyssal-garden/",
+      "demo_label": "试用",
+      "demo_note": "不用登录。需要支持 WebGPU 的浏览器，建议在电脑上用 Chrome 或 Edge；若不支持会提示 This scene needs WebGPU。手机触摸是实验性的，可能较卡。仓库为 MIT。",
+      "source_url": "https://github.com/Noniv/abyssal-garden",
+      "added": "2026-11-16"
+    },
     {
       "id": "openmaic",
       "name": "OpenMAIC",
