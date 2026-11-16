@@ -248,6 +248,79 @@
     return '';
   }
 
+  /* —— 图表库：官方预构建放 assets/vendor/（许可证随附），按页懒加载 ——
+     进页才 loadScript，离开 paintNow 时 destroy/dispose；boot 不预挂任何一套。 */
+  const VENDOR_LIBS = {
+    uplot: {
+      js: 'assets/vendor/uplot.iife.min.js', css: 'assets/vendor/uplot.min.css',
+      ok: function () { return typeof window.uPlot === 'function'; }
+    },
+    chartjs: {
+      js: 'assets/vendor/chart.umd.min.js',
+      ok: function () { return typeof window.Chart === 'function'; }
+    },
+    echarts: {
+      js: 'assets/vendor/echarts.simple.min.js',
+      ok: function () { return !!(window.echarts && typeof window.echarts.init === 'function'); }
+    }
+  };
+  const libJobs = {};
+  function loadLib(name) {
+    if (libJobs[name]) return libJobs[name];
+    const spec = VENDOR_LIBS[name];
+    libJobs[name] = new Promise(function (resolve, reject) {
+      if (spec.ok()) { resolve(); return; }
+      if (spec.css && !document.querySelector('link[data-vendor="' + name + '"]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = spec.css;
+        link.setAttribute('data-vendor', name);
+        document.head.appendChild(link);
+      }
+      const tag = document.createElement('script');
+      tag.src = spec.js;
+      tag.async = true;
+      tag.onload = function () {
+        if (spec.ok()) resolve();
+        else { libJobs[name] = null; reject(new Error(name + ' 全局对象没有就位')); }
+      };
+      tag.onerror = function () { libJobs[name] = null; reject(new Error(name + ' 脚本没有取到')); };
+      document.head.appendChild(tag);
+    });
+    return libJobs[name];
+  }
+  const liveCharts = {};
+  function parkChart(key, inst) { liveCharts[key] = inst; }
+  function destroyCharts() {
+    Object.keys(liveCharts).forEach(function (key) {
+      const inst = liveCharts[key];
+      try {
+        if (inst && typeof inst.destroy === 'function') inst.destroy();
+        else if (inst && typeof inst.dispose === 'function') inst.dispose();
+      } catch (e) { /* 图表销毁失败不阻塞下一页 */ }
+      delete liveCharts[key];
+    });
+  }
+  function chartNote(key, msg) {
+    const slot = document.getElementById(key);
+    if (slot && msg) slot.innerHTML = '<span class="chart-fallback">' + esc(msg) + '</span>';
+  }
+  function mountCanvasIn(key, height) {
+    const slot = document.getElementById(key);
+    if (!slot) return null;
+    let cv = slot.querySelector('canvas');
+    if (!cv) {
+      slot.innerHTML = '<canvas role="img"></canvas>';
+      cv = slot.querySelector('canvas');
+    }
+    cv.width = Math.max(40, slot.clientWidth || 0);
+    cv.height = height;
+    cv.style.width = '100%';
+    cv.style.height = height + 'px';
+    return cv;
+  }
+  function chartFont() { return '10px ui-monospace, "SF Mono", Menlo, monospace'; }
+
   function loadState() {
     const base = {
       todoDone: {}, decision: {}, top3Done: {}, learnDone: null, sessionDone: null,
@@ -482,7 +555,10 @@
       return '<span class="v"><b>' + esc(m[1]) + '</b><span class="unit">' + esc(m[2]) + '</span></span>';
     }
     const statHtml = '<div class="stat-row">' + stats.map(function (st) {
-      return '<button type="button" class="stat" data-go="' + st.go + '"><span class="k">' + esc(st.k) + '</span>' + heroFigure(st.v) + '<span class="s">' + esc(st.s) + '</span></button>';
+      const miniSpark = st.k === '晨重' && w && w.pts.length >= 2
+        ? '<span class="chart-slot chart-slot--mini" id="chart-today-weight" aria-hidden="true"></span>'
+        : '';
+      return '<button type="button" class="stat" data-go="' + st.go + '"><span class="k">' + esc(st.k) + '</span>' + heroFigure(st.v) + miniSpark + '<span class="s">' + esc(st.s) + '</span></button>';
     }).join('') + '</div>';
     const decs = openDecisions().slice(0, 2);
     const decide = '<section class="glass"><p class="card-kicker">待拍板</p><div class="stack">' + (decs.length ? decs.map(function (t) {
@@ -542,7 +618,11 @@
       '<p class="card-kicker">今日</p><p class="card-copy">' + esc(what) + '</p>' +
       (steps.length ? '<ol class="how">' + steps.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ol>' : '') +
       '<button type="button" class="done-row" data-act="learn-done" aria-pressed="' + (done ? 'true' : 'false') + '"><span class="box"></span><span>完成</span></button>' +
-      '<p class="card-kicker" style="margin-top:16px">今晚</p><p class="card-copy">' + esc(themeNight) + '</p>' +
+      (minutes != null && L.progress && Number.isFinite(Number(L.progress.done))
+        ? '<div class="chart-slot chart-slot--learn" id="chart-learn-week" aria-hidden="true"></div>' +
+          '<p class="footnote">本周已完成 ' + esc(Number(L.progress.done)) + ' / 7 天。</p>'
+        : '') +
+      '<p class="card-kicker kicker-mt">今晚</p><p class="card-copy">' + esc(themeNight) + '</p>' +
       '<p class="artifact"><span>要留下的小产物</span>' + esc(artifact) + '</p>' +
       noteRow +
       '<p class="footnote">只展示早报和晚间交来的字段，页面不另外排课。</p></section>';
@@ -568,10 +648,10 @@
     const sports = arr(groups.sports);
     return head('新闻', '工具与用法', '产品、提示、值得跟的开源。体育相关收在最下面。') +
       '<div class="news-grid">' + cols + '</div>' +
-      '<section class="glass" style="margin-top:14px"><p class="card-kicker">D · 体育 AI</p>' +
+      '<section class="glass glass-mt"><p class="card-kicker">D · 体育 AI</p>' +
       '<button type="button" class="btn" data-act="sports" aria-expanded="' + (sportsOpen ? 'true' : 'false') + '">' +
       (sportsOpen ? '收起体育 AI' : '体育 AI · 次要，默认收起') + '</button>' +
-      (sportsOpen ? '<div style="margin-top:8px">' + sports.map(newsItem).join('') + '</div>' : '<p class="footnote">不进本周主线，也不当教案。</p>') +
+      (sportsOpen ? '<div class="sports-open-mt">' + sports.map(newsItem).join('') + '</div>' : '<p class="footnote">不进本周主线，也不当教案。</p>') +
       '</section><p class="footnote">更新于 ' + esc(whenLabel(data.news.updated)) + '。长文不在这里展开。</p>';
   }
 
@@ -628,10 +708,15 @@
       board = '<section class="trending"><div class="sec-head"><p class="sec-title">每日热榜 · GitHub Trending</p>' +
         '<p class="sec-meta">' + esc(whenLabel(pack.updated)) + '</p></div>' +
         '<div class="chips" role="tablist">' + chips + '</div>' +
-        '<div class="repo-grid" style="margin-top:14px">' + (cards || emptyInline('这个分类今天没有', '热榜还在，只是这一类今天没有仓库。换到「全部」能看到当天完整的一页。')) + '</div>' +
+        '<div class="repo-grid repo-grid-mt">' + (cards || emptyInline('这个分类今天没有', '热榜还在，只是这一类今天没有仓库。换到「全部」能看到当天完整的一页。')) + '</div>' +
         '<p class="footnote">' + mode + '点进仓库再看细节。</p></section>';
     }
-    return head('开源', '可跟的项目', picks.length ? '看见就收进来的先放上面，下面仍是每日 GitHub 热榜。' : '每日 GitHub 热榜，点进仓库再看细节。') + picksBlock + board;
+    const starsChart = items.length >= 2
+      ? '<section class="glass glass-mt"><div class="bar"><p class="card-kicker">今日热度 · 总星数前五</p></div>' +
+        '<div class="chart-slot chart-slot--oss" id="chart-oss-stars" aria-hidden="true"></div>' +
+        '<p class="footnote">星数取自热榜 JSON 的 stars 字段，只排前五，不做趋势。</p></section>'
+      : '';
+    return head('开源', '可跟的项目', picks.length ? '看见就收进来的先放上面，下面仍是每日 GitHub 热榜。' : '每日 GitHub 热榜，点进仓库再看细节。') + picksBlock + board + starsChart;
   }
 
   function renderFeishu() {
@@ -805,7 +890,13 @@
     }).join('');
     const protNote = grams < protein.low ? '距下沿 ' + (protein.low - grams) + ' g' : (grams > protein.high ? '高出区间' : '落在区间里');
     const spark = w ? '<section class="glass"><div class="bar"><p class="card-kicker">近七日晨重</p><span class="pill dim">目标 ' + esc(w.goal) + ' kg</span></div>' +
-      sparkSvg(w.pts) + '<p class="footnote">较七日首日 ' + signed(w.week, 1) + ' kg · 昨日 ' + esc(w.pts[w.pts.length - 2].date.slice(5)) + ' ' + w.pts[w.pts.length - 2].kg.toFixed(1) + '</p></section>' : '';
+      '<div class="chart-slot chart-slot--spark" id="chart-health-weight" aria-hidden="true"></div>' +
+      '<p class="footnote">较七日首日 ' + signed(w.week, 1) + ' kg · 昨日 ' + esc(w.pts[w.pts.length - 2].date.slice(5)) + ' ' + w.pts[w.pts.length - 2].kg.toFixed(1) + '</p></section>' : '';
+    const weekChart = days.length >= 2
+      ? '<section class="glass"><div class="bar"><p class="card-kicker">本周训练节奏</p><span class="pill dim">' + arr(week.days).filter(function (d) { return d.train; }).length + ' 个训练日</span></div>' +
+        '<div class="chart-slot chart-slot--week" id="chart-health-week" aria-hidden="true"></div>' +
+        '<p class="footnote">高柱是训练日，深蓝是带足球的那天，浅柱是休息；动作在上方按日切换。</p></section>'
+      : '';
     return '<div class="health">' +
       '<section class="glass"><div class="plan-bar"><h2>' + esc(week.title || '本周计划') + '</h2>' +
       linkBtn(week.pdf, '打开 PDF', 'btn btn-primary') + '</div>' +
@@ -820,15 +911,17 @@
       '<span class="delta ' + (w ? deltaClass(w.day) : 'flat') + '">较昨 ' + (w ? signed(w.day, 1) : '—') + '</span>' +
       (w ? '<span class="fine">七日 ' + signed(w.week, 1) + '</span>' : '') + '</section>' +
       '<section class="glass metric-cell"><p class="metric-figure"><b class="num">' + grams + '</b><span class="unit">g</span></p><p class="card-kicker">蛋白</p>' +
-      '<div class="track" aria-hidden="true"><i class="band" style="left:' + bandL.toFixed(1) + '%;width:' + bandW.toFixed(1) + '%"></i><i class="fill" style="width:' + fill.toFixed(1) + '%"></i></div>' +
+      (H.protein
+        ? '<div class="chart-slot chart-slot--protein" id="chart-health-protein" aria-hidden="true"></div>'
+        : '<div class="track" aria-hidden="true"><i class="band" style="left:' + bandL.toFixed(1) + '%;width:' + bandW.toFixed(1) + '%"></i><i class="fill" style="width:' + fill.toFixed(1) + '%"></i></div>') +
       '<span class="fine">' + esc(protein.low) + '–' + esc(protein.high) + ' · ' + protNote + '</span></section>' +
       '<section class="glass metric-cell"><p class="metric-figure"><b class="num">' + esc(sleep.hours) + '</b><span class="unit">小时</span></p><p class="card-kicker">睡眠</p>' +
-      '<span class="fine">' + (sleep.asleep ? esc(sleep.asleep) + ' · ' : '') + (late ? '偏晚' : (sleep.quality ? esc(sleep.quality) : '在零点前')) + '</span></section></div>' + spark +
+      '<span class="fine">' + (sleep.asleep ? esc(sleep.asleep) + ' · ' : '') + (late ? '偏晚' : (sleep.quality ? esc(sleep.quality) : '在零点前')) + '</span></section></div>' + weekChart + spark +
       '<section class="glass"><p class="card-kicker">补剂</p><div class="supp-bar">' + supps + '</div></section>' + postureHtml() + '</div>';
   }
 
   function decisionCard(t) {
-    return '<article class="inset" style="padding:14px"><div class="pills"><span class="pill wait">待拍板</span>' +
+    return '<article class="inset inset-pad"><div class="pills"><span class="pill wait">待拍板</span>' +
       (t.priority === 'high' ? '<span class="pill bad">要紧</span>' : '') +
       '<span class="pill dim">' + esc(dueLabel(t.due) || WHO[t.source] || t.source || '') + '</span></div>' +
       '<h2 class="card-title">' + esc(t.text) + '</h2><p class="card-copy">' + esc(t.ask || '') + '</p>' +
@@ -842,7 +935,7 @@
     const todos = openTodos();
     const done = closedItems();
     const laterHtml = later.length ? '<p class="subhead">以后再说</p>' + later.map(function (t) {
-      return '<article class="inset" style="padding:12px"><strong>' + esc(t.text) + '</strong><div class="actions">' +
+      return '<article class="inset inset-pad-sm"><strong>' + esc(t.text) + '</strong><div class="actions">' +
         '<button type="button" class="btn" data-act="undo" data-id="' + esc(t.id) + '">重新拿出来</button></div></article>';
     }).join('') : '';
     const todoHtml = todos.length ? todos.map(function (t) {
@@ -850,17 +943,23 @@
         esc(t.text) + '</strong><small>' + esc(t.cat) + ' · ' + esc(WHO[t.source] || t.source || '') +
         (t.due ? ' · ' + esc(dueLabel(t.due)) : '') + '</small></span></button>';
     }).join('') : emptyInline('待办是空的', '勾掉的会沉到下面「已经处理」。没有新的杂活时，这一列保持空白。');
-    const doneHtml = done.length ? '<section class="glass" style="margin-top:14px"><p class="card-kicker">已经处理</p><div class="stack">' +
+    const doneHtml = done.length ? '<section class="glass glass-mt"><p class="card-kicker">已经处理</p><div class="stack">' +
       done.map(function (t) {
         const res = decisionRes(t);
         const label = res === 'no' ? '这次不做' : res === 'yes' ? '已拍板' : res === 'later' ? '以后再说' : (res || '已完成');
-        return '<article class="check" style="cursor:default"><span class="box is-checked"></span><span class="grow"><strong>' +
+        return '<article class="check check-static"><span class="box is-checked"></span><span class="grow"><strong>' +
           esc(t.text) + '</strong><small>' + label + '</small></span><button type="button" class="btn" data-act="undo" data-id="' + esc(t.id) + '">撤回</button></article>';
       }).join('') + '</div></section>' : '';
+    const ringCard = (done.length + open.length + todos.length)
+      ? '<section class="glass glass-mt decide-ring-card"><div class="decide-ring-wrap">' +
+        '<div class="chart-slot chart-slot--decide" id="chart-decide-ring" aria-hidden="true"></div>' +
+        '<div><p class="card-kicker">处理进度</p><p class="fine">已处理 ' + done.length + ' / 共 ' + (done.length + open.length + todos.length) + ' 件</p></div>' +
+        '</div></section>'
+      : '';
     return head('拍板', '要你点头的事', '先拍板，再勾掉今天的待办。投资条目不在这张主清单里。') +
       '<div class="decide"><section class="glass"><p class="card-kicker">待拍板</p><div class="stack">' +
       (open.length ? open.map(decisionCard).join('') : emptyInline('没有等你点头的事', '需要你选的条目会出现在这里，两个按钮就够。投资待办留在纪律备忘。')) + laterHtml +
-      '</div></section><section class="glass"><p class="card-kicker">待办</p><div class="stack">' + todoHtml + '</div></section></div>' + doneHtml;
+      '</div></section><section class="glass"><p class="card-kicker">待办</p><div class="stack">' + todoHtml + '</div></section></div>' + doneHtml + ringCard;
   }
 
   function renderBots() {
@@ -870,7 +969,7 @@
       const live = botLive(bot);
       return '<article class="glass"><div class="agent-top"><i class="dot ' + dotClass(live.state) + '"></i><span class="pill dim">' +
         esc(bot.cadence) + '</span></div><h2 class="card-title">' + esc(bot.name) + '</h2><p class="card-copy">' + esc(bot.duty) + '</p>' +
-        '<div class="pills" style="margin-top:10px">' + arr(bot.outputs).map(function (o) { return '<span class="pill">' + esc(o) + '</span>'; }).join('') +
+        '<div class="pills pills-mt">' + arr(bot.outputs).map(function (o) { return '<span class="pill">' + esc(o) + '</span>'; }).join('') +
         '</div><p class="footnote">此刻 · ' + esc(live.status) + '</p><div class="actions">' +
         linkBtn(bot.feishu, '打开会话', 'btn btn-primary') + '</div></article>';
     }).join('');
@@ -902,7 +1001,7 @@
       return '<article class="news-item"><span class="pill dim">' + esc(it.impact || '') + '</span><h3>' + esc(it.headline) + '</h3></article>';
     }).join('');
     const invests = investTodos().map(function (t) {
-      return '<article class="inset" style="padding:12px"><strong>' + esc(t.text) + '</strong><p class="footnote">来自待办，类别是投资，所以不进拍板主清单。</p></article>';
+      return '<article class="inset inset-pad-sm"><strong>' + esc(t.text) + '</strong><p class="footnote">来自待办，类别是投资，所以不进拍板主清单。</p></article>';
     }).join('');
     return head('已降权', '纪律备忘', '规则还在，只是不再占主导航。这里不做交易。') +
       '<div class="memo"><section class="glass wide"><p class="card-kicker">规则摘要 · ' + esc(whenLabel(insight.updated)) + '</p>' +
@@ -912,6 +1011,226 @@
       (lines || '<p class="card-copy">没有摘记。</p>') + '</section>' +
       '<section class="glass"><p class="card-kicker">仍在执行的投资待办</p><div class="stack">' +
       (invests || '<p class="card-copy">没有单独的投资待办。</p>') + '</div></section></div>';
+  }
+
+  /* —— 各页图表装配：先查数据再建图，无数据不出空图 —— */
+  function sparkRange(self, initMin, initMax) {
+    const span = Math.max(initMax - initMin, 0.4);
+    const pad = span * 0.28;
+    return [initMin - pad, initMax + pad];
+  }
+  function mountTodayWeight() {
+    const key = 'chart-today-weight';
+    const slot = document.getElementById(key);
+    if (!slot) return;
+    const pts = weightPoints();
+    if (pts.length < 2) return;
+    loadLib('uplot').then(function () {
+      if (!document.getElementById(key) || liveCharts[key]) return;
+      const u = new uPlot({
+        width: Math.max(80, slot.clientWidth || 120), height: 26, class: 'uplot-mini',
+        cursor: { show: false }, legend: { show: false },
+        scales: { x: { time: false, show: false }, y: { show: false, range: sparkRange } },
+        axes: [{ show: false }, { show: false }],
+        series: [{}, { stroke: '#3B82F6', width: 1.5, fill: 'rgba(59,130,246,0.14)', points: { show: false } }]
+      }, [pts.map(function (_, i) { return i; }), pts.map(function (pt) { return pt.kg; })], slot);
+      parkChart(key, u);
+    }).catch(function () { chartNote(key, '走势要联网加载，数字仍是最新的。'); });
+  }
+  function mountHealthWeight() {
+    const key = 'chart-health-weight';
+    const slot = document.getElementById(key);
+    if (!slot) return;
+    const w = weightStats();
+    if (!w || w.pts.length < 2) return;
+    loadLib('uplot').then(function () {
+      if (!document.getElementById(key) || liveCharts[key]) return;
+      const u = new uPlot({
+        width: Math.max(200, slot.clientWidth || 320), height: 64, class: 'uplot-spark',
+        cursor: { show: false }, legend: { show: false },
+        scales: { x: { time: false, show: false }, y: { show: false, range: sparkRange } },
+        axes: [{ show: false }, { show: false }],
+        series: [{}, {
+          stroke: '#3B82F6', width: 1.5,
+          fill: 'rgba(59,130,246,0.12)',
+          points: { show: w.pts.length <= 8, size: 3, stroke: '#3B82F6', fill: '#FFFEFB' }
+        }]
+      }, [w.pts.map(function (_, i) { return i; }), w.pts.map(function (pt) { return pt.kg; })], slot);
+      parkChart(key, u);
+    }).catch(function () {
+      const el = document.getElementById(key);
+      if (el && !el.firstChild) el.innerHTML = sparkSvg(w.pts);
+    });
+  }
+  const proteinBandPlugin = {
+    id: 'proteinBand',
+    afterDatasetsDraw: function (chart) {
+      const area = chart.chartArea;
+      if (!area || chart.$max <= 0) return;
+      const ctx = chart.ctx;
+      ctx.save();
+      [[chart.$low, 'rgba(37,99,235,0.9)'], [chart.$high, 'rgba(23,23,23,0.45)']].forEach(function (pair) {
+        const x = area.left + (pair[0] / chart.$max) * (area.right - area.left);
+        ctx.strokeStyle = pair[1];
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x, area.top);
+        ctx.lineTo(x, area.bottom);
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
+  };
+  function mountHealthProtein() {
+    const key = 'chart-health-protein';
+    const slot = document.getElementById(key);
+    if (!slot) return;
+    const protein = data.health && data.health.protein;
+    if (!protein) return;
+    const grams = proteinGrams();
+    loadLib('chartjs').then(function () {
+      if (!document.getElementById(key) || liveCharts[key]) return;
+      const cv = mountCanvasIn(key, 8);
+      if (!cv) return;
+      const max = Math.max(180, grams, protein.high);
+      const chart = new Chart(cv.getContext('2d'), {
+        type: 'bar',
+        data: { labels: [''], datasets: [{ data: [grams], backgroundColor: 'rgba(59,130,246,0.85)', borderRadius: 4, borderSkipped: false, barThickness: 8 }] },
+        options: {
+          indexAxis: 'y', responsive: false, maintainAspectRatio: false, animation: false,
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          scales: { x: { min: 0, max: max, display: false }, y: { display: false } }
+        },
+        plugins: [proteinBandPlugin]
+      });
+      chart.$low = protein.low;
+      chart.$high = protein.high;
+      chart.$max = max;
+      parkChart(key, chart);
+    }).catch(function () { /* 小条不画时，保留数字与区间说明 */ });
+  }
+  function mountHealthWeek() {
+    const key = 'chart-health-week';
+    const slot = document.getElementById(key);
+    if (!slot) return;
+    const days = arr(data.health && data.health.week && data.health.week.days);
+    if (days.length < 2) return;
+    loadLib('echarts').then(function () {
+      if (!document.getElementById(key) || liveCharts[key]) return;
+      const chart = echarts.init(slot, null, { renderer: 'canvas' });
+      const todayIso = isoOf(shanghaiParts(new Date()));
+      chart.setOption({
+        animation: false,
+        grid: { left: 6, right: 6, top: 10, bottom: 22 },
+        xAxis: {
+          type: 'category',
+          data: days.map(function (d) { return '周' + d.label; }),
+          axisLine: { lineStyle: { color: 'rgba(23,23,23,0.12)' } },
+          axisTick: { show: false },
+          axisLabel: { color: '#5E5E5E', fontSize: 10, interval: 0, fontFamily: 'ui-monospace, "SF Mono", Menlo, monospace' }
+        },
+        yAxis: { type: 'value', show: false, max: 1.6 },
+        series: [{
+          type: 'bar',
+          barWidth: '46%',
+          data: days.map(function (d) {
+            return {
+              value: d.train ? (d.football ? 1.35 : 1) : 0.28,
+              itemStyle: {
+                color: d.train ? (d.football ? '#2563EB' : '#3B82F6') : 'rgba(23,23,23,0.16)',
+                borderRadius: [5, 5, 0, 0],
+                borderColor: d.date === todayIso ? '#2563EB' : 'transparent',
+                borderWidth: d.date === todayIso ? 1.5 : 0
+              }
+            };
+          })
+        }]
+      });
+      parkChart(key, chart);
+    }).catch(function () { chartNote(key, '节奏图要联网加载，每天安排在上方照常可点。'); });
+  }
+  function mountLearnChart() {
+    const key = 'chart-learn-week';
+    const slot = document.getElementById(key);
+    if (!slot) return;
+    const L = data.learning || {};
+    const minutes = L.today_minutes != null ? L.today_minutes : (L.today && L.today.minutes);
+    const done = L.progress ? Number(L.progress.done) : NaN;
+    if (minutes == null || !Number.isFinite(done)) return;
+    loadLib('chartjs').then(function () {
+      if (!document.getElementById(key) || liveCharts[key]) return;
+      const cv = mountCanvasIn(key, 30);
+      if (!cv) return;
+      const chart = new Chart(cv.getContext('2d'), {
+        type: 'bar',
+        data: { labels: [''], datasets: [{ data: [done], backgroundColor: 'rgba(59,130,246,0.85)', borderRadius: 4, borderSkipped: false, barThickness: 8 }] },
+        options: {
+          indexAxis: 'y', responsive: false, maintainAspectRatio: false, animation: false,
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          scales: { x: { min: 0, max: 7, display: false }, y: { display: false } }
+        }
+      });
+      parkChart(key, chart);
+    }).catch(function () { /* 完成天数已用文字说明 */ });
+  }
+  function mountOssChart() {
+    const key = 'chart-oss-stars';
+    const slot = document.getElementById(key);
+    if (!slot) return;
+    const parsed = arr(data.trending && data.trending.items).map(function (it) {
+      const n = Number(String(it.stars || '').replace(/[^\d.]/g, ''));
+      return { name: String(it.name || it.repo || ''), n: Number.isFinite(n) ? n : 0 };
+    }).filter(function (x) { return x.n > 0 && x.name; })
+      .sort(function (a, b) { return b.n - a.n; })
+      .slice(0, 5);
+    if (parsed.length < 2) return;
+    loadLib('chartjs').then(function () {
+      if (!document.getElementById(key) || liveCharts[key]) return;
+      const cv = mountCanvasIn(key, 108);
+      if (!cv) return;
+      const chart = new Chart(cv.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: parsed.map(function (x) { return x.name.length > 14 ? x.name.slice(0, 13) + '…' : x.name; }),
+          datasets: [{ data: parsed.map(function (x) { return x.n; }), backgroundColor: 'rgba(59,130,246,0.8)', borderRadius: 4, borderSkipped: false, barThickness: 10 }]
+        },
+        options: {
+          indexAxis: 'y', responsive: false, maintainAspectRatio: false, animation: false,
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          scales: {
+            x: { display: false, min: 0 },
+            y: { grid: { display: false }, ticks: { color: '#5E5E5E', font: { size: 11, family: 'ui-monospace, "SF Mono", Menlo, monospace' }, autoSkip: false },
+              border: { display: false } }
+          }
+        }
+      });
+      parkChart(key, chart);
+    }).catch(function () { chartNote(key, '热度条要联网加载，仓库卡片照常可点。'); });
+  }
+  function mountDecideChart() {
+    const key = 'chart-decide-ring';
+    const slot = document.getElementById(key);
+    if (!slot) return;
+    const doneN = closedItems().length;
+    const openN = openDecisions().length + openTodos().length;
+    if (doneN + openN === 0) return;
+    loadLib('chartjs').then(function () {
+      if (!document.getElementById(key) || liveCharts[key]) return;
+      const cv = mountCanvasIn(key, 44);
+      if (!cv) return;
+      const chart = new Chart(cv.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          datasets: [{
+            data: [doneN, openN],
+            backgroundColor: ['rgba(59,130,246,0.85)', 'rgba(23,23,23,0.14)'],
+            borderWidth: 0
+          }]
+        },
+        options: { cutout: '72%', responsive: false, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false }, tooltip: { enabled: false } } }
+      });
+      parkChart(key, chart);
+    }).catch(function () { /* 进度已用文字说明 */ });
   }
 
   function renderTab() {
@@ -1004,8 +1323,10 @@
       syncChrome();
       const view = document.getElementById('view');
       disconnectGifIo();
+      destroyCharts();
       view.innerHTML = renderTab();
       hydrateLazyGifs(view);
+      mountCharts();
       document.title = (TITLES[tab] || '拾壹') + ' · 拾壹工作台';
       if (reset) {
         const stage = document.getElementById('stage');

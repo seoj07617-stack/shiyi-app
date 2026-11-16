@@ -31,6 +31,10 @@
 
 字号与控件借鉴 Twenty / Radix Themes / coss ui 的规则，字体仍为系统栈；Bonjourr 仅借鉴字距思路，未复制其源码。
 
+## 图表库（2026-11-16）
+
+三套开源图表库的官方预构建文件放 `assets/vendor/`（许可证文本随附同目录）：Apache ECharts 5.6.0（Apache-2.0，simple 精简构建）、Chart.js 4.4.7（MIT，官方 umd）、uPlot 1.6.32（MIT，官方 dist）。按页懒加载：进页才加载脚本、离开页面即销毁实例，boot 不预挂任何一套；无数据不出空图。图表配色只走 `#3B82F6` 与灰阶，不引入第二强调色。
+
 ## 历史
 
 1. **浅色编辑风 + 克制紫**：画布 `#F1F1F3`、实心白卡、36–40px 圆角、Newsreader / Inter、紫 `#8B75B8`。已停用。

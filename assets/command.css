@@ -387,7 +387,7 @@ body[data-shell="desktop"] .dock { display: none; }
   border-radius: 2px;
   background: var(--accent);
 }
-.dock-item .badge { position: absolute; top: 3px; right: 2px; min-width: 14px; height: 14px; padding: 0 3px; font-size: 10px; }
+.dock-item .badge { position: absolute; top: 3px; right: 2px; min-width: 14px; height: 14px; padding: 0 3px; font-size: var(--text-kicker); }
 
 .badge {
   min-width: 16px; height: 16px; padding: 0 4px;
@@ -397,7 +397,7 @@ body[data-shell="desktop"] .dock { display: none; }
   box-shadow: inset 0 0 0 1px var(--line-strong);
   color: var(--strong);
   font-style: normal;
-  font-size: 10px;
+  font-size: var(--text-kicker);
   font-weight: var(--weight-label);
   line-height: 1;
 }
@@ -499,7 +499,7 @@ button.glass, a.glass { width: 100%; text-align: left; display: block; color: in
 
 .card-title { margin: 2px 0 10px; font-size: var(--text-title); line-height: var(--leading-tight); font-weight: var(--weight-title); letter-spacing: -0.01em; color: var(--strong); }
 .week-theme { margin: 4px 0 8px; font-size: var(--text-h2); line-height: var(--leading-title); font-weight: var(--weight-title); letter-spacing: -0.01em; color: var(--strong); }
-body[data-shell="desktop"] .week-theme { font-size: 21px; }
+body[data-shell="desktop"] .week-theme { font-size: var(--text-h2); }
 .check-gray { margin: 0 0 10px; color: var(--mid); font-size: var(--text-secondary); line-height: 1.6; }
 .bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .bar .card-kicker { margin: 0; }
@@ -633,13 +633,13 @@ body[data-shell="desktop"] .stat-row { grid-template-columns: repeat(4, minmax(0
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0 0.22em;
-  font-size: 34px;
+  font-size: var(--text-display);
   font-weight: var(--weight-title);
   line-height: 1;
   letter-spacing: var(--track-tight);
   color: var(--strong);
 }
-body[data-shell="desktop"] .stat .v { font-size: 40px; }
+body[data-shell="desktop"] .stat .v { font-size: var(--text-display-lg); }
 .stat .v b { font-weight: var(--weight-title); }
 .stat .v .unit {
   font-size: 0.36em;
@@ -648,8 +648,8 @@ body[data-shell="desktop"] .stat .v { font-size: 40px; }
   color: var(--mid);
   font-style: normal;
 }
-.stat .v.is-phrase { font-size: 17px; line-height: 1.35; letter-spacing: var(--track-flat); }
-body[data-shell="desktop"] .stat .v.is-phrase { font-size: 20px; }
+.stat .v.is-phrase { font-size: var(--text-title); line-height: 1.35; letter-spacing: var(--track-flat); }
+body[data-shell="desktop"] .stat .v.is-phrase { font-size: var(--text-h2); }
 .stat .s {
   margin-top: 10px;
   color: var(--mid);
@@ -779,7 +779,7 @@ body[data-shell="desktop"] .stat .v.is-phrase { font-size: 20px; }
 .metric-figure { margin: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
 .metric-cell .num {
   display: block;
-  font-size: 34px;
+  font-size: var(--text-display);
   font-weight: var(--weight-title);
   line-height: 1;
   letter-spacing: var(--track-tight);
@@ -791,7 +791,7 @@ body[data-shell="desktop"] .days { max-width: 720px; }
 body[data-shell="desktop"] .day { min-height: 92px; }
 body[data-shell="desktop"] .metric-cell { padding: 18px 16px 16px; }
 body[data-shell="desktop"] .metric-figure { flex-direction: row; align-items: baseline; gap: 8px; }
-body[data-shell="desktop"] .metric-cell .num { display: inline; font-size: 42px; }
+body[data-shell="desktop"] .metric-cell .num { display: inline; font-size: var(--text-display-lg); }
 .metric-cell .unit {
   display: block;
   font-size: var(--text-kicker);
@@ -1030,7 +1030,7 @@ body[data-shell="desktop"] .split { grid-template-columns: 1fr 1fr; align-items:
 .repo { height: 100%; }
 .repo-top, .agent-top { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
 .stars { margin-left: auto; color: var(--accent-deep); font-size: var(--text-meta); font-weight: var(--weight-label); letter-spacing: 0.01em; }
-.repo footer { display: flex; justify-content: space-between; margin-top: 12px; color: var(--dim); font-size: var(--text-meta); letter-spacing: 0.01em; }
+.repo footer { display: flex; justify-content: space-between; margin-top: 12px; color: var(--mid); font-size: var(--text-meta); letter-spacing: 0.01em; }
 .repo footer span:last-child { color: var(--mid); }
 
 /* 开源 · 精选 */
@@ -1246,7 +1246,7 @@ body[data-shell="desktop"] .miles { grid-template-columns: 1fr 1fr; column-gap: 
 .tips li::before { content: ""; position: absolute; left: 0; top: 8px; width: 5px; height: 1px; background: var(--dim); }
 
 .hold { justify-content: space-between; align-items: center; }
-.hold b { font-size: 20px; font-weight: var(--weight-title); display: block; color: var(--strong); letter-spacing: var(--track-tight); }
+.hold b { font-size: var(--text-h2); font-weight: var(--weight-title); display: block; color: var(--strong); letter-spacing: var(--track-tight); }
 .hold-px { text-align: right; flex: none; }
 
 input {
@@ -1275,10 +1275,6 @@ input:focus { outline: none; box-shadow: inset 0 0 0 1px var(--line-strong), 0 0
 .boot { min-height: 100dvh; display: grid; place-items: center; color: var(--mid); font-size: var(--text-body); letter-spacing: 0.02em; }
 .quote { border-left: 2px solid var(--accent); padding-left: 12px; }
 .hero { display: flex; justify-content: space-between; gap: 16px; align-items: flex-end; }
-.hero-target { font-size: 42px; line-height: 1; font-weight: var(--weight-title); letter-spacing: var(--track-tight); color: var(--strong); }
-.hero-copy { margin: 8px 0 0; color: var(--mid); font-size: var(--text-body); }
-.hero-count { font-size: 24px; font-weight: var(--weight-title); letter-spacing: var(--track-tight); color: var(--strong); }
-.hero-label { color: var(--mid); font-size: var(--text-kicker); font-weight: var(--weight-label); letter-spacing: var(--track-kicker); text-transform: uppercase; }
 
 /* ——— 三机器人 ——— */
 .mini-bots { display: grid; gap: 6px; }
@@ -1434,3 +1430,33 @@ body[data-shell="desktop"] .health { grid-template-columns: 1fr; align-items: st
 @media (prefers-reduced-motion: reduce) {
   *, .rise, .gif-thumb > img, .gif-thumb .gif-ph { animation: none !important; transition: none !important; }
 }
+
+/* ——— 图表插槽与工具类（2026-11-16 三库懒加载）———
+   图表配色只走 #3B82F6 与灰阶；槽位高度固定，图表不撑卡片。 */
+.chart-slot { position: relative; width: 100%; }
+.chart-slot--spark { height: 64px; margin-top: 12px; }
+.chart-slot--week { height: 120px; margin-top: 12px; }
+.chart-slot--protein { height: 8px; margin-top: 12px; }
+.chart-slot--mini { display: block; height: 26px; margin-top: 8px; }
+.chart-slot--learn { height: 30px; margin-top: 12px; }
+.chart-slot--oss { height: 108px; margin-top: 12px; }
+.chart-slot--decide { width: 44px; height: 44px; flex: none; }
+.chart-fallback { display: block; margin: 10px 0 0; font-size: var(--text-meta); line-height: 1.6; color: var(--mid); }
+.uplot-mini, .uplot-spark { display: block; }
+
+.decide-ring-card { padding: 16px 16px 14px; }
+.decide-ring-wrap { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.decide-ring-wrap .fine { margin-top: 2px; }
+
+.glass-mt { margin-top: 14px; }
+.inset-pad { padding: 14px; }
+.inset-pad-sm { padding: 12px; }
+.pills-mt { margin-top: 10px; }
+.kicker-mt { margin-top: 16px; }
+.sports-open-mt { margin-top: 8px; }
+.repo-grid-mt { margin-top: 14px; }
+.check-static { cursor: default; }
+
+/* 健康页窄屏：周条带里的短名允许换行但不撑破卡片 */
+.day { min-width: 0; }
+.day strong { overflow-wrap: anywhere; }
