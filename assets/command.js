@@ -625,9 +625,11 @@
       '<p class="card-kicker">今日</p><p class="card-copy">' + esc(what) + '</p>' +
       (steps.length ? '<ol class="how">' + steps.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ol>' : '') +
       '<button type="button" class="done-row" data-act="learn-done" aria-pressed="' + (done ? 'true' : 'false') + '"><span class="box"></span><span>完成</span></button>' +
-      (minutes != null && L.progress && Number.isFinite(Number(L.progress.done))
-        ? '<div class="chart-slot chart-slot--learn" id="chart-learn-week" aria-hidden="true"></div>' +
-          '<p class="footnote">本周已完成 ' + esc(Number(L.progress.done)) + ' / 7 天。</p>'
+      ((minutes != null || L.today_done != null)
+        ? '<div class="decide-ring-wrap pills-mt">' +
+          '<div class="chart-slot chart-slot--decide" id="chart-learn-today" aria-hidden="true"></div>' +
+          '<div><p class="card-kicker">今日学习</p><p class="fine">' +
+          (minutes != null ? esc(minutes) + ' 分钟 · ' : '') + (done ? '已完成' : '未完成') + '</p></div></div>'
         : '') +
       '<p class="card-kicker kicker-mt">今晚</p><p class="card-copy">' + esc(themeNight) + '</p>' +
       '<p class="artifact"><span>要留下的小产物</span>' + esc(artifact) + '</p>' +
@@ -760,6 +762,18 @@
     }).join('');
     const teachWall = '<section class="glass"><p class="card-kicker">③ 教学产出墙</p><div class="teach-grid">' +
       (wall || emptyInline('还没有教学产出', '说明卡、教案和验收会以卡片出现在这里。')) + '</div></section>';
+    const statusOrder = [];
+    const statusCounts = {};
+    teaching.forEach(function (it) {
+      const s = String(it && it.status || '').trim() || '未标注';
+      if (statusOrder.indexOf(s) < 0) statusOrder.push(s);
+      statusCounts[s] = (statusCounts[s] || 0) + 1;
+    });
+    const statusCard = statusOrder.length >= 2
+      ? '<section class="glass wide"><p class="card-kicker">任务 / 产出状态分布</p>' +
+        '<div class="chart-slot chart-slot--feishu" id="chart-feishu-status" aria-hidden="true"></div>' +
+        '<p class="footnote">只数教学产出墙现有条目的 status，不新增状态。</p></section>'
+      : '';
     const healthCard = health.url ? '<section class="glass wide health-narrow"><span class="ro-badge">只读·健康</span>' +
       '<p class="card-kicker">④ 健康交付</p><h2 class="card-title">' + esc(health.title || '周训练 PDF') + '</h2>' +
       '<div class="pills"><span class="pill">PDF</span>' + (health.delivered ? '<span class="pill dim">交付 ' + esc(dayLabel(health.delivered)) + '</span>' : '') + '</div>' +
@@ -779,7 +793,7 @@
           esc(it.name || '') + '</strong><span class="pill dim">' + esc(it.agent || '') + '</span>' +
           linkBtn(it.url, '打开', 'open-link') + '</div>';
       }).join('') : emptyInline('没有任务', '飞书任务会排在这里，只看和打开，不做拖拽。')) + '</div></section>';
-    return '<div class="feishu">' + route +
+    return '<div class="feishu">' + route + statusCard +
       '<div class="split">' + cloud + teachWall + '</div>' +
       healthCard +
       '<div class="split">' + followBlock + taskBlock + '</div></div>';
@@ -983,8 +997,18 @@
     const miles = arr(data.progress && data.progress.milestones).slice().sort(function (a, b) {
       return String(b.date).localeCompare(String(a.date));
     });
+    const liveCounts = { online: 0, attention: 0, off: 0 };
+    bots.forEach(function (bot) {
+      const st = botLive(bot).state;
+      if (liveCounts[st] != null) liveCounts[st] += 1;
+    });
+    const statusCard = '<section class="glass wide decide-ring-card"><div class="decide-ring-wrap">' +
+      '<div class="chart-slot chart-slot--decide" id="chart-bots-status" aria-hidden="true"></div>' +
+      '<div><p class="card-kicker">此刻状态</p><p class="fine">在线 ' + liveCounts.online + ' · 留意 ' + liveCounts.attention +
+      (liveCounts.off ? ' · 离线 ' + liveCounts.off : '') + '</p></div></div></section>';
     return head('地图', '三个机器人', '谁在什么时候交什么。工作台不替他们排新的课。') +
       '<div class="bots"><div class="flow inset wide"><b>教学助理</b><span>早报与晚间</span><span>→</span><b>拾壹</b><span>收口拍板</span><span>→</span><b>素问</b><span>训练与恢复</span></div>' +
+      statusCard +
       '<div class="bot-grid">' + cards + '</div>' +
       '<section class="glass wide"><p class="card-kicker">共事记录</p><ol class="miles">' + miles.map(function (m) {
         return '<li><time>' + esc(String(m.date).slice(5)) + '</time><div><span class="pill dim">' + esc(m.cat) + '</span><strong> ' +
@@ -1157,28 +1181,31 @@
     }).catch(function () { chartNote(key, '节奏图要联网加载，每天安排在上方照常可点。'); });
   }
   function mountLearnChart() {
-    const key = 'chart-learn-week';
+    const key = 'chart-learn-today';
     const slot = document.getElementById(key);
     if (!slot) return;
     const L = data.learning || {};
     const minutes = L.today_minutes != null ? L.today_minutes : (L.today && L.today.minutes);
-    const done = L.progress ? Number(L.progress.done) : NaN;
-    if (minutes == null || !Number.isFinite(done)) return;
+    const hasDone = L.today_done != null || !!(L.today && L.today.done != null);
+    if (minutes == null && !hasDone) return;
+    const done = isLearnDone();
     loadLib('chartjs').then(function () {
       if (!document.getElementById(key) || liveCharts[key]) return;
-      const cv = mountCanvasIn(key, 30);
+      const cv = mountCanvasIn(key, 44);
       if (!cv) return;
       const chart = new Chart(cv.getContext('2d'), {
-        type: 'bar',
-        data: { labels: [''], datasets: [{ data: [done], backgroundColor: 'rgba(59,130,246,0.85)', borderRadius: 4, borderSkipped: false, barThickness: 8 }] },
-        options: {
-          indexAxis: 'y', responsive: false, maintainAspectRatio: false, animation: false,
-          plugins: { legend: { display: false }, tooltip: { enabled: false } },
-          scales: { x: { min: 0, max: 7, display: false }, y: { display: false } }
-        }
+        type: 'doughnut',
+        data: {
+          datasets: [{
+            data: [1],
+            backgroundColor: [done ? 'rgba(59,130,246,0.85)' : 'rgba(23,23,23,0.14)'],
+            borderWidth: 0
+          }]
+        },
+        options: { cutout: '72%', responsive: false, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false }, tooltip: { enabled: false } } }
       });
       parkChart(key, chart);
-    }).catch(function () { /* 完成天数已用文字说明 */ });
+    }).catch(function () { /* 今日分钟与完成态已在文字里说明 */ });
   }
   function mountOssChart() {
     const key = 'chart-oss-stars';
@@ -1239,6 +1266,69 @@
       parkChart(key, chart);
     }).catch(function () { /* 进度已用文字说明 */ });
   }
+  function mountFeishuChart() {
+    const key = 'chart-feishu-status';
+    const slot = document.getElementById(key);
+    if (!slot) return;
+    const order = [];
+    const counts = {};
+    arr(data.feishu && data.feishu.teaching).forEach(function (it) {
+      const s = String(it && it.status || '').trim() || '未标注';
+      if (order.indexOf(s) < 0) order.push(s);
+      counts[s] = (counts[s] || 0) + 1;
+    });
+    if (order.length < 2) return;
+    loadLib('chartjs').then(function () {
+      if (!document.getElementById(key) || liveCharts[key]) return;
+      const cv = mountCanvasIn(key, 84);
+      if (!cv) return;
+      const chart = new Chart(cv.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: order,
+          datasets: [{ data: order.map(function (s) { return counts[s]; }), backgroundColor: 'rgba(59,130,246,0.8)', borderRadius: 4, borderSkipped: false, barThickness: 10 }]
+        },
+        options: {
+          indexAxis: 'y', responsive: false, maintainAspectRatio: false, animation: false,
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          scales: {
+            x: { display: false, min: 0 },
+            y: { grid: { display: false }, ticks: { color: '#5E5E5E', font: { size: 11, family: 'ui-monospace, "SF Mono", Menlo, monospace' }, autoSkip: false },
+              border: { display: false } }
+          }
+        }
+      });
+      parkChart(key, chart);
+    }).catch(function () { chartNote(key, '状态分布要联网加载，产出墙每张卡片仍标着各自状态。'); });
+  }
+  function mountBotsChart() {
+    const key = 'chart-bots-status';
+    const slot = document.getElementById(key);
+    if (!slot) return;
+    const counts = { online: 0, attention: 0, off: 0 };
+    arr(data.bots && data.bots.bots).forEach(function (bot) {
+      const st = botLive(bot).state;
+      if (counts[st] != null) counts[st] += 1;
+    });
+    if (!counts.online && !counts.attention && !counts.off) return;
+    loadLib('chartjs').then(function () {
+      if (!document.getElementById(key) || liveCharts[key]) return;
+      const cv = mountCanvasIn(key, 44);
+      if (!cv) return;
+      const chart = new Chart(cv.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          datasets: [{
+            data: [counts.online, counts.attention, counts.off],
+            backgroundColor: ['rgba(59,130,246,0.85)', 'rgba(23,23,23,0.42)', 'rgba(23,23,23,0.16)'],
+            borderWidth: 0
+          }]
+        },
+        options: { cutout: '72%', responsive: false, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false }, tooltip: { enabled: false } } }
+      });
+      parkChart(key, chart);
+    }).catch(function () { /* 三只状态已用文字说明 */ });
+  }
 
   /* 按当前 tab 分发：只挂本页该画的图，非本页的槽位不碰，切页由 destroyCharts 收尾 */
   function mountCharts() {
@@ -1250,6 +1340,8 @@
     } else if (tab === 'learn') mountLearnChart();
     else if (tab === 'oss') mountOssChart();
     else if (tab === 'decide') mountDecideChart();
+    else if (tab === 'feishu') mountFeishuChart();
+    else if (tab === 'bots') mountBotsChart();
   }
 
   function renderTab() {

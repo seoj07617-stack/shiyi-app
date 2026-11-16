@@ -1438,7 +1438,7 @@ body[data-shell="desktop"] .health { grid-template-columns: 1fr; align-items: st
 .chart-slot--week { height: 120px; margin-top: 12px; }
 .chart-slot--protein { height: 8px; margin-top: 12px; }
 .chart-slot--mini { display: block; height: 26px; margin-top: 8px; }
-.chart-slot--learn { height: 30px; margin-top: 12px; }
+.chart-slot--feishu { height: 84px; margin-top: 12px; }
 .chart-slot--oss { height: 108px; margin-top: 12px; }
 .chart-slot--decide { width: 44px; height: 44px; flex: none; }
 .chart-fallback { display: block; margin: 10px 0 0; font-size: var(--text-meta); line-height: 1.6; color: var(--mid); }
