@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-17T12:38:11+08:00",
+  "updated": "2026-11-17T15:58:33+08:00",
   "items": [
+    {
+      "id": "noxe-pixel-engine",
+      "name": "Noxe Pixel Engine",
+      "repo": "danieljan-design/noxe-pixel-engine",
+      "url": "https://github.com/danieljan-design/noxe-pixel-engine",
+      "line": "打开网页就能逛一组实时渲成像素画的三维小景：可改昼夜和天气，声音在浏览器里合成，还能导出 60 帧的 MP4；场景都是代码生成的，没有模型、贴图或音效文件。",
+      "cat": "好玩",
+      "demo": "https://pixel.noxestudio.com/",
+      "demo_label": "试用",
+      "demo_note": "不用登录。需要 WebGL；建议用电脑上的 Chrome 或 Edge（导出 MP4 要用 WebCodecs）。会从 jsDelivr 加载 Three.js。仓库为 MIT。",
+      "source_url": "https://github.com/danieljan-design/noxe-pixel-engine",
+      "added": "2026-11-17"
+    },
     {
       "id": "insect-world",
       "name": "昆虫世界",
