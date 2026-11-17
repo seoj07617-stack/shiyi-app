@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-17T15:58:33+08:00",
+  "updated": "2026-11-17T19:22:41+08:00",
   "items": [
+    {
+      "id": "sakura-fantasy",
+      "name": "桜幻想",
+      "repo": "billpwchan/sakura-fantasy",
+      "url": "https://github.com/billpwchan/sakura-fantasy",
+      "line": "打开网页就能坐船走过一段日本河谷：樱花长堤、朱之太鼓桥、千本鸟居和湖中的鸟居，四季会轮流更替，画面在浏览器里用 three.js 现场渲染。",
+      "cat": "好玩",
+      "demo": "https://sakura.billpwchan.art/",
+      "demo_label": "试用",
+      "demo_note": "不用登录。需要 WebGL 2。代码为 MIT，素材许可证见仓库 CREDITS.md。",
+      "source_url": "https://github.com/billpwchan/sakura-fantasy",
+      "added": "2026-11-17"
+    },
     {
       "id": "noxe-pixel-engine",
       "name": "Noxe Pixel Engine",
