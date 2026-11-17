@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-16T18:40:39+08:00",
+  "updated": "2026-11-17T12:38:11+08:00",
   "items": [
+    {
+      "id": "insect-world",
+      "name": "昆虫世界",
+      "repo": "xr843/insect-world",
+      "url": "https://github.com/xr843/insect-world",
+      "line": "打开网页就能逛一部程序化的三维昆虫图鉴：63 种、14 个目，虫体都在浏览器里用代码生成，仓库里没有模型或贴图；其中 8 种能走完整生活史，会悬停的还会振翅。",
+      "cat": "好玩",
+      "demo": "https://insect-world.pages.dev",
+      "demo_label": "试用",
+      "demo_note": "不用登录。需要 WebGL。仓库为 MIT。",
+      "source_url": "https://github.com/xr843/insect-world",
+      "added": "2026-11-17"
+    },
     {
       "id": "sedona-sunset",
       "name": "Sedona Sunset",
