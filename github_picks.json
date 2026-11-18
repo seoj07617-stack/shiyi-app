@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-18T14:28:09+08:00",
+  "updated": "2026-11-18T18:25:55+08:00",
   "items": [
+    {
+      "id": "fog-harbor",
+      "name": "雾港（Fog Harbor）",
+      "repo": "aevumworks/webGameLab",
+      "url": "https://github.com/aevumworks/webGameLab",
+      "line": "打开网页就能环绕一座全由代码生成的灯塔小岛——红白灯塔、守灯人小屋、栈桥和划艇都在浏览器里现场建模，还可切换暮色、月夜和风雨。",
+      "cat": "好玩",
+      "demo": "https://aevumworks.github.io/webGameLab/scenes/fog-harbor/",
+      "demo_label": "试用",
+      "demo_note": "不用登录、不用安装。需要 WebGL。仓库为 MIT。试用页在 GitHub Pages，打开后就是雾港场景。",
+      "source_url": "https://github.com/aevumworks/webGameLab",
+      "added": "2026-11-18"
+    },
     {
       "id": "florilegium",
       "name": "Florilegium",
