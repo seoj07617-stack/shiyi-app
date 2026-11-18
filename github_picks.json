@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-17T19:22:41+08:00",
+  "updated": "2026-11-18T10:24:59+08:00",
   "items": [
+    {
+      "id": "sakuga-vfx",
+      "name": "Sakuga VFX",
+      "repo": "finktheartist/sakuga-vfx",
+      "url": "https://github.com/finktheartist/sakuga-vfx",
+      "line": "打开网页就能点按钮、开关、滑条，它们会像动画作画一样被压扁、回弹，并甩出烟、冲击波和「ドン!」这类漫画拟音；一共 12 个控件，每个一份文件，不用登录、不用装东西。",
+      "cat": "好玩",
+      "demo": "https://sakuga-vfx.vercel.app",
+      "demo_label": "试用",
+      "demo_note": "不用登录。仓库为 MIT。试用页在 Vercel。打开后进 gallery。",
+      "source_url": "https://github.com/finktheartist/sakuga-vfx",
+      "added": "2026-11-18"
+    },
     {
       "id": "sakura-fantasy",
       "name": "桜幻想",
