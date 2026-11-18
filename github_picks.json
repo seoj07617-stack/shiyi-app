@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-18T10:24:59+08:00",
+  "updated": "2026-11-18T14:28:09+08:00",
   "items": [
+    {
+      "id": "florilegium",
+      "name": "Florilegium",
+      "repo": "kevinraymond/florilegium",
+      "url": "https://github.com/kevinraymond/florilegium",
+      "line": "打开网页就能看到一页会自己长出的青花瓷风页边花草——茎叶、雏菊、蕨类和小虫都是代码算出的曲线，没有贴图；还能调页边宽度，花园会重新铺满空出来的地方。",
+      "cat": "好玩",
+      "demo": "https://kevinraymond.github.io/florilegium/",
+      "demo_label": "试用",
+      "demo_note": "不用登录、不用安装。仓库为 MIT。试用页在 GitHub Pages。花园在浏览器里现场生成。",
+      "source_url": "https://github.com/kevinraymond/florilegium",
+      "added": "2026-11-18"
+    },
     {
       "id": "sakuga-vfx",
       "name": "Sakuga VFX",
