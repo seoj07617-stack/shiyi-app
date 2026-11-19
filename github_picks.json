@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-18T18:25:55+08:00",
+  "updated": "2026-11-19T11:27:07+08:00",
   "items": [
+    {
+      "id": "coast",
+      "name": "Coast",
+      "repo": "invertedworld/coast",
+      "url": "https://github.com/invertedworld/coast",
+      "line": "打开网页就能走进一座程序生成的地中海山城——红瓦白墙、港口帆船和橄榄园都在浏览器里现场长出来，白天到夜里大约十二分钟一轮，还可以坐船、坐轮渡、潜水和坐火车。",
+      "cat": "好玩",
+      "demo": "https://markhammond.me/play/coast/",
+      "demo_label": "试用",
+      "demo_note": "不用登录、不用安装。需要 WebGL，建议用电脑上的 Chrome 或 Edge（低配设备可能较卡）。仓库为 MIT。试用页在作者站点。打开后按 H 可看操作。",
+      "source_url": "https://github.com/invertedworld/coast",
+      "added": "2026-11-19"
+    },
     {
       "id": "fog-harbor",
       "name": "雾港（Fog Harbor）",
