@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-20T18:39:47+08:00",
+  "updated": "2026-11-20T18:54:46+08:00",
   "items": [
+    {
+      "id": "frostwind",
+      "name": "Frostwind",
+      "repo": "trinity-works/frostwind",
+      "url": "https://github.com/trinity-works/frostwind",
+      "line": "打开网页就能走进一组由物理和气候推出来的像素世界——冬林小屋、阳光草甸、绿沼吊脚楼、琥珀荒原和紫晶洞窟，都在浏览器里当场编译，用方向键或 WASD 走动。",
+      "cat": "好玩",
+      "demo": "https://project-frostwind.fly.dev/",
+      "demo_label": "试用",
+      "demo_note": "不用登录、不用安装。需要 WebGL。仓库为 MIT。试用页在作者站点 project-frostwind.fly.dev。打开后可选 Frostwood、Sun Meadow、Green Swamp、Amber Waste、Amethyst Hollow 五个世界，用方向键或 WASD 走动。建议用电脑浏览器。",
+      "source_url": "https://github.com/trinity-works/frostwind",
+      "added": "2026-11-20"
+    },
     {
       "id": "htone",
       "name": "Htone",
