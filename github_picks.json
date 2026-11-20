@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-20T19:07:17+08:00",
+  "updated": "2026-11-20T19:24:23+08:00",
   "items": [
+    {
+      "id": "infinitex",
+      "name": "Infinitex",
+      "repo": "lejrimostfa/infinitex",
+      "url": "https://github.com/lejrimostfa/infinitex",
+      "line": "打开网页就能走进一片程序生成的折纸海滩——沙子、海面、码头和纸伞都是代码算出的材质，没有贴图；还可以一直放大，从整片海滩看到纸纤维或一粒沙子。",
+      "cat": "好玩",
+      "demo": "https://lejrimostfa.github.io/infinitex/beach.html",
+      "demo_label": "试用",
+      "demo_note": "不用登录、不用安装。需要 WebGPU，建议用电脑上的 Chrome 或 Edge（手机和低配设备可能较卡）。仓库为 MIT。试用页在 GitHub Pages。打开后是折纸海滩，页上也可切到针织物、材质立方体、水族箱等其他场景；可点 Zoom to the fibers 放大。",
+      "source_url": "https://github.com/lejrimostfa/infinitex",
+      "added": "2026-11-20"
+    },
     {
       "id": "ink-flight",
       "name": "Ink Flight",
