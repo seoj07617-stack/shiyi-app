@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-20T18:54:46+08:00",
+  "updated": "2026-11-20T19:07:17+08:00",
   "items": [
+    {
+      "id": "ink-flight",
+      "name": "Ink Flight",
+      "repo": "StarKnightt/ink-flight",
+      "url": "https://github.com/StarKnightt/ink-flight",
+      "line": "打开网页就能驾驶一架折纸飞机，穿过一本立起来的探路速写本——墨线山峦、水色小镇、石桥和灯塔都画在发黄的纸上，没有计分，也不会失败。",
+      "cat": "好玩",
+      "demo": "https://starknightt.github.io/ink-flight/",
+      "demo_label": "试用",
+      "demo_note": "不用登录、不用安装。需要 WebGPU，并会在缺少 WebGPU 时回退到 WebGL 2；建议用电脑上的 Chrome 或 Edge，用键盘和鼠标操作。仓库为 MIT。试用页在 GitHub Pages。打开后点 Start flying 即可飞。",
+      "source_url": "https://github.com/StarKnightt/ink-flight",
+      "added": "2026-11-20"
+    },
     {
       "id": "frostwind",
       "name": "Frostwind",
