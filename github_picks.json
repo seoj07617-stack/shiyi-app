@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-20T18:25:12+08:00",
+  "updated": "2026-11-20T18:39:47+08:00",
   "items": [
+    {
+      "id": "htone",
+      "name": "Htone",
+      "repo": "tazumi/htone",
+      "url": "https://github.com/tazumi/htone",
+      "line": "打开网页就能从一间暗房间的窗口望见十一月末的家属院——薄雪、路灯、湿柏油和偶尔亮起的窗户都在浏览器里用代码现场生成；还可以从窗口飞出去，在停车位、游乐场和屋顶之间逛。",
+      "cat": "好玩",
+      "demo": "https://maksimgolub.com/demo/htone/",
+      "demo_label": "试用",
+      "demo_note": "不用登录、不用安装。需要支持 WebGPU 的浏览器，建议在电脑上用 Chrome 或 Edge。仓库为 MIT。试用页在作者站点 maksimgolub.com。没有模型、贴图或音效文件，整座场景是一份约 90 KB 的 HTML。",
+      "source_url": "https://github.com/tazumi/htone",
+      "added": "2026-11-19"
+    },
     {
       "id": "small-world",
       "name": "Small World",
