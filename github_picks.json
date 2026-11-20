@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-19T11:27:07+08:00",
+  "updated": "2026-11-20T18:25:12+08:00",
   "items": [
+    {
+      "id": "small-world",
+      "name": "Small World",
+      "repo": "paulrobello/small-world",
+      "url": "https://github.com/paulrobello/small-world",
+      "line": "打开网页就能看见一座从 16 位种子长出来的袖珍浮岛——十二种地貌、花草、小动物、天气和昼夜都在浏览器里现场生成；点一下可换一座，链接还能准确复现同一座。",
+      "cat": "好玩",
+      "demo": "https://small-world.pardev.net/",
+      "demo_label": "试用",
+      "demo_note": "不用登录、不用安装。需要 WebGL。仓库为 MIT。试用页在作者站点 small-world.pardev.net（仓库 GitHub Pages 目前 500，不要用那个地址）。",
+      "source_url": "https://github.com/paulrobello/small-world",
+      "added": "2026-11-19"
+    },
     {
       "id": "coast",
       "name": "Coast",
