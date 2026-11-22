@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-20T19:24:23+08:00",
+  "updated": "2026-11-22T14:24:08+08:00",
   "items": [
+    {
+      "id": "atlantis",
+      "name": "Atlantis",
+      "repo": "Noniv/atlantis",
+      "url": "https://github.com/Noniv/atlantis",
+      "line": "打开网页就能飞进一座程序生成的大理石花园城——白石厅堂、水晶塔、同心运河和金色暮光都在浏览器里当场长出来，没有贴图或模型。",
+      "cat": "好玩",
+      "demo": "https://noniv.github.io/atlantis/",
+      "demo_label": "试用",
+      "demo_note": "不用登录、不用安装。需要 WebGPU，建议用电脑上的 Chrome 或 Edge（手机和低配设备可能较卡）。仓库为 MIT。试用页在 GitHub Pages。打开后会先「Raising the city」，再按 Enter 起飞；WASD 飞行，Q/E 升降。整座城是一份约 96 KB 的 HTML，没有图片、模型或外部库。",
+      "source_url": "https://github.com/Noniv/atlantis",
+      "added": "2026-11-22"
+    },
     {
       "id": "infinitex",
       "name": "Infinitex",
