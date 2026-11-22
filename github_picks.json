@@ -1,6 +1,19 @@
 {
-  "updated": "2026-11-22T14:24:08+08:00",
+  "updated": "2026-11-22T14:40:17+08:00",
   "items": [
+    {
+      "id": "nightscape",
+      "name": "Nightscape",
+      "repo": "WeebLabs/Nightscape",
+      "url": "https://github.com/WeebLabs/Nightscape",
+      "line": "打开网页就能沿着一片月光下的云海慢慢往前飞：积雨云塔、云缝里的山峦和灯火小镇都在浏览器里当场算出，偶尔还有闪电和流星，没有预渲染的影片。",
+      "cat": "好玩",
+      "demo": "https://weeblabs.github.io/Nightscape/",
+      "demo_label": "试用",
+      "demo_note": "不用登录、不用安装。需要 WebGL 2，建议用电脑上的 Chrome、Edge、Firefox 或 Safari（低配设备会自动降低云层分辨率）。仓库为 MIT。月球表面贴图为 NASA 公有领域数据，已嵌在页面里；Three.js r128 从 cdnjs 加载。试用页在 GitHub Pages。打开后会先准备云层（可能有几秒），标题淡出后就会自己向前飞；动鼠标可轻轻转头，按 G 打开设置。整份场景是一份约 273 KB 的 HTML。",
+      "source_url": "https://github.com/WeebLabs/Nightscape",
+      "added": "2026-11-22"
+    },
     {
       "id": "atlantis",
       "name": "Atlantis",
