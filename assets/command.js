@@ -327,10 +327,6 @@
     const t = String(s || '').replace(/\s+/g, '');
     return t.length > 12 ? t.slice(0, 12) : t;
   }
-  function asleepLate(hhmm) {
-    const h = Number(String(hhmm || '12:00').split(':')[0]);
-    return h < 5;
-  }
   /* HH:MM 换成「今晚」时间线上的分钟数：中午 12 点前算跨过午夜的凌晨，加一天再比。读不出来返回 NaN。 */
   function nightMinutes(v) {
     const m = /^(\d{1,2}):(\d{2})$/.exec(typeof v === 'string' ? v.trim() : '');
@@ -353,6 +349,13 @@
   function leverCopy(sleep) {
     const t = sleep && typeof sleep.target === 'string' ? sleep.target.trim() : '';
     return !Number.isNaN(nightMinutes(t)) ? '今晚杠杆：' + t + ' 前睡着' : '今晚杠杆：入睡目标还没填';
+  }
+  /* 健康页睡眠格只写已有字段：入睡时刻、质量。缺质量时补杠杆状态（同一条入睡记录和 sleep.target 比），
+     判不出就只留入睡时刻，不按零点判「偏晚」。 */
+  function sleepNote(sleep) {
+    const s = sleep || {};
+    const label = leverLabel(s);
+    return [s.asleep, s.quality || (label === '暂无可判定记录' ? '' : label)].filter(Boolean).map(esc).join(' · ');
   }
   function relTime(iso) {
     if (!iso) return '';
@@ -470,6 +473,9 @@
     const minutes = L.today_minutes != null ? L.today_minutes : (L.today && L.today.minutes);
     const learnOn = !!(what || minutes);
     const session = data.health && data.health.today;
+    /* 训练格只读 health.today 快照。快照带日期且不是今天时不写「今天休」，只标记录日期；不从周表替它推断今天练不练。 */
+    const snapDay = session && typeof session.date === 'string' ? session.date.trim() : '';
+    const snapOld = !!snapDay && snapDay !== isoOf(p);
     const w = weightStats();
     const prot = data.health && data.health.protein;
     const grams = data.health ? proteinGrams() : null;
@@ -486,10 +492,10 @@
       {
         go: 'health',
         k: '训练',
-        v: session && session.hasTraining ? (session.title || '训练日') : '今天休',
-        s: session && session.hasTraining
+        v: session && session.hasTraining ? (session.title || '训练日') : (snapOld ? '休' : '今天休'),
+        s: (snapOld ? '记录于 ' + snapDay + ' · ' : '') + (session && session.hasTraining
           ? arr(session.parts).join(' · ') + (session.footballEvening ? ' · 足球晚' : '') + (arr(session.exercises).length ? ' · ' + arr(session.exercises).length + ' 个动作' : '')
-          : '没有优先动作，维持体态备注就够。'
+          : '没有优先动作，维持体态备注就够。')
       },
       {
         go: 'health',
@@ -574,7 +580,7 @@
       '<p class="card-kicker kicker-mt">今晚</p><p class="card-copy">' + esc(themeNight) + '</p>' +
       '<p class="artifact"><span>要留下的小产物</span>' + esc(artifact) + '</p>' +
       noteRow +
-      '<p class="footnote">只展示早报和晚间交来的字段，页面不另外排课。</p></section>';
+      '<p class="footnote">' + (L.updated_at ? '记录更新于 ' + esc(dayLabel(L.updated_at)) + '。' : '') + '只展示早报和晚间交来的字段，页面不另外排课。</p></section>';
   }
 
   function newsItem(it) {
@@ -818,7 +824,6 @@
     const bandW = ((protein.high - protein.low) / max) * 100;
     const fill = Math.min(100, (Math.max(grams, 0) / max) * 100);
     const sleep = H.sleep || {};
-    const late = asleepLate(sleep.asleep);
     const shortName = { d3: 'D3', creatine: '肌酸', protein: '蛋白粉', magnesium: '镁' };
     const supps = arr(H.supplements).map(function (s) {
       const on = suppOn(s);
@@ -854,7 +859,7 @@
       '<div class="track" aria-hidden="true"><i class="band" style="left:' + bandL.toFixed(1) + '%;width:' + bandW.toFixed(1) + '%"></i><i class="fill" style="width:' + fill.toFixed(1) + '%"></i></div>' +
       '<span class="fine">' + esc(protein.low) + '–' + esc(protein.high) + ' · ' + protNote + '</span></section>' +
       '<section class="glass metric-cell"><p class="metric-figure"><b class="num">' + esc(sleep.hours) + '</b><span class="unit">小时</span></p><p class="card-kicker">睡眠</p>' +
-      '<span class="fine">' + (sleep.asleep ? esc(sleep.asleep) + ' · ' : '') + (late ? '偏晚' : (sleep.quality ? esc(sleep.quality) : '在零点前')) + '</span></section></div>' + spark +
+      '<span class="fine">' + sleepNote(sleep) + '</span></section></div>' + spark +
       '<section class="glass"><p class="card-kicker">补剂</p><div class="supp-bar">' + supps + '</div></section>' + postureHtml() + '</div>';
   }
 
@@ -902,7 +907,7 @@
       return '<article class="glass"><div class="agent-top"><i class="dot ' + dotClass(live.state) + '"></i><span class="pill dim">' +
         esc(bot.cadence) + '</span></div><h2 class="card-title">' + esc(bot.name) + '</h2><p class="card-copy">' + esc(bot.duty) + '</p>' +
         '<div class="pills pills-mt">' + arr(bot.outputs).map(function (o) { return '<span class="pill">' + esc(o) + '</span>'; }).join('') +
-        '</div><p class="footnote">此刻 · ' + esc(live.status) + '</p><div class="actions">' +
+        '</div><p class="footnote">' + esc(live.status) + '</p><div class="actions">' +
         linkBtn(bot.feishu, '打开会话', 'btn btn-primary') + '</div></article>';
     }).join('');
     const miles = arr(data.progress && data.progress.milestones).slice().sort(function (a, b) {
