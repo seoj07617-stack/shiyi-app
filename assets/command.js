@@ -331,10 +331,22 @@
     const h = Number(String(hhmm || '12:00').split(':')[0]);
     return h < 5;
   }
-  function leverLabel(p, sleep) {
-    if (p.hour >= 5 && p.hour < 12 && sleep && sleep.asleep && !asleepLate(sleep.asleep)) return '已达成';
-    if (p.hour * 60 + p.minute < 22 * 60 + 30) return '未到点';
-    return '已踩线';
+  /* HH:MM 换成「今晚」时间线上的分钟数：中午 12 点前算跨过午夜的凌晨，加一天再比。读不出来返回 NaN。 */
+  function nightMinutes(v) {
+    const m = /^(\d{1,2}):(\d{2})$/.exec(typeof v === 'string' ? v.trim() : '');
+    if (!m) return NaN;
+    const h = Number(m[1]);
+    const min = Number(m[2]);
+    if (h > 23 || min > 59) return NaN;
+    return (h < 12 ? h + 24 : h) * 60 + min;
+  }
+  /* 杠杆状态只拿入睡记录和 sleep.target 比，不看时钟：不晚于目标→已达成，晚于→已踩线。
+     缺目标、缺记录或时间读不出来都保持「未到点」，不回退到任何写死的入睡线。 */
+  function leverLabel(sleep) {
+    const asleep = nightMinutes(sleep && sleep.asleep);
+    const target = nightMinutes(sleep && sleep.target);
+    if (Number.isNaN(asleep) || Number.isNaN(target)) return '未到点';
+    return asleep <= target ? '已达成' : '已踩线';
   }
   /* 杠杆文案只读 sleep.target；缺字段就直说，不写死入睡线，也不造关屏时间。 */
   function leverCopy(sleep) {
@@ -438,7 +450,7 @@
   function renderToday() {
     const p = shanghaiParts(new Date());
     const sleep = data.health && data.health.sleep;
-    const label = leverLabel(p, sleep);
+    const label = leverLabel(sleep);
     const dot = label === '已达成' ? 'done' : label === '已踩线' ? 'line' : 'wait';
     const night = sleep && sleep.asleep ? '<p class="lever-half">昨夜 ' + esc(sleep.asleep) + ' 入睡 · ' + esc(sleep.hours) + ' 小时' +
       (sleep.quality ? ' · ' + esc(sleep.quality) : '') + '</p>' : '';
@@ -1042,7 +1054,7 @@
     const lever = document.getElementById('leverState');
     const dot = document.getElementById('leverDot');
     if (lever && data.health) {
-      const label = leverLabel(p, data.health.sleep);
+      const label = leverLabel(data.health.sleep);
       lever.textContent = label;
       if (dot) dot.className = 'dot ' + (label === '已达成' ? 'done' : label === '已踩线' ? 'line' : 'wait');
     }
