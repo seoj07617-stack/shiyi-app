@@ -340,18 +340,19 @@
     if (h > 23 || min > 59) return NaN;
     return (h < 12 ? h + 24 : h) * 60 + min;
   }
-  /* 杠杆状态只拿入睡记录和 sleep.target 比，不看时钟：不晚于目标→已达成，晚于→已踩线。
-     缺目标、缺记录或时间读不出来都保持「未到点」，不回退到任何写死的入睡线。 */
+  /* 杠杆状态只拿入睡记录和 sleep.target 比，不看时钟，也不推断记录是哪一夜：不晚于目标→达标，晚于→晚于目标。
+     缺目标、缺记录或时间读不出来都说「暂无可判定记录」，不回退到任何写死的入睡线。 */
+  const LEVER_DOT = { '该次记录达标': 'done', '该次记录晚于目标': 'line', '暂无可判定记录': 'wait' };
   function leverLabel(sleep) {
     const asleep = nightMinutes(sleep && sleep.asleep);
     const target = nightMinutes(sleep && sleep.target);
-    if (Number.isNaN(asleep) || Number.isNaN(target)) return '未到点';
-    return asleep <= target ? '已达成' : '已踩线';
+    if (Number.isNaN(asleep) || Number.isNaN(target)) return '暂无可判定记录';
+    return asleep <= target ? '该次记录达标' : '该次记录晚于目标';
   }
-  /* 杠杆文案只读 sleep.target；缺字段就直说，不写死入睡线，也不造关屏时间。 */
+  /* 杠杆文案只显示读得出来的 sleep.target；缺字段或读不出来就直说，不写死入睡线，也不造关屏时间。 */
   function leverCopy(sleep) {
     const t = sleep && typeof sleep.target === 'string' ? sleep.target.trim() : '';
-    return t ? '今晚杠杆：' + t + ' 前睡着' : '今晚杠杆：入睡目标还没填';
+    return !Number.isNaN(nightMinutes(t)) ? '今晚杠杆：' + t + ' 前睡着' : '今晚杠杆：入睡目标还没填';
   }
   function relTime(iso) {
     if (!iso) return '';
@@ -451,8 +452,11 @@
     const p = shanghaiParts(new Date());
     const sleep = data.health && data.health.sleep;
     const label = leverLabel(sleep);
-    const dot = label === '已达成' ? 'done' : label === '已踩线' ? 'line' : 'wait';
-    const night = sleep && sleep.asleep ? '<p class="lever-half">昨夜 ' + esc(sleep.asleep) + ' 入睡 · ' + esc(sleep.hours) + ' 小时' +
+    const dot = LEVER_DOT[label] || 'wait';
+    /* 入睡记录行只写 sleep.date 的原文，不推断它是哪一夜；没有可用的 date 就不写日期 */
+    const recorded = sleep && typeof sleep.date === 'string' ? sleep.date.trim() : '';
+    const night = sleep && sleep.asleep ? '<p class="lever-half">' + (recorded ? '记录于 ' + esc(recorded) + ' · ' : '') +
+      esc(sleep.asleep) + ' 入睡 · ' + esc(sleep.hours) + ' 小时' +
       (sleep.quality ? ' · ' + esc(sleep.quality) : '') + '</p>' : '';
     const items = arr(data.todos && data.todos.top3).slice(0, 3);
     const doneN = items.filter(isTop3Done).length;
@@ -1056,7 +1060,7 @@
     if (lever && data.health) {
       const label = leverLabel(data.health.sleep);
       lever.textContent = label;
-      if (dot) dot.className = 'dot ' + (label === '已达成' ? 'done' : label === '已踩线' ? 'line' : 'wait');
+      if (dot) dot.className = 'dot ' + (LEVER_DOT[label] || 'wait');
     }
   }
   function readTab() {
