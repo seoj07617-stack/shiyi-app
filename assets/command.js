@@ -85,6 +85,14 @@
   function linkBtn(url, label, cls) {
     return '<a class="' + cls + '" href="' + safeUrl(url) + '" target="_blank" rel="noopener noreferrer">' + esc(label) + '</a>';
   }
+  /* 周计划 PDF：https 绝对地址，或站内相对的 .pdf 路径（开头可带 ./ 或 /，同 gifSrc）。拿不准的当没有，不落到 '#'。 */
+  function pdfHref(url) {
+    const s = String(url == null ? '' : url).trim();
+    if (/^https:\/\/[^\s/?#]+/i.test(s)) return esc(s);
+    const clean = s.replace(/^\.?\//, '');
+    if (/(^|\/)\.\.(\/|$)/.test(clean)) return '';
+    return /^(?:[A-Za-z0-9._-]+\/)*[A-Za-z0-9._-]+\.pdf$/i.test(clean) ? esc(clean) : '';
+  }
   function gifSrc(p) {
     const s = String(p || '').trim();
     if (!s) return '';
@@ -328,6 +336,11 @@
     if (p.hour * 60 + p.minute < 22 * 60 + 30) return '未到点';
     return '已踩线';
   }
+  /* 杠杆文案只读 sleep.target；缺字段就直说，不写死入睡线，也不造关屏时间。 */
+  function leverCopy(sleep) {
+    const t = sleep && typeof sleep.target === 'string' ? sleep.target.trim() : '';
+    return t ? '今晚杠杆：' + t + ' 前睡着' : '今晚杠杆：入睡目标还没填';
+  }
   function relTime(iso) {
     if (!iso) return '';
     const d = new Date(iso);
@@ -504,7 +517,7 @@
       '</span></p></section>';
     const topMeta = items.length ? '<span class="pill' + (doneN === items.length ? ' ok' : ' dim') + '">' + doneN + ' / ' + items.length + '</span>' : '';
     return '<div class="today">' + hello +
-      '<section class="lever glass wide" id="leverBar"><i class="dot ' + dot + '" id="leverDot"></i><div><p class="lever-copy">今晚杠杆：00:00 前睡着 · 22:30 关屏</p>' +
+      '<section class="lever glass wide" id="leverBar"><i class="dot ' + dot + '" id="leverDot"></i><div><p class="lever-copy">' + esc(leverCopy(sleep)) + '</p>' +
       '<p class="lever-half" id="leverState">' + esc(label) + '</p>' + night + '</div></section>' +
       '<div class="wide">' + statHtml + '</div>' +
       '<section class="glass"><div class="bar"><p class="card-kicker">今日 Top3</p>' + topMeta + '</div>' + lines + '</section>' +
@@ -804,11 +817,13 @@
         '<span>周' + esc(d.label) + '</span><strong>' + esc(d.name) + '</strong><i>' + (d.football ? '球' : '') + '</i></button>';
     }).join('');
     const protNote = grams < protein.low ? '距下沿 ' + (protein.low - grams) + ' g' : (grams > protein.high ? '高出区间' : '落在区间里');
+    const pdf = pdfHref(week.pdf);
+    const pdfBtn = pdf ? '<a class="btn btn-primary" href="' + pdf + '" target="_blank" rel="noopener noreferrer">' + esc(week.pdfLabel || '打开 PDF') + '</a>' : '';
     const spark = w ? '<section class="glass"><div class="bar"><p class="card-kicker">近七日晨重</p><span class="pill dim">目标 ' + esc(w.goal) + ' kg</span></div>' +
       sparkSvg(w.pts) + '<p class="footnote">较七日首日 ' + signed(w.week, 1) + ' kg · 昨日 ' + esc(w.pts[w.pts.length - 2].date.slice(5)) + ' ' + w.pts[w.pts.length - 2].kg.toFixed(1) + '</p></section>' : '';
     return '<div class="health">' +
-      '<section class="glass"><div class="plan-bar"><h2>' + esc(week.title || '本周计划') + '</h2>' +
-      linkBtn(week.pdf, '打开 PDF', 'btn btn-primary') + '</div>' +
+      '<section class="glass"><div class="plan-bar"><h2>' + esc(week.title || '本周计划') + '</h2>' + pdfBtn + '</div>' +
+      (pdf ? '' : '<p class="footnote">本周 PDF 还未放上</p>') +
       (dayStrip ? '<div class="days">' + dayStrip + '</div>' : '') +
       (days.some(function (d) { return arr(d.exercises).length; }) ? '<p class="footnote">点某一天切换当日动作与演示 GIF。</p>' : '') +
       (H.review ? '<p class="footnote">' + esc(H.review) + '</p>' : '') + '</section>' +
